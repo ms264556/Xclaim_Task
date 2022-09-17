@@ -1,0 +1,464 @@
+<!-- core.xparm  -  Xtensa core parameter values file
+
+     Customer ID=8327; Build=0x3b95c; Copyright (c) 2008 Tensilica Inc.  ALL RIGHTS RESERVED.
+     These coded instructions, statements, and computer programs are the
+     copyrighted works and confidential proprietary information of Tensilica Inc.
+     They may not be modified, copied, reproduced, distributed, or disclosed to
+     third parties in any manner, medium, or form, in whole or in part, without
+     the prior written consent of Tensilica Inc.
+
+     WARNING: This file has been automatically generated with values that are
+     specific to a particular Xtensa processor configuration.  Changing values
+     here will likely result in an inconsistent system.  Do not edit!
+  -->
+
+<sysdoc>
+  <!-- This XML sequence is in 'Stash' format - see Xtensa/share/Stash.pm -->
+
+<types b="hash" t="typedef_hash">
+ <peregrine_Environment b="hash" range="*" default="*" subtypes="*" sizerange="*" objmodel="1">
+  <type b="array" value="Environment"/>
+  <entries b="hash"/>
+ </peregrine_Environment>
+ <peregrine_Xtbench b="hash" range="*" default="*" subtypes="*" sizerange="*" objmodel="1">
+  <type b="array" value="Xtbench"/>
+  <entries b="hash"/>
+ </peregrine_Xtbench>
+ <peregrine_XT b="hash" range="*" default="*" subtypes="*" sizerange="*" objmodel="1">
+  <type b="array" value="ProcessorModule"/>
+  <entries b="hash"/>
+ </peregrine_XT>
+ <xpg_peregrine b="hash" range="*" default="*" subtypes="*" sizerange="*" objmodel="1" moduleName="xpg_peregrine">
+  <type b="array" value="Processor"/>
+  <entries b="hash"/>
+  <netlistVisible b="string"/>
+ </xpg_peregrine>
+</types>
+
+<xtb b="hash" t="peregrine_Xtbench" sysRomCount="1" sysRamCount="1" uartAccessWidth="0x20" SysIONonCachedPAddr="0">
+ <pr b="hash" t="peregrine_XT" dcacheOption="0" icacheOption="0" numOfUnifiedRams="0" numOfDataRams="2" numOfDataRoms="0" numOfDataPorts="0" numOfInstRams="2" numOfInstRoms="0" dcache="*" icache="*" unifiedRams="*" dataRoms="*" dataPorts="*" instRoms="*">
+  <xt b="hash" t="xpg_peregrine" tieCheckLinuxNoPorts="1" debugOption="1" timersOption="1" interruptsOption="1" mac16Option="0" MAC16ImplementsMul16="0" userImplementsMul="0" userMulReadStage="1" userMulWriteStage="1" ocdOption="1" mmuOption="1" density="1" TargetHWVersion="X7.1.3" TargetHWEarliestVersion="X7.1.3" TargetHWConfigID0="0xc280c9fe" TargetHWConfigID1="0xdc315d9" TargetHWUniqueID="0" ConfigKey0="0" ConfigKey1="0" taskEngine="0" smallCore="0" bootLoader="0" name="Xm_peregrine" usePRID="0" prid="0" loadStoreUnitsCount="1" speculation="0" coprocessorCount="0" booleans="0" Mul16="1" Mul32="1" Mulh="1" VectorFPU2005="0" unalignedLoadAction="Exception" unalignedStoreAction="Exception" ClkGateFuncUnit="1" ClkGateGlobal="1" lowPower="0" Div32="0" writeBufferEntries="4" numOfTieModules="1" inboundRequestBufferDepth="4" pifBridgeType="AXI" pifAsync="0" traxEnabled="0" numOfDCacheIntfs="1" numOfUnifiedRamsIntfs="0" numOfDataRamsIntfs="0" numOfDataRomsIntfs="0" numOfDataPortsIntfs="0" numOfICacheIntfs="1" numOfInstRamIntfs="1" numOfInstRomIntfs="1" numOfTieOutQueueIntfs="0" numOfTieInQueueIntfs="0" numOfTieOutPortIntfs="0" numOfTieInPortIntfs="0" trax="*" prefetch="*" tie="*" global="*" pifMasterIntfc="*" pifSlaveIntfc="*" icacheCommonIntfc="*" icacheWayIntfc="*" itagCommonIntfc="*" itagWayIntfc="*" dcacheCommonIntfc="*" dcacheWayIntfc="*" dtagCommonIntfc="*" dtagWayIntfc="*" unifiedRamIntfc="*" dataRamIntfc="*" dataRamBusy="*" dataRomIntfc="*" dataRomBusy="*" dataPortIntfc="*" dataPortLoad="*" dataPortLoadRetired="*" dataPortRetireFlush="*" dataPortBusy="*" instRamIntfc="*" instRamLoadStore="*" instRamBusy="*" instRomIntfc="*" instRomLoad="*" instRomBusy="*" tieOutQueueIntfc="*" tieInQueueIntfc="*" tieOutPortIntfc="*" tieInPortIntfc="*" traceIntfc="*" tmodeIntfc="*" pwaitmodeIntfc="*" tapocdIntfc="*" jtdiIntfc="*" jtckIntfc="*" xocdmodeIntfc="*" tdebuginterruptIntfc="*" xocdmodepulseIntfc="*" interruptsIntfc="*" stallIntfc="*">
+   <env b="hash" t="peregrine_Environment">
+    <build b="hash" buildXTBoard="no" buildEmul="no" buildXTBoardFreq="0x1e" buildXMON="0" buildHW="0" buildDiags="0" useCoware="0" useSeamless="0" useXTOS="1" useVxworks="0" useLinux="0" useNucleus="0" useRedboot="0" uniqueID="0x3b95c" userCID="0x2087" expirationDate="0" licenseID="0" mode="Evaluation" compatSeamless="0" compatCoware="0" compatVxworks="0" compatNucleus="0" compatRedboot="0" compatLinux="0" compatXTOS="1" compatCustomer="0"/>
+    <implementation b="hash" ImplTargetSpeed="0xef" ImplTargetSize="0x19ce0" ImplTargetPower="0x4b" ImplSpeedPriority="High" ImplPowerPriority="Medium" ImplSizePriority="Low" ImplTargetTechnology="65lp" ImplTargetLibraryType="TENSILICA_STD" ImplOperatingCondition="Worst" ImplRegFileBuildingBlock="FlipFlop" ImplResetFlops="1" ImplAsyncReset="0"/>
+    <cadTools b="hash" CadHDL="Verilog" CadParUseAstro="1" CadSimUseVCS="1" CadSimUseVerilogXL="1" CadSimUseVerilogNC="1" CadSimUseVantage="0" CadSimUseMTI="0" CadStvUseMotive="0" CadStvUsePrimeTime="1" CadSiUseCeltic="1" CadSynUseDesignCompiler="1" CadPsynUsePhysicalCompiler="1" CadExtractUseQX="1"/>
+    <verification b="hash" dvderived="1" dvarch="0" pageTableVAddr="0x20000000" pageTableBytes="0" pageTableLinkVAddr="0" pageTableLinkBytes="0" dynRegionSize="0" clockPeriod="0xa" clockDutyCycle="0.500000" numOfDVMemories="0" mymemories="*"/>
+    <fpga b="hash" ioCachedPAddr="0x70000000" ioCachedBytes="0xe000000" ioNonCachedPAddr="0x50000000" ioNonCachedBytes="0xe000000"/>
+   </env>
+   <core b="hash" memoryOrder="LittleEndian" addressWidth="0x20" newExceptionArch="1" externalExceptionArch="0" haltArch="0" exceptions="1" Loops="1" maxInstructionSize="3" wideInstHoldingBuffer="0" Synchronization="0" ConditionalStore="0" virtualAddressWidth="0x20" physicalAddressWidth="0x20" pifReadDataBits="0x20" pifWriteDataBits="0x20" pifWriteResponse="0" pifInboundWriteResponse="0" dataUsePIF="1" instUsePIF="1" pifInReqRouteIdBits="0" writeBufferBypassAddrBits="0" pifTracePort="0" pifDataTracePort="0" TIETracePort="0" usePerformanceCounter="0" numOfMiscRegs="4" threadptr="0" tieUseStoreByteDisable="0" tieUseWideStore="1" ifetchLatency="1" pipeBStage="1" pipeEStage="1" pipeMStage="2" pipeWStage="3" numContexts="1" BranchPredictedTaken="0" L32R="1" ExtL32R="1" Const16replacesMac16="0" Abs="1" Addx="1" Call4and12="1" InterruptDistributor="0" MPRunStall="0" SWExtL32R="1" SW_ABI="windowed" SW_CLibrary="newlib" SW_UseFloatingPoint="1" Const16="0" instructionWidth="0x18" WideInstr="0" pifReadDataBytes="4" pifWriteDataBytes="4">
+    <contextStateList b="hash" AR="1" WINDOWSTART="1" WINDOWBASE="1"/>
+   </core>
+   <registerFile b="hash" nareg="0x20" windowsConfigured="1"/>
+   <cacheAttribute b="hash" t="attr_mmuca_noIC_noDC" id="0">
+    <fetchAttrMap b="array" value="1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1"/>
+    <loadAttrMap b="array" value="0x20,0x20,0x20,1,0x20,1,1,1,1,1,1,1,1,1,0x20,1"/>
+    <storeAttrMap b="array" value="0x28,0x28,0x28,1,0x28,1,1,1,1,1,1,1,1,1,0x28,1"/>
+   </cacheAttribute>
+   <interrupts b="hash" count="0x20" levelmax="5" highLevel="1" excmLevel="1">
+    <interrupt b="array">
+     <hash type="Software" level="1" number="0" mask="1"/>
+     <hash type="Timer" level="1" number="1" mask="2"/>
+     <hash type="ExtLevel" level="2" number="2" mask="4"/>
+     <hash type="ExtLevel" level="2" number="3" mask="8"/>
+     <hash type="ExtLevel" level="2" number="4" mask="0x10"/>
+     <hash type="ExtLevel" level="2" number="5" mask="0x20"/>
+     <hash type="ExtLevel" level="2" number="6" mask="0x40"/>
+     <hash type="ExtLevel" level="2" number="7" mask="0x80"/>
+     <hash type="ExtLevel" level="2" number="8" mask="0x100"/>
+     <hash type="ExtLevel" level="2" number="9" mask="0x200"/>
+     <hash type="ExtLevel" level="2" number="0xa" mask="0x400"/>
+     <hash type="ExtLevel" level="2" number="0xb" mask="0x800"/>
+     <hash type="ExtLevel" level="2" number="0xc" mask="0x1000"/>
+     <hash type="ExtLevel" level="2" number="0xd" mask="0x2000"/>
+     <hash type="ExtLevel" level="2" number="0xe" mask="0x4000"/>
+     <hash type="ExtLevel" level="2" number="0xf" mask="0x8000"/>
+     <hash type="ExtLevel" level="2" number="0x10" mask="0x10000"/>
+     <hash type="ExtLevel" level="2" number="0x11" mask="0x20000"/>
+     <hash type="ExtLevel" level="2" number="0x12" mask="0x40000"/>
+     <hash type="ExtLevel" level="2" number="0x13" mask="0x80000"/>
+     <hash type="ExtLevel" level="3" number="0x14" mask="0x100000"/>
+     <hash type="ExtLevel" level="3" number="0x15" mask="0x200000"/>
+     <hash type="ExtLevel" level="3" number="0x16" mask="0x400000"/>
+     <hash type="ExtLevel" level="3" number="0x17" mask="0x800000"/>
+     <hash type="ExtLevel" level="3" number="0x18" mask="0x1000000"/>
+     <hash type="ExtLevel" level="3" number="0x19" mask="0x2000000"/>
+     <hash type="ExtLevel" level="4" number="0x1a" mask="0x4000000"/>
+     <hash type="ExtLevel" level="4" number="0x1b" mask="0x8000000"/>
+     <hash type="ExtLevel" level="4" number="0x1c" mask="0x10000000"/>
+     <hash type="ExtLevel" level="4" number="0x1d" mask="0x20000000"/>
+     <hash type="ExtLevel" level="4" number="0x1e" mask="0x40000000"/>
+     <hash type="ExtLevel" level="4" number="0x1f" mask="0x80000000"/>
+    </interrupt>
+   </interrupts>
+   <debug b="hash" ivaTrapCount="2" dvaTrapCount="2" interruptLevel="5"/>
+   <timers b="hash" count="1">
+    <timer b="array">
+     <hash interrupt="1" number="0"/>
+    </timer>
+   </timers>
+   <OCD b="hash" DebugExternalInterrupt="1" DebugUseDIRArray="1"/>
+   <miscOperations b="hash" NormShiftAmount="1" MinMax="1" SignExtend="1" Clamps="1" CRC="0" PopCount="0"/>
+   <vectors b="hash" numOfVectors="9" relocatableVectorOption="0" relocatableVectorBaseResetVal="0" stationaryVectorBase0="0" stationaryVectorBase1="0" SW_stationaryVectorBaseSelect="0">
+    <vectorList b="array">
+     <hash name="ResetVector" baseAddress="0x97f000" size="0x2e0" alignment="4" level="1" hasHandler="0" group="relocatable" offset="0"/>
+     <hash name="KernelExceptionVector" baseAddress="0x97f5fc" size="0x1c" alignment="4" level="1" hasHandler="1" group="relocatable" offset="0"/>
+     <hash name="UserExceptionVector" baseAddress="0x97f61c" size="0x1c" alignment="4" level="1" hasHandler="1" group="relocatable" offset="0"/>
+     <hash name="DoubleExceptionVector" baseAddress="0x97f63c" size="0x180" alignment="8" level="1" hasHandler="1" group="relocatable" offset="0"/>
+     <hash name="WindowVectors" baseAddress="0x97f800" size="0x180" alignment="0x200" level="1" hasHandler="0" group="relocatable" offset="0"/>
+     <hash name="Level2InterruptVector" baseAddress="0x97f57c" size="0x1c" alignment="4" level="2" hasHandler="1" group="relocatable" offset="0"/>
+     <hash name="Level3InterruptVector" baseAddress="0x97f59c" size="0x1c" alignment="4" level="3" hasHandler="1" group="relocatable" offset="0"/>
+     <hash name="Level4InterruptVector" baseAddress="0x97f5bc" size="0x1c" alignment="4" level="4" hasHandler="1" group="relocatable" offset="0"/>
+     <hash name="DebugExceptionVector" baseAddress="0x97f5dc" size="0x1c" alignment="4" level="5" hasHandler="1" group="relocatable" offset="0"/>
+    </vectorList>
+   </vectors>
+   <_loadStoreUnits b="array">
+    <hash id="0" type="LoadStore" vaddrBits="0x20" paddrBits="0x20">
+     <lsInterfaces b="hash" DataCache="1" DataPIF="1" DataPort0="1" DataRAM0="1" DataRAM1="1" DataROM0="1" UnifiedRAM0="1"/>
+    </hash>
+   </_loadStoreUnits>
+   <mmu b="hash" t="mmuca" id="0" asidBits="0" ringCount="1" pteEntrySize="4" sizeRestrictionBits="0" noMatchAction="Exception" _invalidAsid="0" _kernelAsid="1" kernelAsid="0" invalidAsid="0">
+    <pageSizes b="array" value="0x1d,*,*,*,*,*,*,*"/>
+    <itlb b="hash" id="0" type="Inst" wayCount="1" vaddrBits="0x20" paddrBits="0x20">
+     <ways b="array">
+      <hash id="0">
+       <assoc b="hash" id="0" numOfEntries="8" autoRefill="0" sizeRestrictionBits="0" VPNMsb="0x1f" VPNLsb="0x1d" PPNMsb="0x1f" PPNLsb="0x1d">
+        <pageSizes b="array" value="0x1d,*,*,*,*,*,*,*"/>
+        <ASIDConstValues b="array" value="*,*,*,*,*,*,*,*"/>
+        <VPNConstValues b="array" value="0,0x20000000,0x40000000,0x60000000,0x80000000,0xa0000000,0xc0000000,0xe0000000"/>
+        <PPNConstValues b="array" value="0,0x20000000,0x40000000,0x60000000,0x80000000,0xa0000000,0xc0000000,0xe0000000"/>
+        <CAConstValues b="array" value="*,*,*,*,*,*,*,*"/>
+        <ASIDResetValues b="array" value="*,*,*,*,*,*,*,*"/>
+        <VPNResetValues b="array" value="*,*,*,*,*,*,*,*"/>
+        <PPNResetValues b="array" value="*,*,*,*,*,*,*,*"/>
+        <CAResetValues b="array" value="2,2,2,2,2,2,2,2"/>
+       </assoc>
+      </hash>
+     </ways>
+    </itlb>
+    <dtlb b="hash" id="0" type="Data" wayCount="1" vaddrBits="0x20" paddrBits="0x20">
+     <ways b="array">
+      <hash id="0">
+       <assoc b="hash" id="0" numOfEntries="8" autoRefill="0" sizeRestrictionBits="0" VPNMsb="0x1f" VPNLsb="0x1d" PPNMsb="0x1f" PPNLsb="0x1d">
+        <pageSizes b="array" value="0x1d,*,*,*,*,*,*,*"/>
+        <ASIDConstValues b="array" value="*,*,*,*,*,*,*,*"/>
+        <VPNConstValues b="array" value="0,0x20000000,0x40000000,0x60000000,0x80000000,0xa0000000,0xc0000000,0xe0000000"/>
+        <PPNConstValues b="array" value="0,0x20000000,0x40000000,0x60000000,0x80000000,0xa0000000,0xc0000000,0xe0000000"/>
+        <CAConstValues b="array" value="*,*,*,*,*,*,*,*"/>
+        <ASIDResetValues b="array" value="*,*,*,*,*,*,*,*"/>
+        <VPNResetValues b="array" value="*,*,*,*,*,*,*,*"/>
+        <PPNResetValues b="array" value="*,*,*,*,*,*,*,*"/>
+        <CAResetValues b="array" value="2,2,2,2,2,2,2,2"/>
+       </assoc>
+      </hash>
+     </ways>
+    </dtlb>
+   </mmu>
+   <testOptions b="hash" fullScan="1" latchesTransparent="0"/>
+   <tie_modules b="array">
+    <hash t="MUL32" internal="1" _implements="mul16mulh" mulh="1" mul16="1" iterativeMul32="0">
+     <sourceFile b="string" value="/home/customer/tree/RD-2011.2/p4root/Xtensa/share/saridef/Processor/Coprocessor/../../../../../Coprocessors/MUL32/mul32.tie"/>
+    </hash>
+   </tie_modules>
+  </xt>
+  <dataRams b="array">
+   <hash type="dataRam" psize="0x40000" basePAddr="0x400000" accessWidth="0x20" extraBits="0" name="dram0" id="0" assoc="1" latency="1" busy="0" dma="1" tieLS="1" error="none" rcw="0" cbox="0" lsAccess="1" initPattern="0x1234567" size="0x40000" addressWidth="0x10" numbytes="4" numwords="0" vsize="0x40000" baseVAddr="0x400000" numBanks="1" numPorts="1" bankDecodeLsb="7" global="*" dataIntfc="*" loadIntfc="*">
+    <attributes b="hash" writable="1" unaligned="1"/>
+    <softwareModel b="string"/>
+    <portAccess b="hash" RW="1"/>
+    <dram b="hash" addrWidth="0x10" ramWidth="0x20" numBytes="4" numWords="0">
+     <hardwareModel b="string" value="Xtensa/Hardware/common/verilog/SRam.v.tpp"/>
+     <sramPort b="hash" addrWidth="0x10" ramWidth="0x20" numBytes="4" numWords="0" testComp="none" insertTestComp="ifNotPresent" testCompLevel="top" Addr="*" En="*" Wr="*" ByteEn="*" WordEn="*" WrData="*" Data="*"/>
+     <global b="hash" dir="in" CLK="*"/>
+    </dram>
+   </hash>
+   <hash type="dataRam" psize="0x40000" basePAddr="0x440000" accessWidth="0x20" extraBits="0" name="dram1" id="1" assoc="1" latency="1" busy="0" dma="1" tieLS="1" error="none" rcw="0" cbox="0" lsAccess="1" initPattern="0x1234567" size="0x40000" addressWidth="0x10" numbytes="4" numwords="0" vsize="0x40000" baseVAddr="0x440000" numBanks="1" numPorts="1" bankDecodeLsb="7" global="*" dataIntfc="*" loadIntfc="*">
+    <attributes b="hash" writable="1" unaligned="1"/>
+    <softwareModel b="string"/>
+    <portAccess b="hash" RW="1"/>
+    <dram b="hash" addrWidth="0x10" ramWidth="0x20" numBytes="4" numWords="0">
+     <hardwareModel b="string" value="Xtensa/Hardware/common/verilog/SRam.v.tpp"/>
+     <sramPort b="hash" addrWidth="0x10" ramWidth="0x20" numBytes="4" numWords="0" testComp="none" insertTestComp="ifNotPresent" testCompLevel="top" Addr="*" En="*" Wr="*" ByteEn="*" WordEn="*" WrData="*" Data="*"/>
+     <global b="hash" dir="in" CLK="*"/>
+    </dram>
+   </hash>
+  </dataRams>
+  <instRams b="array">
+   <hash type="instRam" psize="0x80000" basePAddr="0x900000" accessWidth="0x20" extraBits="0" name="iram0" id="0" assoc="1" latency="1" busy="0" dma="1" tieLS="0" error="none" rcw="0" cbox="0" lsAccess="1" initPattern="0x6c6cb6b6" size="0x80000" addressWidth="0x11" numbytes="4" numwords="0" vsize="0x80000" baseVAddr="0x900000" numBanks="1" numPorts="1" bankDecodeLsb="2" global="*" dataIntfc="*" loadIntfc="*" busyIntfc="*">
+    <attributes b="hash" writable="1" executable="1"/>
+    <softwareModel b="string"/>
+    <portAccess b="hash" RW="1"/>
+    <iram b="hash" addrWidth="0x11" ramWidth="0x20" numBytes="0" numWords="0">
+     <hardwareModel b="string" value="Xtensa/Hardware/common/verilog/SRam.v.tpp"/>
+     <sramPort b="hash" addrWidth="0x11" ramWidth="0x20" numBytes="0" numWords="0" testComp="none" insertTestComp="ifNotPresent" testCompLevel="top" Addr="*" En="*" Wr="*" ByteEn="*" WordEn="*" WrData="*" Data="*"/>
+     <global b="hash" dir="in" CLK="*"/>
+    </iram>
+   </hash>
+   <hash type="instRam" psize="0x80000" basePAddr="0x980000" accessWidth="0x20" extraBits="0" name="iram1" id="1" assoc="1" latency="1" busy="0" dma="1" tieLS="0" error="none" rcw="0" cbox="0" lsAccess="1" initPattern="0x6c6cb6b6" size="0x80000" addressWidth="0x11" numbytes="4" numwords="0" vsize="0x80000" baseVAddr="0x980000" numBanks="1" numPorts="1" bankDecodeLsb="2" global="*" dataIntfc="*" loadIntfc="*" busyIntfc="*">
+    <attributes b="hash" writable="1" executable="1"/>
+    <softwareModel b="string"/>
+    <portAccess b="hash" RW="1"/>
+    <iram b="hash" addrWidth="0x11" ramWidth="0x20" numBytes="0" numWords="0">
+     <hardwareModel b="string" value="Xtensa/Hardware/common/verilog/SRam.v.tpp"/>
+     <sramPort b="hash" addrWidth="0x11" ramWidth="0x20" numBytes="0" numWords="0" testComp="none" insertTestComp="ifNotPresent" testCompLevel="top" Addr="*" En="*" Wr="*" ByteEn="*" WordEn="*" WrData="*" Data="*"/>
+     <global b="hash" dir="in" CLK="*"/>
+    </iram>
+   </hash>
+  </instRams>
+ </pr>
+ <sysrom b="array">
+  <hash type="sysrom" psize="0x20000" basePAddr="0x40000000" accessWidth="0x20" extraBits="0" name="srom" id="0" assoc="1" latency="1" busy="0" dma="0" tieLS="1" error="none" rcw="0" cbox="0" lsAccess="1" initPattern="0" size="0x20000" addressWidth="0xf" numbytes="4" numwords="0" vsize="0x20000" baseVAddr="0x40000000">
+   <attributes b="hash" executable="1"/>
+   <softwareModel b="string"/>
+  </hash>
+ </sysrom>
+ <sysram b="array">
+  <hash type="sysram" psize="0x400000" basePAddr="0x60000000" accessWidth="0x20" extraBits="0" name="sram" id="0" assoc="1" latency="1" busy="0" dma="0" tieLS="1" error="none" rcw="0" cbox="0" lsAccess="1" initPattern="0" size="0x400000" addressWidth="0x14" numbytes="4" numwords="0" vsize="0x400000" baseVAddr="0x60000000">
+   <attributes b="hash" writable="1" executable="1"/>
+   <softwareModel b="string"/>
+  </hash>
+ </sysram>
+ <Uart b="hash" type="Uart" name="UART_BASE" size="0x20" baseVAddr="*" basePAddr="*" accessWidth="0x20" psize="0x20" vsize="0x20">
+  <cmodel b="string"/>
+ </Uart>
+</xtb>
+
+<modulemap b="hash" t="modulemaps">
+ <peregrine_Xtbench b="array">
+  <refh link="xtb"/>
+ </peregrine_Xtbench>
+ <peregrine_XT b="array">
+  <refh link="xtb.pr"/>
+ </peregrine_XT>
+ <Memory b="array">
+  <refh link="xtb.sysrom.0"/>
+ </Memory>
+ <Memory_1 b="array">
+  <refh link="xtb.sysram.0"/>
+ </Memory_1>
+ <Uart b="array">
+  <refh link="xtb.Uart"/>
+ </Uart>
+ <xpg_peregrine b="array">
+  <refh link="xtb.pr.xt"/>
+ </xpg_peregrine>
+ <DataRam b="array">
+  <refh link="xtb.pr.dataRams.0"/>
+ </DataRam>
+ <DataRam_1 b="array">
+  <refh link="xtb.pr.dataRams.1"/>
+ </DataRam_1>
+ <InstRam b="array">
+  <refh link="xtb.pr.instRams.0"/>
+ </InstRam>
+ <InstRam_1 b="array">
+  <refh link="xtb.pr.instRams.1"/>
+ </InstRam_1>
+ <peregrine_Environment b="array">
+  <refh link="xtb.pr.xt.env"/>
+ </peregrine_Environment>
+ <Core b="array">
+  <refh link="xtb.pr.xt.core"/>
+ </Core>
+ <RegisterFile b="array">
+  <refh link="xtb.pr.xt.registerFile"/>
+ </RegisterFile>
+ <attr_mmuca_noIC_noDC b="array">
+  <refh link="xtb.pr.xt.cacheAttribute"/>
+ </attr_mmuca_noIC_noDC>
+ <Interrupts b="array">
+  <refh link="xtb.pr.xt.interrupts"/>
+ </Interrupts>
+ <Debug b="array">
+  <refh link="xtb.pr.xt.debug"/>
+ </Debug>
+ <Timers b="array">
+  <refh link="xtb.pr.xt.timers"/>
+ </Timers>
+ <OCD b="array">
+  <refh link="xtb.pr.xt.OCD"/>
+ </OCD>
+ <MiscOperations b="array">
+  <refh link="xtb.pr.xt.miscOperations"/>
+ </MiscOperations>
+ <Vectors b="array">
+  <refh link="xtb.pr.xt.vectors"/>
+ </Vectors>
+ <LoadStore b="array">
+  <refh link="xtb.pr.xt._loadStoreUnits.0"/>
+ </LoadStore>
+ <mmuca b="array">
+  <refh link="xtb.pr.xt.mmu"/>
+ </mmuca>
+ <TestOptions b="array">
+  <refh link="xtb.pr.xt.testOptions"/>
+ </TestOptions>
+ <MUL32 b="array">
+  <refh link="xtb.pr.xt.tie_modules.0"/>
+ </MUL32>
+ <SRam b="array">
+  <refh link="xtb.pr.dataRams.0.dram"/>
+  <refh link="xtb.pr.dataRams.1.dram"/>
+ </SRam>
+ <SRam_1 b="array">
+  <refh link="xtb.pr.instRams.0.iram"/>
+  <refh link="xtb.pr.instRams.1.iram"/>
+ </SRam_1>
+ <Build b="array">
+  <refh link="xtb.pr.xt.env.build"/>
+ </Build>
+ <DesignImplementation b="array">
+  <refh link="xtb.pr.xt.env.implementation"/>
+ </DesignImplementation>
+ <CadTools b="array">
+  <refh link="xtb.pr.xt.env.cadTools"/>
+ </CadTools>
+ <DesignVerification b="array">
+  <refh link="xtb.pr.xt.env.verification"/>
+ </DesignVerification>
+ <FPGABoard b="array">
+  <refh link="xtb.pr.xt.env.fpga"/>
+ </FPGABoard>
+ <Interrupt b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.0"/>
+ </Interrupt>
+ <Interrupt_1 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.1"/>
+ </Interrupt_1>
+ <Interrupt_2 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.2"/>
+ </Interrupt_2>
+ <Interrupt_3 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.3"/>
+ </Interrupt_3>
+ <Interrupt_4 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.4"/>
+ </Interrupt_4>
+ <Interrupt_5 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.5"/>
+ </Interrupt_5>
+ <Interrupt_6 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.6"/>
+ </Interrupt_6>
+ <Interrupt_7 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.7"/>
+ </Interrupt_7>
+ <Interrupt_8 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.8"/>
+ </Interrupt_8>
+ <Interrupt_9 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.9"/>
+ </Interrupt_9>
+ <Interrupt_10 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.10"/>
+ </Interrupt_10>
+ <Interrupt_11 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.11"/>
+ </Interrupt_11>
+ <Interrupt_12 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.12"/>
+ </Interrupt_12>
+ <Interrupt_13 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.13"/>
+ </Interrupt_13>
+ <Interrupt_14 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.14"/>
+ </Interrupt_14>
+ <Interrupt_15 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.15"/>
+ </Interrupt_15>
+ <Interrupt_16 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.16"/>
+ </Interrupt_16>
+ <Interrupt_17 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.17"/>
+ </Interrupt_17>
+ <Interrupt_18 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.18"/>
+ </Interrupt_18>
+ <Interrupt_19 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.19"/>
+ </Interrupt_19>
+ <Interrupt_20 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.20"/>
+ </Interrupt_20>
+ <Interrupt_21 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.21"/>
+ </Interrupt_21>
+ <Interrupt_22 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.22"/>
+ </Interrupt_22>
+ <Interrupt_23 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.23"/>
+ </Interrupt_23>
+ <Interrupt_24 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.24"/>
+ </Interrupt_24>
+ <Interrupt_25 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.25"/>
+ </Interrupt_25>
+ <Interrupt_26 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.26"/>
+ </Interrupt_26>
+ <Interrupt_27 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.27"/>
+ </Interrupt_27>
+ <Interrupt_28 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.28"/>
+ </Interrupt_28>
+ <Interrupt_29 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.29"/>
+ </Interrupt_29>
+ <Interrupt_30 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.30"/>
+ </Interrupt_30>
+ <Interrupt_31 b="array">
+  <refh link="xtb.pr.xt.interrupts.interrupt.31"/>
+ </Interrupt_31>
+ <Timer b="array">
+  <refh link="xtb.pr.xt.timers.timer.0"/>
+ </Timer>
+ <Vector b="array">
+  <refh link="xtb.pr.xt.vectors.vectorList.0"/>
+ </Vector>
+ <Vector_1 b="array">
+  <refh link="xtb.pr.xt.vectors.vectorList.1"/>
+ </Vector_1>
+ <Vector_2 b="array">
+  <refh link="xtb.pr.xt.vectors.vectorList.2"/>
+ </Vector_2>
+ <Vector_3 b="array">
+  <refh link="xtb.pr.xt.vectors.vectorList.3"/>
+ </Vector_3>
+ <Vector_4 b="array">
+  <refh link="xtb.pr.xt.vectors.vectorList.4"/>
+ </Vector_4>
+ <Vector_5 b="array">
+  <refh link="xtb.pr.xt.vectors.vectorList.5"/>
+ </Vector_5>
+ <Vector_6 b="array">
+  <refh link="xtb.pr.xt.vectors.vectorList.6"/>
+ </Vector_6>
+ <Vector_7 b="array">
+  <refh link="xtb.pr.xt.vectors.vectorList.7"/>
+ </Vector_7>
+ <Vector_8 b="array">
+  <refh link="xtb.pr.xt.vectors.vectorList.8"/>
+ </Vector_8>
+ <TLB b="array">
+  <refh link="xtb.pr.xt.mmu.itlb"/>
+ </TLB>
+ <TLB_1 b="array">
+  <refh link="xtb.pr.xt.mmu.dtlb"/>
+ </TLB_1>
+ <TLBWay b="array">
+  <refh link="xtb.pr.xt.mmu.itlb.ways.0"/>
+  <refh link="xtb.pr.xt.mmu.dtlb.ways.0"/>
+ </TLBWay>
+ <TLBAssoc b="array">
+  <refh link="xtb.pr.xt.mmu.itlb.ways.0.assoc"/>
+  <refh link="xtb.pr.xt.mmu.dtlb.ways.0.assoc"/>
+ </TLBAssoc>
+</modulemap>
+
+</sysdoc>
+

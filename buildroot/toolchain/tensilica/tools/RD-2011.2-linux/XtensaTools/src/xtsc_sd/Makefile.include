@@ -1,0 +1,95 @@
+# Copyright (c) 2006-2010 Tensilica Inc.  ALL RIGHTS RESERVED.
+# 
+# These coded instructions, statements, and computer programs are
+# the copyrighted works and confidential proprietary information of
+# Tensilica Inc.  They may be adapted and modified by bona fide
+# purchasers for internal use, but no adapted or modified version
+# may be disclosed or distributed to third parties in any manner,
+# medium, or form, in whole or in part, without the prior written
+# consent of Tensilica Inc.
+
+ifndef MAXSIM_HOME
+$(error The MAXSIM_HOME environment variable must be set prior to running make.  See instructions in Makefile.include)
+endif
+
+ifndef MAXSIM_VERSION_NUMBER
+$(error The MAXSIM_VERSION_NUMBER environment variable must be set prior to running make.  See instructions in Makefile.include)
+endif
+
+
+# Instructions: Before using this make file:
+#   -- Ensure the MAXSIM_HOME environment variable is set for the correct version of SoC Designer and that the
+#      MAXSIM_VERSION_NUMBER environment variable is set and matches (for example, 7.7).
+#   -- Ensure the XTTOOLS macro below points to <xtensa_tools_root>, your installation of the Xtensa Tools.  We recommend
+#      you use an absolute path.  If you use a relative path, then the XTTOOLS macro must point from one directory below
+#      this directory to the Xtensa Tools installation.
+#   -- (Optional) Define AMBA2_HOME and ensure that the resulting AMBA2_INCLUDE_DIR macro points to the include directory
+#      of your AMBA2 models installation.
+#   -- (Optional) Define the XTSC_COMPONENT_LIBRARY_PATH macro to point to your customized XTSC component library.
+
+XTTOOLS = ../../..
+AMBA2_INCLUDE_DIR = $(AMBA2_HOME)/include
+
+# If you have a customized version of the XTSC component library, libxtsc_comp.so, that was built using the SystemC header
+# files from $(MAXSIM_HOME)/include and in accordance with ../xtsc/README.SoCDesigner.txt (in <xtensa_tools_root>/src/xtsc),
+# then uncomment and edit the following line to point to its location.  We recommend you use an absolute path.  If you use
+# a relative path, then the macro must point from one directory below this directory to the customized XTSC component
+# library directory.
+# XTSC_COMPONENT_LIBRARY_PATH = PutPathHere
+
+XTSC_SD_LIB_DIR=$(XTTOOLS)/lib/iss/SoCDesigner_$(MAXSIM_VERSION_NUMBER)
+
+CXX = g++
+DSO_NAME = lib$(COMP_NAME).so
+
+SRCS = $(COMP_NAME).cpp
+
+OBJS = $(SRCS:.cpp=.o)
+
+LDFLAGS = 
+ifeq ($(findstring _if_sd_mon,$(COMP_NAME)),) # {
+XTSC_COMP_LIB = -l xtsc_comp
+ifdef XTSC_COMPONENT_LIBRARY_PATH # {
+ifeq ($(patsubst /%,/,$(XTSC_COMPONENT_LIBRARY_PATH)),/) # {
+LDFLAGS += -Wl,-rpath,$(XTSC_COMPONENT_LIBRARY_PATH)
+else # } {
+# Relative paths need '$$ORIGIN'/ prefixed
+LDFLAGS += -Wl,-rpath,'$$ORIGIN'/$(XTSC_COMPONENT_LIBRARY_PATH)
+endif # }
+XTSC_COMP_INC     = -I $(XTSC_COMPONENT_LIBRARY_PATH)
+XTSC_COMP_LIBPATH = -L $(XTSC_COMPONENT_LIBRARY_PATH)
+endif # }
+endif # }
+
+
+INCLUDES = \
+	-I ../include \
+	$(XTSC_COMP_INC) \
+	-I $(XTTOOLS)/include \
+	-I $(MAXSIM_HOME)/include
+
+LIBS  = \
+	$(XTSC_COMP_LIBPATH) \
+	-L $(XTSC_SD_LIB_DIR) \
+	-L $(XTTOOLS)/lib/iss \
+	-l xtsc_sd \
+	$(XTSC_COMP_LIB) \
+	-l xtsc \
+	-l xtmp \
+	-l log4xtensa
+
+CFLAGS = -O2 -g -fPIC -Wall -D XTSC_SD -c
+
+ifeq ($(patsubst /%,/,$(XTSC_SD_LIB_DIR)),/)
+LDFLAGS += -Wl,-rpath,$(XTSC_SD_LIB_DIR):$(XTSC_SD_LIB_DIR)/..:$(XTSC_SD_LIB_DIR)/../.. -shared
+else
+# Relative paths need '$$ORIGIN'/ prefixed
+LDFLAGS += -Wl,-rpath,'$$ORIGIN'/$(XTSC_SD_LIB_DIR):'$$ORIGIN'/$(XTSC_SD_LIB_DIR)/..:'$$ORIGIN'/$(XTSC_SD_LIB_DIR)/../.. -shared
+endif
+
+ifdef AMBA2_HOME
+INCLUDES += -I $(AMBA2_INCLUDE_DIR)
+CFLAGS += -D AMBA2_HOME
+endif
+
+

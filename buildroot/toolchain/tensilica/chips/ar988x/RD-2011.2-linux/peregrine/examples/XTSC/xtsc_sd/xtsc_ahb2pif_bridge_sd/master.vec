@@ -1,0 +1,3722 @@
+// Customer ID=8327; Build=0x3b95c; Copyright (c) 2007-2008 by Tensilica Inc.  ALL RIGHTS RESERVED.
+// These coded instructions, statements, and computer programs are the
+// copyrighted works and confidential proprietary information of Tensilica Inc.
+// They may not be modified, copied, reproduced, distributed, or disclosed to
+// third parties in any manner, medium, or form, in whole or in part, without
+// the prior written consent of Tensilica Inc.
+
+// delay PEEK  address size
+// delay POKE  address size value
+// delay WRITE address size timeout unlock trans burst prot value
+// delay READ  address size timeout unlock trans burst prot
+0 deassert lock
+1 assert
+
+
+
+#if 1
+
+wait 20
+note ********* Starting Aligned Writes of Word Size or Less *********
+
+note Doing 4 byte single writes
+0 write 0x00400000 1 0 unlock nonseq single 0 0x00
+0 write 0x00400001 1 0 unlock nonseq single 0 0x01
+0 write 0x00400002 1 0 unlock nonseq single 0 0x02
+0 write 0x00400003 1 0 unlock nonseq single 0 0x03
+wait 20
+info &grep Peek:  0x00400000/1: 00 *$ << grep
+0 peek 0x00400000 1
+info &grep Peek:  0x00400001/1: 01 *$ << grep
+0 peek 0x00400001 1
+info &grep Peek:  0x00400002/1: 02 *$ << grep
+0 peek 0x00400002 1
+info &grep Peek:  0x00400003/1: 03 *$ << grep
+0 peek 0x00400003 1
+info endgrep
+
+note Doing 2 halfword single writes
+0 write 0x00400004 2 0 unlock nonseq single 0 0x04 0x05
+0 write 0x00400006 2 0 unlock nonseq single 0 0x06 0x07
+wait 20
+info &grep Peek:  0x00400004/2: 04 05 *$ << grep
+0 peek 0x00400004 2
+info &grep Peek:  0x00400006/2: 06 07 *$ << grep
+0 peek 0x00400006 2
+
+note Doing 2 word single writes
+0 write 0x00400008 4 0 unlock nonseq single 0 0x08 0x09 0x0a 0x0b
+0 write 0x0040000c 4 0 unlock nonseq single 0 0x0c 0x0d 0x0e 0x0f
+wait 20
+info &grep Peek:  0x00400008/4: 08 09 0a 0b *$ << grep
+0 peek 0x00400008 4
+info &grep Peek:  0x0040000c/4: 0c 0d 0e 0f *$ << grep
+0 peek 0x0040000c 4
+info endgrep
+
+note Doing 4 byte incr writes
+0 write 0x00400010 1 0 unlock nonseq incr   0 0x10
+0 write 0x00400011 1 0 unlock seq    incr   0 0x11
+0 write 0x00400012 1 0 unlock seq    incr   0 0x12
+0 write 0x00400013 1 0 unlock nonseq incr   0 0x13
+wait 20
+info &grep Peek:  0x00400010/1: 10 *$ << grep
+0 peek 0x00400010 1
+info &grep Peek:  0x00400011/1: 11 *$ << grep
+0 peek 0x00400011 1
+info &grep Peek:  0x00400012/1: 12 *$ << grep
+0 peek 0x00400012 1
+info &grep Peek:  0x00400013/1: 13 *$ << grep
+0 peek 0x00400013 1
+info endgrep
+
+note Doing 2 halfword incr writes
+0 write 0x00400014 2 0 unlock nonseq incr   0 0x14 0x15
+0 write 0x00400016 2 0 unlock seq    incr   0 0x16 0x17
+wait 20
+info &grep Peek:  0x00400014/2: 14 15 *$ << grep
+0 peek 0x00400014 2
+info &grep Peek:  0x00400016/2: 16 17 *$ << grep
+0 peek 0x00400016 2
+info endgrep
+
+note Doing 2 word incr writes
+0 write 0x00400018 4 0 unlock nonseq incr   0 0x18 0x19 0x1a 0x1b
+0 write 0x0040001c 4 0 unlock seq    incr   0 0x1c 0x1d 0x1e 0x1f
+wait 20
+info &grep Peek:  0x00400018/4: 18 19 1a 1b *$ << grep
+0 peek 0x00400018 4
+info &grep Peek:  0x0040001c/4: 1c 1d 1e 1f *$ << grep
+0 peek 0x0040001c 4
+info endgrep
+
+note Doing 4 byte incr4 writes
+0 write 0x00400020 1 0 unlock nonseq incr4  0 0x20
+0 write 0x00400021 1 0 unlock seq    incr4  0 0x21
+0 write 0x00400022 1 0 unlock seq    incr4  0 0x22
+0 write 0x00400023 1 0 unlock seq    incr4  0 0x23
+wait 20
+info &grep Peek:  0x00400020/1: 20 *$ << grep
+0 peek 0x00400020 1
+info &grep Peek:  0x00400021/1: 21 *$ << grep
+0 peek 0x00400021 1
+info &grep Peek:  0x00400022/1: 22 *$ << grep
+0 peek 0x00400022 1
+info &grep Peek:  0x00400023/1: 23 *$ << grep
+0 peek 0x00400023 1
+info endgrep
+
+note Doing 4 byte incr4 writes again
+0 write 0x00400024 1 0 unlock nonseq incr4  0 0x24
+0 write 0x00400025 1 0 unlock seq    incr4  0 0x25
+0 write 0x00400026 1 0 unlock seq    incr4  0 0x26
+0 write 0x00400027 1 0 unlock seq    incr4  0 0x27
+wait 20
+info &grep Peek:  0x00400024/1: 24 *$ << grep
+0 peek 0x00400024 1
+info &grep Peek:  0x00400025/1: 25 *$ << grep
+0 peek 0x00400025 1
+info &grep Peek:  0x00400026/1: 26 *$ << grep
+0 peek 0x00400026 1
+info &grep Peek:  0x00400027/1: 27 *$ << grep
+0 peek 0x00400027 1
+info endgrep
+
+note Doing 4 byte wrap4 writes
+0 write 0x00400028 1 0 unlock nonseq wrap4  0 0x28
+0 write 0x00400029 1 0 unlock seq    wrap4  0 0x29
+0 write 0x0040002a 1 0 unlock seq    wrap4  0 0x2a
+0 write 0x0040002b 1 0 unlock seq    wrap4  0 0x2b
+wait 20
+info &grep Peek:  0x00400028/1: 28 *$ << grep
+0 peek 0x00400028 1
+info &grep Peek:  0x00400029/1: 29 *$ << grep
+0 peek 0x00400029 1
+info &grep Peek:  0x0040002a/1: 2a *$ << grep
+0 peek 0x0040002a 1
+info &grep Peek:  0x0040002b/1: 2b *$ << grep
+0 peek 0x0040002b 1
+info endgrep
+
+note Doing 4 byte wrap4 writes again
+0 write 0x0040002c 1 0 unlock nonseq wrap4  0 0x2c
+0 write 0x0040002d 1 0 unlock seq    wrap4  0 0x2d
+0 write 0x0040002e 1 0 unlock seq    wrap4  0 0x2e
+0 write 0x0040002f 1 0 unlock seq    wrap4  0 0x2f
+wait 20
+info &grep Peek:  0x0040002c/1: 2c *$ << grep
+0 peek 0x0040002c 1
+info &grep Peek:  0x0040002d/1: 2d *$ << grep
+0 peek 0x0040002d 1
+info &grep Peek:  0x0040002e/1: 2e *$ << grep
+0 peek 0x0040002e 1
+info &grep Peek:  0x0040002f/1: 2f *$ << grep
+0 peek 0x0040002f 1
+info endgrep
+
+note Doing 4 halfword incr4 writes
+0 write 0x00400030 2 0 unlock nonseq incr4  0 0x30 0x31
+0 write 0x00400032 2 0 unlock seq    incr4  0 0x32 0x33
+0 write 0x00400034 2 0 unlock seq    incr4  0 0x34 0x35
+0 write 0x00400036 2 0 unlock seq    incr4  0 0x36 0x37
+wait 20
+info &grep Peek:  0x00400030/2: 30 31 *$ << grep
+0 peek 0x00400030 2
+info &grep Peek:  0x00400032/2: 32 33 *$ << grep
+0 peek 0x00400032 2
+info &grep Peek:  0x00400034/2: 34 35 *$ << grep
+0 peek 0x00400034 2
+info &grep Peek:  0x00400036/2: 36 37 *$ << grep
+0 peek 0x00400036 2
+info endgrep
+
+note Doing 4 halfword wrap4 writes
+0 write 0x00400038 2 0 unlock nonseq wrap4  0 0x38 0x39
+0 write 0x0040003a 2 0 unlock seq    wrap4  0 0x3a 0x3b
+0 write 0x0040003c 2 0 unlock seq    wrap4  0 0x3c 0x3d
+0 write 0x0040003e 2 0 unlock seq    wrap4  0 0x3e 0x3f
+wait 20
+info &grep Peek:  0x00400038/2: 38 39 *$ << grep
+0 peek 0x00400038 2
+info &grep Peek:  0x0040003a/2: 3a 3b *$ << grep
+0 peek 0x0040003a 2
+info &grep Peek:  0x0040003c/2: 3c 3d *$ << grep
+0 peek 0x0040003c 2
+info &grep Peek:  0x0040003e/2: 3e 3f *$ << grep
+0 peek 0x0040003e 2
+info endgrep
+
+note Doing 4 word incr4 writes
+0 write 0x00400040 4 0 unlock nonseq incr4  0 0x40 0x41 0x42 0x43
+0 write 0x00400044 4 0 unlock seq    incr4  0 0x44 0x45 0x46 0x47
+0 write 0x00400048 4 0 unlock seq    incr4  0 0x48 0x49 0x4a 0x4b
+0 write 0x0040004c 4 0 unlock seq    incr4  0 0x4c 0x4d 0x4e 0x4f
+wait 20
+info &grep Peek:  0x00400040/4: 40 41 42 43 *$ << grep
+0 peek 0x00400040 4
+info &grep Peek:  0x00400044/4: 44 45 46 47 *$ << grep
+0 peek 0x00400044 4
+info &grep Peek:  0x00400048/4: 48 49 4a 4b *$ << grep
+0 peek 0x00400048 4
+info &grep Peek:  0x0040004c/4: 4c 4d 4e 4f *$ << grep
+0 peek 0x0040004c 4
+info endgrep
+
+note Doing 4 word wrap4 writes
+0 write 0x00400050 4 0 unlock nonseq wrap4  0 0x50 0x51 0x52 0x53
+0 write 0x00400054 4 0 unlock seq    wrap4  0 0x54 0x55 0x56 0x57
+0 write 0x00400058 4 0 unlock seq    wrap4  0 0x58 0x59 0x5a 0x5b
+0 write 0x0040005c 4 0 unlock seq    wrap4  0 0x5c 0x5d 0x5e 0x5f
+wait 20
+info &grep Peek:  0x00400050/4: 50 51 52 53 *$ << grep
+0 peek 0x00400050 4
+info &grep Peek:  0x00400054/4: 54 55 56 57 *$ << grep
+0 peek 0x00400054 4
+info &grep Peek:  0x00400058/4: 58 59 5a 5b *$ << grep
+0 peek 0x00400058 4
+info &grep Peek:  0x0040005c/4: 5c 5d 5e 5f *$ << grep
+0 peek 0x0040005c 4
+info endgrep
+
+note Doing 8 byte incr8 writes
+0 write 0x00400060 1 0 unlock nonseq incr8  0 0x60
+0 write 0x00400061 1 0 unlock seq    incr8  0 0x61
+0 write 0x00400062 1 0 unlock seq    incr8  0 0x62
+0 write 0x00400063 1 0 unlock seq    incr8  0 0x63
+0 write 0x00400064 1 0 unlock seq    incr8  0 0x64
+0 write 0x00400065 1 0 unlock seq    incr8  0 0x65
+0 write 0x00400066 1 0 unlock seq    incr8  0 0x66
+0 write 0x00400067 1 0 unlock seq    incr8  0 0x67
+wait 20
+info &grep Peek:  0x00400060/1: 60 *$ << grep
+0 peek 0x00400060 1
+info &grep Peek:  0x00400061/1: 61 *$ << grep
+0 peek 0x00400061 1
+info &grep Peek:  0x00400062/1: 62 *$ << grep
+0 peek 0x00400062 1
+info &grep Peek:  0x00400063/1: 63 *$ << grep
+0 peek 0x00400063 1
+info &grep Peek:  0x00400064/1: 64 *$ << grep
+0 peek 0x00400064 1
+info &grep Peek:  0x00400065/1: 65 *$ << grep
+0 peek 0x00400065 1
+info &grep Peek:  0x00400066/1: 66 *$ << grep
+0 peek 0x00400066 1
+info &grep Peek:  0x00400067/1: 67 *$ << grep
+0 peek 0x00400067 1
+info endgrep
+
+note Doing 8 byte wrap8 writes
+0 write 0x00400068 1 0 unlock nonseq wrap8  0 0x68
+0 write 0x00400069 1 0 unlock seq    wrap8  0 0x69
+0 write 0x0040006a 1 0 unlock seq    wrap8  0 0x6a
+0 write 0x0040006b 1 0 unlock seq    wrap8  0 0x6b
+0 write 0x0040006c 1 0 unlock seq    wrap8  0 0x6c
+0 write 0x0040006d 1 0 unlock seq    wrap8  0 0x6d
+0 write 0x0040006e 1 0 unlock seq    wrap8  0 0x6e
+0 write 0x0040006f 1 0 unlock seq    wrap8  0 0x6f
+wait 20
+info &grep Peek:  0x00400068/1: 68 *$ << grep
+0 peek 0x00400068 1
+info &grep Peek:  0x00400069/1: 69 *$ << grep
+0 peek 0x00400069 1
+info &grep Peek:  0x0040006a/1: 6a *$ << grep
+0 peek 0x0040006a 1
+info &grep Peek:  0x0040006b/1: 6b *$ << grep
+0 peek 0x0040006b 1
+info &grep Peek:  0x0040006c/1: 6c *$ << grep
+0 peek 0x0040006c 1
+info &grep Peek:  0x0040006d/1: 6d *$ << grep
+0 peek 0x0040006d 1
+info &grep Peek:  0x0040006e/1: 6e *$ << grep
+0 peek 0x0040006e 1
+info &grep Peek:  0x0040006f/1: 6f *$ << grep
+0 peek 0x0040006f 1
+info endgrep
+
+note Doing 8 halfword incr8 writes
+0 write 0x00400070 2 0 unlock nonseq incr8  0 0x70 0x71
+0 write 0x00400072 2 0 unlock seq    incr8  0 0x72 0x73
+0 write 0x00400074 2 0 unlock seq    incr8  0 0x74 0x75
+0 write 0x00400076 2 0 unlock seq    incr8  0 0x76 0x77
+0 write 0x00400078 2 0 unlock seq    incr8  0 0x78 0x79
+0 write 0x0040007a 2 0 unlock seq    incr8  0 0x7a 0x7b
+0 write 0x0040007c 2 0 unlock seq    incr8  0 0x7c 0x7d
+0 write 0x0040007e 2 0 unlock seq    incr8  0 0x7e 0x7f
+wait 20
+info &grep Peek:  0x00400070/2: 70 71 *$ << grep
+0 peek 0x00400070 2
+info &grep Peek:  0x00400072/2: 72 73 *$ << grep
+0 peek 0x00400072 2
+info &grep Peek:  0x00400074/2: 74 75 *$ << grep
+0 peek 0x00400074 2
+info &grep Peek:  0x00400076/2: 76 77 *$ << grep
+0 peek 0x00400076 2
+info &grep Peek:  0x00400078/2: 78 79 *$ << grep
+0 peek 0x00400078 2
+info &grep Peek:  0x0040007a/2: 7a 7b *$ << grep
+0 peek 0x0040007a 2
+info &grep Peek:  0x0040007c/2: 7c 7d *$ << grep
+0 peek 0x0040007c 2
+info &grep Peek:  0x0040007e/2: 7e 7f *$ << grep
+0 peek 0x0040007e 2
+info endgrep
+
+note Doing 8 halfword wrap8 writes
+0 write 0x00400080 2 0 unlock nonseq wrap8  0 0x80 0x81
+0 write 0x00400082 2 0 unlock seq    wrap8  0 0x82 0x83
+0 write 0x00400084 2 0 unlock seq    wrap8  0 0x84 0x85
+0 write 0x00400086 2 0 unlock seq    wrap8  0 0x86 0x87
+0 write 0x00400088 2 0 unlock seq    wrap8  0 0x88 0x89
+0 write 0x0040008a 2 0 unlock seq    wrap8  0 0x8a 0x8b
+0 write 0x0040008c 2 0 unlock seq    wrap8  0 0x8c 0x8d
+0 write 0x0040008e 2 0 unlock seq    wrap8  0 0x8e 0x8f
+wait 20
+info &grep Peek:  0x00400080/2: 80 81 *$ << grep
+0 peek 0x00400080 2
+info &grep Peek:  0x00400082/2: 82 83 *$ << grep
+0 peek 0x00400082 2
+info &grep Peek:  0x00400084/2: 84 85 *$ << grep
+0 peek 0x00400084 2
+info &grep Peek:  0x00400086/2: 86 87 *$ << grep
+0 peek 0x00400086 2
+info &grep Peek:  0x00400088/2: 88 89 *$ << grep
+0 peek 0x00400088 2
+info &grep Peek:  0x0040008a/2: 8a 8b *$ << grep
+0 peek 0x0040008a 2
+info &grep Peek:  0x0040008c/2: 8c 8d *$ << grep
+0 peek 0x0040008c 2
+info &grep Peek:  0x0040008e/2: 8e 8f *$ << grep
+0 peek 0x0040008e 2
+info endgrep
+
+note Doing 8 word incr8 writes
+0 write 0x004000a0 4 0 unlock nonseq incr8  0 0xa0 0xa1 0xa2 0xa3
+0 write 0x004000a4 4 0 unlock seq    incr8  0 0xa4 0xa5 0xa6 0xa7
+0 write 0x004000a8 4 0 unlock seq    incr8  0 0xa8 0xa9 0xaa 0xab
+0 write 0x004000ac 4 0 unlock seq    incr8  0 0xac 0xad 0xae 0xaf
+0 write 0x004000b0 4 0 unlock seq    incr8  0 0xb0 0xb1 0xb2 0xb3
+0 write 0x004000b4 4 0 unlock seq    incr8  0 0xb4 0xb5 0xb6 0xb7
+0 write 0x004000b8 4 0 unlock seq    incr8  0 0xb8 0xb9 0xba 0xbb
+0 write 0x004000bc 4 0 unlock seq    incr8  0 0xbc 0xbd 0xbe 0xbf
+wait 20
+info &grep Peek:  0x004000a0/4: a0 a1 a2 a3 *$ << grep
+0 peek 0x004000a0 4
+info &grep Peek:  0x004000a4/4: a4 a5 a6 a7 *$ << grep
+0 peek 0x004000a4 4
+info &grep Peek:  0x004000a8/4: a8 a9 aa ab *$ << grep
+0 peek 0x004000a8 4
+info &grep Peek:  0x004000ac/4: ac ad ae af *$ << grep
+0 peek 0x004000ac 4
+info &grep Peek:  0x004000b0/4: b0 b1 b2 b3 *$ << grep
+0 peek 0x004000b0 4
+info &grep Peek:  0x004000b4/4: b4 b5 b6 b7 *$ << grep
+0 peek 0x004000b4 4
+info &grep Peek:  0x004000b8/4: b8 b9 ba bb *$ << grep
+0 peek 0x004000b8 4
+info &grep Peek:  0x004000bc/4: bc bd be bf *$ << grep
+0 peek 0x004000bc 4
+info endgrep
+
+note Doing 8 word wrap8 writes
+0 write 0x004000c0 4 0 unlock nonseq wrap8  0 0xc0 0xc1 0xc2 0xc3
+0 write 0x004000c4 4 0 unlock seq    wrap8  0 0xc4 0xc5 0xc6 0xc7
+0 write 0x004000c8 4 0 unlock seq    wrap8  0 0xc8 0xc9 0xca 0xcb
+0 write 0x004000cc 4 0 unlock seq    wrap8  0 0xcc 0xcd 0xce 0xcf
+0 write 0x004000d0 4 0 unlock seq    wrap8  0 0xd0 0xd1 0xd2 0xd3
+0 write 0x004000d4 4 0 unlock seq    wrap8  0 0xd4 0xd5 0xd6 0xd7
+0 write 0x004000d8 4 0 unlock seq    wrap8  0 0xd8 0xd9 0xda 0xdb
+0 write 0x004000dc 4 0 unlock seq    wrap8  0 0xdc 0xdd 0xde 0xdf
+wait 20
+info &grep Peek:  0x004000c0/4: c0 c1 c2 c3 *$ << grep
+0 peek 0x004000c0 4
+info &grep Peek:  0x004000c4/4: c4 c5 c6 c7 *$ << grep
+0 peek 0x004000c4 4
+info &grep Peek:  0x004000c8/4: c8 c9 ca cb *$ << grep
+0 peek 0x004000c8 4
+info &grep Peek:  0x004000cc/4: cc cd ce cf *$ << grep
+0 peek 0x004000cc 4
+info &grep Peek:  0x004000d0/4: d0 d1 d2 d3 *$ << grep
+0 peek 0x004000d0 4
+info &grep Peek:  0x004000d4/4: d4 d5 d6 d7 *$ << grep
+0 peek 0x004000d4 4
+info &grep Peek:  0x004000d8/4: d8 d9 da db *$ << grep
+0 peek 0x004000d8 4
+info &grep Peek:  0x004000dc/4: dc dd de df *$ << grep
+0 peek 0x004000dc 4
+info endgrep
+
+note Doing 16 byte incr16 writes
+0 write 0x004000e0 1 0 unlock nonseq incr16 0 0xe0
+0 write 0x004000e1 1 0 unlock seq    incr16 0 0xe1
+0 write 0x004000e2 1 0 unlock seq    incr16 0 0xe2
+0 write 0x004000e3 1 0 unlock seq    incr16 0 0xe3
+0 write 0x004000e4 1 0 unlock seq    incr16 0 0xe4
+0 write 0x004000e5 1 0 unlock seq    incr16 0 0xe5
+0 write 0x004000e6 1 0 unlock seq    incr16 0 0xe6
+0 write 0x004000e7 1 0 unlock seq    incr16 0 0xe7
+0 write 0x004000e8 1 0 unlock seq    incr16 0 0xe8
+0 write 0x004000e9 1 0 unlock seq    incr16 0 0xe9
+0 write 0x004000ea 1 0 unlock seq    incr16 0 0xea
+0 write 0x004000eb 1 0 unlock seq    incr16 0 0xeb
+0 write 0x004000ec 1 0 unlock seq    incr16 0 0xec
+0 write 0x004000ed 1 0 unlock seq    incr16 0 0xed
+0 write 0x004000ee 1 0 unlock seq    incr16 0 0xee
+0 write 0x004000ef 1 0 unlock seq    incr16 0 0xef
+wait 20
+info &grep Peek:  0x004000e0/1: e0 *$ << grep
+0 peek 0x004000e0 1
+info &grep Peek:  0x004000e1/1: e1 *$ << grep
+0 peek 0x004000e1 1
+info &grep Peek:  0x004000e2/1: e2 *$ << grep
+0 peek 0x004000e2 1
+info &grep Peek:  0x004000e3/1: e3 *$ << grep
+0 peek 0x004000e3 1
+info &grep Peek:  0x004000e4/1: e4 *$ << grep
+0 peek 0x004000e4 1
+info &grep Peek:  0x004000e5/1: e5 *$ << grep
+0 peek 0x004000e5 1
+info &grep Peek:  0x004000e6/1: e6 *$ << grep
+0 peek 0x004000e6 1
+info &grep Peek:  0x004000e7/1: e7 *$ << grep
+0 peek 0x004000e7 1
+info &grep Peek:  0x004000e8/1: e8 *$ << grep
+0 peek 0x004000e8 1
+info &grep Peek:  0x004000e9/1: e9 *$ << grep
+0 peek 0x004000e9 1
+info &grep Peek:  0x004000ea/1: ea *$ << grep
+0 peek 0x004000ea 1
+info &grep Peek:  0x004000eb/1: eb *$ << grep
+0 peek 0x004000eb 1
+info &grep Peek:  0x004000ec/1: ec *$ << grep
+0 peek 0x004000ec 1
+info &grep Peek:  0x004000ed/1: ed *$ << grep
+0 peek 0x004000ed 1
+info &grep Peek:  0x004000ee/1: ee *$ << grep
+0 peek 0x004000ee 1
+info &grep Peek:  0x004000ef/1: ef *$ << grep
+0 peek 0x004000ef 1
+info endgrep
+
+note Doing 16 byte wrap16 writes
+0 write 0x004000f0 1 0 unlock nonseq wrap16 0 0xf0
+0 write 0x004000f1 1 0 unlock seq    wrap16 0 0xf1
+0 write 0x004000f2 1 0 unlock seq    wrap16 0 0xf2
+0 write 0x004000f3 1 0 unlock seq    wrap16 0 0xf3
+0 write 0x004000f4 1 0 unlock seq    wrap16 0 0xf4
+0 write 0x004000f5 1 0 unlock seq    wrap16 0 0xf5
+0 write 0x004000f6 1 0 unlock seq    wrap16 0 0xf6
+0 write 0x004000f7 1 0 unlock seq    wrap16 0 0xf7
+0 write 0x004000f8 1 0 unlock seq    wrap16 0 0xf8
+0 write 0x004000f9 1 0 unlock seq    wrap16 0 0xf9
+0 write 0x004000fa 1 0 unlock seq    wrap16 0 0xfa
+0 write 0x004000fb 1 0 unlock seq    wrap16 0 0xfb
+0 write 0x004000fc 1 0 unlock seq    wrap16 0 0xfc
+0 write 0x004000fd 1 0 unlock seq    wrap16 0 0xfd
+0 write 0x004000fe 1 0 unlock seq    wrap16 0 0xfe
+0 write 0x004000ff 1 0 unlock seq    wrap16 0 0xff
+wait 20
+info &grep Peek:  0x004000f0/1: f0 *$ << grep
+0 peek 0x004000f0 1
+info &grep Peek:  0x004000f1/1: f1 *$ << grep
+0 peek 0x004000f1 1
+info &grep Peek:  0x004000f2/1: f2 *$ << grep
+0 peek 0x004000f2 1
+info &grep Peek:  0x004000f3/1: f3 *$ << grep
+0 peek 0x004000f3 1
+info &grep Peek:  0x004000f4/1: f4 *$ << grep
+0 peek 0x004000f4 1
+info &grep Peek:  0x004000f5/1: f5 *$ << grep
+0 peek 0x004000f5 1
+info &grep Peek:  0x004000f6/1: f6 *$ << grep
+0 peek 0x004000f6 1
+info &grep Peek:  0x004000f7/1: f7 *$ << grep
+0 peek 0x004000f7 1
+info &grep Peek:  0x004000f8/1: f8 *$ << grep
+0 peek 0x004000f8 1
+info &grep Peek:  0x004000f9/1: f9 *$ << grep
+0 peek 0x004000f9 1
+info &grep Peek:  0x004000fa/1: fa *$ << grep
+0 peek 0x004000fa 1
+info &grep Peek:  0x004000fb/1: fb *$ << grep
+0 peek 0x004000fb 1
+info &grep Peek:  0x004000fc/1: fc *$ << grep
+0 peek 0x004000fc 1
+info &grep Peek:  0x004000fd/1: fd *$ << grep
+0 peek 0x004000fd 1
+info &grep Peek:  0x004000fe/1: fe *$ << grep
+0 peek 0x004000fe 1
+info &grep Peek:  0x004000ff/1: ff *$ << grep
+0 peek 0x004000ff 1
+info endgrep
+
+note Doing 16 halfword incr16 writes
+0 write 0x00400100 2 0 unlock nonseq incr16 0 0x00 0x01
+0 write 0x00400102 2 0 unlock seq    incr16 0 0x02 0x03
+0 write 0x00400104 2 0 unlock seq    incr16 0 0x04 0x05
+0 write 0x00400106 2 0 unlock seq    incr16 0 0x06 0x07
+0 write 0x00400108 2 0 unlock seq    incr16 0 0x08 0x09
+0 write 0x0040010a 2 0 unlock seq    incr16 0 0x0a 0x0b
+0 write 0x0040010c 2 0 unlock seq    incr16 0 0x0c 0x0d
+0 write 0x0040010e 2 0 unlock seq    incr16 0 0x0e 0x0f
+0 write 0x00400110 2 0 unlock seq    incr16 0 0x10 0x11
+0 write 0x00400112 2 0 unlock seq    incr16 0 0x12 0x13
+0 write 0x00400114 2 0 unlock seq    incr16 0 0x14 0x15
+0 write 0x00400116 2 0 unlock seq    incr16 0 0x16 0x17
+0 write 0x00400118 2 0 unlock seq    incr16 0 0x18 0x19
+0 write 0x0040011a 2 0 unlock seq    incr16 0 0x1a 0x1b
+0 write 0x0040011c 2 0 unlock seq    incr16 0 0x1c 0x1d
+0 write 0x0040011e 2 0 unlock seq    incr16 0 0x1e 0x1f
+wait 20
+info &grep Peek:  0x00400100/2: 00 01 *$ << grep
+0 peek 0x00400100 2
+info &grep Peek:  0x00400102/2: 02 03 *$ << grep
+0 peek 0x00400102 2
+info &grep Peek:  0x00400104/2: 04 05 *$ << grep
+0 peek 0x00400104 2
+info &grep Peek:  0x00400106/2: 06 07 *$ << grep
+0 peek 0x00400106 2
+info &grep Peek:  0x00400108/2: 08 09 *$ << grep
+0 peek 0x00400108 2
+info &grep Peek:  0x0040010a/2: 0a 0b *$ << grep
+0 peek 0x0040010a 2
+info &grep Peek:  0x0040010c/2: 0c 0d *$ << grep
+0 peek 0x0040010c 2
+info &grep Peek:  0x0040010e/2: 0e 0f *$ << grep
+0 peek 0x0040010e 2
+info &grep Peek:  0x00400110/2: 10 11 *$ << grep
+0 peek 0x00400110 2
+info &grep Peek:  0x00400112/2: 12 13 *$ << grep
+0 peek 0x00400112 2
+info &grep Peek:  0x00400114/2: 14 15 *$ << grep
+0 peek 0x00400114 2
+info &grep Peek:  0x00400116/2: 16 17 *$ << grep
+0 peek 0x00400116 2
+info &grep Peek:  0x00400118/2: 18 19 *$ << grep
+0 peek 0x00400118 2
+info &grep Peek:  0x0040011a/2: 1a 1b *$ << grep
+0 peek 0x0040011a 2
+info &grep Peek:  0x0040011c/2: 1c 1d *$ << grep
+0 peek 0x0040011c 2
+info &grep Peek:  0x0040011e/2: 1e 1f *$ << grep
+0 peek 0x0040011e 2
+info endgrep
+
+note Doing 16 halfword wrap16 writes
+0 write 0x00400120 2 0 unlock nonseq wrap16 0 0x20 0x21
+0 write 0x00400122 2 0 unlock seq    wrap16 0 0x22 0x23
+0 write 0x00400124 2 0 unlock seq    wrap16 0 0x24 0x25
+0 write 0x00400126 2 0 unlock seq    wrap16 0 0x26 0x27
+0 write 0x00400128 2 0 unlock seq    wrap16 0 0x28 0x29
+0 write 0x0040012a 2 0 unlock seq    wrap16 0 0x2a 0x2b
+0 write 0x0040012c 2 0 unlock seq    wrap16 0 0x2c 0x2d
+0 write 0x0040012e 2 0 unlock seq    wrap16 0 0x2e 0x2f
+0 write 0x00400130 2 0 unlock seq    wrap16 0 0x30 0x31
+0 write 0x00400132 2 0 unlock seq    wrap16 0 0x32 0x33
+0 write 0x00400134 2 0 unlock seq    wrap16 0 0x34 0x35
+0 write 0x00400136 2 0 unlock seq    wrap16 0 0x36 0x37
+0 write 0x00400138 2 0 unlock seq    wrap16 0 0x38 0x39
+0 write 0x0040013a 2 0 unlock seq    wrap16 0 0x3a 0x3b
+0 write 0x0040013c 2 0 unlock seq    wrap16 0 0x3c 0x3d
+0 write 0x0040013e 2 0 unlock seq    wrap16 0 0x3e 0x3f
+wait 20
+info &grep Peek:  0x00400120/2: 20 21 *$ << grep
+0 peek 0x00400120 2
+info &grep Peek:  0x00400122/2: 22 23 *$ << grep
+0 peek 0x00400122 2
+info &grep Peek:  0x00400124/2: 24 25 *$ << grep
+0 peek 0x00400124 2
+info &grep Peek:  0x00400126/2: 26 27 *$ << grep
+0 peek 0x00400126 2
+info &grep Peek:  0x00400128/2: 28 29 *$ << grep
+0 peek 0x00400128 2
+info &grep Peek:  0x0040012a/2: 2a 2b *$ << grep
+0 peek 0x0040012a 2
+info &grep Peek:  0x0040012c/2: 2c 2d *$ << grep
+0 peek 0x0040012c 2
+info &grep Peek:  0x0040012e/2: 2e 2f *$ << grep
+0 peek 0x0040012e 2
+info &grep Peek:  0x00400130/2: 30 31 *$ << grep
+0 peek 0x00400130 2
+info &grep Peek:  0x00400132/2: 32 33 *$ << grep
+0 peek 0x00400132 2
+info &grep Peek:  0x00400134/2: 34 35 *$ << grep
+0 peek 0x00400134 2
+info &grep Peek:  0x00400136/2: 36 37 *$ << grep
+0 peek 0x00400136 2
+info &grep Peek:  0x00400138/2: 38 39 *$ << grep
+0 peek 0x00400138 2
+info &grep Peek:  0x0040013a/2: 3a 3b *$ << grep
+0 peek 0x0040013a 2
+info &grep Peek:  0x0040013c/2: 3c 3d *$ << grep
+0 peek 0x0040013c 2
+info &grep Peek:  0x0040013e/2: 3e 3f *$ << grep
+0 peek 0x0040013e 2
+info endgrep
+
+note Doing 16 word incr16 writes
+0 write 0x00400140 4 0 unlock nonseq incr16 0 0x40 0x41 0x42 0x43
+0 write 0x00400144 4 0 unlock seq    incr16 0 0x44 0x45 0x46 0x47
+0 write 0x00400148 4 0 unlock seq    incr16 0 0x48 0x49 0x4a 0x4b
+0 write 0x0040014c 4 0 unlock seq    incr16 0 0x4c 0x4d 0x4e 0x4f
+0 write 0x00400150 4 0 unlock seq    incr16 0 0x50 0x51 0x52 0x53
+0 write 0x00400154 4 0 unlock seq    incr16 0 0x54 0x55 0x56 0x57
+0 write 0x00400158 4 0 unlock seq    incr16 0 0x58 0x59 0x5a 0x5b
+0 write 0x0040015c 4 0 unlock seq    incr16 0 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400160 4 0 unlock seq    incr16 0 0x60 0x61 0x62 0x63
+0 write 0x00400164 4 0 unlock seq    incr16 0 0x64 0x65 0x66 0x67
+0 write 0x00400168 4 0 unlock seq    incr16 0 0x68 0x69 0x6a 0x6b
+0 write 0x0040016c 4 0 unlock seq    incr16 0 0x6c 0x6d 0x6e 0x6f
+0 write 0x00400170 4 0 unlock seq    incr16 0 0x70 0x71 0x72 0x73
+0 write 0x00400174 4 0 unlock seq    incr16 0 0x74 0x75 0x76 0x77
+0 write 0x00400178 4 0 unlock seq    incr16 0 0x78 0x79 0x7a 0x7b
+0 write 0x0040017c 4 0 unlock seq    incr16 0 0x7c 0x7d 0x7e 0x7f
+wait 20
+info &grep Peek:  0x00400140/4: 40 41 42 43 *$ << grep
+0 peek 0x00400140 4
+info &grep Peek:  0x00400144/4: 44 45 46 47 *$ << grep
+0 peek 0x00400144 4
+info &grep Peek:  0x00400148/4: 48 49 4a 4b *$ << grep
+0 peek 0x00400148 4
+info &grep Peek:  0x0040014c/4: 4c 4d 4e 4f *$ << grep
+0 peek 0x0040014c 4
+info &grep Peek:  0x00400150/4: 50 51 52 53 *$ << grep
+0 peek 0x00400150 4
+info &grep Peek:  0x00400154/4: 54 55 56 57 *$ << grep
+0 peek 0x00400154 4
+info &grep Peek:  0x00400158/4: 58 59 5a 5b *$ << grep
+0 peek 0x00400158 4
+info &grep Peek:  0x0040015c/4: 5c 5d 5e 5f *$ << grep
+0 peek 0x0040015c 4
+info &grep Peek:  0x00400160/4: 60 61 62 63 *$ << grep
+0 peek 0x00400160 4
+info &grep Peek:  0x00400164/4: 64 65 66 67 *$ << grep
+0 peek 0x00400164 4
+info &grep Peek:  0x00400168/4: 68 69 6a 6b *$ << grep
+0 peek 0x00400168 4
+info &grep Peek:  0x0040016c/4: 6c 6d 6e 6f *$ << grep
+0 peek 0x0040016c 4
+info &grep Peek:  0x00400170/4: 70 71 72 73 *$ << grep
+0 peek 0x00400170 4
+info &grep Peek:  0x00400174/4: 74 75 76 77 *$ << grep
+0 peek 0x00400174 4
+info &grep Peek:  0x00400178/4: 78 79 7a 7b *$ << grep
+0 peek 0x00400178 4
+info &grep Peek:  0x0040017c/4: 7c 7d 7e 7f *$ << grep
+0 peek 0x0040017c 4
+info endgrep
+
+note Doing 16 word wrap16 writes
+0 write 0x00400180 4 0 unlock nonseq wrap16 0 0x80 0x81 0x82 0x83
+0 write 0x00400184 4 0 unlock seq    wrap16 0 0x84 0x85 0x86 0x87
+0 write 0x00400188 4 0 unlock seq    wrap16 0 0x88 0x89 0x8a 0x8b
+0 write 0x0040018c 4 0 unlock seq    wrap16 0 0x8c 0x8d 0x8e 0x8f
+0 write 0x00400190 4 0 unlock seq    wrap16 0 0x90 0x91 0x92 0x93
+0 write 0x00400194 4 0 unlock seq    wrap16 0 0x94 0x95 0x96 0x97
+0 write 0x00400198 4 0 unlock seq    wrap16 0 0x98 0x99 0x9a 0x9b
+0 write 0x0040019c 4 0 unlock seq    wrap16 0 0x9c 0x9d 0x9e 0x9f
+0 write 0x004001a0 4 0 unlock seq    wrap16 0 0xa0 0xa1 0xa2 0xa3
+0 write 0x004001a4 4 0 unlock seq    wrap16 0 0xa4 0xa5 0xa6 0xa7
+0 write 0x004001a8 4 0 unlock seq    wrap16 0 0xa8 0xa9 0xaa 0xab
+0 write 0x004001ac 4 0 unlock seq    wrap16 0 0xac 0xad 0xae 0xaf
+0 write 0x004001b0 4 0 unlock seq    wrap16 0 0xb0 0xb1 0xb2 0xb3
+0 write 0x004001b4 4 0 unlock seq    wrap16 0 0xb4 0xb5 0xb6 0xb7
+0 write 0x004001b8 4 0 unlock seq    wrap16 0 0xb8 0xb9 0xba 0xbb
+0 write 0x004001bc 4 0 unlock seq    wrap16 0 0xbc 0xbd 0xbe 0xbf
+wait 20
+info &grep Peek:  0x00400180/4: 80 81 82 83 *$ << grep
+0 peek 0x00400180 4
+info &grep Peek:  0x00400184/4: 84 85 86 87 *$ << grep
+0 peek 0x00400184 4
+info &grep Peek:  0x00400188/4: 88 89 8a 8b *$ << grep
+0 peek 0x00400188 4
+info &grep Peek:  0x0040018c/4: 8c 8d 8e 8f *$ << grep
+0 peek 0x0040018c 4
+info &grep Peek:  0x00400190/4: 90 91 92 93 *$ << grep
+0 peek 0x00400190 4
+info &grep Peek:  0x00400194/4: 94 95 96 97 *$ << grep
+0 peek 0x00400194 4
+info &grep Peek:  0x00400198/4: 98 99 9a 9b *$ << grep
+0 peek 0x00400198 4
+info &grep Peek:  0x0040019c/4: 9c 9d 9e 9f *$ << grep
+0 peek 0x0040019c 4
+info &grep Peek:  0x004001a0/4: a0 a1 a2 a3 *$ << grep
+0 peek 0x004001a0 4
+info &grep Peek:  0x004001a4/4: a4 a5 a6 a7 *$ << grep
+0 peek 0x004001a4 4
+info &grep Peek:  0x004001a8/4: a8 a9 aa ab *$ << grep
+0 peek 0x004001a8 4
+info &grep Peek:  0x004001ac/4: ac ad ae af *$ << grep
+0 peek 0x004001ac 4
+info &grep Peek:  0x004001b0/4: b0 b1 b2 b3 *$ << grep
+0 peek 0x004001b0 4
+info &grep Peek:  0x004001b4/4: b4 b5 b6 b7 *$ << grep
+0 peek 0x004001b4 4
+info &grep Peek:  0x004001b8/4: b8 b9 ba bb *$ << grep
+0 peek 0x004001b8 4
+info &grep Peek:  0x004001bc/4: bc bd be bf *$ << grep
+0 peek 0x004001bc 4
+info endgrep
+
+
+
+
+note ********* Starting Aligned Reads of Word Size or Less *********
+
+note Doing 4 byte single reads
+info &grep Read:  0x00400000/1: 00 *$ << endgrepA
+0 read  0x00400000 1 0 unlock nonseq single 0
+info &grep Read:  0x00400001/1: 01 *$ << endgrepB
+0 read  0x00400001 1 0 unlock nonseq single 0
+info &grep Read:  0x00400002/1: 02 *$ << endgrepA
+0 read  0x00400002 1 0 unlock nonseq single 0
+info &grep Read:  0x00400003/1: 03 *$ << endgrepB
+0 read  0x00400003 1 0 unlock nonseq single 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 2 halfword single reads
+info &grep Read:  0x00400004/2: 04 05 *$ << endgrepA
+0 read  0x00400004 2 0 unlock nonseq single 0
+info &grep Read:  0x00400006/2: 06 07 *$ << endgrepB
+0 read  0x00400006 2 0 unlock nonseq single 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 2 word single reads
+info &grep Read:  0x00400008/4: 08 09 0a 0b *$ << endgrepA
+0 read  0x00400008 4 0 unlock nonseq single 0
+info &grep Read:  0x0040000c/4: 0c 0d 0e 0f *$ << endgrepB
+0 read  0x0040000c 4 0 unlock nonseq single 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 byte incr reads
+info &grep Read:  0x00400010/1: 10 *$ << endgrepA
+0 read  0x00400010 1 0 unlock nonseq incr   0
+info &grep Read:  0x00400011/1: 11 *$ << endgrepB
+0 read  0x00400011 1 0 unlock seq    incr   0
+info &grep Read:  0x00400012/1: 12 *$ << endgrepA
+0 read  0x00400012 1 0 unlock seq    incr   0
+info &grep Read:  0x00400013/1: 13 *$ << endgrepB
+0 read  0x00400013 1 0 unlock nonseq incr   0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 2 halfword incr reads
+info &grep Read:  0x00400014/2: 14 15 *$ << endgrepA
+0 read  0x00400014 2 0 unlock nonseq incr   0
+info &grep Read:  0x00400016/2: 16 17 *$ << endgrepB
+0 read  0x00400016 2 0 unlock seq    incr   0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 2 word incr reads
+info &grep Read:  0x00400018/4: 18 19 1a 1b *$ << endgrepA
+0 read  0x00400018 4 0 unlock nonseq incr   0
+info &grep Read:  0x0040001c/4: 1c 1d 1e 1f *$ << endgrepB
+0 read  0x0040001c 4 0 unlock seq    incr   0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 byte incr4 reads
+info &grep Read:  0x00400020/1: 20 *$ << endgrepA
+0 read  0x00400020 1 0 unlock nonseq incr4  0
+info &grep Read:  0x00400021/1: 21 *$ << endgrepB
+0 read  0x00400021 1 0 unlock seq    incr4  0
+info &grep Read:  0x00400022/1: 22 *$ << endgrepA
+0 read  0x00400022 1 0 unlock seq    incr4  0
+info &grep Read:  0x00400023/1: 23 *$ << endgrepB
+0 read  0x00400023 1 0 unlock seq    incr4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 byte incr4 reads again
+info &grep Read:  0x00400024/1: 24 *$ << endgrepA
+0 read  0x00400024 1 0 unlock nonseq incr4  0
+info &grep Read:  0x00400025/1: 25 *$ << endgrepB
+0 read  0x00400025 1 0 unlock seq    incr4  0
+info &grep Read:  0x00400026/1: 26 *$ << endgrepA
+0 read  0x00400026 1 0 unlock seq    incr4  0
+info &grep Read:  0x00400027/1: 27 *$ << endgrepB
+0 read  0x00400027 1 0 unlock seq    incr4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 byte wrap4 reads
+info &grep Read:  0x00400028/1: 28 *$ << endgrepA
+0 read  0x00400028 1 0 unlock nonseq wrap4  0
+info &grep Read:  0x00400029/1: 29 *$ << endgrepB
+0 read  0x00400029 1 0 unlock seq    wrap4  0
+info &grep Read:  0x0040002a/1: 2a *$ << endgrepA
+0 read  0x0040002a 1 0 unlock seq    wrap4  0
+info &grep Read:  0x0040002b/1: 2b *$ << endgrepB
+0 read  0x0040002b 1 0 unlock seq    wrap4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 byte wrap4 reads again
+info &grep Read:  0x0040002c/1: 2c *$ << endgrepA
+0 read  0x0040002c 1 0 unlock nonseq wrap4  0
+info &grep Read:  0x0040002d/1: 2d *$ << endgrepB
+0 read  0x0040002d 1 0 unlock seq    wrap4  0
+info &grep Read:  0x0040002e/1: 2e *$ << endgrepA
+0 read  0x0040002e 1 0 unlock seq    wrap4  0
+info &grep Read:  0x0040002f/1: 2f *$ << endgrepB
+0 read  0x0040002f 1 0 unlock seq    wrap4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 halfword incr4 reads
+info &grep Read:  0x00400030/2: 30 31 *$ << endgrepA
+0 read  0x00400030 2 0 unlock nonseq incr4  0
+info &grep Read:  0x00400032/2: 32 33 *$ << endgrepB
+0 read  0x00400032 2 0 unlock seq    incr4  0
+info &grep Read:  0x00400034/2: 34 35 *$ << endgrepA
+0 read  0x00400034 2 0 unlock seq    incr4  0
+info &grep Read:  0x00400036/2: 36 37 *$ << endgrepB
+0 read  0x00400036 2 0 unlock seq    incr4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 halfword wrap4 reads
+info &grep Read:  0x00400038/2: 38 39 *$ << endgrepA
+0 read  0x00400038 2 0 unlock nonseq wrap4  0
+info &grep Read:  0x0040003a/2: 3a 3b *$ << endgrepB
+0 read  0x0040003a 2 0 unlock seq    wrap4  0
+info &grep Read:  0x0040003c/2: 3c 3d *$ << endgrepA
+0 read  0x0040003c 2 0 unlock seq    wrap4  0
+info &grep Read:  0x0040003e/2: 3e 3f *$ << endgrepB
+0 read  0x0040003e 2 0 unlock seq    wrap4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 word incr4 reads
+info &grep Read:  0x00400040/4: 40 41 42 43 *$ << endgrepA
+0 read  0x00400040 4 0 unlock nonseq incr4  0
+info &grep Read:  0x00400044/4: 44 45 46 47 *$ << endgrepB
+0 read  0x00400044 4 0 unlock seq    incr4  0
+info &grep Read:  0x00400048/4: 48 49 4a 4b *$ << endgrepA
+0 read  0x00400048 4 0 unlock seq    incr4  0
+info &grep Read:  0x0040004c/4: 4c 4d 4e 4f *$ << endgrepB
+0 read  0x0040004c 4 0 unlock seq    incr4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 word wrap4 reads
+info &grep Read:  0x00400050/4: 50 51 52 53 *$ << endgrepA
+0 read  0x00400050 4 0 unlock nonseq wrap4  0
+info &grep Read:  0x00400054/4: 54 55 56 57 *$ << endgrepB
+0 read  0x00400054 4 0 unlock seq    wrap4  0
+info &grep Read:  0x00400058/4: 58 59 5a 5b *$ << endgrepA
+0 read  0x00400058 4 0 unlock seq    wrap4  0
+info &grep Read:  0x0040005c/4: 5c 5d 5e 5f *$ << endgrepB
+0 read  0x0040005c 4 0 unlock seq    wrap4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 byte incr8 reads
+info &grep Read:  0x00400060/1: 60 *$ << endgrepA
+0 read  0x00400060 1 0 unlock nonseq incr8  0
+info &grep Read:  0x00400061/1: 61 *$ << endgrepB
+0 read  0x00400061 1 0 unlock seq    incr8  0
+info &grep Read:  0x00400062/1: 62 *$ << endgrepA
+0 read  0x00400062 1 0 unlock seq    incr8  0
+info &grep Read:  0x00400063/1: 63 *$ << endgrepB
+0 read  0x00400063 1 0 unlock seq    incr8  0
+info &grep Read:  0x00400064/1: 64 *$ << endgrepA
+0 read  0x00400064 1 0 unlock seq    incr8  0
+info &grep Read:  0x00400065/1: 65 *$ << endgrepB
+0 read  0x00400065 1 0 unlock seq    incr8  0
+info &grep Read:  0x00400066/1: 66 *$ << endgrepA
+0 read  0x00400066 1 0 unlock seq    incr8  0
+info &grep Read:  0x00400067/1: 67 *$ << endgrepB
+0 read  0x00400067 1 0 unlock seq    incr8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 byte wrap8 reads
+info &grep Read:  0x00400068/1: 68 *$ << endgrepA
+0 read  0x00400068 1 0 unlock nonseq wrap8  0
+info &grep Read:  0x00400069/1: 69 *$ << endgrepB
+0 read  0x00400069 1 0 unlock seq    wrap8  0
+info &grep Read:  0x0040006a/1: 6a *$ << endgrepA
+0 read  0x0040006a 1 0 unlock seq    wrap8  0
+info &grep Read:  0x0040006b/1: 6b *$ << endgrepB
+0 read  0x0040006b 1 0 unlock seq    wrap8  0
+info &grep Read:  0x0040006c/1: 6c *$ << endgrepA
+0 read  0x0040006c 1 0 unlock seq    wrap8  0
+info &grep Read:  0x0040006d/1: 6d *$ << endgrepB
+0 read  0x0040006d 1 0 unlock seq    wrap8  0
+info &grep Read:  0x0040006e/1: 6e *$ << endgrepA
+0 read  0x0040006e 1 0 unlock seq    wrap8  0
+info &grep Read:  0x0040006f/1: 6f *$ << endgrepB
+0 read  0x0040006f 1 0 unlock seq    wrap8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 halfword incr8 reads
+info &grep Read:  0x00400070/2: 70 71 *$ << endgrepA
+0 read  0x00400070 2 0 unlock nonseq incr8  0
+info &grep Read:  0x00400072/2: 72 73 *$ << endgrepB
+0 read  0x00400072 2 0 unlock seq    incr8  0
+info &grep Read:  0x00400074/2: 74 75 *$ << endgrepA
+0 read  0x00400074 2 0 unlock seq    incr8  0
+info &grep Read:  0x00400076/2: 76 77 *$ << endgrepB
+0 read  0x00400076 2 0 unlock seq    incr8  0
+info &grep Read:  0x00400078/2: 78 79 *$ << endgrepA
+0 read  0x00400078 2 0 unlock seq    incr8  0
+info &grep Read:  0x0040007a/2: 7a 7b *$ << endgrepB
+0 read  0x0040007a 2 0 unlock seq    incr8  0
+info &grep Read:  0x0040007c/2: 7c 7d *$ << endgrepA
+0 read  0x0040007c 2 0 unlock seq    incr8  0
+info &grep Read:  0x0040007e/2: 7e 7f *$ << endgrepB
+0 read  0x0040007e 2 0 unlock seq    incr8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 halfword wrap8 reads
+info &grep Read:  0x00400080/2: 80 81 *$ << endgrepA
+0 read  0x00400080 2 0 unlock nonseq wrap8  0
+info &grep Read:  0x00400082/2: 82 83 *$ << endgrepB
+0 read  0x00400082 2 0 unlock seq    wrap8  0
+info &grep Read:  0x00400084/2: 84 85 *$ << endgrepA
+0 read  0x00400084 2 0 unlock seq    wrap8  0
+info &grep Read:  0x00400086/2: 86 87 *$ << endgrepB
+0 read  0x00400086 2 0 unlock seq    wrap8  0
+info &grep Read:  0x00400088/2: 88 89 *$ << endgrepA
+0 read  0x00400088 2 0 unlock seq    wrap8  0
+info &grep Read:  0x0040008a/2: 8a 8b *$ << endgrepB
+0 read  0x0040008a 2 0 unlock seq    wrap8  0
+info &grep Read:  0x0040008c/2: 8c 8d *$ << endgrepA
+0 read  0x0040008c 2 0 unlock seq    wrap8  0
+info &grep Read:  0x0040008e/2: 8e 8f *$ << endgrepB
+0 read  0x0040008e 2 0 unlock seq    wrap8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 word incr8 reads
+info &grep Read:  0x004000a0/4: a0 a1 a2 a3 *$ << endgrepA
+0 read  0x004000a0 4 0 unlock nonseq incr8  0
+info &grep Read:  0x004000a4/4: a4 a5 a6 a7 *$ << endgrepB
+0 read  0x004000a4 4 0 unlock seq    incr8  0
+info &grep Read:  0x004000a8/4: a8 a9 aa ab *$ << endgrepA
+0 read  0x004000a8 4 0 unlock seq    incr8  0
+info &grep Read:  0x004000ac/4: ac ad ae af *$ << endgrepB
+0 read  0x004000ac 4 0 unlock seq    incr8  0
+info &grep Read:  0x004000b0/4: b0 b1 b2 b3 *$ << endgrepA
+0 read  0x004000b0 4 0 unlock seq    incr8  0
+info &grep Read:  0x004000b4/4: b4 b5 b6 b7 *$ << endgrepB
+0 read  0x004000b4 4 0 unlock seq    incr8  0
+info &grep Read:  0x004000b8/4: b8 b9 ba bb *$ << endgrepA
+0 read  0x004000b8 4 0 unlock seq    incr8  0
+info &grep Read:  0x004000bc/4: bc bd be bf *$ << endgrepB
+0 read  0x004000bc 4 0 unlock seq    incr8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 word wrap8 reads
+info &grep Read:  0x004000c0/4: c0 c1 c2 c3 *$ << endgrepA
+0 read  0x004000c0 4 0 unlock nonseq wrap8  0
+info &grep Read:  0x004000c4/4: c4 c5 c6 c7 *$ << endgrepB
+0 read  0x004000c4 4 0 unlock seq    wrap8  0
+info &grep Read:  0x004000c8/4: c8 c9 ca cb *$ << endgrepA
+0 read  0x004000c8 4 0 unlock seq    wrap8  0
+info &grep Read:  0x004000cc/4: cc cd ce cf *$ << endgrepB
+0 read  0x004000cc 4 0 unlock seq    wrap8  0
+info &grep Read:  0x004000d0/4: d0 d1 d2 d3 *$ << endgrepA
+0 read  0x004000d0 4 0 unlock seq    wrap8  0
+info &grep Read:  0x004000d4/4: d4 d5 d6 d7 *$ << endgrepB
+0 read  0x004000d4 4 0 unlock seq    wrap8  0
+info &grep Read:  0x004000d8/4: d8 d9 da db *$ << endgrepA
+0 read  0x004000d8 4 0 unlock seq    wrap8  0
+info &grep Read:  0x004000dc/4: dc dd de df *$ << endgrepB
+0 read  0x004000dc 4 0 unlock seq    wrap8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 byte incr16 reads
+info &grep Read:  0x004000e0/1: e0 *$ << endgrepA
+0 read  0x004000e0 1 0 unlock nonseq incr16 0
+info &grep Read:  0x004000e1/1: e1 *$ << endgrepB
+0 read  0x004000e1 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000e2/1: e2 *$ << endgrepA
+0 read  0x004000e2 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000e3/1: e3 *$ << endgrepB
+0 read  0x004000e3 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000e4/1: e4 *$ << endgrepA
+0 read  0x004000e4 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000e5/1: e5 *$ << endgrepB
+0 read  0x004000e5 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000e6/1: e6 *$ << endgrepA
+0 read  0x004000e6 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000e7/1: e7 *$ << endgrepB
+0 read  0x004000e7 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000e8/1: e8 *$ << endgrepA
+0 read  0x004000e8 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000e9/1: e9 *$ << endgrepB
+0 read  0x004000e9 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000ea/1: ea *$ << endgrepA
+0 read  0x004000ea 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000eb/1: eb *$ << endgrepB
+0 read  0x004000eb 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000ec/1: ec *$ << endgrepA
+0 read  0x004000ec 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000ed/1: ed *$ << endgrepB
+0 read  0x004000ed 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000ee/1: ee *$ << endgrepA
+0 read  0x004000ee 1 0 unlock seq    incr16 0
+info &grep Read:  0x004000ef/1: ef *$ << endgrepB
+0 read  0x004000ef 1 0 unlock seq    incr16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 byte wrap16 reads
+info &grep Read:  0x004000f0/1: f0 *$ << endgrepA
+0 read  0x004000f0 1 0 unlock nonseq wrap16 0
+info &grep Read:  0x004000f1/1: f1 *$ << endgrepB
+0 read  0x004000f1 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000f2/1: f2 *$ << endgrepA
+0 read  0x004000f2 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000f3/1: f3 *$ << endgrepB
+0 read  0x004000f3 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000f4/1: f4 *$ << endgrepA
+0 read  0x004000f4 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000f5/1: f5 *$ << endgrepB
+0 read  0x004000f5 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000f6/1: f6 *$ << endgrepA
+0 read  0x004000f6 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000f7/1: f7 *$ << endgrepB
+0 read  0x004000f7 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000f8/1: f8 *$ << endgrepA
+0 read  0x004000f8 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000f9/1: f9 *$ << endgrepB
+0 read  0x004000f9 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000fa/1: fa *$ << endgrepA
+0 read  0x004000fa 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000fb/1: fb *$ << endgrepB
+0 read  0x004000fb 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000fc/1: fc *$ << endgrepA
+0 read  0x004000fc 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000fd/1: fd *$ << endgrepB
+0 read  0x004000fd 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000fe/1: fe *$ << endgrepA
+0 read  0x004000fe 1 0 unlock seq    wrap16 0
+info &grep Read:  0x004000ff/1: ff *$ << endgrepB
+0 read  0x004000ff 1 0 unlock seq    wrap16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 halfword incr16 reads
+info &grep Read:  0x00400100/2: 00 01 *$ << endgrepA
+0 read  0x00400100 2 0 unlock nonseq incr16 0
+info &grep Read:  0x00400102/2: 02 03 *$ << endgrepB
+0 read  0x00400102 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400104/2: 04 05 *$ << endgrepA
+0 read  0x00400104 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400106/2: 06 07 *$ << endgrepB
+0 read  0x00400106 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400108/2: 08 09 *$ << endgrepA
+0 read  0x00400108 2 0 unlock seq    incr16 0
+info &grep Read:  0x0040010a/2: 0a 0b *$ << endgrepB
+0 read  0x0040010a 2 0 unlock seq    incr16 0
+info &grep Read:  0x0040010c/2: 0c 0d *$ << endgrepA
+0 read  0x0040010c 2 0 unlock seq    incr16 0
+info &grep Read:  0x0040010e/2: 0e 0f *$ << endgrepB
+0 read  0x0040010e 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400110/2: 10 11 *$ << endgrepA
+0 read  0x00400110 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400112/2: 12 13 *$ << endgrepB
+0 read  0x00400112 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400114/2: 14 15 *$ << endgrepA
+0 read  0x00400114 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400116/2: 16 17 *$ << endgrepB
+0 read  0x00400116 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400118/2: 18 19 *$ << endgrepA
+0 read  0x00400118 2 0 unlock seq    incr16 0
+info &grep Read:  0x0040011a/2: 1a 1b *$ << endgrepB
+0 read  0x0040011a 2 0 unlock seq    incr16 0
+info &grep Read:  0x0040011c/2: 1c 1d *$ << endgrepA
+0 read  0x0040011c 2 0 unlock seq    incr16 0
+info &grep Read:  0x0040011e/2: 1e 1f *$ << endgrepB
+0 read  0x0040011e 2 0 unlock seq    incr16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 halfword wrap16 reads
+info &grep Read:  0x00400120/2: 20 21 *$ << endgrepA
+0 read  0x00400120 2 0 unlock nonseq wrap16 0
+info &grep Read:  0x00400122/2: 22 23 *$ << endgrepB
+0 read  0x00400122 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00400124/2: 24 25 *$ << endgrepA
+0 read  0x00400124 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00400126/2: 26 27 *$ << endgrepB
+0 read  0x00400126 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00400128/2: 28 29 *$ << endgrepA
+0 read  0x00400128 2 0 unlock seq    wrap16 0
+info &grep Read:  0x0040012a/2: 2a 2b *$ << endgrepB
+0 read  0x0040012a 2 0 unlock seq    wrap16 0
+info &grep Read:  0x0040012c/2: 2c 2d *$ << endgrepA
+0 read  0x0040012c 2 0 unlock seq    wrap16 0
+info &grep Read:  0x0040012e/2: 2e 2f *$ << endgrepB
+0 read  0x0040012e 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00400130/2: 30 31 *$ << endgrepA
+0 read  0x00400130 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00400132/2: 32 33 *$ << endgrepB
+0 read  0x00400132 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00400134/2: 34 35 *$ << endgrepA
+0 read  0x00400134 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00400136/2: 36 37 *$ << endgrepB
+0 read  0x00400136 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00400138/2: 38 39 *$ << endgrepA
+0 read  0x00400138 2 0 unlock seq    wrap16 0
+info &grep Read:  0x0040013a/2: 3a 3b *$ << endgrepB
+0 read  0x0040013a 2 0 unlock seq    wrap16 0
+info &grep Read:  0x0040013c/2: 3c 3d *$ << endgrepA
+0 read  0x0040013c 2 0 unlock seq    wrap16 0
+info &grep Read:  0x0040013e/2: 3e 3f *$ << endgrepB
+0 read  0x0040013e 2 0 unlock seq    wrap16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 word incr16 reads
+info &grep Read:  0x00400140/4: 40 41 42 43 *$ << endgrepA
+0 read  0x00400140 4 0 unlock nonseq incr16 0
+info &grep Read:  0x00400144/4: 44 45 46 47 *$ << endgrepB
+0 read  0x00400144 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400148/4: 48 49 4a 4b *$ << endgrepA
+0 read  0x00400148 4 0 unlock seq    incr16 0
+info &grep Read:  0x0040014c/4: 4c 4d 4e 4f *$ << endgrepB
+0 read  0x0040014c 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400150/4: 50 51 52 53 *$ << endgrepA
+0 read  0x00400150 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400154/4: 54 55 56 57 *$ << endgrepB
+0 read  0x00400154 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400158/4: 58 59 5a 5b *$ << endgrepA
+0 read  0x00400158 4 0 unlock seq    incr16 0
+info &grep Read:  0x0040015c/4: 5c 5d 5e 5f *$ << endgrepB
+0 read  0x0040015c 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400160/4: 60 61 62 63 *$ << endgrepA
+0 read  0x00400160 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400164/4: 64 65 66 67 *$ << endgrepB
+0 read  0x00400164 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400168/4: 68 69 6a 6b *$ << endgrepA
+0 read  0x00400168 4 0 unlock seq    incr16 0
+info &grep Read:  0x0040016c/4: 6c 6d 6e 6f *$ << endgrepB
+0 read  0x0040016c 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400170/4: 70 71 72 73 *$ << endgrepA
+0 read  0x00400170 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400174/4: 74 75 76 77 *$ << endgrepB
+0 read  0x00400174 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400178/4: 78 79 7a 7b *$ << endgrepA
+0 read  0x00400178 4 0 unlock seq    incr16 0
+info &grep Read:  0x0040017c/4: 7c 7d 7e 7f *$ << endgrepB
+0 read  0x0040017c 4 0 unlock seq    incr16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 word wrap16 reads
+info &grep Read:  0x00400180/4: 80 81 82 83 *$ << endgrepA
+0 read  0x00400180 4 0 unlock nonseq wrap16 0
+info &grep Read:  0x00400184/4: 84 85 86 87 *$ << endgrepB
+0 read  0x00400184 4 0 unlock seq    wrap16 0
+info &grep Read:  0x00400188/4: 88 89 8a 8b *$ << endgrepA
+0 read  0x00400188 4 0 unlock seq    wrap16 0
+info &grep Read:  0x0040018c/4: 8c 8d 8e 8f *$ << endgrepB
+0 read  0x0040018c 4 0 unlock seq    wrap16 0
+info &grep Read:  0x00400190/4: 90 91 92 93 *$ << endgrepA
+0 read  0x00400190 4 0 unlock seq    wrap16 0
+info &grep Read:  0x00400194/4: 94 95 96 97 *$ << endgrepB
+0 read  0x00400194 4 0 unlock seq    wrap16 0
+info &grep Read:  0x00400198/4: 98 99 9a 9b *$ << endgrepA
+0 read  0x00400198 4 0 unlock seq    wrap16 0
+info &grep Read:  0x0040019c/4: 9c 9d 9e 9f *$ << endgrepB
+0 read  0x0040019c 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004001a0/4: a0 a1 a2 a3 *$ << endgrepA
+0 read  0x004001a0 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004001a4/4: a4 a5 a6 a7 *$ << endgrepB
+0 read  0x004001a4 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004001a8/4: a8 a9 aa ab *$ << endgrepA
+0 read  0x004001a8 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004001ac/4: ac ad ae af *$ << endgrepB
+0 read  0x004001ac 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004001b0/4: b0 b1 b2 b3 *$ << endgrepA
+0 read  0x004001b0 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004001b4/4: b4 b5 b6 b7 *$ << endgrepB
+0 read  0x004001b4 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004001b8/4: b8 b9 ba bb *$ << endgrepA
+0 read  0x004001b8 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004001bc/4: bc bd be bf *$ << endgrepB
+0 read  0x004001bc 4 0 unlock seq    wrap16 0
+info endgrepA
+wait 20
+info endgrepB
+
+
+
+note ********* Starting Unaligned Writes of Word Size or Less *********
+
+note Doing 4 byte incr4 unaligned writes
+0 write 0x00400201 1 0 unlock nonseq incr4  0 0x01
+0 write 0x00400202 1 0 unlock seq    incr4  0 0x02
+0 write 0x00400203 1 0 unlock seq    incr4  0 0x03
+0 write 0x00400204 1 0 unlock seq    incr4  0 0x04
+wait 20
+info &grep Peek:  0x00400201/1: 01 *$ << grep
+0 peek 0x00400201 1
+info &grep Peek:  0x00400202/1: 02 *$ << grep
+0 peek 0x00400202 1
+info &grep Peek:  0x00400203/1: 03 *$ << grep
+0 peek 0x00400203 1
+info &grep Peek:  0x00400204/1: 04 *$ << grep
+0 peek 0x00400204 1
+info endgrep
+
+note Doing 4 byte wrap4 unaligned writes
+0 write 0x00400209 1 0 unlock nonseq wrap4  0 0x09
+0 write 0x0040020a 1 0 unlock seq    wrap4  0 0x0a
+0 write 0x0040020b 1 0 unlock seq    wrap4  0 0x0b
+0 write 0x00400208 1 0 unlock seq    wrap4  0 0x08
+wait 20
+info &grep Peek:  0x00400209/1: 09 *$ << grep
+0 peek 0x00400209 1
+info &grep Peek:  0x0040020a/1: 0a *$ << grep
+0 peek 0x0040020a 1
+info &grep Peek:  0x0040020b/1: 0b *$ << grep
+0 peek 0x0040020b 1
+info &grep Peek:  0x00400208/1: 08 *$ << grep
+0 peek 0x00400208 1
+info endgrep
+
+note Doing 4 byte wrap4 unaligned writes again
+0 write 0x0040020e 1 0 unlock nonseq wrap4  0 0x0e
+0 write 0x0040020f 1 0 unlock seq    wrap4  0 0x0f
+0 write 0x0040020c 1 0 unlock seq    wrap4  0 0x0c
+0 write 0x0040020d 1 0 unlock seq    wrap4  0 0x0d
+wait 20
+info &grep Peek:  0x0040020e/1: 0e *$ << grep
+0 peek 0x0040020e 1
+info &grep Peek:  0x0040020f/1: 0f *$ << grep
+0 peek 0x0040020f 1
+info &grep Peek:  0x0040020c/1: 0c *$ << grep
+0 peek 0x0040020c 1
+info &grep Peek:  0x0040020d/1: 0d *$ << grep
+0 peek 0x0040020d 1
+info endgrep
+
+note Doing 4 halfword incr4 unaligned writes
+0 write 0x00400212 2 0 unlock nonseq incr4  0 0x12 0x13
+0 write 0x00400214 2 0 unlock seq    incr4  0 0x14 0x15
+0 write 0x00400216 2 0 unlock seq    incr4  0 0x16 0x17
+0 write 0x00400218 2 0 unlock seq    incr4  0 0x18 0x19
+wait 20
+info &grep Peek:  0x00400212/2: 12 13 *$ << grep
+0 peek 0x00400212 2
+info &grep Peek:  0x00400214/2: 14 15 *$ << grep
+0 peek 0x00400214 2
+info &grep Peek:  0x00400216/2: 16 17 *$ << grep
+0 peek 0x00400216 2
+info &grep Peek:  0x00400218/2: 18 19 *$ << grep
+0 peek 0x00400218 2
+info endgrep
+
+note Doing 4 halfword wrap4 unaligned writes
+0 write 0x00400222 2 0 unlock nonseq wrap4  0 0x22 0x23
+0 write 0x00400224 2 0 unlock seq    wrap4  0 0x24 0x25
+0 write 0x00400226 2 0 unlock seq    wrap4  0 0x26 0x27
+0 write 0x00400220 2 0 unlock seq    wrap4  0 0x20 0x21
+wait 20
+info &grep Peek:  0x00400222/2: 22 23 *$ << grep
+0 peek 0x00400222 2
+info &grep Peek:  0x00400224/2: 24 25 *$ << grep
+0 peek 0x00400224 2
+info &grep Peek:  0x00400226/2: 26 27 *$ << grep
+0 peek 0x00400226 2
+info &grep Peek:  0x00400220/2: 20 21 *$ << grep
+0 peek 0x00400220 2
+info endgrep
+
+note Doing 4 word incr4 unaligned writes
+0 write 0x00400234 4 0 unlock nonseq incr4  0 0x34 0x35 0x36 0x37
+0 write 0x00400238 4 0 unlock seq    incr4  0 0x38 0x39 0x3a 0x3b
+0 write 0x0040023c 4 0 unlock seq    incr4  0 0x3c 0x3d 0x3e 0x3f
+0 write 0x00400240 4 0 unlock seq    incr4  0 0x40 0x41 0x42 0x43
+wait 20
+info &grep Peek:  0x00400234/4: 34 35 36 37 *$ << grep
+0 peek 0x00400234 4
+info &grep Peek:  0x00400238/4: 38 39 3a 3b *$ << grep
+0 peek 0x00400238 4
+info &grep Peek:  0x0040023c/4: 3c 3d 3e 3f *$ << grep
+0 peek 0x0040023c 4
+info &grep Peek:  0x00400240/4: 40 41 42 43 *$ << grep
+0 peek 0x00400240 4
+info endgrep
+
+note Doing 4 word wrap4 unaligned writes
+0 write 0x00400254 4 0 unlock nonseq wrap4  0 0x54 0x55 0x56 0x57
+0 write 0x00400258 4 0 unlock seq    wrap4  0 0x58 0x59 0x5a 0x5b
+0 write 0x0040025c 4 0 unlock seq    wrap4  0 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400250 4 0 unlock seq    wrap4  0 0x50 0x51 0x52 0x53
+wait 20
+info &grep Peek:  0x00400254/4: 54 55 56 57 *$ << grep
+0 peek 0x00400254 4
+info &grep Peek:  0x00400258/4: 58 59 5a 5b *$ << grep
+0 peek 0x00400258 4
+info &grep Peek:  0x0040025c/4: 5c 5d 5e 5f *$ << grep
+0 peek 0x0040025c 4
+info &grep Peek:  0x00400250/4: 50 51 52 53 *$ << grep
+0 peek 0x00400250 4
+info endgrep
+
+note Doing 8 byte incr8 unaligned writes
+0 write 0x00400261 1 0 unlock nonseq incr8  0 0x61
+0 write 0x00400262 1 0 unlock seq    incr8  0 0x62
+0 write 0x00400263 1 0 unlock seq    incr8  0 0x63
+0 write 0x00400264 1 0 unlock seq    incr8  0 0x64
+0 write 0x00400265 1 0 unlock seq    incr8  0 0x65
+0 write 0x00400266 1 0 unlock seq    incr8  0 0x66
+0 write 0x00400267 1 0 unlock seq    incr8  0 0x67
+0 write 0x00400268 1 0 unlock seq    incr8  0 0x68
+wait 20
+info &grep Peek:  0x00400261/1: 61 *$ << grep
+0 peek 0x00400261 1
+info &grep Peek:  0x00400262/1: 62 *$ << grep
+0 peek 0x00400262 1
+info &grep Peek:  0x00400263/1: 63 *$ << grep
+0 peek 0x00400263 1
+info &grep Peek:  0x00400264/1: 64 *$ << grep
+0 peek 0x00400264 1
+info &grep Peek:  0x00400265/1: 65 *$ << grep
+0 peek 0x00400265 1
+info &grep Peek:  0x00400266/1: 66 *$ << grep
+0 peek 0x00400266 1
+info &grep Peek:  0x00400267/1: 67 *$ << grep
+0 peek 0x00400267 1
+info &grep Peek:  0x00400268/1: 68 *$ << grep
+0 peek 0x00400268 1
+info endgrep
+
+note Doing 8 byte wrap8 unaligned writes
+0 write 0x00400271 1 0 unlock nonseq wrap8  0 0x71
+0 write 0x00400272 1 0 unlock seq    wrap8  0 0x72
+0 write 0x00400273 1 0 unlock seq    wrap8  0 0x73
+0 write 0x00400274 1 0 unlock seq    wrap8  0 0x74
+0 write 0x00400275 1 0 unlock seq    wrap8  0 0x75
+0 write 0x00400276 1 0 unlock seq    wrap8  0 0x76
+0 write 0x00400277 1 0 unlock seq    wrap8  0 0x77
+0 write 0x00400270 1 0 unlock seq    wrap8  0 0x70
+wait 20
+info &grep Peek:  0x00400271/1: 71 *$ << grep
+0 peek 0x00400271 1
+info &grep Peek:  0x00400272/1: 72 *$ << grep
+0 peek 0x00400272 1
+info &grep Peek:  0x00400273/1: 73 *$ << grep
+0 peek 0x00400273 1
+info &grep Peek:  0x00400274/1: 74 *$ << grep
+0 peek 0x00400274 1
+info &grep Peek:  0x00400275/1: 75 *$ << grep
+0 peek 0x00400275 1
+info &grep Peek:  0x00400276/1: 76 *$ << grep
+0 peek 0x00400276 1
+info &grep Peek:  0x00400277/1: 77 *$ << grep
+0 peek 0x00400277 1
+info &grep Peek:  0x00400270/1: 70 *$ << grep
+0 peek 0x00400270 1
+info endgrep
+
+note Doing 8 halfword incr8 unaligned writes
+0 write 0x00400282 2 0 unlock nonseq incr8  0 0x82 0x83
+0 write 0x00400284 2 0 unlock seq    incr8  0 0x84 0x85
+0 write 0x00400286 2 0 unlock seq    incr8  0 0x86 0x87
+0 write 0x00400288 2 0 unlock seq    incr8  0 0x88 0x89
+0 write 0x0040028a 2 0 unlock seq    incr8  0 0x8a 0x8b
+0 write 0x0040028c 2 0 unlock seq    incr8  0 0x8c 0x8d
+0 write 0x0040028e 2 0 unlock seq    incr8  0 0x8e 0x8f
+0 write 0x00400290 2 0 unlock seq    incr8  0 0x90 0x91
+wait 20
+info &grep Peek:  0x00400282/2: 82 83 *$ << grep
+0 peek 0x00400282 2
+info &grep Peek:  0x00400284/2: 84 85 *$ << grep
+0 peek 0x00400284 2
+info &grep Peek:  0x00400286/2: 86 87 *$ << grep
+0 peek 0x00400286 2
+info &grep Peek:  0x00400288/2: 88 89 *$ << grep
+0 peek 0x00400288 2
+info &grep Peek:  0x0040028a/2: 8a 8b *$ << grep
+0 peek 0x0040028a 2
+info &grep Peek:  0x0040028c/2: 8c 8d *$ << grep
+0 peek 0x0040028c 2
+info &grep Peek:  0x0040028e/2: 8e 8f *$ << grep
+0 peek 0x0040028e 2
+info &grep Peek:  0x00400290/2: 90 91 *$ << grep
+0 peek 0x00400290 2
+info endgrep
+
+note Doing 8 halfword wrap8 unaligned writes
+0 write 0x004002a2 2 0 unlock nonseq wrap8  0 0xa2 0xa3
+0 write 0x004002a4 2 0 unlock seq    wrap8  0 0xa4 0xa5
+0 write 0x004002a6 2 0 unlock seq    wrap8  0 0xa6 0xa7
+0 write 0x004002a8 2 0 unlock seq    wrap8  0 0xa8 0xa9
+0 write 0x004002aa 2 0 unlock seq    wrap8  0 0xaa 0xab
+0 write 0x004002ac 2 0 unlock seq    wrap8  0 0xac 0xad
+0 write 0x004002ae 2 0 unlock seq    wrap8  0 0xae 0xaf
+0 write 0x004002a0 2 0 unlock seq    wrap8  0 0xa0 0xa1
+wait 20
+info &grep Peek:  0x004002a2/2: a2 a3 *$ << grep
+0 peek 0x004002a2 2
+info &grep Peek:  0x004002a4/2: a4 a5 *$ << grep
+0 peek 0x004002a4 2
+info &grep Peek:  0x004002a6/2: a6 a7 *$ << grep
+0 peek 0x004002a6 2
+info &grep Peek:  0x004002a8/2: a8 a9 *$ << grep
+0 peek 0x004002a8 2
+info &grep Peek:  0x004002aa/2: aa ab *$ << grep
+0 peek 0x004002aa 2
+info &grep Peek:  0x004002ac/2: ac ad *$ << grep
+0 peek 0x004002ac 2
+info &grep Peek:  0x004002ae/2: ae af *$ << grep
+0 peek 0x004002ae 2
+info &grep Peek:  0x004002a0/2: a0 a1 *$ << grep
+0 peek 0x004002a0 2
+info endgrep
+
+note Doing 8 word incr8 unaligned writes
+0 write 0x004002b0 4 0 unlock nonseq incr8  0 0xb0 0xb1 0xb2 0xb3
+0 write 0x004002b4 4 0 unlock seq    incr8  0 0xb4 0xb5 0xb6 0xb7
+0 write 0x004002b8 4 0 unlock seq    incr8  0 0xb8 0xb9 0xba 0xbb
+0 write 0x004002bc 4 0 unlock seq    incr8  0 0xbc 0xbd 0xbe 0xbf
+0 write 0x004002c0 4 0 unlock seq    incr8  0 0xc0 0xc1 0xc2 0xc3
+0 write 0x004002c4 4 0 unlock seq    incr8  0 0xc4 0xc5 0xc6 0xc7
+0 write 0x004002c8 4 0 unlock seq    incr8  0 0xc8 0xc9 0xca 0xcb
+0 write 0x004002cc 4 0 unlock seq    incr8  0 0xcc 0xcd 0xce 0xcf
+wait 20
+info &grep Peek:  0x004002b0/4: b0 b1 b2 b3 *$ << grep
+0 peek 0x004002b0 4
+info &grep Peek:  0x004002b4/4: b4 b5 b6 b7 *$ << grep
+0 peek 0x004002b4 4
+info &grep Peek:  0x004002b8/4: b8 b9 ba bb *$ << grep
+0 peek 0x004002b8 4
+info &grep Peek:  0x004002bc/4: bc bd be bf *$ << grep
+0 peek 0x004002bc 4
+info &grep Peek:  0x004002c0/4: c0 c1 c2 c3 *$ << grep
+0 peek 0x004002c0 4
+info &grep Peek:  0x004002c4/4: c4 c5 c6 c7 *$ << grep
+0 peek 0x004002c4 4
+info &grep Peek:  0x004002c8/4: c8 c9 ca cb *$ << grep
+0 peek 0x004002c8 4
+info &grep Peek:  0x004002cc/4: cc cd ce cf *$ << grep
+0 peek 0x004002cc 4
+info endgrep
+
+note Doing 8 word wrap8 unaligned writes
+0 write 0x004002e4 4 0 unlock nonseq wrap8  0 0xe4 0xe5 0xe6 0xe7
+0 write 0x004002e8 4 0 unlock seq    wrap8  0 0xe8 0xe9 0xea 0xeb
+0 write 0x004002ec 4 0 unlock seq    wrap8  0 0xec 0xed 0xee 0xef
+0 write 0x004002f0 4 0 unlock seq    wrap8  0 0xf0 0xf1 0xf2 0xf3
+0 write 0x004002f4 4 0 unlock seq    wrap8  0 0xf4 0xf5 0xf6 0xf7
+0 write 0x004002f8 4 0 unlock seq    wrap8  0 0xf8 0xf9 0xfa 0xfb
+0 write 0x004002fc 4 0 unlock seq    wrap8  0 0xfc 0xfd 0xfe 0xff
+0 write 0x004002e0 4 0 unlock seq    wrap8  0 0xe0 0xe1 0xe2 0xe3
+wait 20
+info &grep Peek:  0x004002e4/4: e4 e5 e6 e7 *$ << grep
+0 peek 0x004002e4 4
+info &grep Peek:  0x004002e8/4: e8 e9 ea eb *$ << grep
+0 peek 0x004002e8 4
+info &grep Peek:  0x004002ec/4: ec ed ee ef *$ << grep
+0 peek 0x004002ec 4
+info &grep Peek:  0x004002f0/4: f0 f1 f2 f3 *$ << grep
+0 peek 0x004002f0 4
+info &grep Peek:  0x004002f4/4: f4 f5 f6 f7 *$ << grep
+0 peek 0x004002f4 4
+info &grep Peek:  0x004002f8/4: f8 f9 fa fb *$ << grep
+0 peek 0x004002f8 4
+info &grep Peek:  0x004002fc/4: fc fd fe ff *$ << grep
+0 peek 0x004002fc 4
+info &grep Peek:  0x004002e0/4: e0 e1 e2 e3 *$ << grep
+0 peek 0x004002e0 4
+info endgrep
+
+note Doing 16 byte incr16 unaligned writes
+0 write 0x004022e1 1 0 unlock nonseq incr16 0 0xe1
+0 write 0x004022e2 1 0 unlock seq    incr16 0 0xe2
+0 write 0x004022e3 1 0 unlock seq    incr16 0 0xe3
+0 write 0x004022e4 1 0 unlock seq    incr16 0 0xe4
+0 write 0x004022e5 1 0 unlock seq    incr16 0 0xe5
+0 write 0x004022e6 1 0 unlock seq    incr16 0 0xe6
+0 write 0x004022e7 1 0 unlock seq    incr16 0 0xe7
+0 write 0x004022e8 1 0 unlock seq    incr16 0 0xe8
+0 write 0x004022e9 1 0 unlock seq    incr16 0 0xe9
+0 write 0x004022ea 1 0 unlock seq    incr16 0 0xea
+0 write 0x004022eb 1 0 unlock seq    incr16 0 0xeb
+0 write 0x004022ec 1 0 unlock seq    incr16 0 0xec
+0 write 0x004022ed 1 0 unlock seq    incr16 0 0xed
+0 write 0x004022ee 1 0 unlock seq    incr16 0 0xee
+0 write 0x004022ef 1 0 unlock seq    incr16 0 0xef
+0 write 0x004022f0 1 0 unlock seq    incr16 0 0xf0
+wait 20
+info &grep Peek:  0x004022e1/1: e1 *$ << grep
+0 peek 0x004022e1 1
+info &grep Peek:  0x004022e2/1: e2 *$ << grep
+0 peek 0x004022e2 1
+info &grep Peek:  0x004022e3/1: e3 *$ << grep
+0 peek 0x004022e3 1
+info &grep Peek:  0x004022e4/1: e4 *$ << grep
+0 peek 0x004022e4 1
+info &grep Peek:  0x004022e5/1: e5 *$ << grep
+0 peek 0x004022e5 1
+info &grep Peek:  0x004022e6/1: e6 *$ << grep
+0 peek 0x004022e6 1
+info &grep Peek:  0x004022e7/1: e7 *$ << grep
+0 peek 0x004022e7 1
+info &grep Peek:  0x004022e8/1: e8 *$ << grep
+0 peek 0x004022e8 1
+info &grep Peek:  0x004022e9/1: e9 *$ << grep
+0 peek 0x004022e9 1
+info &grep Peek:  0x004022ea/1: ea *$ << grep
+0 peek 0x004022ea 1
+info &grep Peek:  0x004022eb/1: eb *$ << grep
+0 peek 0x004022eb 1
+info &grep Peek:  0x004022ec/1: ec *$ << grep
+0 peek 0x004022ec 1
+info &grep Peek:  0x004022ed/1: ed *$ << grep
+0 peek 0x004022ed 1
+info &grep Peek:  0x004022ee/1: ee *$ << grep
+0 peek 0x004022ee 1
+info &grep Peek:  0x004022ef/1: ef *$ << grep
+0 peek 0x004022ef 1
+info &grep Peek:  0x004022f0/1: f0 *$ << grep
+0 peek 0x004022f0 1
+info endgrep
+
+note Doing 16 byte wrap16 unaligned writes
+0 write 0x00400301 1 0 unlock nonseq wrap16 0 0x01
+0 write 0x00400302 1 0 unlock seq    wrap16 0 0x02
+0 write 0x00400303 1 0 unlock seq    wrap16 0 0x03
+0 write 0x00400304 1 0 unlock seq    wrap16 0 0x04
+0 write 0x00400305 1 0 unlock seq    wrap16 0 0x05
+0 write 0x00400306 1 0 unlock seq    wrap16 0 0x06
+0 write 0x00400307 1 0 unlock seq    wrap16 0 0x07
+0 write 0x00400308 1 0 unlock seq    wrap16 0 0x08
+0 write 0x00400309 1 0 unlock seq    wrap16 0 0x09
+0 write 0x0040030a 1 0 unlock seq    wrap16 0 0x0a
+0 write 0x0040030b 1 0 unlock seq    wrap16 0 0x0b
+0 write 0x0040030c 1 0 unlock seq    wrap16 0 0x0c
+0 write 0x0040030d 1 0 unlock seq    wrap16 0 0x0d
+0 write 0x0040030e 1 0 unlock seq    wrap16 0 0x0e
+0 write 0x0040030f 1 0 unlock seq    wrap16 0 0x0f
+0 write 0x00400300 1 0 unlock seq    wrap16 0 0x00
+wait 20
+info &grep Peek:  0x00400301/1: 01 *$ << grep
+0 peek 0x00400301 1
+info &grep Peek:  0x00400302/1: 02 *$ << grep
+0 peek 0x00400302 1
+info &grep Peek:  0x00400303/1: 03 *$ << grep
+0 peek 0x00400303 1
+info &grep Peek:  0x00400304/1: 04 *$ << grep
+0 peek 0x00400304 1
+info &grep Peek:  0x00400305/1: 05 *$ << grep
+0 peek 0x00400305 1
+info &grep Peek:  0x00400306/1: 06 *$ << grep
+0 peek 0x00400306 1
+info &grep Peek:  0x00400307/1: 07 *$ << grep
+0 peek 0x00400307 1
+info &grep Peek:  0x00400308/1: 08 *$ << grep
+0 peek 0x00400308 1
+info &grep Peek:  0x00400309/1: 09 *$ << grep
+0 peek 0x00400309 1
+info &grep Peek:  0x0040030a/1: 0a *$ << grep
+0 peek 0x0040030a 1
+info &grep Peek:  0x0040030b/1: 0b *$ << grep
+0 peek 0x0040030b 1
+info &grep Peek:  0x0040030c/1: 0c *$ << grep
+0 peek 0x0040030c 1
+info &grep Peek:  0x0040030d/1: 0d *$ << grep
+0 peek 0x0040030d 1
+info &grep Peek:  0x0040030e/1: 0e *$ << grep
+0 peek 0x0040030e 1
+info &grep Peek:  0x0040030f/1: 0f *$ << grep
+0 peek 0x0040030f 1
+info &grep Peek:  0x00400300/1: 00 *$ << grep
+0 peek 0x00400300 1
+info endgrep
+
+note Doing 16 halfword incr16 unaligned writes
+0 write 0x00400310 2 0 unlock nonseq incr16 0 0x10 0x11
+0 write 0x00400312 2 0 unlock seq    incr16 0 0x12 0x13
+0 write 0x00400314 2 0 unlock seq    incr16 0 0x14 0x15
+0 write 0x00400316 2 0 unlock seq    incr16 0 0x16 0x17
+0 write 0x00400318 2 0 unlock seq    incr16 0 0x18 0x19
+0 write 0x0040031a 2 0 unlock seq    incr16 0 0x1a 0x1b
+0 write 0x0040031c 2 0 unlock seq    incr16 0 0x1c 0x1d
+0 write 0x0040031e 2 0 unlock seq    incr16 0 0x1e 0x1f
+0 write 0x00400320 2 0 unlock seq    incr16 0 0x20 0x21
+0 write 0x00400322 2 0 unlock seq    incr16 0 0x22 0x23
+0 write 0x00400324 2 0 unlock seq    incr16 0 0x24 0x25
+0 write 0x00400326 2 0 unlock seq    incr16 0 0x26 0x27
+0 write 0x00400328 2 0 unlock seq    incr16 0 0x28 0x29
+0 write 0x0040032a 2 0 unlock seq    incr16 0 0x2a 0x2b
+0 write 0x0040032c 2 0 unlock seq    incr16 0 0x2c 0x2d
+0 write 0x0040032e 2 0 unlock seq    incr16 0 0x2e 0x2f
+wait 20
+info &grep Peek:  0x00400310/2: 10 11 *$ << grep
+0 peek 0x00400310 2
+info &grep Peek:  0x00400312/2: 12 13 *$ << grep
+0 peek 0x00400312 2
+info &grep Peek:  0x00400314/2: 14 15 *$ << grep
+0 peek 0x00400314 2
+info &grep Peek:  0x00400316/2: 16 17 *$ << grep
+0 peek 0x00400316 2
+info &grep Peek:  0x00400318/2: 18 19 *$ << grep
+0 peek 0x00400318 2
+info &grep Peek:  0x0040031a/2: 1a 1b *$ << grep
+0 peek 0x0040031a 2
+info &grep Peek:  0x0040031c/2: 1c 1d *$ << grep
+0 peek 0x0040031c 2
+info &grep Peek:  0x0040031e/2: 1e 1f *$ << grep
+0 peek 0x0040031e 2
+info &grep Peek:  0x00400320/2: 20 21 *$ << grep
+0 peek 0x00400320 2
+info &grep Peek:  0x00400322/2: 22 23 *$ << grep
+0 peek 0x00400322 2
+info &grep Peek:  0x00400324/2: 24 25 *$ << grep
+0 peek 0x00400324 2
+info &grep Peek:  0x00400326/2: 26 27 *$ << grep
+0 peek 0x00400326 2
+info &grep Peek:  0x00400328/2: 28 29 *$ << grep
+0 peek 0x00400328 2
+info &grep Peek:  0x0040032a/2: 2a 2b *$ << grep
+0 peek 0x0040032a 2
+info &grep Peek:  0x0040032c/2: 2c 2d *$ << grep
+0 peek 0x0040032c 2
+info &grep Peek:  0x0040032e/2: 2e 2f *$ << grep
+0 peek 0x0040032e 2
+info endgrep
+
+note Doing 16 halfword wrap16 unaligned writes
+0 write 0x00402330 2 0 unlock nonseq wrap16 0 0x30 0x31
+0 write 0x00402332 2 0 unlock seq    wrap16 0 0x32 0x33
+0 write 0x00402334 2 0 unlock seq    wrap16 0 0x34 0x35
+0 write 0x00402336 2 0 unlock seq    wrap16 0 0x36 0x37
+0 write 0x00402338 2 0 unlock seq    wrap16 0 0x38 0x39
+0 write 0x0040233a 2 0 unlock seq    wrap16 0 0x3a 0x3b
+0 write 0x0040233c 2 0 unlock seq    wrap16 0 0x3c 0x3d
+0 write 0x0040233e 2 0 unlock seq    wrap16 0 0x3e 0x3f
+0 write 0x00402320 2 0 unlock seq    wrap16 0 0x20 0x21
+0 write 0x00402322 2 0 unlock seq    wrap16 0 0x22 0x23
+0 write 0x00402324 2 0 unlock seq    wrap16 0 0x24 0x25
+0 write 0x00402326 2 0 unlock seq    wrap16 0 0x26 0x27
+0 write 0x00402328 2 0 unlock seq    wrap16 0 0x28 0x29
+0 write 0x0040232a 2 0 unlock seq    wrap16 0 0x2a 0x2b
+0 write 0x0040232c 2 0 unlock seq    wrap16 0 0x2c 0x2d
+0 write 0x0040232e 2 0 unlock seq    wrap16 0 0x2e 0x2f
+wait 20
+info &grep Peek:  0x00402330/2: 30 31 *$ << grep
+0 peek 0x00402330 2
+info &grep Peek:  0x00402332/2: 32 33 *$ << grep
+0 peek 0x00402332 2
+info &grep Peek:  0x00402334/2: 34 35 *$ << grep
+0 peek 0x00402334 2
+info &grep Peek:  0x00402336/2: 36 37 *$ << grep
+0 peek 0x00402336 2
+info &grep Peek:  0x00402338/2: 38 39 *$ << grep
+0 peek 0x00402338 2
+info &grep Peek:  0x0040233a/2: 3a 3b *$ << grep
+0 peek 0x0040233a 2
+info &grep Peek:  0x0040233c/2: 3c 3d *$ << grep
+0 peek 0x0040233c 2
+info &grep Peek:  0x0040233e/2: 3e 3f *$ << grep
+0 peek 0x0040233e 2
+info &grep Peek:  0x00402320/2: 20 21 *$ << grep
+0 peek 0x00402320 2
+info &grep Peek:  0x00402322/2: 22 23 *$ << grep
+0 peek 0x00402322 2
+info &grep Peek:  0x00402324/2: 24 25 *$ << grep
+0 peek 0x00402324 2
+info &grep Peek:  0x00402326/2: 26 27 *$ << grep
+0 peek 0x00402326 2
+info &grep Peek:  0x00402328/2: 28 29 *$ << grep
+0 peek 0x00402328 2
+info &grep Peek:  0x0040232a/2: 2a 2b *$ << grep
+0 peek 0x0040232a 2
+info &grep Peek:  0x0040232c/2: 2c 2d *$ << grep
+0 peek 0x0040232c 2
+info &grep Peek:  0x0040232e/2: 2e 2f *$ << grep
+0 peek 0x0040232e 2
+info endgrep
+
+note Doing 16 word incr16 unaligned writes
+0 write 0x00400350 4 0 unlock nonseq incr16 0 0x50 0x51 0x52 0x53
+0 write 0x00400354 4 0 unlock seq    incr16 0 0x54 0x55 0x56 0x57
+0 write 0x00400358 4 0 unlock seq    incr16 0 0x58 0x59 0x5a 0x5b
+0 write 0x0040035c 4 0 unlock seq    incr16 0 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400360 4 0 unlock seq    incr16 0 0x60 0x61 0x62 0x63
+0 write 0x00400364 4 0 unlock seq    incr16 0 0x64 0x65 0x66 0x67
+0 write 0x00400368 4 0 unlock seq    incr16 0 0x68 0x69 0x6a 0x6b
+0 write 0x0040036c 4 0 unlock seq    incr16 0 0x6c 0x6d 0x6e 0x6f
+0 write 0x00400370 4 0 unlock seq    incr16 0 0x70 0x71 0x72 0x73
+0 write 0x00400374 4 0 unlock seq    incr16 0 0x74 0x75 0x76 0x77
+0 write 0x00400378 4 0 unlock seq    incr16 0 0x78 0x79 0x7a 0x7b
+0 write 0x0040037c 4 0 unlock seq    incr16 0 0x7c 0x7d 0x7e 0x7f
+0 write 0x00400380 4 0 unlock seq    incr16 0 0x80 0x81 0x82 0x83
+0 write 0x00400384 4 0 unlock seq    incr16 0 0x84 0x85 0x86 0x87
+0 write 0x00400388 4 0 unlock seq    incr16 0 0x88 0x89 0x8a 0x8b
+0 write 0x0040038c 4 0 unlock seq    incr16 0 0x8c 0x8d 0x8e 0x8f
+wait 20
+info &grep Peek:  0x00400350/4: 50 51 52 53 *$ << grep
+0 peek 0x00400350 4
+info &grep Peek:  0x00400354/4: 54 55 56 57 *$ << grep
+0 peek 0x00400354 4
+info &grep Peek:  0x00400358/4: 58 59 5a 5b *$ << grep
+0 peek 0x00400358 4
+info &grep Peek:  0x0040035c/4: 5c 5d 5e 5f *$ << grep
+0 peek 0x0040035c 4
+info &grep Peek:  0x00400360/4: 60 61 62 63 *$ << grep
+0 peek 0x00400360 4
+info &grep Peek:  0x00400364/4: 64 65 66 67 *$ << grep
+0 peek 0x00400364 4
+info &grep Peek:  0x00400368/4: 68 69 6a 6b *$ << grep
+0 peek 0x00400368 4
+info &grep Peek:  0x0040036c/4: 6c 6d 6e 6f *$ << grep
+0 peek 0x0040036c 4
+info &grep Peek:  0x00400370/4: 70 71 72 73 *$ << grep
+0 peek 0x00400370 4
+info &grep Peek:  0x00400374/4: 74 75 76 77 *$ << grep
+0 peek 0x00400374 4
+info &grep Peek:  0x00400378/4: 78 79 7a 7b *$ << grep
+0 peek 0x00400378 4
+info &grep Peek:  0x0040037c/4: 7c 7d 7e 7f *$ << grep
+0 peek 0x0040037c 4
+info &grep Peek:  0x00400380/4: 80 81 82 83 *$ << grep
+0 peek 0x00400380 4
+info &grep Peek:  0x00400384/4: 84 85 86 87 *$ << grep
+0 peek 0x00400384 4
+info &grep Peek:  0x00400388/4: 88 89 8a 8b *$ << grep
+0 peek 0x00400388 4
+info &grep Peek:  0x0040038c/4: 8c 8d 8e 8f *$ << grep
+0 peek 0x0040038c 4
+info endgrep
+
+note Doing 16 word wrap16 unaligned writes
+0 write 0x00402390 4 0 unlock nonseq wrap16 0 0x90 0x91 0x92 0x93
+0 write 0x00402394 4 0 unlock seq    wrap16 0 0x94 0x95 0x96 0x97
+0 write 0x00402398 4 0 unlock seq    wrap16 0 0x98 0x99 0x9a 0x9b
+0 write 0x0040239c 4 0 unlock seq    wrap16 0 0x9c 0x9d 0x9e 0x9f
+0 write 0x004023a0 4 0 unlock seq    wrap16 0 0xa0 0xa1 0xa2 0xa3
+0 write 0x004023a4 4 0 unlock seq    wrap16 0 0xa4 0xa5 0xa6 0xa7
+0 write 0x004023a8 4 0 unlock seq    wrap16 0 0xa8 0xa9 0xaa 0xab
+0 write 0x004023ac 4 0 unlock seq    wrap16 0 0xac 0xad 0xae 0xaf
+0 write 0x004023b0 4 0 unlock seq    wrap16 0 0xb0 0xb1 0xb2 0xb3
+0 write 0x004023b4 4 0 unlock seq    wrap16 0 0xb4 0xb5 0xb6 0xb7
+0 write 0x004023b8 4 0 unlock seq    wrap16 0 0xb8 0xb9 0xba 0xbb
+0 write 0x004023bc 4 0 unlock seq    wrap16 0 0xbc 0xbd 0xbe 0xbf
+0 write 0x00402380 4 0 unlock seq    wrap16 0 0x80 0x81 0x82 0x83
+0 write 0x00402384 4 0 unlock seq    wrap16 0 0x84 0x85 0x86 0x87
+0 write 0x00402388 4 0 unlock seq    wrap16 0 0x88 0x89 0x8a 0x8b
+0 write 0x0040238c 4 0 unlock seq    wrap16 0 0x8c 0x8d 0x8e 0x8f
+wait 20
+info &grep Peek:  0x00402390/4: 90 91 92 93 *$ << grep
+0 peek 0x00402390 4
+info &grep Peek:  0x00402394/4: 94 95 96 97 *$ << grep
+0 peek 0x00402394 4
+info &grep Peek:  0x00402398/4: 98 99 9a 9b *$ << grep
+0 peek 0x00402398 4
+info &grep Peek:  0x0040239c/4: 9c 9d 9e 9f *$ << grep
+0 peek 0x0040239c 4
+info &grep Peek:  0x004023a0/4: a0 a1 a2 a3 *$ << grep
+0 peek 0x004023a0 4
+info &grep Peek:  0x004023a4/4: a4 a5 a6 a7 *$ << grep
+0 peek 0x004023a4 4
+info &grep Peek:  0x004023a8/4: a8 a9 aa ab *$ << grep
+0 peek 0x004023a8 4
+info &grep Peek:  0x004023ac/4: ac ad ae af *$ << grep
+0 peek 0x004023ac 4
+info &grep Peek:  0x004023b0/4: b0 b1 b2 b3 *$ << grep
+0 peek 0x004023b0 4
+info &grep Peek:  0x004023b4/4: b4 b5 b6 b7 *$ << grep
+0 peek 0x004023b4 4
+info &grep Peek:  0x004023b8/4: b8 b9 ba bb *$ << grep
+0 peek 0x004023b8 4
+info &grep Peek:  0x004023bc/4: bc bd be bf *$ << grep
+0 peek 0x004023bc 4
+info &grep Peek:  0x00402380/4: 80 81 82 83 *$ << grep
+0 peek 0x00402380 4
+info &grep Peek:  0x00402384/4: 84 85 86 87 *$ << grep
+0 peek 0x00402384 4
+info &grep Peek:  0x00402388/4: 88 89 8a 8b *$ << grep
+0 peek 0x00402388 4
+info &grep Peek:  0x0040238c/4: 8c 8d 8e 8f *$ << grep
+0 peek 0x0040238c 4
+info endgrep
+
+
+
+note ********* Starting Unaligned Reads of Word Size or Less *********
+
+note Doing 4 byte incr4 unaligned reads
+info &grep Read:  0x00400201/1: 01 *$ << endgrepA
+0 read  0x00400201 1 0 unlock nonseq incr4  0
+info &grep Read:  0x00400202/1: 02 *$ << endgrepB
+0 read  0x00400202 1 0 unlock seq    incr4  0
+info &grep Read:  0x00400203/1: 03 *$ << endgrepA
+0 read  0x00400203 1 0 unlock seq    incr4  0
+info &grep Read:  0x00400204/1: 04 *$ << endgrepB
+0 read  0x00400204 1 0 unlock seq    incr4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 byte wrap4 unaligned reads
+info &grep Read:  0x00400209/1: 09 *$ << endgrepA
+0 read  0x00400209 1 0 unlock nonseq wrap4  0
+info &grep Read:  0x0040020a/1: 0a *$ << endgrepB
+0 read  0x0040020a 1 0 unlock seq    wrap4  0
+info &grep Read:  0x0040020b/1: 0b *$ << endgrepA
+0 read  0x0040020b 1 0 unlock seq    wrap4  0
+info &grep Read:  0x00400208/1: 08 *$ << endgrepB
+0 read  0x00400208 1 0 unlock seq    wrap4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 byte wrap4 unaligned reads again
+info &grep Read:  0x0040020e/1: 0e *$ << endgrepA
+0 read  0x0040020e 1 0 unlock nonseq wrap4  0
+info &grep Read:  0x0040020f/1: 0f *$ << endgrepB
+0 read  0x0040020f 1 0 unlock seq    wrap4  0
+info &grep Read:  0x0040020c/1: 0c *$ << endgrepA
+0 read  0x0040020c 1 0 unlock seq    wrap4  0
+info &grep Read:  0x0040020d/1: 0d *$ << endgrepB
+0 read  0x0040020d 1 0 unlock seq    wrap4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 halfword incr4 unaligned reads
+info &grep Read:  0x00400212/2: 12 13 *$ << endgrepA
+0 read  0x00400212 2 0 unlock nonseq incr4  0
+info &grep Read:  0x00400214/2: 14 15 *$ << endgrepB
+0 read  0x00400214 2 0 unlock seq    incr4  0
+info &grep Read:  0x00400216/2: 16 17 *$ << endgrepA
+0 read  0x00400216 2 0 unlock seq    incr4  0
+info &grep Read:  0x00400218/2: 18 19 *$ << endgrepB
+0 read  0x00400218 2 0 unlock seq    incr4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 halfword wrap4 unaligned reads
+info &grep Read:  0x00400222/2: 22 23 *$ << endgrepA
+0 read  0x00400222 2 0 unlock nonseq wrap4  0
+info &grep Read:  0x00400224/2: 24 25 *$ << endgrepB
+0 read  0x00400224 2 0 unlock seq    wrap4  0
+info &grep Read:  0x00400226/2: 26 27 *$ << endgrepA
+0 read  0x00400226 2 0 unlock seq    wrap4  0
+info &grep Read:  0x00400220/2: 20 21 *$ << endgrepB
+0 read  0x00400220 2 0 unlock seq    wrap4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 word incr4 unaligned reads
+info &grep Read:  0x00400234/4: 34 35 36 37 *$ << endgrepA
+0 read  0x00400234 4 0 unlock nonseq incr4  0
+info &grep Read:  0x00400238/4: 38 39 3a 3b *$ << endgrepB
+0 read  0x00400238 4 0 unlock seq    incr4  0
+info &grep Read:  0x0040023c/4: 3c 3d 3e 3f *$ << endgrepA
+0 read  0x0040023c 4 0 unlock seq    incr4  0
+info &grep Read:  0x00400240/4: 40 41 42 43 *$ << endgrepB
+0 read  0x00400240 4 0 unlock seq    incr4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 word wrap4 unaligned reads
+info &grep Read:  0x00400254/4: 54 55 56 57 *$ << endgrepA
+0 read  0x00400254 4 0 unlock nonseq wrap4  0
+info &grep Read:  0x00400258/4: 58 59 5a 5b *$ << endgrepB
+0 read  0x00400258 4 0 unlock seq    wrap4  0
+info &grep Read:  0x0040025c/4: 5c 5d 5e 5f *$ << endgrepA
+0 read  0x0040025c 4 0 unlock seq    wrap4  0
+info &grep Read:  0x00400250/4: 50 51 52 53 *$ << endgrepB
+0 read  0x00400250 4 0 unlock seq    wrap4  0
+
+wait 20
+
+note Doing 8 byte incr8 unaligned reads
+info &grep Read:  0x00400261/1: 61 *$ << endgrepA
+0 read  0x00400261 1 0 unlock nonseq incr8  0
+info &grep Read:  0x00400262/1: 62 *$ << endgrepB
+0 read  0x00400262 1 0 unlock seq    incr8  0
+info &grep Read:  0x00400263/1: 63 *$ << endgrepA
+0 read  0x00400263 1 0 unlock seq    incr8  0
+info &grep Read:  0x00400264/1: 64 *$ << endgrepB
+0 read  0x00400264 1 0 unlock seq    incr8  0
+info &grep Read:  0x00400265/1: 65 *$ << endgrepA
+0 read  0x00400265 1 0 unlock seq    incr8  0
+info &grep Read:  0x00400266/1: 66 *$ << endgrepB
+0 read  0x00400266 1 0 unlock seq    incr8  0
+info &grep Read:  0x00400267/1: 67 *$ << endgrepA
+0 read  0x00400267 1 0 unlock seq    incr8  0
+info &grep Read:  0x00400268/1: 68 *$ << endgrepB
+0 read  0x00400268 1 0 unlock seq    incr8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 byte wrap8 unaligned reads
+info &grep Read:  0x00400271/1: 71 *$ << endgrepA
+0 read  0x00400271 1 0 unlock nonseq wrap8  0
+info &grep Read:  0x00400272/1: 72 *$ << endgrepB
+0 read  0x00400272 1 0 unlock seq    wrap8  0
+info &grep Read:  0x00400273/1: 73 *$ << endgrepA
+0 read  0x00400273 1 0 unlock seq    wrap8  0
+info &grep Read:  0x00400274/1: 74 *$ << endgrepB
+0 read  0x00400274 1 0 unlock seq    wrap8  0
+info &grep Read:  0x00400275/1: 75 *$ << endgrepA
+0 read  0x00400275 1 0 unlock seq    wrap8  0
+info &grep Read:  0x00400276/1: 76 *$ << endgrepB
+0 read  0x00400276 1 0 unlock seq    wrap8  0
+info &grep Read:  0x00400277/1: 77 *$ << endgrepA
+0 read  0x00400277 1 0 unlock seq    wrap8  0
+info &grep Read:  0x00400270/1: 70 *$ << endgrepB
+0 read  0x00400270 1 0 unlock seq    wrap8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 halfword incr8 unaligned reads
+info &grep Read:  0x00400282/2: 82 83 *$ << endgrepA
+0 read  0x00400282 2 0 unlock nonseq incr8  0
+info &grep Read:  0x00400284/2: 84 85 *$ << endgrepB
+0 read  0x00400284 2 0 unlock seq    incr8  0
+info &grep Read:  0x00400286/2: 86 87 *$ << endgrepA
+0 read  0x00400286 2 0 unlock seq    incr8  0
+info &grep Read:  0x00400288/2: 88 89 *$ << endgrepB
+0 read  0x00400288 2 0 unlock seq    incr8  0
+info &grep Read:  0x0040028a/2: 8a 8b *$ << endgrepA
+0 read  0x0040028a 2 0 unlock seq    incr8  0
+info &grep Read:  0x0040028c/2: 8c 8d *$ << endgrepB
+0 read  0x0040028c 2 0 unlock seq    incr8  0
+info &grep Read:  0x0040028e/2: 8e 8f *$ << endgrepA
+0 read  0x0040028e 2 0 unlock seq    incr8  0
+info &grep Read:  0x00400290/2: 90 91 *$ << endgrepB
+0 read  0x00400290 2 0 unlock seq    incr8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 halfword wrap8 unaligned reads
+info &grep Read:  0x004002a2/2: a2 a3 *$ << endgrepA
+0 read  0x004002a2 2 0 unlock nonseq wrap8  0
+info &grep Read:  0x004002a4/2: a4 a5 *$ << endgrepB
+0 read  0x004002a4 2 0 unlock seq    wrap8  0
+info &grep Read:  0x004002a6/2: a6 a7 *$ << endgrepA
+0 read  0x004002a6 2 0 unlock seq    wrap8  0
+info &grep Read:  0x004002a8/2: a8 a9 *$ << endgrepB
+0 read  0x004002a8 2 0 unlock seq    wrap8  0
+info &grep Read:  0x004002aa/2: aa ab *$ << endgrepA
+0 read  0x004002aa 2 0 unlock seq    wrap8  0
+info &grep Read:  0x004002ac/2: ac ad *$ << endgrepB
+0 read  0x004002ac 2 0 unlock seq    wrap8  0
+info &grep Read:  0x004002ae/2: ae af *$ << endgrepA
+0 read  0x004002ae 2 0 unlock seq    wrap8  0
+info &grep Read:  0x004002a0/2: a0 a1 *$ << endgrepB
+0 read  0x004002a0 2 0 unlock seq    wrap8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 word incr8 unaligned reads
+info &grep Read:  0x004002b0/4: b0 b1 b2 b3 *$ << endgrepA
+0 read  0x004002b0 4 0 unlock nonseq incr8  0
+info &grep Read:  0x004002b4/4: b4 b5 b6 b7 *$ << endgrepB
+0 read  0x004002b4 4 0 unlock seq    incr8  0
+info &grep Read:  0x004002b8/4: b8 b9 ba bb *$ << endgrepA
+0 read  0x004002b8 4 0 unlock seq    incr8  0
+info &grep Read:  0x004002bc/4: bc bd be bf *$ << endgrepB
+0 read  0x004002bc 4 0 unlock seq    incr8  0
+info &grep Read:  0x004002c0/4: c0 c1 c2 c3 *$ << endgrepA
+0 read  0x004002c0 4 0 unlock seq    incr8  0
+info &grep Read:  0x004002c4/4: c4 c5 c6 c7 *$ << endgrepB
+0 read  0x004002c4 4 0 unlock seq    incr8  0
+info &grep Read:  0x004002c8/4: c8 c9 ca cb *$ << endgrepA
+0 read  0x004002c8 4 0 unlock seq    incr8  0
+info &grep Read:  0x004002cc/4: cc cd ce cf *$ << endgrepB
+0 read  0x004002cc 4 0 unlock seq    incr8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 word wrap8 unaligned reads
+info &grep Read:  0x004002e4/4: e4 e5 e6 e7 *$ << endgrepA
+0 read  0x004002e4 4 0 unlock nonseq wrap8  0
+info &grep Read:  0x004002e8/4: e8 e9 ea eb *$ << endgrepB
+0 read  0x004002e8 4 0 unlock seq    wrap8  0
+info &grep Read:  0x004002ec/4: ec ed ee ef *$ << endgrepA
+0 read  0x004002ec 4 0 unlock seq    wrap8  0
+info &grep Read:  0x004002f0/4: f0 f1 f2 f3 *$ << endgrepB
+0 read  0x004002f0 4 0 unlock seq    wrap8  0
+info &grep Read:  0x004002f4/4: f4 f5 f6 f7 *$ << endgrepA
+0 read  0x004002f4 4 0 unlock seq    wrap8  0
+info &grep Read:  0x004002f8/4: f8 f9 fa fb *$ << endgrepB
+0 read  0x004002f8 4 0 unlock seq    wrap8  0
+info &grep Read:  0x004002fc/4: fc fd fe ff *$ << endgrepA
+0 read  0x004002fc 4 0 unlock seq    wrap8  0
+info &grep Read:  0x004002e0/4: e0 e1 e2 e3 *$ << endgrepB
+0 read  0x004002e0 4 0 unlock seq    wrap8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 byte incr16 unaligned reads
+info &grep Read:  0x004022e1/1: e1 *$ << endgrepA
+0 read  0x004022e1 1 0 unlock nonseq incr16 0
+info &grep Read:  0x004022e2/1: e2 *$ << endgrepB
+0 read  0x004022e2 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022e3/1: e3 *$ << endgrepA
+0 read  0x004022e3 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022e4/1: e4 *$ << endgrepB
+0 read  0x004022e4 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022e5/1: e5 *$ << endgrepA
+0 read  0x004022e5 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022e6/1: e6 *$ << endgrepB
+0 read  0x004022e6 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022e7/1: e7 *$ << endgrepA
+0 read  0x004022e7 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022e8/1: e8 *$ << endgrepB
+0 read  0x004022e8 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022e9/1: e9 *$ << endgrepA
+0 read  0x004022e9 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022ea/1: ea *$ << endgrepB
+0 read  0x004022ea 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022eb/1: eb *$ << endgrepA
+0 read  0x004022eb 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022ec/1: ec *$ << endgrepB
+0 read  0x004022ec 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022ed/1: ed *$ << endgrepA
+0 read  0x004022ed 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022ee/1: ee *$ << endgrepB
+0 read  0x004022ee 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022ef/1: ef *$ << endgrepA
+0 read  0x004022ef 1 0 unlock seq    incr16 0
+info &grep Read:  0x004022f0/1: f0 *$ << endgrepB
+0 read  0x004022f0 1 0 unlock seq    incr16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 byte wrap16 unaligned reads
+info &grep Read:  0x00400301/1: 01 *$ << endgrepA
+0 read  0x00400301 1 0 unlock nonseq wrap16 0
+info &grep Read:  0x00400302/1: 02 *$ << endgrepB
+0 read  0x00400302 1 0 unlock seq    wrap16 0
+info &grep Read:  0x00400303/1: 03 *$ << endgrepA
+0 read  0x00400303 1 0 unlock seq    wrap16 0
+info &grep Read:  0x00400304/1: 04 *$ << endgrepB
+0 read  0x00400304 1 0 unlock seq    wrap16 0
+info &grep Read:  0x00400305/1: 05 *$ << endgrepA
+0 read  0x00400305 1 0 unlock seq    wrap16 0
+info &grep Read:  0x00400306/1: 06 *$ << endgrepB
+0 read  0x00400306 1 0 unlock seq    wrap16 0
+info &grep Read:  0x00400307/1: 07 *$ << endgrepA
+0 read  0x00400307 1 0 unlock seq    wrap16 0
+info &grep Read:  0x00400308/1: 08 *$ << endgrepB
+0 read  0x00400308 1 0 unlock seq    wrap16 0
+info &grep Read:  0x00400309/1: 09 *$ << endgrepA
+0 read  0x00400309 1 0 unlock seq    wrap16 0
+info &grep Read:  0x0040030a/1: 0a *$ << endgrepB
+0 read  0x0040030a 1 0 unlock seq    wrap16 0
+info &grep Read:  0x0040030b/1: 0b *$ << endgrepA
+0 read  0x0040030b 1 0 unlock seq    wrap16 0
+info &grep Read:  0x0040030c/1: 0c *$ << endgrepB
+0 read  0x0040030c 1 0 unlock seq    wrap16 0
+info &grep Read:  0x0040030d/1: 0d *$ << endgrepA
+0 read  0x0040030d 1 0 unlock seq    wrap16 0
+info &grep Read:  0x0040030e/1: 0e *$ << endgrepB
+0 read  0x0040030e 1 0 unlock seq    wrap16 0
+info &grep Read:  0x0040030f/1: 0f *$ << endgrepA
+0 read  0x0040030f 1 0 unlock seq    wrap16 0
+info &grep Read:  0x00400300/1: 00 *$ << endgrepB
+0 read  0x00400300 1 0 unlock seq    wrap16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 halfword incr16 unaligned reads
+info &grep Read:  0x00400310/2: 10 11 *$ << endgrepA
+0 read  0x00400310 2 0 unlock nonseq incr16 0
+info &grep Read:  0x00400312/2: 12 13 *$ << endgrepB
+0 read  0x00400312 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400314/2: 14 15 *$ << endgrepA
+0 read  0x00400314 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400316/2: 16 17 *$ << endgrepB
+0 read  0x00400316 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400318/2: 18 19 *$ << endgrepA
+0 read  0x00400318 2 0 unlock seq    incr16 0
+info &grep Read:  0x0040031a/2: 1a 1b *$ << endgrepB
+0 read  0x0040031a 2 0 unlock seq    incr16 0
+info &grep Read:  0x0040031c/2: 1c 1d *$ << endgrepA
+0 read  0x0040031c 2 0 unlock seq    incr16 0
+info &grep Read:  0x0040031e/2: 1e 1f *$ << endgrepB
+0 read  0x0040031e 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400320/2: 20 21 *$ << endgrepA
+0 read  0x00400320 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400322/2: 22 23 *$ << endgrepB
+0 read  0x00400322 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400324/2: 24 25 *$ << endgrepA
+0 read  0x00400324 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400326/2: 26 27 *$ << endgrepB
+0 read  0x00400326 2 0 unlock seq    incr16 0
+info &grep Read:  0x00400328/2: 28 29 *$ << endgrepA
+0 read  0x00400328 2 0 unlock seq    incr16 0
+info &grep Read:  0x0040032a/2: 2a 2b *$ << endgrepB
+0 read  0x0040032a 2 0 unlock seq    incr16 0
+info &grep Read:  0x0040032c/2: 2c 2d *$ << endgrepA
+0 read  0x0040032c 2 0 unlock seq    incr16 0
+info &grep Read:  0x0040032e/2: 2e 2f *$ << endgrepB
+0 read  0x0040032e 2 0 unlock seq    incr16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 halfword wrap16 unaligned reads
+info &grep Read:  0x00402330/2: 30 31 *$ << endgrepA
+0 read  0x00402330 2 0 unlock nonseq wrap16 0
+info &grep Read:  0x00402332/2: 32 33 *$ << endgrepB
+0 read  0x00402332 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00402334/2: 34 35 *$ << endgrepA
+0 read  0x00402334 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00402336/2: 36 37 *$ << endgrepB
+0 read  0x00402336 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00402338/2: 38 39 *$ << endgrepA
+0 read  0x00402338 2 0 unlock seq    wrap16 0
+info &grep Read:  0x0040233a/2: 3a 3b *$ << endgrepB
+0 read  0x0040233a 2 0 unlock seq    wrap16 0
+info &grep Read:  0x0040233c/2: 3c 3d *$ << endgrepA
+0 read  0x0040233c 2 0 unlock seq    wrap16 0
+info &grep Read:  0x0040233e/2: 3e 3f *$ << endgrepB
+0 read  0x0040233e 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00402320/2: 20 21 *$ << endgrepA
+0 read  0x00402320 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00402322/2: 22 23 *$ << endgrepB
+0 read  0x00402322 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00402324/2: 24 25 *$ << endgrepA
+0 read  0x00402324 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00402326/2: 26 27 *$ << endgrepB
+0 read  0x00402326 2 0 unlock seq    wrap16 0
+info &grep Read:  0x00402328/2: 28 29 *$ << endgrepA
+0 read  0x00402328 2 0 unlock seq    wrap16 0
+info &grep Read:  0x0040232a/2: 2a 2b *$ << endgrepB
+0 read  0x0040232a 2 0 unlock seq    wrap16 0
+info &grep Read:  0x0040232c/2: 2c 2d *$ << endgrepA
+0 read  0x0040232c 2 0 unlock seq    wrap16 0
+info &grep Read:  0x0040232e/2: 2e 2f *$ << endgrepB
+0 read  0x0040232e 2 0 unlock seq    wrap16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 word incr16 unaligned reads
+info &grep Read:  0x00400350/4: 50 51 52 53 *$ << endgrepA
+0 read  0x00400350 4 0 unlock nonseq incr16 0
+info &grep Read:  0x00400354/4: 54 55 56 57 *$ << endgrepB
+0 read  0x00400354 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400358/4: 58 59 5a 5b *$ << endgrepA
+0 read  0x00400358 4 0 unlock seq    incr16 0
+info &grep Read:  0x0040035c/4: 5c 5d 5e 5f *$ << endgrepB
+0 read  0x0040035c 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400360/4: 60 61 62 63 *$ << endgrepA
+0 read  0x00400360 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400364/4: 64 65 66 67 *$ << endgrepB
+0 read  0x00400364 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400368/4: 68 69 6a 6b *$ << endgrepA
+0 read  0x00400368 4 0 unlock seq    incr16 0
+info &grep Read:  0x0040036c/4: 6c 6d 6e 6f *$ << endgrepB
+0 read  0x0040036c 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400370/4: 70 71 72 73 *$ << endgrepA
+0 read  0x00400370 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400374/4: 74 75 76 77 *$ << endgrepB
+0 read  0x00400374 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400378/4: 78 79 7a 7b *$ << endgrepA
+0 read  0x00400378 4 0 unlock seq    incr16 0
+info &grep Read:  0x0040037c/4: 7c 7d 7e 7f *$ << endgrepB
+0 read  0x0040037c 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400380/4: 80 81 82 83 *$ << endgrepA
+0 read  0x00400380 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400384/4: 84 85 86 87 *$ << endgrepB
+0 read  0x00400384 4 0 unlock seq    incr16 0
+info &grep Read:  0x00400388/4: 88 89 8a 8b *$ << endgrepA
+0 read  0x00400388 4 0 unlock seq    incr16 0
+info &grep Read:  0x0040038c/4: 8c 8d 8e 8f *$ << endgrepB
+0 read  0x0040038c 4 0 unlock seq    incr16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 word wrap16 unaligned reads
+info &grep Read:  0x00402390/4: 90 91 92 93 *$ << endgrepA
+0 read  0x00402390 4 0 unlock nonseq wrap16 0
+info &grep Read:  0x00402394/4: 94 95 96 97 *$ << endgrepB
+0 read  0x00402394 4 0 unlock seq    wrap16 0
+info &grep Read:  0x00402398/4: 98 99 9a 9b *$ << endgrepA
+0 read  0x00402398 4 0 unlock seq    wrap16 0
+info &grep Read:  0x0040239c/4: 9c 9d 9e 9f *$ << endgrepB
+0 read  0x0040239c 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004023a0/4: a0 a1 a2 a3 *$ << endgrepA
+0 read  0x004023a0 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004023a4/4: a4 a5 a6 a7 *$ << endgrepB
+0 read  0x004023a4 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004023a8/4: a8 a9 aa ab *$ << endgrepA
+0 read  0x004023a8 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004023ac/4: ac ad ae af *$ << endgrepB
+0 read  0x004023ac 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004023b0/4: b0 b1 b2 b3 *$ << endgrepA
+0 read  0x004023b0 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004023b4/4: b4 b5 b6 b7 *$ << endgrepB
+0 read  0x004023b4 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004023b8/4: b8 b9 ba bb *$ << endgrepA
+0 read  0x004023b8 4 0 unlock seq    wrap16 0
+info &grep Read:  0x004023bc/4: bc bd be bf *$ << endgrepB
+0 read  0x004023bc 4 0 unlock seq    wrap16 0
+info &grep Read:  0x00402380/4: 80 81 82 83 *$ << endgrepA
+0 read  0x00402380 4 0 unlock seq    wrap16 0
+info &grep Read:  0x00402384/4: 84 85 86 87 *$ << endgrepB
+0 read  0x00402384 4 0 unlock seq    wrap16 0
+info &grep Read:  0x00402388/4: 88 89 8a 8b *$ << endgrepA
+0 read  0x00402388 4 0 unlock seq    wrap16 0
+info &grep Read:  0x0040238c/4: 8c 8d 8e 8f *$ << endgrepB
+0 read  0x0040238c 4 0 unlock seq    wrap16 0
+info endgrepA
+wait 20
+info endgrepB
+#endif
+
+
+
+
+
+
+// This section requires a 64-bit or 128-bit AHB bus (it doesn't work on 32-bit AHB buses)
+#if 0
+
+note ************* Starting Aligned Double-Word Writes **************
+
+note Doing 2 double-word single writes
+0 write 0x00400400 8 0 unlock nonseq single 0 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07
+0 write 0x00400408 8 0 unlock nonseq single 0 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f
+wait 20
+info &grep Peek:  0x00400400/8: 00 01 02 03 04 05 06 07 *$ << grep
+0 peek 0x00400400 8
+info &grep Peek:  0x00400408/8: 08 09 0a 0b 0c 0d 0e 0f *$ << grep
+0 peek 0x00400408 8
+info endgrep
+
+note Doing 2 double-word incr writes
+0 write 0x00400410 8 0 unlock nonseq incr   0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17
+0 write 0x00400418 8 0 unlock seq    incr   0 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+wait 20
+info &grep Peek:  0x00400410/8: 10 11 12 13 14 15 16 17 *$ << grep
+0 peek 0x00400410 8
+info &grep Peek:  0x00400418/8: 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00400418 8
+info endgrep
+
+note Doing 4 double-word incr4 writes
+0 write 0x00400420 8 0 unlock nonseq incr4  0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27
+0 write 0x00400428 8 0 unlock seq    incr4  0 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00400430 8 0 unlock seq    incr4  0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37
+0 write 0x00400438 8 0 unlock seq    incr4  0 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+wait 20
+info &grep Peek:  0x00400420/8: 20 21 22 23 24 25 26 27 *$ << grep
+0 peek 0x00400420 8
+info &grep Peek:  0x00400428/8: 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00400428 8
+info &grep Peek:  0x00400430/8: 30 31 32 33 34 35 36 37 *$ << grep
+0 peek 0x00400430 8
+info &grep Peek:  0x00400438/8: 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00400438 8
+info endgrep
+
+note Doing 4 double-word wrap4 writes
+0 write 0x00400440 8 0 unlock nonseq wrap4  0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47
+0 write 0x00400448 8 0 unlock seq    wrap4  0 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00400450 8 0 unlock seq    wrap4  0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37
+0 write 0x00400458 8 0 unlock seq    wrap4  0 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+wait 20
+info &grep Peek:  0x00400440/8: 40 41 42 43 44 45 46 47 *$ << grep
+0 peek 0x00400440 8
+info &grep Peek:  0x00400448/8: 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00400448 8
+info &grep Peek:  0x00400450/8: 30 31 32 33 34 35 36 37 *$ << grep
+0 peek 0x00400450 8
+info &grep Peek:  0x00400458/8: 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00400458 8
+info endgrep
+
+note Doing 8 double-word incr8 writes
+0 write 0x00400480 8 0 unlock nonseq incr8  0 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87
+0 write 0x00400488 8 0 unlock seq    incr8  0 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f
+0 write 0x00400490 8 0 unlock seq    incr8  0 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97
+0 write 0x00400498 8 0 unlock seq    incr8  0 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f
+0 write 0x004004a0 8 0 unlock seq    incr8  0 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7
+0 write 0x004004a8 8 0 unlock seq    incr8  0 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf
+0 write 0x004004b0 8 0 unlock seq    incr8  0 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7
+0 write 0x004004b8 8 0 unlock seq    incr8  0 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf
+wait 20
+info &grep Peek:  0x00400480/8: 80 81 82 83 84 85 86 87 *$ << grep
+0 peek 0x00400480 8
+info &grep Peek:  0x00400488/8: 88 89 8a 8b 8c 8d 8e 8f *$ << grep
+0 peek 0x00400488 8
+info &grep Peek:  0x00400490/8: 90 91 92 93 94 95 96 97 *$ << grep
+0 peek 0x00400490 8
+info &grep Peek:  0x00400498/8: 98 99 9a 9b 9c 9d 9e 9f *$ << grep
+0 peek 0x00400498 8
+info &grep Peek:  0x004004a0/8: a0 a1 a2 a3 a4 a5 a6 a7 *$ << grep
+0 peek 0x004004a0 8
+info &grep Peek:  0x004004a8/8: a8 a9 aa ab ac ad ae af *$ << grep
+0 peek 0x004004a8 8
+info &grep Peek:  0x004004b0/8: b0 b1 b2 b3 b4 b5 b6 b7 *$ << grep
+0 peek 0x004004b0 8
+info &grep Peek:  0x004004b8/8: b8 b9 ba bb bc bd be bf *$ << grep
+0 peek 0x004004b8 8
+info endgrep
+
+note Doing 8 double-word wrap8 writes
+0 write 0x004004c0 8 0 unlock nonseq wrap8  0 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7
+0 write 0x004004c8 8 0 unlock seq    wrap8  0 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf
+0 write 0x004004d0 8 0 unlock seq    wrap8  0 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7
+0 write 0x004004d8 8 0 unlock seq    wrap8  0 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf
+0 write 0x004004e0 8 0 unlock seq    wrap8  0 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7
+0 write 0x004004e8 8 0 unlock seq    wrap8  0 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef
+0 write 0x004004f0 8 0 unlock seq    wrap8  0 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7
+0 write 0x004004f8 8 0 unlock seq    wrap8  0 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff
+wait 20
+info &grep Peek:  0x004004c0/8: c0 c1 c2 c3 c4 c5 c6 c7 *$ << grep
+0 peek 0x004004c0 8
+info &grep Peek:  0x004004c8/8: c8 c9 ca cb cc cd ce cf *$ << grep
+0 peek 0x004004c8 8
+info &grep Peek:  0x004004d0/8: d0 d1 d2 d3 d4 d5 d6 d7 *$ << grep
+0 peek 0x004004d0 8
+info &grep Peek:  0x004004d8/8: d8 d9 da db dc dd de df *$ << grep
+0 peek 0x004004d8 8
+info &grep Peek:  0x004004e0/8: e0 e1 e2 e3 e4 e5 e6 e7 *$ << grep
+0 peek 0x004004e0 8
+info &grep Peek:  0x004004e8/8: e8 e9 ea eb ec ed ee ef *$ << grep
+0 peek 0x004004e8 8
+info &grep Peek:  0x004004f0/8: f0 f1 f2 f3 f4 f5 f6 f7 *$ << grep
+0 peek 0x004004f0 8
+info &grep Peek:  0x004004f8/8: f8 f9 fa fb fc fd fe ff *$ << grep
+0 peek 0x004004f8 8
+info endgrep
+
+note Doing 16 double-word incr16 writes
+0 write 0x00400500 8 0 unlock nonseq incr16 0 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07
+0 write 0x00400508 8 0 unlock seq    incr16 0 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f
+0 write 0x00400510 8 0 unlock seq    incr16 0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17
+0 write 0x00400518 8 0 unlock seq    incr16 0 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+0 write 0x00400520 8 0 unlock seq    incr16 0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27
+0 write 0x00400528 8 0 unlock seq    incr16 0 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00400530 8 0 unlock seq    incr16 0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37
+0 write 0x00400538 8 0 unlock seq    incr16 0 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+0 write 0x00400540 8 0 unlock seq    incr16 0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47
+0 write 0x00400548 8 0 unlock seq    incr16 0 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00400550 8 0 unlock seq    incr16 0 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57
+0 write 0x00400558 8 0 unlock seq    incr16 0 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400560 8 0 unlock seq    incr16 0 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67
+0 write 0x00400568 8 0 unlock seq    incr16 0 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f
+0 write 0x00400570 8 0 unlock seq    incr16 0 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77
+0 write 0x00400578 8 0 unlock seq    incr16 0 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f
+wait 20
+info &grep Peek:  0x00400500/8: 00 01 02 03 04 05 06 07 *$ << grep
+0 peek 0x00400500 8
+info &grep Peek:  0x00400508/8: 08 09 0a 0b 0c 0d 0e 0f *$ << grep
+0 peek 0x00400508 8
+info &grep Peek:  0x00400510/8: 10 11 12 13 14 15 16 17 *$ << grep
+0 peek 0x00400510 8
+info &grep Peek:  0x00400518/8: 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00400518 8
+info &grep Peek:  0x00400520/8: 20 21 22 23 24 25 26 27 *$ << grep
+0 peek 0x00400520 8
+info &grep Peek:  0x00400528/8: 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00400528 8
+info &grep Peek:  0x00400530/8: 30 31 32 33 34 35 36 37 *$ << grep
+0 peek 0x00400530 8
+info &grep Peek:  0x00400538/8: 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00400538 8
+info &grep Peek:  0x00400540/8: 40 41 42 43 44 45 46 47 *$ << grep
+0 peek 0x00400540 8
+info &grep Peek:  0x00400548/8: 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00400548 8
+info &grep Peek:  0x00400550/8: 50 51 52 53 54 55 56 57 *$ << grep
+0 peek 0x00400550 8
+info &grep Peek:  0x00400558/8: 58 59 5a 5b 5c 5d 5e 5f *$ << grep
+0 peek 0x00400558 8
+info &grep Peek:  0x00400560/8: 60 61 62 63 64 65 66 67 *$ << grep
+0 peek 0x00400560 8
+info &grep Peek:  0x00400568/8: 68 69 6a 6b 6c 6d 6e 6f *$ << grep
+0 peek 0x00400568 8
+info &grep Peek:  0x00400570/8: 70 71 72 73 74 75 76 77 *$ << grep
+0 peek 0x00400570 8
+info &grep Peek:  0x00400578/8: 78 79 7a 7b 7c 7d 7e 7f *$ << grep
+0 peek 0x00400578 8
+info endgrep
+
+note Doing 16 double-word wrap16 writes
+0 write 0x00400580 8 0 unlock nonseq wrap16 0 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87
+0 write 0x00400588 8 0 unlock seq    wrap16 0 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f
+0 write 0x00400590 8 0 unlock seq    wrap16 0 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97
+0 write 0x00400598 8 0 unlock seq    wrap16 0 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f
+0 write 0x004005a0 8 0 unlock seq    wrap16 0 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7
+0 write 0x004005a8 8 0 unlock seq    wrap16 0 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf
+0 write 0x004005b0 8 0 unlock seq    wrap16 0 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7
+0 write 0x004005b8 8 0 unlock seq    wrap16 0 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf
+0 write 0x004005c0 8 0 unlock seq    wrap16 0 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7
+0 write 0x004005c8 8 0 unlock seq    wrap16 0 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf
+0 write 0x004005d0 8 0 unlock seq    wrap16 0 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7
+0 write 0x004005d8 8 0 unlock seq    wrap16 0 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf
+0 write 0x004005e0 8 0 unlock seq    wrap16 0 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7
+0 write 0x004005e8 8 0 unlock seq    wrap16 0 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef
+0 write 0x004005f0 8 0 unlock seq    wrap16 0 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7
+0 write 0x004005f8 8 0 unlock seq    wrap16 0 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff
+wait 20
+info &grep Peek:  0x00400580/8: 80 81 82 83 84 85 86 87 *$ << grep
+0 peek 0x00400580 8
+info &grep Peek:  0x00400588/8: 88 89 8a 8b 8c 8d 8e 8f *$ << grep
+0 peek 0x00400588 8
+info &grep Peek:  0x00400590/8: 90 91 92 93 94 95 96 97 *$ << grep
+0 peek 0x00400590 8
+info &grep Peek:  0x00400598/8: 98 99 9a 9b 9c 9d 9e 9f *$ << grep
+0 peek 0x00400598 8
+info &grep Peek:  0x004005a0/8: a0 a1 a2 a3 a4 a5 a6 a7 *$ << grep
+0 peek 0x004005a0 8
+info &grep Peek:  0x004005a8/8: a8 a9 aa ab ac ad ae af *$ << grep
+0 peek 0x004005a8 8
+info &grep Peek:  0x004005b0/8: b0 b1 b2 b3 b4 b5 b6 b7 *$ << grep
+0 peek 0x004005b0 8
+info &grep Peek:  0x004005b8/8: b8 b9 ba bb bc bd be bf *$ << grep
+0 peek 0x004005b8 8
+info &grep Peek:  0x004005c0/8: c0 c1 c2 c3 c4 c5 c6 c7 *$ << grep
+0 peek 0x004005c0 8
+info &grep Peek:  0x004005c8/8: c8 c9 ca cb cc cd ce cf *$ << grep
+0 peek 0x004005c8 8
+info &grep Peek:  0x004005d0/8: d0 d1 d2 d3 d4 d5 d6 d7 *$ << grep
+0 peek 0x004005d0 8
+info &grep Peek:  0x004005d8/8: d8 d9 da db dc dd de df *$ << grep
+0 peek 0x004005d8 8
+info &grep Peek:  0x004005e0/8: e0 e1 e2 e3 e4 e5 e6 e7 *$ << grep
+0 peek 0x004005e0 8
+info &grep Peek:  0x004005e8/8: e8 e9 ea eb ec ed ee ef *$ << grep
+0 peek 0x004005e8 8
+info &grep Peek:  0x004005f0/8: f0 f1 f2 f3 f4 f5 f6 f7 *$ << grep
+0 peek 0x004005f0 8
+info &grep Peek:  0x004005f8/8: f8 f9 fa fb fc fd fe ff *$ << grep
+0 peek 0x004005f8 8
+info endgrep
+
+
+
+note ************* Starting Aligned Double-Word Reads **************
+
+note Doing 2 double-word single reads
+info &grep Read:  0x00400400/8: 00 01 02 03 04 05 06 07 *$ << endgrepA
+0 read  0x00400400 8 0 unlock nonseq single 0
+info &grep Read:  0x00400408/8: 08 09 0a 0b 0c 0d 0e 0f *$ << endgrepB
+0 read  0x00400408 8 0 unlock nonseq single 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 2 double-word incr reads
+info &grep Read:  0x00400410/8: 10 11 12 13 14 15 16 17 *$ << endgrepA
+0 read  0x00400410 8 0 unlock nonseq incr   0
+info &grep Read:  0x00400418/8: 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepB
+0 read  0x00400418 8 0 unlock seq    incr   0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 double-word incr4 reads
+info &grep Read:  0x00400420/8: 20 21 22 23 24 25 26 27 *$ << endgrepA
+0 read  0x00400420 8 0 unlock nonseq incr4  0
+info &grep Read:  0x00400428/8: 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepB
+0 read  0x00400428 8 0 unlock seq    incr4  0
+info &grep Read:  0x00400430/8: 30 31 32 33 34 35 36 37 *$ << endgrepA
+0 read  0x00400430 8 0 unlock seq    incr4  0
+info &grep Read:  0x00400438/8: 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepB
+0 read  0x00400438 8 0 unlock seq    incr4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 double-word wrap4 reads
+info &grep Read:  0x00400440/8: 40 41 42 43 44 45 46 47 *$ << endgrepA
+0 read  0x00400440 8 0 unlock nonseq wrap4  0
+info &grep Read:  0x00400448/8: 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepB
+0 read  0x00400448 8 0 unlock seq    wrap4  0
+info &grep Read:  0x00400450/8: 30 31 32 33 34 35 36 37 *$ << endgrepA
+0 read  0x00400450 8 0 unlock seq    wrap4  0
+info &grep Read:  0x00400458/8: 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepB
+0 read  0x00400458 8 0 unlock seq    wrap4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 double-word incr8 reads
+info &grep Read:  0x00400480/8: 80 81 82 83 84 85 86 87 *$ << endgrepA
+0 read  0x00400480 8 0 unlock nonseq incr8  0
+info &grep Read:  0x00400488/8: 88 89 8a 8b 8c 8d 8e 8f *$ << endgrepB
+0 read  0x00400488 8 0 unlock seq    incr8  0
+info &grep Read:  0x00400490/8: 90 91 92 93 94 95 96 97 *$ << endgrepA
+0 read  0x00400490 8 0 unlock seq    incr8  0
+info &grep Read:  0x00400498/8: 98 99 9a 9b 9c 9d 9e 9f *$ << endgrepB
+0 read  0x00400498 8 0 unlock seq    incr8  0
+info &grep Read:  0x004004a0/8: a0 a1 a2 a3 a4 a5 a6 a7 *$ << endgrepA
+0 read  0x004004a0 8 0 unlock seq    incr8  0
+info &grep Read:  0x004004a8/8: a8 a9 aa ab ac ad ae af *$ << endgrepB
+0 read  0x004004a8 8 0 unlock seq    incr8  0
+info &grep Read:  0x004004b0/8: b0 b1 b2 b3 b4 b5 b6 b7 *$ << endgrepA
+0 read  0x004004b0 8 0 unlock seq    incr8  0
+info &grep Read:  0x004004b8/8: b8 b9 ba bb bc bd be bf *$ << endgrepB
+0 read  0x004004b8 8 0 unlock seq    incr8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 double-word wrap8 reads
+info &grep Read:  0x004004c0/8: c0 c1 c2 c3 c4 c5 c6 c7 *$ << endgrepA
+0 read  0x004004c0 8 0 unlock nonseq wrap8  0
+info &grep Read:  0x004004c8/8: c8 c9 ca cb cc cd ce cf *$ << endgrepB
+0 read  0x004004c8 8 0 unlock seq    wrap8  0
+info &grep Read:  0x004004d0/8: d0 d1 d2 d3 d4 d5 d6 d7 *$ << endgrepA
+0 read  0x004004d0 8 0 unlock seq    wrap8  0
+info &grep Read:  0x004004d8/8: d8 d9 da db dc dd de df *$ << endgrepB
+0 read  0x004004d8 8 0 unlock seq    wrap8  0
+info &grep Read:  0x004004e0/8: e0 e1 e2 e3 e4 e5 e6 e7 *$ << endgrepA
+0 read  0x004004e0 8 0 unlock seq    wrap8  0
+info &grep Read:  0x004004e8/8: e8 e9 ea eb ec ed ee ef *$ << endgrepB
+0 read  0x004004e8 8 0 unlock seq    wrap8  0
+info &grep Read:  0x004004f0/8: f0 f1 f2 f3 f4 f5 f6 f7 *$ << endgrepA
+0 read  0x004004f0 8 0 unlock seq    wrap8  0
+info &grep Read:  0x004004f8/8: f8 f9 fa fb fc fd fe ff *$ << endgrepB
+0 read  0x004004f8 8 0 unlock seq    wrap8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 double-word incr16 reads
+info &grep Read:  0x00400500/8: 00 01 02 03 04 05 06 07 *$ << endgrepA
+0 read  0x00400500 8 0 unlock nonseq incr16 0
+info &grep Read:  0x00400508/8: 08 09 0a 0b 0c 0d 0e 0f *$ << endgrepB
+0 read  0x00400508 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400510/8: 10 11 12 13 14 15 16 17 *$ << endgrepA
+0 read  0x00400510 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400518/8: 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepB
+0 read  0x00400518 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400520/8: 20 21 22 23 24 25 26 27 *$ << endgrepA
+0 read  0x00400520 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400528/8: 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepB
+0 read  0x00400528 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400530/8: 30 31 32 33 34 35 36 37 *$ << endgrepA
+0 read  0x00400530 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400538/8: 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepB
+0 read  0x00400538 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400540/8: 40 41 42 43 44 45 46 47 *$ << endgrepA
+0 read  0x00400540 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400548/8: 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepB
+0 read  0x00400548 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400550/8: 50 51 52 53 54 55 56 57 *$ << endgrepA
+0 read  0x00400550 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400558/8: 58 59 5a 5b 5c 5d 5e 5f *$ << endgrepB
+0 read  0x00400558 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400560/8: 60 61 62 63 64 65 66 67 *$ << endgrepA
+0 read  0x00400560 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400568/8: 68 69 6a 6b 6c 6d 6e 6f *$ << endgrepB
+0 read  0x00400568 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400570/8: 70 71 72 73 74 75 76 77 *$ << endgrepA
+0 read  0x00400570 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400578/8: 78 79 7a 7b 7c 7d 7e 7f *$ << endgrepB
+0 read  0x00400578 8 0 unlock seq    incr16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 double-word wrap16 reads
+info &grep Read:  0x00400580/8: 80 81 82 83 84 85 86 87 *$ << endgrepA
+0 read  0x00400580 8 0 unlock nonseq wrap16 0
+info &grep Read:  0x00400588/8: 88 89 8a 8b 8c 8d 8e 8f *$ << endgrepB
+0 read  0x00400588 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400590/8: 90 91 92 93 94 95 96 97 *$ << endgrepA
+0 read  0x00400590 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400598/8: 98 99 9a 9b 9c 9d 9e 9f *$ << endgrepB
+0 read  0x00400598 8 0 unlock seq    wrap16 0
+info &grep Read:  0x004005a0/8: a0 a1 a2 a3 a4 a5 a6 a7 *$ << endgrepA
+0 read  0x004005a0 8 0 unlock seq    wrap16 0
+info &grep Read:  0x004005a8/8: a8 a9 aa ab ac ad ae af *$ << endgrepB
+0 read  0x004005a8 8 0 unlock seq    wrap16 0
+info &grep Read:  0x004005b0/8: b0 b1 b2 b3 b4 b5 b6 b7 *$ << endgrepA
+0 read  0x004005b0 8 0 unlock seq    wrap16 0
+info &grep Read:  0x004005b8/8: b8 b9 ba bb bc bd be bf *$ << endgrepB
+0 read  0x004005b8 8 0 unlock seq    wrap16 0
+info &grep Read:  0x004005c0/8: c0 c1 c2 c3 c4 c5 c6 c7 *$ << endgrepA
+0 read  0x004005c0 8 0 unlock seq    wrap16 0
+info &grep Read:  0x004005c8/8: c8 c9 ca cb cc cd ce cf *$ << endgrepB
+0 read  0x004005c8 8 0 unlock seq    wrap16 0
+info &grep Read:  0x004005d0/8: d0 d1 d2 d3 d4 d5 d6 d7 *$ << endgrepA
+0 read  0x004005d0 8 0 unlock seq    wrap16 0
+info &grep Read:  0x004005d8/8: d8 d9 da db dc dd de df *$ << endgrepB
+0 read  0x004005d8 8 0 unlock seq    wrap16 0
+info &grep Read:  0x004005e0/8: e0 e1 e2 e3 e4 e5 e6 e7 *$ << endgrepA
+0 read  0x004005e0 8 0 unlock seq    wrap16 0
+info &grep Read:  0x004005e8/8: e8 e9 ea eb ec ed ee ef *$ << endgrepB
+0 read  0x004005e8 8 0 unlock seq    wrap16 0
+info &grep Read:  0x004005f0/8: f0 f1 f2 f3 f4 f5 f6 f7 *$ << endgrepA
+0 read  0x004005f0 8 0 unlock seq    wrap16 0
+info &grep Read:  0x004005f8/8: f8 f9 fa fb fc fd fe ff *$ << endgrepB
+0 read  0x004005f8 8 0 unlock seq    wrap16 0
+info endgrepA
+wait 20
+info endgrepB
+
+
+
+note ************ Starting Unaligned Double-Word Writes *************
+
+note Doing 4 double-word incr4 unaligned writes
+0 write 0x00400608 8 0 unlock nonseq incr4  0 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f
+0 write 0x00400610 8 0 unlock seq    incr4  0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17
+0 write 0x00400618 8 0 unlock seq    incr4  0 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+0 write 0x00400620 8 0 unlock seq    incr4  0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27
+wait 20
+info &grep Peek:  0x00400608/8: 08 09 0a 0b 0c 0d 0e 0f *$ << grep
+0 peek 0x00400608 8
+info &grep Peek:  0x00400610/8: 10 11 12 13 14 15 16 17 *$ << grep
+0 peek 0x00400610 8
+info &grep Peek:  0x00400618/8: 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00400618 8
+info &grep Peek:  0x00400620/8: 20 21 22 23 24 25 26 27 *$ << grep
+0 peek 0x00400620 8
+info endgrep
+
+note Doing 4 double-word wrap4 unaligned writes
+0 write 0x00400648 8 0 unlock nonseq wrap4  0 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00400650 8 0 unlock seq    wrap4  0 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57
+0 write 0x00400658 8 0 unlock seq    wrap4  0 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400640 8 0 unlock seq    wrap4  0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47
+wait 20
+info &grep Peek:  0x00400648/8: 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00400648 8
+info &grep Peek:  0x00400650/8: 50 51 52 53 54 55 56 57 *$ << grep
+0 peek 0x00400650 8
+info &grep Peek:  0x00400658/8: 58 59 5a 5b 5c 5d 5e 5f *$ << grep
+0 peek 0x00400658 8
+info &grep Peek:  0x00400640/8: 40 41 42 43 44 45 46 47 *$ << grep
+0 peek 0x00400640 8
+info endgrep
+
+note Doing 8 double-word incr8 unaligned writes
+0 write 0x00400660 8 0 unlock nonseq incr8  0 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67
+0 write 0x00400668 8 0 unlock seq    incr8  0 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f
+0 write 0x00400670 8 0 unlock seq    incr8  0 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77
+0 write 0x00400678 8 0 unlock seq    incr8  0 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f
+0 write 0x00400680 8 0 unlock seq    incr8  0 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87
+0 write 0x00400688 8 0 unlock seq    incr8  0 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f
+0 write 0x00400690 8 0 unlock seq    incr8  0 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97
+0 write 0x00400698 8 0 unlock seq    incr8  0 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f
+wait 20
+info &grep Peek:  0x00400660/8: 60 61 62 63 64 65 66 67 *$ << grep
+0 peek 0x00400660 8
+info &grep Peek:  0x00400668/8: 68 69 6a 6b 6c 6d 6e 6f *$ << grep
+0 peek 0x00400668 8
+info &grep Peek:  0x00400670/8: 70 71 72 73 74 75 76 77 *$ << grep
+0 peek 0x00400670 8
+info &grep Peek:  0x00400678/8: 78 79 7a 7b 7c 7d 7e 7f *$ << grep
+0 peek 0x00400678 8
+info &grep Peek:  0x00400680/8: 80 81 82 83 84 85 86 87 *$ << grep
+0 peek 0x00400680 8
+info &grep Peek:  0x00400688/8: 88 89 8a 8b 8c 8d 8e 8f *$ << grep
+0 peek 0x00400688 8
+info &grep Peek:  0x00400690/8: 90 91 92 93 94 95 96 97 *$ << grep
+0 peek 0x00400690 8
+info &grep Peek:  0x00400698/8: 98 99 9a 9b 9c 9d 9e 9f *$ << grep
+0 peek 0x00400698 8
+info endgrep
+
+note Doing 8 double-word wrap8 unaligned writes
+0 write 0x004006d0 8 0 unlock nonseq wrap8  0 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7
+0 write 0x004006d8 8 0 unlock seq    wrap8  0 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf
+0 write 0x004006e0 8 0 unlock seq    wrap8  0 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7
+0 write 0x004006e8 8 0 unlock seq    wrap8  0 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef
+0 write 0x004006f0 8 0 unlock seq    wrap8  0 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7
+0 write 0x004006f8 8 0 unlock seq    wrap8  0 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff
+0 write 0x004006c0 8 0 unlock seq    wrap8  0 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7
+0 write 0x004006c8 8 0 unlock seq    wrap8  0 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf
+wait 20
+info &grep Peek:  0x004006d0/8: d0 d1 d2 d3 d4 d5 d6 d7 *$ << grep
+0 peek 0x004006d0 8
+info &grep Peek:  0x004006d8/8: d8 d9 da db dc dd de df *$ << grep
+0 peek 0x004006d8 8
+info &grep Peek:  0x004006e0/8: e0 e1 e2 e3 e4 e5 e6 e7 *$ << grep
+0 peek 0x004006e0 8
+info &grep Peek:  0x004006e8/8: e8 e9 ea eb ec ed ee ef *$ << grep
+0 peek 0x004006e8 8
+info &grep Peek:  0x004006f0/8: f0 f1 f2 f3 f4 f5 f6 f7 *$ << grep
+0 peek 0x004006f0 8
+info &grep Peek:  0x004006f8/8: f8 f9 fa fb fc fd fe ff *$ << grep
+0 peek 0x004006f8 8
+info &grep Peek:  0x004006c0/8: c0 c1 c2 c3 c4 c5 c6 c7 *$ << grep
+0 peek 0x004006c0 8
+info &grep Peek:  0x004006c8/8: c8 c9 ca cb cc cd ce cf *$ << grep
+0 peek 0x004006c8 8
+info endgrep
+
+note Doing 16 double-word incr16 unaligned writes
+0 write 0x00400720 8 0 unlock nonseq incr16 0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27
+0 write 0x00400728 8 0 unlock seq    incr16 0 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00400730 8 0 unlock seq    incr16 0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37
+0 write 0x00400738 8 0 unlock seq    incr16 0 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+0 write 0x00400740 8 0 unlock seq    incr16 0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47
+0 write 0x00400748 8 0 unlock seq    incr16 0 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00400750 8 0 unlock seq    incr16 0 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57
+0 write 0x00400758 8 0 unlock seq    incr16 0 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400760 8 0 unlock seq    incr16 0 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67
+0 write 0x00400768 8 0 unlock seq    incr16 0 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f
+0 write 0x00400770 8 0 unlock seq    incr16 0 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77
+0 write 0x00400778 8 0 unlock seq    incr16 0 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f
+0 write 0x00400780 8 0 unlock seq    incr16 0 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87
+0 write 0x00400788 8 0 unlock seq    incr16 0 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f
+0 write 0x00400790 8 0 unlock seq    incr16 0 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97
+0 write 0x00400798 8 0 unlock seq    incr16 0 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f
+wait 20
+info &grep Peek:  0x00400720/8: 20 21 22 23 24 25 26 27 *$ << grep
+0 peek 0x00400720 8
+info &grep Peek:  0x00400728/8: 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00400728 8
+info &grep Peek:  0x00400730/8: 30 31 32 33 34 35 36 37 *$ << grep
+0 peek 0x00400730 8
+info &grep Peek:  0x00400738/8: 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00400738 8
+info &grep Peek:  0x00400740/8: 40 41 42 43 44 45 46 47 *$ << grep
+0 peek 0x00400740 8
+info &grep Peek:  0x00400748/8: 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00400748 8
+info &grep Peek:  0x00400750/8: 50 51 52 53 54 55 56 57 *$ << grep
+0 peek 0x00400750 8
+info &grep Peek:  0x00400758/8: 58 59 5a 5b 5c 5d 5e 5f *$ << grep
+0 peek 0x00400758 8
+info &grep Peek:  0x00400760/8: 60 61 62 63 64 65 66 67 *$ << grep
+0 peek 0x00400760 8
+info &grep Peek:  0x00400768/8: 68 69 6a 6b 6c 6d 6e 6f *$ << grep
+0 peek 0x00400768 8
+info &grep Peek:  0x00400770/8: 70 71 72 73 74 75 76 77 *$ << grep
+0 peek 0x00400770 8
+info &grep Peek:  0x00400778/8: 78 79 7a 7b 7c 7d 7e 7f *$ << grep
+0 peek 0x00400778 8
+info &grep Peek:  0x00400780/8: 80 81 82 83 84 85 86 87 *$ << grep
+0 peek 0x00400780 8
+info &grep Peek:  0x00400788/8: 88 89 8a 8b 8c 8d 8e 8f *$ << grep
+0 peek 0x00400788 8
+info &grep Peek:  0x00400790/8: 90 91 92 93 94 95 96 97 *$ << grep
+0 peek 0x00400790 8
+info &grep Peek:  0x00400798/8: 98 99 9a 9b 9c 9d 9e 9f *$ << grep
+0 peek 0x00400798 8
+info endgrep
+
+note Doing 16 double-word wrap16 unaligned writes
+0 write 0x00400820 8 0 unlock nonseq wrap16 0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27
+0 write 0x00400828 8 0 unlock seq    wrap16 0 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00400830 8 0 unlock seq    wrap16 0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37
+0 write 0x00400838 8 0 unlock seq    wrap16 0 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+0 write 0x00400840 8 0 unlock seq    wrap16 0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47
+0 write 0x00400848 8 0 unlock seq    wrap16 0 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00400850 8 0 unlock seq    wrap16 0 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57
+0 write 0x00400858 8 0 unlock seq    wrap16 0 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400860 8 0 unlock seq    wrap16 0 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67
+0 write 0x00400868 8 0 unlock seq    wrap16 0 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f
+0 write 0x00400870 8 0 unlock seq    wrap16 0 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77
+0 write 0x00400878 8 0 unlock seq    wrap16 0 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f
+0 write 0x00400800 8 0 unlock seq    wrap16 0 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07
+0 write 0x00400808 8 0 unlock seq    wrap16 0 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f
+0 write 0x00400810 8 0 unlock seq    wrap16 0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17
+0 write 0x00400818 8 0 unlock seq    wrap16 0 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+wait 20
+info &grep Peek:  0x00400820/8: 20 21 22 23 24 25 26 27 *$ << grep
+0 peek 0x00400820 8
+info &grep Peek:  0x00400828/8: 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00400828 8
+info &grep Peek:  0x00400830/8: 30 31 32 33 34 35 36 37 *$ << grep
+0 peek 0x00400830 8
+info &grep Peek:  0x00400838/8: 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00400838 8
+info &grep Peek:  0x00400840/8: 40 41 42 43 44 45 46 47 *$ << grep
+0 peek 0x00400840 8
+info &grep Peek:  0x00400848/8: 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00400848 8
+info &grep Peek:  0x00400850/8: 50 51 52 53 54 55 56 57 *$ << grep
+0 peek 0x00400850 8
+info &grep Peek:  0x00400858/8: 58 59 5a 5b 5c 5d 5e 5f *$ << grep
+0 peek 0x00400858 8
+info &grep Peek:  0x00400860/8: 60 61 62 63 64 65 66 67 *$ << grep
+0 peek 0x00400860 8
+info &grep Peek:  0x00400868/8: 68 69 6a 6b 6c 6d 6e 6f *$ << grep
+0 peek 0x00400868 8
+info &grep Peek:  0x00400870/8: 70 71 72 73 74 75 76 77 *$ << grep
+0 peek 0x00400870 8
+info &grep Peek:  0x00400878/8: 78 79 7a 7b 7c 7d 7e 7f *$ << grep
+0 peek 0x00400878 8
+info &grep Peek:  0x00400800/8: 00 01 02 03 04 05 06 07 *$ << grep
+0 peek 0x00400800 8
+info &grep Peek:  0x00400808/8: 08 09 0a 0b 0c 0d 0e 0f *$ << grep
+0 peek 0x00400808 8
+info &grep Peek:  0x00400810/8: 10 11 12 13 14 15 16 17 *$ << grep
+0 peek 0x00400810 8
+info &grep Peek:  0x00400818/8: 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00400818 8
+info endgrep
+
+
+
+note ************ Starting Unaligned Double-Word Reads *************
+
+note Doing 4 double-word incr4 unaligned reads
+info &grep Read:  0x00400608/8: 08 09 0a 0b 0c 0d 0e 0f *$ << endgrepA
+0 read  0x00400608 8 0 unlock nonseq incr4  0
+info &grep Read:  0x00400610/8: 10 11 12 13 14 15 16 17 *$ << endgrepB
+0 read  0x00400610 8 0 unlock seq    incr4  0
+info &grep Read:  0x00400618/8: 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepA
+0 read  0x00400618 8 0 unlock seq    incr4  0
+info &grep Read:  0x00400620/8: 20 21 22 23 24 25 26 27 *$ << endgrepB
+0 read  0x00400620 8 0 unlock seq    incr4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 double-word wrap4 unaligned reads
+info &grep Read:  0x00400648/8: 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepA
+0 read  0x00400648 8 0 unlock nonseq wrap4  0
+info &grep Read:  0x00400650/8: 50 51 52 53 54 55 56 57 *$ << endgrepB
+0 read  0x00400650 8 0 unlock seq    wrap4  0
+info &grep Read:  0x00400658/8: 58 59 5a 5b 5c 5d 5e 5f *$ << endgrepA
+0 read  0x00400658 8 0 unlock seq    wrap4  0
+info &grep Read:  0x00400640/8: 40 41 42 43 44 45 46 47 *$ << endgrepB
+0 read  0x00400640 8 0 unlock seq    wrap4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 double-word incr8 unaligned reads
+info &grep Read:  0x00400660/8: 60 61 62 63 64 65 66 67 *$ << endgrepA
+0 read  0x00400660 8 0 unlock nonseq incr8  0
+info &grep Read:  0x00400668/8: 68 69 6a 6b 6c 6d 6e 6f *$ << endgrepB
+0 read  0x00400668 8 0 unlock seq    incr8  0
+info &grep Read:  0x00400670/8: 70 71 72 73 74 75 76 77 *$ << endgrepA
+0 read  0x00400670 8 0 unlock seq    incr8  0
+info &grep Read:  0x00400678/8: 78 79 7a 7b 7c 7d 7e 7f *$ << endgrepB
+0 read  0x00400678 8 0 unlock seq    incr8  0
+info &grep Read:  0x00400680/8: 80 81 82 83 84 85 86 87 *$ << endgrepA
+0 read  0x00400680 8 0 unlock seq    incr8  0
+info &grep Read:  0x00400688/8: 88 89 8a 8b 8c 8d 8e 8f *$ << endgrepB
+0 read  0x00400688 8 0 unlock seq    incr8  0
+info &grep Read:  0x00400690/8: 90 91 92 93 94 95 96 97 *$ << endgrepA
+0 read  0x00400690 8 0 unlock seq    incr8  0
+info &grep Read:  0x00400698/8: 98 99 9a 9b 9c 9d 9e 9f *$ << endgrepB
+0 read  0x00400698 8 0 unlock seq    incr8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 double-word wrap8 unaligned reads
+info &grep Read:  0x004006d0/8: d0 d1 d2 d3 d4 d5 d6 d7 *$ << endgrepA
+0 read  0x004006d0 8 0 unlock nonseq wrap8  0
+info &grep Read:  0x004006d8/8: d8 d9 da db dc dd de df *$ << endgrepB
+0 read  0x004006d8 8 0 unlock seq    wrap8  0
+info &grep Read:  0x004006e0/8: e0 e1 e2 e3 e4 e5 e6 e7 *$ << endgrepA
+0 read  0x004006e0 8 0 unlock seq    wrap8  0
+info &grep Read:  0x004006e8/8: e8 e9 ea eb ec ed ee ef *$ << endgrepB
+0 read  0x004006e8 8 0 unlock seq    wrap8  0
+info &grep Read:  0x004006f0/8: f0 f1 f2 f3 f4 f5 f6 f7 *$ << endgrepA
+0 read  0x004006f0 8 0 unlock seq    wrap8  0
+info &grep Read:  0x004006f8/8: f8 f9 fa fb fc fd fe ff *$ << endgrepB
+0 read  0x004006f8 8 0 unlock seq    wrap8  0
+info &grep Read:  0x004006c0/8: c0 c1 c2 c3 c4 c5 c6 c7 *$ << endgrepA
+0 read  0x004006c0 8 0 unlock seq    wrap8  0
+info &grep Read:  0x004006c8/8: c8 c9 ca cb cc cd ce cf *$ << endgrepB
+0 read  0x004006c8 8 0 unlock seq    wrap8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 double-word incr16 unaligned reads
+info &grep Read:  0x00400720/8: 20 21 22 23 24 25 26 27 *$ << endgrepA
+0 read  0x00400720 8 0 unlock nonseq incr16 0
+info &grep Read:  0x00400728/8: 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepB
+0 read  0x00400728 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400730/8: 30 31 32 33 34 35 36 37 *$ << endgrepA
+0 read  0x00400730 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400738/8: 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepB
+0 read  0x00400738 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400740/8: 40 41 42 43 44 45 46 47 *$ << endgrepA
+0 read  0x00400740 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400748/8: 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepB
+0 read  0x00400748 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400750/8: 50 51 52 53 54 55 56 57 *$ << endgrepA
+0 read  0x00400750 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400758/8: 58 59 5a 5b 5c 5d 5e 5f *$ << endgrepB
+0 read  0x00400758 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400760/8: 60 61 62 63 64 65 66 67 *$ << endgrepA
+0 read  0x00400760 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400768/8: 68 69 6a 6b 6c 6d 6e 6f *$ << endgrepB
+0 read  0x00400768 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400770/8: 70 71 72 73 74 75 76 77 *$ << endgrepA
+0 read  0x00400770 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400778/8: 78 79 7a 7b 7c 7d 7e 7f *$ << endgrepB
+0 read  0x00400778 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400780/8: 80 81 82 83 84 85 86 87 *$ << endgrepA
+0 read  0x00400780 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400788/8: 88 89 8a 8b 8c 8d 8e 8f *$ << endgrepB
+0 read  0x00400788 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400790/8: 90 91 92 93 94 95 96 97 *$ << endgrepA
+0 read  0x00400790 8 0 unlock seq    incr16 0
+info &grep Read:  0x00400798/8: 98 99 9a 9b 9c 9d 9e 9f *$ << endgrepB
+0 read  0x00400798 8 0 unlock seq    incr16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 double-word wrap16 unaligned reads
+info &grep Read:  0x00400820/8: 20 21 22 23 24 25 26 27 *$ << endgrepA
+0 read  0x00400820 8 0 unlock nonseq wrap16 0
+info &grep Read:  0x00400828/8: 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepB
+0 read  0x00400828 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400830/8: 30 31 32 33 34 35 36 37 *$ << endgrepA
+0 read  0x00400830 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400838/8: 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepB
+0 read  0x00400838 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400840/8: 40 41 42 43 44 45 46 47 *$ << endgrepA
+0 read  0x00400840 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400848/8: 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepB
+0 read  0x00400848 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400850/8: 50 51 52 53 54 55 56 57 *$ << endgrepA
+0 read  0x00400850 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400858/8: 58 59 5a 5b 5c 5d 5e 5f *$ << endgrepB
+0 read  0x00400858 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400860/8: 60 61 62 63 64 65 66 67 *$ << endgrepA
+0 read  0x00400860 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400868/8: 68 69 6a 6b 6c 6d 6e 6f *$ << endgrepB
+0 read  0x00400868 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400870/8: 70 71 72 73 74 75 76 77 *$ << endgrepA
+0 read  0x00400870 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400878/8: 78 79 7a 7b 7c 7d 7e 7f *$ << endgrepB
+0 read  0x00400878 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400800/8: 00 01 02 03 04 05 06 07 *$ << endgrepA
+0 read  0x00400800 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400808/8: 08 09 0a 0b 0c 0d 0e 0f *$ << endgrepB
+0 read  0x00400808 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400810/8: 10 11 12 13 14 15 16 17 *$ << endgrepA
+0 read  0x00400810 8 0 unlock seq    wrap16 0
+info &grep Read:  0x00400818/8: 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepB
+0 read  0x00400818 8 0 unlock seq    wrap16 0
+info endgrepA
+wait 20
+info endgrepB
+
+#endif
+
+
+
+
+
+// This section requires a 128-bit AHB bus (it doesn't work on 32-bit and 64-bit AHB buses)
+#if 0
+
+note ************** Starting Aligned Quad-Word Writes ***************
+
+note Doing 2 quad-word single writes
+0 write 0x00400900 16 0 unlock nonseq single 0 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f
+0 write 0x00400910 16 0 unlock nonseq single 0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+wait 20
+info &grep Peek:  0x00400900/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << grep
+0 peek 0x00400900 16
+info &grep Peek:  0x00400910/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00400910 16
+info endgrep
+
+note Doing 2 quad-word incr writes
+0 write 0x00400920 16 0 unlock nonseq incr   0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00400930 16 0 unlock seq    incr   0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+wait 20
+info &grep Peek:  0x00400920/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00400920 16
+info &grep Peek:  0x00400930/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00400930 16
+info endgrep
+
+note Doing 4 quad-word incr4 writes
+0 write 0x00400940 16 0 unlock nonseq incr4  0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00400950 16 0 unlock seq    incr4  0 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400960 16 0 unlock seq    incr4  0 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f
+0 write 0x00400970 16 0 unlock seq    incr4  0 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f
+wait 20
+info &grep Peek:  0x00400940/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00400940 16
+info &grep Peek:  0x00400950/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << grep
+0 peek 0x00400950 16
+info &grep Peek:  0x00400960/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << grep
+0 peek 0x00400960 16
+info &grep Peek:  0x00400970/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << grep
+0 peek 0x00400970 16
+info endgrep
+
+note Doing 4 quad-word wrap4 writes
+0 write 0x00400980 16 0 unlock nonseq wrap4  0 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f
+0 write 0x00400990 16 0 unlock seq    wrap4  0 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f
+0 write 0x004009a0 16 0 unlock seq    wrap4  0 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf
+0 write 0x004009b0 16 0 unlock seq    wrap4  0 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf
+wait 20
+info &grep Peek:  0x00400980/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << grep
+0 peek 0x00400980 16
+info &grep Peek:  0x00400990/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << grep
+0 peek 0x00400990 16
+info &grep Peek:  0x004009a0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << grep
+0 peek 0x004009a0 16
+info &grep Peek:  0x004009b0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << grep
+0 peek 0x004009b0 16
+info endgrep
+
+note Doing 8 quad-word incr8 writes
+0 write 0x00400a00 16 0 unlock nonseq incr8  0 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f
+0 write 0x00400a10 16 0 unlock seq    incr8  0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+0 write 0x00400a20 16 0 unlock seq    incr8  0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00400a30 16 0 unlock seq    incr8  0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+0 write 0x00400a40 16 0 unlock seq    incr8  0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00400a50 16 0 unlock seq    incr8  0 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400a60 16 0 unlock seq    incr8  0 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f
+0 write 0x00400a70 16 0 unlock seq    incr8  0 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f
+wait 20
+info &grep Peek:  0x00400a00/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << grep
+0 peek 0x00400a00 16
+info &grep Peek:  0x00400a10/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00400a10 16
+info &grep Peek:  0x00400a20/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00400a20 16
+info &grep Peek:  0x00400a30/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00400a30 16
+info &grep Peek:  0x00400a40/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00400a40 16
+info &grep Peek:  0x00400a50/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << grep
+0 peek 0x00400a50 16
+info &grep Peek:  0x00400a60/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << grep
+0 peek 0x00400a60 16
+info &grep Peek:  0x00400a70/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << grep
+0 peek 0x00400a70 16
+info endgrep
+
+note Doing 8 quad-word wrap8 writes
+0 write 0x00400a80 16 0 unlock nonseq wrap8  0 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f
+0 write 0x00400a90 16 0 unlock seq    wrap8  0 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f
+0 write 0x00400aa0 16 0 unlock seq    wrap8  0 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf
+0 write 0x00400ab0 16 0 unlock seq    wrap8  0 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf
+0 write 0x00400ac0 16 0 unlock seq    wrap8  0 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf
+0 write 0x00400ad0 16 0 unlock seq    wrap8  0 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf
+0 write 0x00400ae0 16 0 unlock seq    wrap8  0 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef
+0 write 0x00400af0 16 0 unlock seq    wrap8  0 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff
+wait 20
+info &grep Peek:  0x00400a80/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << grep
+0 peek 0x00400a80 16
+info &grep Peek:  0x00400a90/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << grep
+0 peek 0x00400a90 16
+info &grep Peek:  0x00400aa0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << grep
+0 peek 0x00400aa0 16
+info &grep Peek:  0x00400ab0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << grep
+0 peek 0x00400ab0 16
+info &grep Peek:  0x00400ac0/16: c0 c1 c2 c3 c4 c5 c6 c7 c8 c9 ca cb cc cd ce cf *$ << grep
+0 peek 0x00400ac0 16
+info &grep Peek:  0x00400ad0/16: d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 da db dc dd de df *$ << grep
+0 peek 0x00400ad0 16
+info &grep Peek:  0x00400ae0/16: e0 e1 e2 e3 e4 e5 e6 e7 e8 e9 ea eb ec ed ee ef *$ << grep
+0 peek 0x00400ae0 16
+info &grep Peek:  0x00400af0/16: f0 f1 f2 f3 f4 f5 f6 f7 f8 f9 fa fb fc fd fe ff *$ << grep
+0 peek 0x00400af0 16
+info endgrep
+
+note Doing 16 quad-word incr16 writes
+0 write 0x00400b00 16 0 unlock nonseq incr16 0 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f
+0 write 0x00400b10 16 0 unlock seq    incr16 0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+0 write 0x00400b20 16 0 unlock seq    incr16 0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00400b30 16 0 unlock seq    incr16 0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+0 write 0x00400b40 16 0 unlock seq    incr16 0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00400b50 16 0 unlock seq    incr16 0 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400b60 16 0 unlock seq    incr16 0 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f
+0 write 0x00400b70 16 0 unlock seq    incr16 0 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f
+0 write 0x00400b80 16 0 unlock seq    incr16 0 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f
+0 write 0x00400b90 16 0 unlock seq    incr16 0 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f
+0 write 0x00400ba0 16 0 unlock seq    incr16 0 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf
+0 write 0x00400bb0 16 0 unlock seq    incr16 0 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf
+0 write 0x00400bc0 16 0 unlock seq    incr16 0 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf
+0 write 0x00400bd0 16 0 unlock seq    incr16 0 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf
+0 write 0x00400be0 16 0 unlock seq    incr16 0 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef
+0 write 0x00400bf0 16 0 unlock seq    incr16 0 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff
+wait 20
+info &grep Peek:  0x00400b00/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << grep
+0 peek 0x00400b00 16
+info &grep Peek:  0x00400b10/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00400b10 16
+info &grep Peek:  0x00400b20/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00400b20 16
+info &grep Peek:  0x00400b30/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00400b30 16
+info &grep Peek:  0x00400b40/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00400b40 16
+info &grep Peek:  0x00400b50/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << grep
+0 peek 0x00400b50 16
+info &grep Peek:  0x00400b60/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << grep
+0 peek 0x00400b60 16
+info &grep Peek:  0x00400b70/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << grep
+0 peek 0x00400b70 16
+info &grep Peek:  0x00400b80/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << grep
+0 peek 0x00400b80 16
+info &grep Peek:  0x00400b90/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << grep
+0 peek 0x00400b90 16
+info &grep Peek:  0x00400ba0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << grep
+0 peek 0x00400ba0 16
+info &grep Peek:  0x00400bb0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << grep
+0 peek 0x00400bb0 16
+info &grep Peek:  0x00400bc0/16: c0 c1 c2 c3 c4 c5 c6 c7 c8 c9 ca cb cc cd ce cf *$ << grep
+0 peek 0x00400bc0 16
+info &grep Peek:  0x00400bd0/16: d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 da db dc dd de df *$ << grep
+0 peek 0x00400bd0 16
+info &grep Peek:  0x00400be0/16: e0 e1 e2 e3 e4 e5 e6 e7 e8 e9 ea eb ec ed ee ef *$ << grep
+0 peek 0x00400be0 16
+info &grep Peek:  0x00400bf0/16: f0 f1 f2 f3 f4 f5 f6 f7 f8 f9 fa fb fc fd fe ff *$ << grep
+0 peek 0x00400bf0 16
+info endgrep
+
+note Doing 16 quad-word wrap16 writes
+0 write 0x00400c00 16 0 unlock nonseq wrap16 0 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f
+0 write 0x00400c10 16 0 unlock seq    wrap16 0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+0 write 0x00400c20 16 0 unlock seq    wrap16 0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00400c30 16 0 unlock seq    wrap16 0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+0 write 0x00400c40 16 0 unlock seq    wrap16 0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00400c50 16 0 unlock seq    wrap16 0 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400c60 16 0 unlock seq    wrap16 0 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f
+0 write 0x00400c70 16 0 unlock seq    wrap16 0 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f
+0 write 0x00400c80 16 0 unlock seq    wrap16 0 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f
+0 write 0x00400c90 16 0 unlock seq    wrap16 0 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f
+0 write 0x00400ca0 16 0 unlock seq    wrap16 0 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf
+0 write 0x00400cb0 16 0 unlock seq    wrap16 0 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf
+0 write 0x00400cc0 16 0 unlock seq    wrap16 0 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf
+0 write 0x00400cd0 16 0 unlock seq    wrap16 0 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf
+0 write 0x00400ce0 16 0 unlock seq    wrap16 0 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef
+0 write 0x00400cf0 16 0 unlock seq    wrap16 0 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff
+wait 20
+info &grep Peek:  0x00400c00/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << grep
+0 peek 0x00400c00 16
+info &grep Peek:  0x00400c10/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00400c10 16
+info &grep Peek:  0x00400c20/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00400c20 16
+info &grep Peek:  0x00400c30/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00400c30 16
+info &grep Peek:  0x00400c40/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00400c40 16
+info &grep Peek:  0x00400c50/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << grep
+0 peek 0x00400c50 16
+info &grep Peek:  0x00400c60/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << grep
+0 peek 0x00400c60 16
+info &grep Peek:  0x00400c70/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << grep
+0 peek 0x00400c70 16
+info &grep Peek:  0x00400c80/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << grep
+0 peek 0x00400c80 16
+info &grep Peek:  0x00400c90/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << grep
+0 peek 0x00400c90 16
+info &grep Peek:  0x00400ca0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << grep
+0 peek 0x00400ca0 16
+info &grep Peek:  0x00400cb0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << grep
+0 peek 0x00400cb0 16
+info &grep Peek:  0x00400cc0/16: c0 c1 c2 c3 c4 c5 c6 c7 c8 c9 ca cb cc cd ce cf *$ << grep
+0 peek 0x00400cc0 16
+info &grep Peek:  0x00400cd0/16: d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 da db dc dd de df *$ << grep
+0 peek 0x00400cd0 16
+info &grep Peek:  0x00400ce0/16: e0 e1 e2 e3 e4 e5 e6 e7 e8 e9 ea eb ec ed ee ef *$ << grep
+0 peek 0x00400ce0 16
+info &grep Peek:  0x00400cf0/16: f0 f1 f2 f3 f4 f5 f6 f7 f8 f9 fa fb fc fd fe ff *$ << grep
+0 peek 0x00400cf0 16
+info endgrep
+
+
+
+note ************** Starting Aligned Quad-Word Reads ***************
+
+note Doing 2 quad-word single reads
+info &grep Read:  0x00400900/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << endgrepA
+0 read  0x00400900 16 0 unlock nonseq single 0
+info &grep Read:  0x00400910/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepB
+0 read  0x00400910 16 0 unlock nonseq single 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 2 quad-word incr reads
+info &grep Read:  0x00400920/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepA
+0 read  0x00400920 16 0 unlock nonseq incr   0
+info &grep Read:  0x00400930/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepB
+0 read  0x00400930 16 0 unlock seq    incr   0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 quad-word incr4 reads
+info &grep Read:  0x00400940/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepA
+0 read  0x00400940 16 0 unlock nonseq incr4  0
+info &grep Read:  0x00400950/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << endgrepB
+0 read  0x00400950 16 0 unlock seq    incr4  0
+info &grep Read:  0x00400960/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << endgrepA
+0 read  0x00400960 16 0 unlock seq    incr4  0
+info &grep Read:  0x00400970/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << endgrepB
+0 read  0x00400970 16 0 unlock seq    incr4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 quad-word wrap4 reads
+info &grep Read:  0x00400980/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << endgrepA
+0 read  0x00400980 16 0 unlock nonseq wrap4  0
+info &grep Read:  0x00400990/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << endgrepB
+0 read  0x00400990 16 0 unlock seq    wrap4  0
+info &grep Read:  0x004009a0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << endgrepA
+0 read  0x004009a0 16 0 unlock seq    wrap4  0
+info &grep Read:  0x004009b0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << endgrepB
+0 read  0x004009b0 16 0 unlock seq    wrap4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 quad-word incr8 reads
+info &grep Read:  0x00400a00/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << endgrepA
+0 read  0x00400a00 16 0 unlock nonseq incr8  0
+info &grep Read:  0x00400a10/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepB
+0 read  0x00400a10 16 0 unlock seq    incr8  0
+info &grep Read:  0x00400a20/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepA
+0 read  0x00400a20 16 0 unlock seq    incr8  0
+info &grep Read:  0x00400a30/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepB
+0 read  0x00400a30 16 0 unlock seq    incr8  0
+info &grep Read:  0x00400a40/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepA
+0 read  0x00400a40 16 0 unlock seq    incr8  0
+info &grep Read:  0x00400a50/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << endgrepB
+0 read  0x00400a50 16 0 unlock seq    incr8  0
+info &grep Read:  0x00400a60/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << endgrepA
+0 read  0x00400a60 16 0 unlock seq    incr8  0
+info &grep Read:  0x00400a70/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << endgrepB
+0 read  0x00400a70 16 0 unlock seq    incr8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 quad-word wrap8 reads
+info &grep Read:  0x00400a80/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << endgrepA
+0 read  0x00400a80 16 0 unlock nonseq wrap8  0
+info &grep Read:  0x00400a90/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << endgrepB
+0 read  0x00400a90 16 0 unlock seq    wrap8  0
+info &grep Read:  0x00400aa0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << endgrepA
+0 read  0x00400aa0 16 0 unlock seq    wrap8  0
+info &grep Read:  0x00400ab0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << endgrepB
+0 read  0x00400ab0 16 0 unlock seq    wrap8  0
+info &grep Read:  0x00400ac0/16: c0 c1 c2 c3 c4 c5 c6 c7 c8 c9 ca cb cc cd ce cf *$ << endgrepA
+0 read  0x00400ac0 16 0 unlock seq    wrap8  0
+info &grep Read:  0x00400ad0/16: d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 da db dc dd de df *$ << endgrepB
+0 read  0x00400ad0 16 0 unlock seq    wrap8  0
+info &grep Read:  0x00400ae0/16: e0 e1 e2 e3 e4 e5 e6 e7 e8 e9 ea eb ec ed ee ef *$ << endgrepA
+0 read  0x00400ae0 16 0 unlock seq    wrap8  0
+info &grep Read:  0x00400af0/16: f0 f1 f2 f3 f4 f5 f6 f7 f8 f9 fa fb fc fd fe ff *$ << endgrepB
+0 read  0x00400af0 16 0 unlock seq    wrap8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 quad-word incr16 reads
+info &grep Read:  0x00400b00/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << endgrepA
+0 read  0x00400b00 16 0 unlock nonseq incr16 0
+info &grep Read:  0x00400b10/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepB
+0 read  0x00400b10 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400b20/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepA
+0 read  0x00400b20 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400b30/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepB
+0 read  0x00400b30 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400b40/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepA
+0 read  0x00400b40 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400b50/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << endgrepB
+0 read  0x00400b50 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400b60/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << endgrepA
+0 read  0x00400b60 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400b70/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << endgrepB
+0 read  0x00400b70 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400b80/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << endgrepA
+0 read  0x00400b80 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400b90/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << endgrepB
+0 read  0x00400b90 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400ba0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << endgrepA
+0 read  0x00400ba0 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400bb0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << endgrepB
+0 read  0x00400bb0 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400bc0/16: c0 c1 c2 c3 c4 c5 c6 c7 c8 c9 ca cb cc cd ce cf *$ << endgrepA
+0 read  0x00400bc0 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400bd0/16: d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 da db dc dd de df *$ << endgrepB
+0 read  0x00400bd0 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400be0/16: e0 e1 e2 e3 e4 e5 e6 e7 e8 e9 ea eb ec ed ee ef *$ << endgrepA
+0 read  0x00400be0 16 0 unlock seq    incr16 0
+info &grep Read:  0x00400bf0/16: f0 f1 f2 f3 f4 f5 f6 f7 f8 f9 fa fb fc fd fe ff *$ << endgrepB
+0 read  0x00400bf0 16 0 unlock seq    incr16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 quad-word wrap16 reads
+info &grep Read:  0x00400c00/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << endgrepA
+0 read  0x00400c00 16 0 unlock nonseq wrap16 0
+info &grep Read:  0x00400c10/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepB
+0 read  0x00400c10 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400c20/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepA
+0 read  0x00400c20 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400c30/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepB
+0 read  0x00400c30 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400c40/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepA
+0 read  0x00400c40 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400c50/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << endgrepB
+0 read  0x00400c50 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400c60/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << endgrepA
+0 read  0x00400c60 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400c70/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << endgrepB
+0 read  0x00400c70 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400c80/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << endgrepA
+0 read  0x00400c80 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400c90/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << endgrepB
+0 read  0x00400c90 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400ca0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << endgrepA
+0 read  0x00400ca0 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400cb0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << endgrepB
+0 read  0x00400cb0 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400cc0/16: c0 c1 c2 c3 c4 c5 c6 c7 c8 c9 ca cb cc cd ce cf *$ << endgrepA
+0 read  0x00400cc0 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400cd0/16: d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 da db dc dd de df *$ << endgrepB
+0 read  0x00400cd0 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400ce0/16: e0 e1 e2 e3 e4 e5 e6 e7 e8 e9 ea eb ec ed ee ef *$ << endgrepA
+0 read  0x00400ce0 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00400cf0/16: f0 f1 f2 f3 f4 f5 f6 f7 f8 f9 fa fb fc fd fe ff *$ << endgrepB
+0 read  0x00400cf0 16 0 unlock seq    wrap16 0
+info endgrepA
+wait 20
+info endgrepB
+
+
+
+
+note ************ Starting Unaligned Quad-Word Writes *************
+
+note Doing 4 quad-word incr4 unaligned writes
+0 write 0x00400d10 16 0 unlock nonseq incr4  0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+0 write 0x00400d20 16 0 unlock seq    incr4  0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00400d30 16 0 unlock seq    incr4  0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+0 write 0x00400d40 16 0 unlock seq    incr4  0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+wait 20
+info &grep Peek:  0x00400d10/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00400d10 16
+info &grep Peek:  0x00400d20/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00400d20 16
+info &grep Peek:  0x00400d30/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00400d30 16
+info &grep Peek:  0x00400d40/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00400d40 16
+info endgrep
+
+note Doing 4 quad-word wrap4 unaligned writes
+0 write 0x00400d90 16 0 unlock nonseq wrap4  0 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f
+0 write 0x00400da0 16 0 unlock seq    wrap4  0 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf
+0 write 0x00400db0 16 0 unlock seq    wrap4  0 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf
+0 write 0x00400d80 16 0 unlock seq    wrap4  0 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f
+wait 20
+info &grep Peek:  0x00400d90/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << grep
+0 peek 0x00400d90 16
+info &grep Peek:  0x00400da0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << grep
+0 peek 0x00400da0 16
+info &grep Peek:  0x00400db0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << grep
+0 peek 0x00400db0 16
+info &grep Peek:  0x00400d80/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << grep
+0 peek 0x00400d80 16
+info endgrep
+
+note Doing 8 quad-word incr8 unaligned writes
+0 write 0x00400e10 16 0 unlock nonseq incr8  0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+0 write 0x00400e20 16 0 unlock seq    incr8  0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00400e30 16 0 unlock seq    incr8  0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+0 write 0x00400e40 16 0 unlock seq    incr8  0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00400e50 16 0 unlock seq    incr8  0 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400e60 16 0 unlock seq    incr8  0 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f
+0 write 0x00400e70 16 0 unlock seq    incr8  0 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f
+0 write 0x00400e80 16 0 unlock seq    incr8  0 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f
+wait 40
+info &grep Peek:  0x00400e10/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00400e10 16
+info &grep Peek:  0x00400e20/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00400e20 16
+info &grep Peek:  0x00400e30/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00400e30 16
+info &grep Peek:  0x00400e40/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00400e40 16
+info &grep Peek:  0x00400e50/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << grep
+0 peek 0x00400e50 16
+info &grep Peek:  0x00400e60/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << grep
+0 peek 0x00400e60 16
+info &grep Peek:  0x00400e70/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << grep
+0 peek 0x00400e70 16
+info &grep Peek:  0x00400e80/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << grep
+0 peek 0x00400e80 16
+info endgrep
+
+note Doing 8 quad-word wrap8 unaligned writes
+0 write 0x00400f10 16 0 unlock nonseq wrap8  0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+0 write 0x00400f20 16 0 unlock seq    wrap8  0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00400f30 16 0 unlock seq    wrap8  0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+0 write 0x00400f40 16 0 unlock seq    wrap8  0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00400f50 16 0 unlock seq    wrap8  0 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f
+0 write 0x00400f60 16 0 unlock seq    wrap8  0 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f
+0 write 0x00400f70 16 0 unlock seq    wrap8  0 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f
+0 write 0x00400f00 16 0 unlock seq    wrap8  0 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f
+wait 40
+info &grep Peek:  0x00400f10/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00400f10 16
+info &grep Peek:  0x00400f20/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00400f20 16
+info &grep Peek:  0x00400f30/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00400f30 16
+info &grep Peek:  0x00400f40/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00400f40 16
+info &grep Peek:  0x00400f50/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << grep
+0 peek 0x00400f50 16
+info &grep Peek:  0x00400f60/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << grep
+0 peek 0x00400f60 16
+info &grep Peek:  0x00400f70/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << grep
+0 peek 0x00400f70 16
+info &grep Peek:  0x00400f00/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << grep
+0 peek 0x00400f00 16
+info endgrep
+
+note Doing 16 quad-word incr16 unaligned writes
+0 write 0x00401010 16 0 unlock nonseq incr16 0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+0 write 0x00401020 16 0 unlock seq    incr16 0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00401030 16 0 unlock seq    incr16 0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+0 write 0x00401040 16 0 unlock seq    incr16 0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00401050 16 0 unlock seq    incr16 0 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f
+0 write 0x00401060 16 0 unlock seq    incr16 0 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f
+0 write 0x00401070 16 0 unlock seq    incr16 0 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f
+0 write 0x00401080 16 0 unlock seq    incr16 0 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f
+0 write 0x00401090 16 0 unlock seq    incr16 0 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f
+0 write 0x004010a0 16 0 unlock seq    incr16 0 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf
+0 write 0x004010b0 16 0 unlock seq    incr16 0 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf
+0 write 0x004010c0 16 0 unlock seq    incr16 0 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf
+0 write 0x004010d0 16 0 unlock seq    incr16 0 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf
+0 write 0x004010e0 16 0 unlock seq    incr16 0 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef
+0 write 0x004010f0 16 0 unlock seq    incr16 0 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff
+0 write 0x00401100 16 0 unlock seq    incr16 0 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f
+wait 40
+info &grep Peek:  0x00401010/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00401010 16
+info &grep Peek:  0x00401020/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00401020 16
+info &grep Peek:  0x00401030/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00401030 16
+info &grep Peek:  0x00401040/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00401040 16
+info &grep Peek:  0x00401050/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << grep
+0 peek 0x00401050 16
+info &grep Peek:  0x00401060/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << grep
+0 peek 0x00401060 16
+info &grep Peek:  0x00401070/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << grep
+0 peek 0x00401070 16
+info &grep Peek:  0x00401080/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << grep
+0 peek 0x00401080 16
+info &grep Peek:  0x00401090/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << grep
+0 peek 0x00401090 16
+info &grep Peek:  0x004010a0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << grep
+0 peek 0x004010a0 16
+info &grep Peek:  0x004010b0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << grep
+0 peek 0x004010b0 16
+info &grep Peek:  0x004010c0/16: c0 c1 c2 c3 c4 c5 c6 c7 c8 c9 ca cb cc cd ce cf *$ << grep
+0 peek 0x004010c0 16
+info &grep Peek:  0x004010d0/16: d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 da db dc dd de df *$ << grep
+0 peek 0x004010d0 16
+info &grep Peek:  0x004010e0/16: e0 e1 e2 e3 e4 e5 e6 e7 e8 e9 ea eb ec ed ee ef *$ << grep
+0 peek 0x004010e0 16
+info &grep Peek:  0x004010f0/16: f0 f1 f2 f3 f4 f5 f6 f7 f8 f9 fa fb fc fd fe ff *$ << grep
+0 peek 0x004010f0 16
+info &grep Peek:  0x00401100/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << grep
+0 peek 0x00401100 16
+info endgrep
+
+note Doing 16 quad-word wrap16 unaligned writes
+0 write 0x00401210 16 0 unlock nonseq wrap16 0 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+0 write 0x00401220 16 0 unlock seq    wrap16 0 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 0x28 0x29 0x2a 0x2b 0x2c 0x2d 0x2e 0x2f
+0 write 0x00401230 16 0 unlock seq    wrap16 0 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0x3f
+0 write 0x00401240 16 0 unlock seq    wrap16 0 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x48 0x49 0x4a 0x4b 0x4c 0x4d 0x4e 0x4f
+0 write 0x00401250 16 0 unlock seq    wrap16 0 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5a 0x5b 0x5c 0x5d 0x5e 0x5f
+0 write 0x00401260 16 0 unlock seq    wrap16 0 0x60 0x61 0x62 0x63 0x64 0x65 0x66 0x67 0x68 0x69 0x6a 0x6b 0x6c 0x6d 0x6e 0x6f
+0 write 0x00401270 16 0 unlock seq    wrap16 0 0x70 0x71 0x72 0x73 0x74 0x75 0x76 0x77 0x78 0x79 0x7a 0x7b 0x7c 0x7d 0x7e 0x7f
+0 write 0x00401280 16 0 unlock seq    wrap16 0 0x80 0x81 0x82 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f
+0 write 0x00401290 16 0 unlock seq    wrap16 0 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f
+0 write 0x004012a0 16 0 unlock seq    wrap16 0 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf
+0 write 0x004012b0 16 0 unlock seq    wrap16 0 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 0xb9 0xba 0xbb 0xbc 0xbd 0xbe 0xbf
+0 write 0x004012c0 16 0 unlock seq    wrap16 0 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 0xc8 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf
+0 write 0x004012d0 16 0 unlock seq    wrap16 0 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf
+0 write 0x004012e0 16 0 unlock seq    wrap16 0 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 0xe6 0xe7 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef
+0 write 0x004012f0 16 0 unlock seq    wrap16 0 0xf0 0xf1 0xf2 0xf3 0xf4 0xf5 0xf6 0xf7 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff
+0 write 0x00401200 16 0 unlock seq    wrap16 0 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f
+wait 40
+info &grep Peek:  0x00401210/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << grep
+0 peek 0x00401210 16
+info &grep Peek:  0x00401220/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << grep
+0 peek 0x00401220 16
+info &grep Peek:  0x00401230/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << grep
+0 peek 0x00401230 16
+info &grep Peek:  0x00401240/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << grep
+0 peek 0x00401240 16
+info &grep Peek:  0x00401250/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << grep
+0 peek 0x00401250 16
+info &grep Peek:  0x00401260/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << grep
+0 peek 0x00401260 16
+info &grep Peek:  0x00401270/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << grep
+0 peek 0x00401270 16
+info &grep Peek:  0x00401280/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << grep
+0 peek 0x00401280 16
+info &grep Peek:  0x00401290/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << grep
+0 peek 0x00401290 16
+info &grep Peek:  0x004012a0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << grep
+0 peek 0x004012a0 16
+info &grep Peek:  0x004012b0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << grep
+0 peek 0x004012b0 16
+info &grep Peek:  0x004012c0/16: c0 c1 c2 c3 c4 c5 c6 c7 c8 c9 ca cb cc cd ce cf *$ << grep
+0 peek 0x004012c0 16
+info &grep Peek:  0x004012d0/16: d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 da db dc dd de df *$ << grep
+0 peek 0x004012d0 16
+info &grep Peek:  0x004012e0/16: e0 e1 e2 e3 e4 e5 e6 e7 e8 e9 ea eb ec ed ee ef *$ << grep
+0 peek 0x004012e0 16
+info &grep Peek:  0x004012f0/16: f0 f1 f2 f3 f4 f5 f6 f7 f8 f9 fa fb fc fd fe ff *$ << grep
+0 peek 0x004012f0 16
+info &grep Peek:  0x00401200/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << grep
+0 peek 0x00401200 16
+info endgrep
+
+
+
+
+
+note ************ Starting Unaligned Quad-Word Reads *************
+
+note Doing 4 quad-word incr4 unaligned reads
+info &grep Read:  0x00400d10/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepA
+0 read  0x00400d10 16 0 unlock nonseq incr4  0
+info &grep Read:  0x00400d20/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepB
+0 read  0x00400d20 16 0 unlock seq    incr4  0
+info &grep Read:  0x00400d30/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepA
+0 read  0x00400d30 16 0 unlock seq    incr4  0
+info &grep Read:  0x00400d40/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepB
+0 read  0x00400d40 16 0 unlock seq    incr4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 4 quad-word wrap4 unaligned reads
+info &grep Read:  0x00400d90/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << endgrepA
+0 read  0x00400d90 16 0 unlock nonseq wrap4  0
+info &grep Read:  0x00400da0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << endgrepB
+0 read  0x00400da0 16 0 unlock seq    wrap4  0
+info &grep Read:  0x00400db0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << endgrepA
+0 read  0x00400db0 16 0 unlock seq    wrap4  0
+info &grep Read:  0x00400d80/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << endgrepB
+0 read  0x00400d80 16 0 unlock seq    wrap4  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 quad-word incr8 unaligned reads
+info &grep Read:  0x00400e10/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepA
+0 read  0x00400e10 16 0 unlock nonseq incr8  0
+info &grep Read:  0x00400e20/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepB
+0 read  0x00400e20 16 0 unlock seq    incr8  0
+info &grep Read:  0x00400e30/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepA
+0 read  0x00400e30 16 0 unlock seq    incr8  0
+info &grep Read:  0x00400e40/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepB
+0 read  0x00400e40 16 0 unlock seq    incr8  0
+info &grep Read:  0x00400e50/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << endgrepA
+0 read  0x00400e50 16 0 unlock seq    incr8  0
+info &grep Read:  0x00400e60/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << endgrepB
+0 read  0x00400e60 16 0 unlock seq    incr8  0
+info &grep Read:  0x00400e70/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << endgrepA
+0 read  0x00400e70 16 0 unlock seq    incr8  0
+info &grep Read:  0x00400e80/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << endgrepB
+0 read  0x00400e80 16 0 unlock seq    incr8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 8 quad-word wrap8 unaligned reads
+info &grep Read:  0x00400f10/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepA
+0 read  0x00400f10 16 0 unlock nonseq wrap8  0
+info &grep Read:  0x00400f20/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepB
+0 read  0x00400f20 16 0 unlock seq    wrap8  0
+info &grep Read:  0x00400f30/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepA
+0 read  0x00400f30 16 0 unlock seq    wrap8  0
+info &grep Read:  0x00400f40/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepB
+0 read  0x00400f40 16 0 unlock seq    wrap8  0
+info &grep Read:  0x00400f50/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << endgrepA
+0 read  0x00400f50 16 0 unlock seq    wrap8  0
+info &grep Read:  0x00400f60/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << endgrepB
+0 read  0x00400f60 16 0 unlock seq    wrap8  0
+info &grep Read:  0x00400f70/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << endgrepA
+0 read  0x00400f70 16 0 unlock seq    wrap8  0
+info &grep Read:  0x00400f00/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << endgrepB
+0 read  0x00400f00 16 0 unlock seq    wrap8  0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 quad-word incr16 unaligned reads
+info &grep Read:  0x00401010/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepA
+0 read  0x00401010 16 0 unlock nonseq incr16 0
+info &grep Read:  0x00401020/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepB
+0 read  0x00401020 16 0 unlock seq    incr16 0
+info &grep Read:  0x00401030/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepA
+0 read  0x00401030 16 0 unlock seq    incr16 0
+info &grep Read:  0x00401040/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepB
+0 read  0x00401040 16 0 unlock seq    incr16 0
+info &grep Read:  0x00401050/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << endgrepA
+0 read  0x00401050 16 0 unlock seq    incr16 0
+info &grep Read:  0x00401060/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << endgrepB
+0 read  0x00401060 16 0 unlock seq    incr16 0
+info &grep Read:  0x00401070/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << endgrepA
+0 read  0x00401070 16 0 unlock seq    incr16 0
+info &grep Read:  0x00401080/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << endgrepB
+0 read  0x00401080 16 0 unlock seq    incr16 0
+info &grep Read:  0x00401090/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << endgrepA
+0 read  0x00401090 16 0 unlock seq    incr16 0
+info &grep Read:  0x004010a0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << endgrepB
+0 read  0x004010a0 16 0 unlock seq    incr16 0
+info &grep Read:  0x004010b0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << endgrepA
+0 read  0x004010b0 16 0 unlock seq    incr16 0
+info &grep Read:  0x004010c0/16: c0 c1 c2 c3 c4 c5 c6 c7 c8 c9 ca cb cc cd ce cf *$ << endgrepB
+0 read  0x004010c0 16 0 unlock seq    incr16 0
+info &grep Read:  0x004010d0/16: d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 da db dc dd de df *$ << endgrepA
+0 read  0x004010d0 16 0 unlock seq    incr16 0
+info &grep Read:  0x004010e0/16: e0 e1 e2 e3 e4 e5 e6 e7 e8 e9 ea eb ec ed ee ef *$ << endgrepB
+0 read  0x004010e0 16 0 unlock seq    incr16 0
+info &grep Read:  0x004010f0/16: f0 f1 f2 f3 f4 f5 f6 f7 f8 f9 fa fb fc fd fe ff *$ << endgrepA
+0 read  0x004010f0 16 0 unlock seq    incr16 0
+info &grep Read:  0x00401100/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << endgrepB
+0 read  0x00401100 16 0 unlock seq    incr16 0
+info endgrepA
+wait 20
+info endgrepB
+
+note Doing 16 quad-word wrap16 unaligned reads
+info &grep Read:  0x00401210/16: 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f *$ << endgrepA
+0 read  0x00401210 16 0 unlock nonseq wrap16 0
+info &grep Read:  0x00401220/16: 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f *$ << endgrepB
+0 read  0x00401220 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00401230/16: 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f *$ << endgrepA
+0 read  0x00401230 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00401240/16: 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f *$ << endgrepB
+0 read  0x00401240 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00401250/16: 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f *$ << endgrepA
+0 read  0x00401250 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00401260/16: 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f *$ << endgrepB
+0 read  0x00401260 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00401270/16: 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f *$ << endgrepA
+0 read  0x00401270 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00401280/16: 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f *$ << endgrepB
+0 read  0x00401280 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00401290/16: 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f *$ << endgrepA
+0 read  0x00401290 16 0 unlock seq    wrap16 0
+info &grep Read:  0x004012a0/16: a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af *$ << endgrepB
+0 read  0x004012a0 16 0 unlock seq    wrap16 0
+info &grep Read:  0x004012b0/16: b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf *$ << endgrepA
+0 read  0x004012b0 16 0 unlock seq    wrap16 0
+info &grep Read:  0x004012c0/16: c0 c1 c2 c3 c4 c5 c6 c7 c8 c9 ca cb cc cd ce cf *$ << endgrepB
+0 read  0x004012c0 16 0 unlock seq    wrap16 0
+info &grep Read:  0x004012d0/16: d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 da db dc dd de df *$ << endgrepA
+0 read  0x004012d0 16 0 unlock seq    wrap16 0
+info &grep Read:  0x004012e0/16: e0 e1 e2 e3 e4 e5 e6 e7 e8 e9 ea eb ec ed ee ef *$ << endgrepB
+0 read  0x004012e0 16 0 unlock seq    wrap16 0
+info &grep Read:  0x004012f0/16: f0 f1 f2 f3 f4 f5 f6 f7 f8 f9 fa fb fc fd fe ff *$ << endgrepA
+0 read  0x004012f0 16 0 unlock seq    wrap16 0
+info &grep Read:  0x00401200/16: 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f *$ << endgrepB
+0 read  0x00401200 16 0 unlock seq    wrap16 0
+info endgrepA
+wait 20
+info endgrepB
+
+#endif
+
+wait 20
+note script done

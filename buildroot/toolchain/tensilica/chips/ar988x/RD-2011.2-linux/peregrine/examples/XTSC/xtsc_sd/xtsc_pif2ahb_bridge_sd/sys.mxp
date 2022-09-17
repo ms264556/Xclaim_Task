@@ -1,0 +1,92 @@
+#// Customer ID=8327; Build=0x3b95c; Copyright (c) 2007-2008 by Tensilica Inc.  ALL RIGHTS RESERVED.
+#// These coded instructions, statements, and computer programs are the
+#// copyrighted works and confidential proprietary information of
+#// Tensilica Inc.  They may be adapted and modified by bona fide
+#// purchasers for internal use, but neither the original nor any adapted
+#// or modified version may be disclosed or distributed to third parties
+#// in any manner, medium, or form, in whole or in part, without the prior
+#// written consent of Tensilica Inc.
+
+
+system "sys"
+(
+  properties
+  (
+    type = "System";
+    version = "1.0";
+    variant = "";
+    loadfile_extension = "";
+    description = "";
+    onecyclevalue = "1.0";
+    onecycletime = "ns";
+    simulationresolution = "1 ps";
+    simulationdefaulttime = "1 ns";
+  )
+  parameters ()
+  components
+  (
+
+    instance "core0"
+    (
+      model   = "xtsc_core_sd";
+      version = "";
+      variant = "";
+
+      parameters
+      (
+      )
+
+    )
+
+    instance "bridge"
+    (
+      model   = "xtsc_pif2ahb_bridge_sd";
+      version = "";
+      variant = "";
+
+      parameters
+      (
+        "ahb_byte_width" = "4";
+        "big_endian" = "false";
+        "pif_byte_width" = "4";
+      )
+
+    )
+
+    instance "ahb_bus"
+    (
+      model   = "MxAHB1";
+      version = "";
+      variant = "";
+
+      parameters
+      (
+        "Data Width" = "32";
+      )
+
+    )
+
+    instance "ahb_mem"
+    (
+      model   = "AHB_Mem1";
+      version = "";
+      variant = "";
+
+      parameters
+      (
+        "big endian" = "false";
+        "data width" = "32";
+      )
+
+    )
+
+  )
+  connections
+  (
+    "core0::m_pif_request_port<-->bridge::m_pif_request_export" = "core0":"m_pif_request_port" to "bridge":"m_pif_request_export";
+    "bridge::m_pif_respond_port<-->core0::m_pif_respond_export" = "bridge":"m_pif_respond_port" to "core0":"m_pif_respond_export";
+    "bridge::m_ahb_master_port<-->ahb_bus::bslave0" = "bridge":"m_ahb_master_port" to "ahb_bus":"bslave0";
+    "ahb_bus::bmaster<-->ahb_mem::ahb0" = "ahb_bus":"bmaster" to "ahb_mem":"ahb0";
+  )
+  portmaps ()
+)

@@ -1,0 +1,87 @@
+# Makefile for libferret (Xtensa ISS debug library for malloc)
+
+# Copyright (c) 2003-2008 Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+SHELL = /bin/sh
+
+srcdir = @srcdir@
+VPATH = $(srcdir)
+prefix = @prefix@
+target_alias = @target_alias@
+target_libdir = $(prefix)/$(target_alias)/lib
+
+top_builddir = @abs_top_builddir@
+top_srcdir = @top_srcdir@
+
+default: all
+include $(top_builddir)/../../Makefile.env
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+
+CC_FOR_TARGET = $(XTTOOLS)/bin/$(XTENSA_CC_FOR_TARGET)
+AR_FOR_TARGET = $(XTTOOLS)/bin/xt-ar
+AR_FLAGS = rc
+
+ISS_HEADERS = $(srcdir)/../../Software/sim/xtcore
+FERRET_HEADERS = $(srcdir)/../../Software/sim/client/ferret
+
+INCLUDES = -I$(srcdir) -I$(ISS_HEADERS) -I$(FERRET_HEADERS) \
+	-I$(srcdir)/../uclibc/include
+
+DEFINES = @DEFS@ -D_LIBC -DINTERNAL_NEWLIB
+
+# check if there are any local overrides (e.g., LOCAL_CFLAGS)
+-include $(srcdir)/Makefile.local
+
+ALL_CFLAGS = $(CFLAGS) -O2 -g -mlongcalls $(INCLUDES) $(DEFINES) \
+	$(LOCAL_CFLAGS)
+
+SRCS = calloc.c free.c heap_alloc_at.c \
+	heap_alloc.c heap_free.c malloc.c \
+	memalign.c realloc.c simtrap.c
+
+ASM_SRCS = init.S
+
+OBJECTS = $(SRCS:.c=.o) $(ASM_SRCS:.S=.o)
+
+.PHONY: all all-target install install-target clean
+
+LIB = libferret.a
+
+FLAGS_TO_PASS = \
+	"LOCAL_CFLAGS=$(LOCAL_CFLAGS)"
+
+all: all-target
+install: install-target
+
+all-target: $(LIB)
+
+install-target: $(LIB)
+	$(INSTALL) $(LIB) $(target_libdir)
+
+%.o : %.c
+	$(CC_FOR_TARGET) $(ALL_CFLAGS) -c -o $@ $<
+
+%.o : %.S
+	$(CC_FOR_TARGET) $(ALL_CFLAGS) -c -o $@ $<
+
+$(LIB): $(OBJECTS)
+	-rm -f $@
+	$(AR_FOR_TARGET) $(AR_FLAGS) $@ $(OBJECTS)
+
+clean:
+	-rm -f $(LIB) *.o *.d
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) && $(SHELL) ./config.status
+
+$(top_builddir)/config.status: $(top_srcdir)/configure
+	cd $(top_builddir) && $(SHELL) ./config.status --recheck
+

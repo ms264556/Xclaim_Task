@@ -1,0 +1,270 @@
+<html>
+  <head>
+    <title>
+      CALL0 - Non-windowed Call
+    </title>
+    <style type="text/css">
+      <!--
+	body {
+		background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+		margin-left: 2em;
+		margin-right: 2em;
+	}
+	#boundingbox {
+	        background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+	        position: relative;
+	        width: 865px;
+	        margin: 0 auto;
+	        padding: 20px;
+	        border-style: dashed;
+	        border-width: 1px;
+	        border-spacing: 10px;
+	        border-collapse: separate;
+	}
+	a {
+		text-decoration: none;
+	}
+	a:visited {
+		color: blue;
+	}
+	a:link {
+		color: green;
+	}
+	a:active {
+		color: green;
+	}
+	a:hover {
+		color: green;
+	}
+	a:offsite {
+		color: green;
+	}
+	h1 {
+		font-size: 14pt;
+		font-weight: bold;
+	}
+	h1.center {
+		font-size: 14pt;
+		font-weight: bold;
+	        text-align: center;
+	}
+	h2 {
+		font-size: 12pt;
+	}
+	caption {
+		padding-top: 1em;
+	}
+	table.thin {
+		border-width: thin;
+		border-spacing: 0px;
+		border-style: inset;
+		border-color: gray;
+		border-collapse: collapse;
+		background-color: rgb(250, 240, 230);
+	}
+	table th.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table th.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	pre {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	}
+	.proto {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 1em;
+	        text-indent: -1em;
+	}
+	.protohead {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 2em;
+	        text-indent: -2em;
+	}
+	.protobody {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 4em;
+	        text-indent: -2em;
+	}
+	.rotate {
+	        display: block;
+	        -webkit-transform: rotate(-90deg); 
+	        -moz-transform: rotate(-90deg);
+	        filter:
+	progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	        padding-top: 20px;                       
+	}
+	.light {
+	        font-size: 75%;
+	        color: SlateGrey;
+	}
+	
+        -->
+    </style>
+  </head>
+  <body>
+    <h1>
+      CALL0 &#8212; Non-windowed Call
+    </h1>
+    <h2>
+      Instruction Word
+    </h2>
+    <table frame="void" rules="groups" cellspacing=0 cellpadding=0>
+      <caption>x24 : x24_Inst_0</caption>
+      <colgroup colspan=18>
+	<col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=6>
+	<col width=33><col width=33><col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <thead>
+	<tr>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>2
+	    3</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>6</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>5</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>0</small>
+	  </td>
+	</tr>
+      </thead>
+      <tfoot>
+	<tr>
+	  <td colspan=18 width=594 align="center">
+	    <small>18</small>
+	  </td>
+	  <td colspan=6 width=198 align="center">
+	    <small>6</small>
+	  </td>
+	</tr>
+      </tfoot>
+      <tbody>
+	<tr>
+	  <td colspan=18 width=594 align="center" bgcolor="#FFE4E1">
+	    offset
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <h2>
+      Assembler Syntax
+    </h2>
+    <p>
+      <code>CALL0 label</code><br>
+
+    </p>
+    <h2>
+      Description
+    </h2>
+    <p><small>(please consult the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for any cross references and additional information)</small></p><P><code>CALL0</code> calls subroutines without using register windows. The return address is placed in <code>a0</code>, and the processor then branches to the target address. The return address is the address of the <code>CALL0</code> instruction plus three.</P><P>The target instruction address must be 32-bit aligned. This allows <code>CALL0</code> to have a larger effective range (-524284 to 524288 bytes). The target instruction address of the call is given by the address of the <code>CALL0</code> instruction with the least significant two bits set to zero plus the sign-extended 18-bit <code>offset</code> field of the instruction shifted by two, plus four.</P><P>The <code>RET</code> and <code>RET.N</code> instructions are used to return from a subroutine called by <code>CALL0</code>.</P><P>See the <code>CALLX0</code> instruction  for calling routines where the target address is given by the contents of a register.</P><P>To call using the register window mechanism, see the <code>CALL4</code>, <code>CALL8</code>, and <code>CALL12</code> instructions.</P>    <h2>Operation</h2>      <pre>
+AR[0] &#8592; PC + 3
+nextPC &#8592; (PC<SUB>31..2</SUB> + (offset<SUB>17</SUB><SUP>12</SUP>||offset) + 1)||00</pre>    <h2>Exceptions</h2>      <LI>EveryInst Group (see the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for more information)</LI>
+    <h2>
+      Protos that use CALL0
+    </h2>
+    <div>
+      <div class=protohead>proto <a href=../protos.html#CALL0>CALL0</a> { in
+      void * soffsetx4 }{}{</div><div class=protobody><a
+      href=CALL0.html>CALL0</a> soffsetx4 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+  </body>
+</html>

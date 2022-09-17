@@ -1,0 +1,8 @@
+This directory contains files from libiberty needed while building libstdc++.
+The files here should be kept in sync with the files in
+Software/xcc/gcc/libiberty.
+
+This directory is not named "libiberty" because if the "libiberty"
+directory exists, it is assumed to contain the full set of sources for
+libiberty.  If it is there, the top-level makefile insists on building
+it for both host and target and we don't want it for either.

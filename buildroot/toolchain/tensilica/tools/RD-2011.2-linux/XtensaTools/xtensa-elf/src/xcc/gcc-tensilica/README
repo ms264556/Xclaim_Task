@@ -1,0 +1,7 @@
+/*  Copyright (C) 2007--2009 Tensilica, Inc.  */
+This directory contains files from GCC needed while building libraries.
+The files here should be kept in sync with the files in Software/xcc/gcc/gcc.
+
+This directory cannot be named "gcc" because if the "gcc" directory exists,
+it is assumed to contain the full set of sources for GCC and the build
+will break if that assumption is not correct.

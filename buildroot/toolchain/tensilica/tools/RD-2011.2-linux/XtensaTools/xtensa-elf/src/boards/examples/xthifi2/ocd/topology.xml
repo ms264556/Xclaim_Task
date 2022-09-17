@@ -1,0 +1,42 @@
+<configuration>
+  <!--
+    - Copyright (c) 2009 by Tensilica Inc.  ALL RIGHTS RESERVED.
+    - These coded instructions, statements, and computer programs are the
+    - copyrighted works and confidential proprietary information of Tensilica Inc.
+    - They may not be modified, copied, reproduced, distributed, or disclosed to
+    - third parties in any manner, medium, or form, in whole or in part, without
+    - the prior written consent of Tensilica Inc.
+    -->
+  <controller id='Controller0' module='macraigor' cable='wiggler' speed='1' port='0' />
+  <!--
+	Here are other example controller lines, that can replace the above ones
+	when using different JTAG probes (scan controllers):
+
+	Macraigor USB2Demon or USBwiggler:
+	<controller id='Controller0' module='macraigor' cable='usb2demon' speed='4' port='0' />
+	Macraigor Wiggler:
+	<controller id='Controller0' module='macraigor' cable='wiggler' speed='1' port='0' />
+
+	ByteTools Catapult (Ethernet):
+	<controller id='Controller0' module='catapult' speed='12500000' ipaddr='192.168.1.1' debug='0'/>
+	ByteTools Catapult (USB, unsupported):
+	<controller id='Controller0' module='catapult' speed='12500000' usbser='332211' debug='0'/>
+   -->
+  <driver id='XtensaDriver0' module='xtensa' step-intr='mask,stepover,setps' />
+  <chain controller='Controller0'> 
+    <tap id='TAP-PE0Mbist' irwidth='19' bypass='0x7ffff' />
+    <tap id='TAP-PE0Xt0' irwidth='5' />
+    <tap id='TAP-PE0Xt1' irwidth='5' />
+  </chain>
+  <system module='jtag'>
+    <component id='Component-PE0Xt0' tap='TAP-PE0Xt0' config='tensilica' />
+    <component id='Component-PE0Xt1' tap='TAP-PE0Xt1' config='tensilica' />
+  </system>
+  <device id='PE0Xt0' component='Component-PE0Xt0' driver='XtensaDriver0' />
+  <device id='PE0Xt1' component='Component-PE0Xt1' driver='XtensaDriver0' />
+  <application id='GDBStub' module='gdbstub' port='20000'>
+    <target device='PE0Xt0' />
+    <target device='PE0Xt1' />
+  </application>
+</configuration>
+

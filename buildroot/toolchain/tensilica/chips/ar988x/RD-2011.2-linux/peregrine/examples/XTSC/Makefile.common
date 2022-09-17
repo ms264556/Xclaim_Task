@@ -1,0 +1,61 @@
+# Customer ID=8327; Build=0x3b95c; Copyright (c) 2005-2009 Tensilica Inc.  ALL RIGHTS RESERVED.
+# 
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of
+# Tensilica Inc.  They may be adapted and modified by bona fide
+# purchasers for internal use, but neither the original nor any adapted
+# or modified version may be disclosed or distributed to third parties
+# in any manner, medium, or form, in whole or in part, without the prior
+# written consent of Tensilica Inc.
+
+# Common Makefile for building XTSC examples
+
+.PHONY: all custom_target target tie run xtsc-run clean custom_clean
+BASE_NAME := $(EXAMPLE_NAME)
+
+ifeq ($(NO_TIE),)
+TIE_DEPEND = tie
+endif
+
+
+all: target
+
+custom_target:
+
+target: $(TARGET_OBJECTS) custom_target 
+
+$(XTENSA_XMP_DEFS): $(XTENSA_XMP_XSYS)
+	$(MAKE) -C $(XTENSA_XMP_ROOT)/.. xmp
+
+tie:
+	$(MAKE) -C .. $@
+
+$(EXAMPLE_NAME): $(HOST_OBJECTS)
+	$(LINK) $(LDFLAGS) $(LDOUT)$@ $(HOST_OBJECTS) $(LIBS)
+
+%.out: %.c $(TIE_DEPEND)
+	$(TARGET_CXX) $(TARGET_CFLAGS) -o $@ $< $(TARGET_LIBS)
+
+%.$(OBJ): %.cpp
+	$(CXX) $(CXXFLAGS) $<
+
+all: $(EXAMPLE_NAME)
+
+run: $(EXAMPLE_NAME)
+	./$(EXAMPLE_NAME) $(RUNARGS)
+
+clean:
+	-$(RM) target/*.out *.$(OBJ)
+	-$(RM) $(EXAMPLE_NAME)
+	-$(RM) *.log
+
+.PHONY: vclean
+
+vclean: clean
+	-$(RMDIR) $(TDK_DIR)
+
+
+xtsc-run:
+	xtsc-run -include=$(BASE_NAME).inc
+
+

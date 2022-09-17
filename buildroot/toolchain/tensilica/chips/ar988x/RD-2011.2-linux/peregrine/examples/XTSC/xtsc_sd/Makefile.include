@@ -1,0 +1,61 @@
+# Customer ID=8327; Build=0x3b95c; Copyright (c) 2006-2010 Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of
+# Tensilica Inc.  They may be adapted and modified by bona fide
+# purchasers for internal use, but neither the original nor any adapted
+# or modified version may be disclosed or distributed to third parties
+# in any manner, medium, or form, in whole or in part, without the prior
+# written consent of Tensilica Inc.
+
+
+# If you want to use AMBA2 models, define the AMB2_HOME environment variable
+# and ensure the AMBA2_CONF macro below is correct
+ifdef AMBA2_HOME
+AMBA2_CONF = $(AMBA2_HOME)/../etc/RVML_ARM.conf 
+endif
+
+ifndef MAXSIM_HOME
+$(error The MAXSIM_HOME environment variable must be set prior to running make)
+endif
+
+MV = mv -f
+CP = cp -p
+MKDIR = mkdir -p
+RMDIR = rm -rf
+SOCDESIGNER_VERSION_NUMBER = 7.7
+SOCDESIGNER_VERSION_DIR = SoCDesigner_$(SOCDESIGNER_VERSION_NUMBER)
+
+__PATH := $(PATH)
+export PATH=$(MAXSIM_HOME)/bin:$(__PATH)
+__LM_LICENSE_FILE := $(LM_LICENSE_FILE)
+export LM_LICENSE_FILE=$(MAXSIM_HOME)/etc/license.dat:$(__LM_LICENSE_FILE)
+
+XTTOOLS = /home/spatel/depot/private/11ac/buildroot/toolchain/tensilica/tools/RD-2011.2-linux/XtensaTools
+
+
+export XTENSA_SYSTEM = /home/spatel/depot/private/11ac/buildroot/toolchain/tensilica/chips/ar988x/RD-2011.2-linux/peregrine/config
+export XTENSA_CORE = peregrine
+export XTENSA_PARAMS = 
+
+
+
+ifndef XTSC_TEXTLOGGER_CONFIG_FILE
+  export XTSC_TEXTLOGGER_CONFIG_FILE=../../TextLogger.txt
+endif
+
+ifdef RUNARGS
+FWD_RUNARGS=RUNARGS="$(RUNARGS)"
+endif
+
+TARGET_CXX = $(XTTOOLS)/bin/xt-xcc
+TARGET_CFLAGS  = -g $(CUSTOM_TARGET_CFLAGS)
+TARGET_LIBS = -lm
+
+
+ifdef AMBA2_HOME
+MAXLIBS = --maxlib $(XTTOOLS)/lib/iss/$(SOCDESIGNER_VERSION_DIR)/xtsclib.conf
+MAXLIBS += --maxlib $(AMBA2_CONF)
+else
+MAXLIBS = --maxlib $(XTTOOLS)/lib/iss/$(SOCDESIGNER_VERSION_DIR)/xtsclib.without.AMBA2.conf
+endif
+

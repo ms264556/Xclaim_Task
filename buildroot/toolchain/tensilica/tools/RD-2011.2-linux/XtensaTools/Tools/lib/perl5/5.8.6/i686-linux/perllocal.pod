@@ -1,0 +1,44 @@
+=head2 Mon Sep 15 15:15:16 2008: C<Module> L<Digest::MD5|Digest::MD5>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/xtensa/tools-6.1/lib/perl5/5.8.6>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.33>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Mon Sep 15 15:15:20 2008: C<Module> L<Filter::Crypto|Filter::Crypto>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/xtensa/tools-6.1/lib/perl5/site_perl/5.8.6>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.14>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+

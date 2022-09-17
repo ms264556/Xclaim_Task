@@ -1,0 +1,125 @@
+# Makefile configuration for building XTSC examples
+#
+# Customer ID=8327; Build=0x3b95c; Copyright (c) 2005-2009 Tensilica Inc.  ALL RIGHTS RESERVED.
+# 
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of
+# Tensilica Inc.  They may be adapted and modified by bona fide
+# purchasers for internal use, but neither the original nor any adapted
+# or modified version may be disclosed or distributed to third parties
+# in any manner, medium, or form, in whole or in part, without the prior
+# written consent of Tensilica Inc.
+
+CXX = g++
+ARCH_FLAGS = -m32
+
+# These variants of XTSC/ISS libraries are provided inside XTTOOLS:
+# "iss"             directory contains 32-bit libraries compatible with gcc 3.4.X
+# "iss-GCC-4.1"     directory contains 32-bit libraries compatible with gcc 4.1.X
+# "iss-RHEL3"       directory contains *deprecated* 32-bit libraries compatible with
+#                   the RHEL3 default compiler (gcc 3.2.3)
+ifneq ($(findstring 4.1.,$(shell $(CXX) -dumpversion)),)
+LIB_VARIANT = -GCC-4.1
+endif
+ifneq ($(findstring (GCC) 3.2.3,$(shell $(CXX) --version)),)
+LIB_VARIANT = -RHEL3
+endif
+
+ISSLIBDIR = iss$(LIB_VARIANT)
+
+# NOTE: If desired, you can use the original OSCI SystemC 2.2 (available
+# from www.systemc.org); however, you will lose the benefits of Tensilica's
+# modifications (see "Getting Started" in the XTSC User's Guide).
+# To use the original OSCI SystemC 2.2, change the following two defines
+# to point to its locations:
+SYSTEMC_INC = /home/spatel/depot/private/11ac/buildroot/toolchain/tensilica/tools/RD-2011.2-linux/XtensaTools/Tools/systemc/include
+SYSTEMC_LIB = /home/spatel/depot/private/11ac/buildroot/toolchain/tensilica/tools/RD-2011.2-linux/XtensaTools/Tools/systemc/lib-linux$(LIB_VARIANT)
+SYSTEMC_LIBS = -L$(SYSTEMC_LIB) -lsystemc
+XTSCLIBDIR = $(ISSLIBDIR)
+ADDITIONAL_DEFINES =
+
+# If you have a customized version of the XTSC component library 
+# (libxtsc_comp.a on Linux, xtsc_comp.lib/xtsc_compd.lib on MS Windows),
+# then uncomment and edit the following line to point to its location
+# (for more information about building a customized XTSC component
+# library see file /home/spatel/depot/private/11ac/buildroot/toolchain/tensilica/tools/RD-2011.2-linux/XtensaTools/src/xtsc/README.txt):
+# XTSC_COMPONENT_LIBRARY_PATH = PutPathHere
+
+ifdef XTSC_COMPONENT_LIBRARY_PATH
+XTSC_COMP_INC = -I$(XTSC_COMPONENT_LIBRARY_PATH)
+XTSC_COMP_LIB = -L$(XTSC_COMPONENT_LIBRARY_PATH)
+endif
+
+# The -libdebug flag makes TIE wires visible to xt-gdb and Xplorer
+# when running the Xtensa Instruction Set Simulator; however, it
+# can slow down simulation speed.  Comment out the following line
+# to disable TIE wire visibility.
+TCFLAGS = -libdebug
+
+XTTOOLS = /home/spatel/depot/private/11ac/buildroot/toolchain/tensilica/tools/RD-2011.2-linux/XtensaTools
+TDK_DIR = ../TIE/example.tdk
+
+export XTENSA_SYSTEM = /home/spatel/depot/private/11ac/buildroot/toolchain/tensilica/chips/ar988x/RD-2011.2-linux/peregrine/config
+export XTENSA_CORE = peregrine
+
+XTENSA_XMP_ROOT    = ../XMP
+XTENSA_XMP_XSYS    = $(XTENSA_XMP_ROOT)/$(SYSTEM).xsys
+XTENSA_XMP_SYSTEM  = $(XTENSA_XMP_ROOT)/sys-x86-linux/$(SYSTEM)
+XTENSA_XMP_PACKAGE = $(XTENSA_XMP_SYSTEM)/package
+XTENSA_XMP_DEFS    = $(XTENSA_XMP_PACKAGE)/sys-defs.mk
+XTENSA_XMP_CORES   = $(XTENSA_XMP_PACKAGE)/cores
+XMP_XTENSA_SYSTEM  = $(XTENSA_XMP_PACKAGE)/config
+
+
+ifdef RUNARGS
+FWD_RUNARGS=RUNARGS="$(RUNARGS)"
+endif
+
+TARGET_CXX = $(XTTOOLS)/bin/xt-xcc
+TARGET_CFLAGS  = -g $(CUSTOM_TARGET_CFLAGS)
+TARGET_LIBS = -lm
+
+LINK = $(CXX)
+DEBUG_CXXFLAGS = -UNDEBUG -DDEBUG -Wall -O0 -g
+#DEBUG_CXXFLAGS = -DNDEBUG -UDEBUG -Wall -O3
+COMMON_CXXFLAGS = $(ARCH_FLAGS) -c $(DEBUG_CXXFLAGS) -Wno-parentheses
+LDFLAGS = $(ARCH_FLAGS)
+LDOUT = -o 
+OBJ = o
+EXE = 
+RM = rm -f
+RMDIR = rm -rf
+
+INCLUDES = \
+	$(XTSC_COMP_INC) \
+	-I$(XTTOOLS)/include \
+	-I$(SYSTEMC_INC) 
+XTSC_LIBS = \
+	$(XTSC_COMP_LIB) \
+	-L$(XTTOOLS)/lib/$(XTSCLIBDIR) \
+	-lxtsc \
+	-lxtsc_comp \
+	-L$(XTTOOLS)/lib/$(ISSLIBDIR) \
+	-lxtmp \
+	-lsimxtcore \
+	-llog4xtensa \
+	-L$(XTTOOLS)/lib \
+	-lxtparams
+OTHER_LIBS = -Wl,-rpath,$(XTTOOLS)/lib/$(ISSLIBDIR):$(XTTOOLS)/lib
+D = -D
+
+LIBS = $(XTSC_LIBS) $(SYSTEMC_LIBS) $(OTHER_LIBS)
+DEFINES = \
+	$(D) CONFIG_NAME=\"$(XTENSA_CORE)\" \
+	$(D) XTENSA_REGISTRY=\"$(XTENSA_SYSTEM)\" \
+	$(D) TDK_DIR=\"$(TDK_DIR)\" \
+        $(ADDITIONAL_DEFINES)
+
+CXXFLAGS = $(INCLUDES) $(DEFINES) $(COMMON_CXXFLAGS)
+
+TEST_MAKE_TARGET = run
+
+HOST_SOURCES = $(HOST_OBJECTS:.o=.cpp)
+
+
+

@@ -1,0 +1,321 @@
+#! /usr/xtensa/tools-6.1/bin/perl -w
+# Tensilica Perl Preprocessor for TIE code
+# $Id: //depot/rel/Cottonwood/Xtensa/TIE/tc/tietpp/tietpp#2 $
+
+# Copyright (c) 2002-2010 by Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+package tietpp;
+
+# Pragmas
+use strict;
+
+# Perl standard libraries
+use Getopt::Long;
+use sigtrap qw(die normal-signals);
+use FindBin;
+use File::Temp qw(tempfile);
+use File::Spec;
+use Cwd;
+
+use vars qw($debug $stdout_handle $fh $perl_file $lineno $save_perl);
+
+{ # main
+    my $tppdir = $FindBin::RealBin;
+    my $tpp_wrapper = $tppdir."/tietpp_safe";
+    $debug = 0;
+
+    my $usage = <<EOF;
+usage: $0 [options] [file1 file2 ...]
+    -e execute	provide initial perl code to execute
+    -l		track line numbers in output file using C #line convention
+    -p file	dump perl program to "file"
+    -k          execute the perl program
+    -safe       runs in safe mode
+EOF
+
+    $perl_file = "";
+    my $execute = "";
+    $lineno = 0;
+    $save_perl = 0;
+    my $execute_perl_file = 0;
+    my $safe = 0;
+    my $ret = GetOptions(
+	"-e=s"   => \$execute,
+	"-p=s"   => \$perl_file,
+	"-k"     => \$execute_perl_file, 
+	"-l"     => \$lineno,
+	"-safe!" => \$safe );
+    if (! $ret) {
+	print $usage;
+	exit 1;
+    }
+
+    # if the user did not specify a Perl file, create a temporary file
+    # The tempfile call opens the tempfile also and returns a filehandle
+    # as well as a filname. We need to close the filehandle and reopen
+    # the file so we dont have to deal with this filehandle. This file should
+    # already be secure.
+
+    if ($perl_file eq "") {
+
+	my $temp_dir  = File::Spec->tmpdir( CLEANUP => 1 );
+
+	if ($^O eq 'MSWin32') {
+	    my ($vol, $dir, $file) = File::Spec->splitpath ($temp_dir, 1);
+	    if (!defined($vol) || $vol eq '') {
+		my ($curdir, $curfile);
+		($vol, $curdir, $curfile) = File::Spec->splitpath (cwd(), 1);
+		$temp_dir = File::Spec->catpath($vol, $dir, $file);
+	    }
+	}
+
+	($fh, $perl_file) = tempfile("tietpp_XXXXXXXX", DIR => $temp_dir);
+
+	#
+	# Close file handle which was also opened by the tempfile call.
+	# Will not be able to unlink if we dont do this.
+	#
+	close($fh);
+
+	$execute_perl_file = 0;
+    } else {
+	$save_perl = 1;
+    }
+ 
+    my $umask = umask(0066);	# don't expose our code in /tmp
+    open(OUT, ">$perl_file") || die "Error: can't open $perl_file: $!";
+    umask ($umask);
+
+    if (!$safe) {
+	print OUT "package main;\n";
+	print OUT "no strict;\n";	# sigh
+    }
+    if ($execute) {
+	print OUT "BEGIN { $execute }\n";
+    }
+    if (!$safe) {
+	print OUT 'use lib "',$tppdir,'/../lib/TIE";', "\n";
+	print OUT 'use lib "',$tppdir,'/../lib";', "\n";
+	$stdout_handle = "STDOUT";
+    } else { ## For safe Comparment as it does not like "use"
+	print OUT 'BEGIN { unshift @INC, "',$tppdir,'/../lib/TIE" ; }' , "\n";
+	print OUT 'BEGIN { unshift @INC, "',$tppdir,'/../lib" ; }' , "\n";
+	$stdout_handle = "";
+    }
+    print OUT <<'_ENDSUBS_' if $lineno;
+
+my $lastfilename = "";
+my $lastline = -1;
+sub _hidden_::line {
+    my ($filename, $line) = @_;
+    if ($filename ne $lastfilename) {
+	print "# tietpp file $filename\n";
+	$lastfilename = $filename;
+	$lastline = -1;
+    }
+    if ($line ne $lastline) {
+	print "# tietpp line $line\n";
+	$lastline = $line;
+    }
+}
+
+_ENDSUBS_
+
+    @ARGV = ('-') unless @ARGV;
+    if ($debug) {
+	print STDERR "\@ARGV=@ARGV\n";
+    }
+    while ($ARGV = shift @ARGV) {
+	include($ARGV);
+    }
+    if (!$safe) {
+	print OUT "\n1;\n";
+    }
+    close OUT;
+
+    exit(0) if ( $save_perl && !$execute_perl_file);
+    if (!$safe) {
+	if ($debug) {
+	    print STDERR "Executing perl_file $perl_file in unsafe mode\n";
+	}
+	require $perl_file;
+    } else { #### Safe mode
+	if ($debug) {
+	    print STDERR "Executing perl_file $perl_file in safe mode\n";
+	}
+	safetpp ($tppdir, $perl_file);
+    }
+} # main
+
+
+# Notes:
+#     `\w (as in `foo) does not cause a switch into perl mode (it does cause 
+#     a switch out of perl mode)
+# 
+#     ; must be the first character on a line and must be followed by another
+#     character to cause the line to be interpreted as Perl code
+
+sub include {
+    my($filename) = @_;
+    my($out, $perl_mode, $i, $c, $linecount);
+    local(*FILE);
+
+    if (! open(FILE, $filename)) {
+	print STDERR "Error: can't open $filename: $!\n";
+	return 0;
+    }
+
+    print OUT 
+      "print $stdout_handle \"//Output of TieTpp - please do not modify directly\\n\\n\";\n"
+      if $filename =~ /\.tie$/;
+
+    $filename =~ s|\\|/|g;		# avoid quoting issues with windows backslashes
+    $filename =~ s|//+|/|g;		# avoid comment-like double slashes
+    $filename =~ s|[`'"\$\@\%\t ]|:|g;	# declaw anything else that might break quoting
+
+    $linecount = 1;
+    print OUT "# line 1 \"$filename\"\n";
+
+    while (<FILE>) {
+	chomp;
+	s/\r$//;				# get rid of CR too, if CR-LF (Windows)
+	if (m/^;./) {
+	    s/^;//g;
+	    if (m/^\s*include\s*\(/) {
+		if (! eval $_) {
+		    print STDERR "\"$filename\", line $linecount: Warning: include failed\n";
+		    print STDERR "    $_\n";
+		    print STDERR "    $@";
+		}
+		print OUT "# line $linecount \"$filename\"\n";
+	    } else {
+	        print OUT "$_\n";
+	    }
+	} else {
+	    $out = "";
+	    if (m/^\s*\#\s*tietpp file\s+(\S+)/) {
+	       $linecount = 1;
+	       $filename = $1;
+	       $filename =~ s|\\|/|g;	# avoid quoting issues with windows backslashes
+	       $filename =~ s|//+|/|g;	# avoid comment-like double slashes
+	       $filename =~ s|[`'"\$\@\%]|:|g; # declaw anything else that might break quoting
+	       print OUT "# line 1 \"$filename\"\n";
+	       next;
+	    } elsif (m/^\s*\#\s*tietpp line\s+(\d+)/) {
+	       $linecount = $1;
+	       print OUT "# line $linecount \"$filename\"\n";
+	       next;
+	    }
+	    if ($lineno) {
+	      $out .= qq/_hidden_::line("$filename", $linecount); /;
+	    }
+	    $out .= qq/print $stdout_handle \'/;
+	    $perl_mode = 0;
+	    for($i = 0; $i < length($_); $i++) {
+		$c = substr($_, $i, 1);
+		if ($c eq "\\" && substr($_, $i+1, 1) eq "`" && $perl_mode) {
+		    # allow an escape to preserve ` in $perl_mode 
+		    $out .= $c;
+		} elsif ($c eq "`" && ($perl_mode || substr($_, $i+1, 1) !~ m/\w/)) {
+		    # toggle perl mode vs text mode
+		    $out .= $perl_mode ? "; print $stdout_handle '" : "'; print $stdout_handle ";
+		    $perl_mode = ! $perl_mode;
+		} else {
+		    # keep the character, but need to quote it in text mode
+		    if (! $perl_mode && ($c eq "'" || $c eq "\\")) {
+			$c = "\\$c";
+		    }
+		    $out .= $c;
+		}
+	    }
+	    $out .= $perl_mode ? ";" : "';";
+	    if ($perl_mode) {
+		print STDERR "\"$filename\", line $linecount: Warning: missing closing `\n";
+	    }
+	    $out .= qq/print $stdout_handle "\\n";\n/;
+	    print OUT $out;
+	}
+	$linecount++;
+    }
+    close FILE;
+    return 1;
+} # include
+
+sub safetpp {
+    my ($tppdir, $perl_file_name) = @_;
+
+    my $generator_pm = $tppdir."/../lib/TIE/generator.pm";
+
+    if ($debug) {
+	print STDERR "tpp_wrapper called...\n";
+    }
+
+    require Safe;
+    my $cpt = new Safe;   ## creates a safe compartment
+
+    #### need to permit these for generator.pm to be loaded
+    $cpt->permit("require");
+    $cpt->permit("log");
+
+    #### some more operators may be present in TIE codes
+    $cpt->permit("rand");
+    $cpt->permit("srand");
+
+    my $ret = $cpt->rdo($generator_pm);
+    if ($debug) {
+	##print STDERR "generator_pm=$generator_pm\n";
+	if ($ret) {
+	    print STDERR "generator.pm loaded successfully...\n";
+	} else {
+	    print STDERR "generator.pm could not be loaded, error=$@\n";
+	}
+    }
+
+    if ($debug) {
+	print STDERR "perl_file_name=$perl_file_name\n";
+    }
+    my $cmd = "";
+    if (open(FILE, $perl_file_name)){
+	while(<FILE>){
+	    $cmd .= $_
+	}
+	close (FILE);
+    }
+
+    $cmd =~ s/use\s+generator\s*;//g;  ## to remove "use generator;" if any
+    $ret = $cpt->reval($cmd);
+    if ($debug) {
+	if ($ret) {
+	    print STDERR "tpp_wrapper was successful...\n";
+	} else {
+	    print STDERR "tpp_wrapper failed, error=$@\n";
+	}
+    }
+
+    if (!$ret) {
+	my $err_for_user = $@;
+	$err_for_user =~ s/([^\s]+)[\s]+trapped by[^\n]+\n/"$1" not permitted in TIE perl./g;
+	print STDERR "$err_for_user\n";
+	exit(1);
+    }
+} # safetpp
+
+# install atexit-style handler so that when we exit or die,
+# we automatically delete the temporary file
+END {
+    if (($save_perl == 0) && ($perl_file ne "")) {
+	unlink($perl_file) or die "Error: can't unlink $perl_file : $!";
+    }
+} # END
+
+
+# Local Variables:
+# mode:perl
+# perl-indent-level:4
+# cperl-indent-level:4
+# End:

@@ -1,0 +1,31 @@
+// Customer ID=8327; Build=0x3b95c; Copyright (c) 2007-2008 by Tensilica Inc.  ALL RIGHTS RESERVED.
+// These coded instructions, statements, and computer programs are the
+// copyrighted works and confidential proprietary information of Tensilica Inc.
+// They may not be modified, copied, reproduced, distributed, or disclosed to
+// third parties in any manner, medium, or form, in whole or in part, without
+// the prior written consent of Tensilica Inc.
+
+// delay PEEK  address size 
+// delay POKE  address size b0 b1 . . . bN
+// delay WRITE address size timeout unlock trans burst prot b0 b1 . . . bN
+// delay READ  address size timeout unlock trans burst prot
+0 deassert lock
+1 assert
+
+wait 10
+info endgrepA
+
+0 poke 0x10000000 4 0x10 0x11 0x12 0x13
+
+wait 50
+
+info &grep master0.* Read:  0x10000000/4: 10 11 12 13 *$ << endgrepA
+
+0 read  0x10000000 4 0 unlock nonseq incr   0 
+
+sync 100
+note script done
+0 stop
+
+
+

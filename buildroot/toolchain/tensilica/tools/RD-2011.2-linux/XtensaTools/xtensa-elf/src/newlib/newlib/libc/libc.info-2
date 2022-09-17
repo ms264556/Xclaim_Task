@@ -1,0 +1,3724 @@
+This is
+/home/customer/tree/RD-2011.2/p4root/Xtensa/Target-libs/newlib/newlib/libc/libc.info,
+produced by makeinfo version 4.8 from
+/home/customer/tree/RD-2011.2/p4root/Xtensa/Target-libs/newlib/newlib/libc/libc.texinfo.
+
+   This file documents the ANSI C library, version 1.19.0 for Xtensa(R)
+Tools Version 9.0.2.
+
+   Copyright (C) 1992, 1993, 1994-2010 Red Hat, Inc.  Copyright (C)
+1999-2011 Tensilica, Inc.
+
+   `libc' includes software developed by the University of California,
+Berkeley and its contributors.
+
+   libc includes software developed by Martin Jackson, Graham Haley and
+Steve Chamberlain of Tadpole Technology and released to Cygnus.
+
+   libc uses floating-point conversion software developed at AT&T, which
+includes this copyright information:
+
+   The author of this software is David M. Gay.
+
+   Copyright (c) 1991 by AT&T.
+
+   Permission to use, copy, modify, and distribute this software for any
+purpose without fee is hereby granted, provided that this entire notice
+is included in all copies of any software which is or includes a copy
+or modification of this software and in all copies of the supporting
+documentation for such software.
+
+   THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR
+IMPLIED  WARRANTY.  IN PARTICULAR, NEITHER THE AUTHOR NOR AT&T MAKES ANY
+REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, subject to the
+terms of the GNU General Public License, which includes the provision
+that the entire resulting derived work is distributed under the terms
+of a permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions.
+
+   This publication is provided "AS IS."  Tensilica, Inc. (hereafter
+"Tensilica") does not make any warranty of any kind, either expressed
+or implied, including, but not limited to, the implied warranties of
+merchantability and fitness for a particular purpose.  Information in
+this document is provided solely to enable system and software
+developers to use Tensilica(R) processors.  Unless specifically set
+forth herein, there are no express or implied patent, copyright or any
+other intellectual property rights or licenses granted hereunder to
+design or fabricate Tensilica integrated circuits or integrated
+circuits based on the information in this document.  Tensilica does not
+warrant that the contents of this publication, whether individually or
+as one or more groups, meets your requirements or that the publication
+is error-free.  This publication could include technical inaccuracies
+or typographical errors.  Changes may be made to the information
+herein, and these changes may be incorporated in new editions of this
+publication.
+
+   The following terms are trademarks or registered trademarks of
+Tensilica, Inc.: FLIX, OSKit, Sea of Processors, Tensilica, Vectra,
+Xplorer, XPRES, and Xtensa.  All other trademarks and registered
+trademarks are the property of their respective companies.
+
+
+File: libc.info,  Node: strspn,  Next: strstr,  Prev: strsignal,  Up: Strings
+
+5.36 `strspn'--find initial match
+=================================
+
+*Synopsis*
+     #include <string.h>
+     size_t strspn(const char *S1, const char *S2);
+   *Description*
+This function computes the length of the initial segment of the string
+pointed to by S1 which consists entirely of characters from the string
+pointed to by S2 (excluding the terminating null character).
+
+*Returns*
+`strspn' returns the length of the segment found.
+
+*Portability*
+`strspn' is ANSI C.
+
+   `strspn' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: strstr,  Next: strtok,  Prev: strspn,  Up: Strings
+
+5.37 `strstr'--find string segment
+==================================
+
+*Synopsis*
+     #include <string.h>
+     char *strstr(const char *S1, const char *S2);
+   *Description*
+Locates the first occurrence in the string pointed to by S1 of the
+sequence of characters in the string pointed to by S2 (excluding the
+terminating null character).
+
+*Returns*
+Returns a pointer to the located string segment, or a null pointer if
+the string S2 is not found. If S2 points to a string with zero length,
+S1 is returned.
+
+*Portability*
+`strstr' is ANSI C.
+
+   `strstr' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: strtok,  Next: strupr,  Prev: strstr,  Up: Strings
+
+5.38 `strtok', `strtok_r', `strsep'--get next token from a string
+=================================================================
+
+*Synopsis*
+     #include <string.h>
+     char *strtok(char *SOURCE, const char *DELIMITERS)
+     char *strtok_r(char *SOURCE, const char *DELIMITERS,
+         char **LASTS)
+     char *strsep(char **SOURCE_PTR, const char *DELIMITERS)
+   *Description*
+The `strtok' function is used to isolate sequential tokens in a
+null-terminated string, `*SOURCE'. These tokens are delimited in the
+string by at least one of the characters in `*DELIMITERS'.  The first
+time that `strtok' is called, `*SOURCE' should be specified; subsequent
+calls, wishing to obtain further tokens from the same string, should
+pass a null pointer instead.  The separator string, `*DELIMITERS', must
+be supplied each time and may change between calls.
+
+   The `strtok' function returns a pointer to the beginning of each
+subsequent token in the string, after replacing the separator character
+itself with a null character.  When no more tokens remain, a null
+pointer is returned.
+
+   The `strtok_r' function has the same behavior as `strtok', except a
+pointer to placeholder `*LASTS' must be supplied by the caller.
+
+   The `strsep' function is similar in behavior to `strtok', except a
+pointer to the string pointer must be supplied `SOURCE_PTR' and the
+function does not skip leading delimiters.  When the string starts with
+a delimiter, the delimiter is changed to the null character and the
+empty string is returned.  Like `strtok_r' and `strtok', the
+`*SOURCE_PTR' is updated to the next character following the last
+delimiter found or NULL if the end of string is reached with no more
+delimiters.
+
+*Returns*
+`strtok', `strtok_r', and `strsep' all return a pointer to the next
+token, or `NULL' if no more tokens can be found.  For `strsep', a token
+may be the empty string.
+
+*Portability*
+`strtok' is ANSI C.  `strtok_r' is POSIX.  `strsep' is a BSD extension.
+
+   `strtok', `strtok_r', and `strsep' require no supporting OS
+subroutines.
+
+
+File: libc.info,  Node: strupr,  Next: strxfrm,  Prev: strtok,  Up: Strings
+
+5.39 `strupr'--force string to uppercase
+========================================
+
+*Synopsis*
+     #include <string.h>
+     char *strupr(char *A);
+   *Description*
+`strupr' converts each character in the string at A to uppercase.
+
+*Returns*
+`strupr' returns its argument, A.
+
+*Portability*
+`strupr' is not widely portable.
+
+   `strupr' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: strxfrm,  Next: swab,  Prev: strupr,  Up: Strings
+
+5.40 `strxfrm'--transform string
+================================
+
+*Synopsis*
+     #include <string.h>
+     size_t strxfrm(char *S1, const char *S2, size_t N);
+   *Description*
+This function transforms the string pointed to by S2 and places the
+resulting string into the array pointed to by S1. The transformation is
+such that if the `strcmp' function is applied to the two transformed
+strings, it returns a value greater than, equal to, or less than zero,
+correspoinding to the result of a `strcoll' function applied to the
+same two original strings.
+
+   No more than N characters are placed into the resulting array
+pointed to by S1, including the terminating null character. If N is
+zero, S1 may be a null pointer. If copying takes place between objects
+that overlap, the behavior is undefined.
+
+   With a C locale, this function just copies.
+
+*Returns*
+The `strxfrm' function returns the length of the transformed string
+(not including the terminating null character). If the value returned
+is N or more, the contents of the array pointed to by S1 are
+indeterminate.
+
+*Portability*
+`strxfrm' is ANSI C.
+
+   `strxfrm' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: swab,  Next: wcscasecmp,  Prev: strxfrm,  Up: Strings
+
+5.41 `swab'--swap adjacent bytes
+================================
+
+*Synopsis*
+     #include <unistd.h>
+     void swab(const void *IN, void *OUT, ssize_t N);
+   *Description*
+This function copies N bytes from the memory region pointed to by IN to
+the memory region pointed to by OUT, exchanging adjacent even and odd
+bytes.
+
+*Portability*
+`swab' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: wcscasecmp,  Next: wcsdup,  Prev: swab,  Up: Strings
+
+5.42 `wcscasecmp'--case-insensitive wide character string compare
+=================================================================
+
+*Synopsis*
+     #include <wchar.h>
+     int wcscasecmp(const wchar_t *A, const wchar_t *B);
+   *Description*
+`wcscasecmp' compares the wide character string at A to the wide
+character string at B in a case-insensitive manner.
+
+*Returns*
+If `*A' sorts lexicographically after `*B' (after both are converted to
+uppercase), `wcscasecmp' returns a number greater than zero.  If the
+two strings match, `wcscasecmp' returns zero.  If `*A' sorts
+lexicographically before `*B', `wcscasecmp' returns a number less than
+zero.
+
+*Portability*
+POSIX-1.2008
+
+   `wcscasecmp' requires no supporting OS subroutines. It uses
+tolower() from elsewhere in this library.
+
+
+File: libc.info,  Node: wcsdup,  Next: wcsncasecmp,  Prev: wcscasecmp,  Up: Strings
+
+5.43 `wcsdup'--wide character string duplicate
+==============================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wcsdup(const wchar_t *STR);
+
+     #include <wchar.h>
+     wchar_t *_wcsdup_r(struct _reent *PTR, const wchar_t *STR);
+   *Description*
+`wcsdup' allocates a new wide character string using `malloc', and
+copies the content of the argument STR into the newly allocated string,
+thus making a copy of STR.
+
+*Returns*
+`wcsdup' returns a pointer to the copy of STR if enough memory for the
+copy was available.  Otherwise it returns NULL and errno is set to
+ENOMEM.
+
+*Portability*
+POSIX-1.2008
+
+
+File: libc.info,  Node: wcsncasecmp,  Prev: wcsdup,  Up: Strings
+
+5.44 `wcsncasecmp'--case-insensitive wide character string compare
+==================================================================
+
+*Synopsis*
+     #include <wchar.h>
+     int wcsncasecmp(const wchar_t *A, const wchar_t * B, size_t LENGTH);
+   *Description*
+`wcsncasecmp' compares up to LENGTH wide characters from the string at
+A to the string at B in a case-insensitive manner.
+
+*Returns*
+If `*A' sorts lexicographically after `*B' (after both are converted to
+uppercase), `wcsncasecmp' returns a number greater than zero.  If the
+two strings are equivalent, `wcsncasecmp' returns zero.  If `*A' sorts
+lexicographically before `*B', `wcsncasecmp' returns a number less than
+zero.
+
+*Portability*
+POSIX-1.2008
+
+   `wcsncasecmp' requires no supporting OS subroutines. It uses
+tolower() from elsewhere in this library.
+
+
+File: libc.info,  Node: Wchar strings,  Next: Signals,  Prev: Strings,  Up: Top
+
+6 Wide Character Strings (`wchar.h')
+************************************
+
+This chapter describes wide-character string-handling functions and
+managing areas of memory containing wide characters.  The corresponding
+declarations are in `wchar.h'.
+
+* Menu:
+
+* wmemchr::     Find wide character in memory
+* wmemcmp::     Compare two wide-character memory areas
+* wmemcpy::     Copy wide-character memory regions
+* wmemmove::    Move possibly overlapping wide-character memory
+* wmemset::     Set an area of memory to a specified wide character
+* wcscat::      Concatenate wide-character strings
+* wcschr::      Search for wide character in string
+* wcscmp::      Wide-character string compare
+* wcscoll::     Locale-specific wide-character string compare
+* wcscpy::      Copy wide-character string
+* wcpcpy::      Copy a wide-character string returning a pointer to its end
+* wcscspn::     Count wide characters not in string
+* wcsftime::    Convert date and time to a formatted wide-character string
+* wcslcat::     Concatenate wide-character strings to specified length
+* wcslcpy::     Copy wide-character string to specified length
+* wcslen::      Wide-character string length
+* wcsncat::     Concatenate wide-character strings
+* wcsncmp::     Wide-character string compare
+* wcsncpy::     Counted copy wide-character string
+* wcpncpy::     Copy part of a wide-character string returning a pointer to its end
+* wcsnlen::     Wide-character string length with maximum limit
+* wcspbrk::     Find wide characters in string
+* wcsrchr::     Reverse search for wide character in string
+* wcsspn::      Find initial match in wide-character string
+* wcsstr::      Find wide-character string segment
+* wcstok::      Tokenize wide-character string
+* wcswidth::    Number of column positions of a wide-character string
+* wcsxfrm::     Locale-specific wide-character string transformation
+* wcwidth::     Number of column positions of a wide-character code
+
+
+File: libc.info,  Node: wmemchr,  Next: wmemcmp,  Up: Wchar strings
+
+6.1 `wmemchr'--find a wide character in memory
+==============================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t	*wmemchr(const wchar_t *S, wchar_t C, size_t N);
+   *Description*
+The `wmemchr' function locates the first occurrence of C in the initial
+N wide characters of the object pointed to be S. This function is not
+affected by locale and all wchar_t values are treated identically.  The
+null wide character and wchar_t values not corresponding to valid
+characters are not treated specially.
+
+   If N is zero, S must be a valid pointer and the function behaves as
+if no valid occurrence of C is found.
+
+*Returns*
+The `wmemchr' function returns a pointer to the located wide character,
+or a null pointer if the wide character does not occur in the object.
+
+*Portability*
+`wmemchr' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wmemcmp,  Next: wmemcpy,  Prev: wmemchr,  Up: Wchar strings
+
+6.2 `wmemcmp'--compare wide characters in memory
+================================================
+
+*Synopsis*
+     #include <wchar.h>
+     int wmemcmp(const wchar_t *S1, const wchar_t *S2, size_t N);
+   *Description*
+The `wmemcmp' function compares the first N wide characters of the
+object pointed to by S1 to the first N wide characters of the object
+pointed to by S2. This function is not affected by locale and all
+wchar_t values are treated identically. The null wide character and
+wchar_t values not corresponding to valid characters are not treated
+specially.
+
+   If N is zero, S1 and S2 must be a valid pointers and the function
+behaves as if the two objects compare equal.
+
+*Returns*
+The `wmemcmp' function returns an integer greater than, equal to, or
+less than zero, accordingly as the object pointed to by S1 is greater
+than, equal to, or less than the object pointed to by S2.
+
+*Portability*
+`wmemcmp' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wmemcpy,  Next: wmemmove,  Prev: wmemcmp,  Up: Wchar strings
+
+6.3 `wmemcpy'--copy wide characters in memory
+=============================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wmemcpy(wchar_t *D, const wchar_t *S, size_t N);
+   *Description*
+The `wmemcpy' function copies N wide characters from the object pointed
+to by S to the object pointed to be D. This function is not affected by
+locale and all wchar_t values are treated identically.  The null wide
+character and wchar_t values not corresponding to valid characters are
+not treated specially.
+
+   If N is zero, D and S must be a valid pointers, and the function
+copies zero wide characters.
+
+*Returns*
+The `wmemcpy' function returns the value of D.
+
+*Portability*
+`wmemcpy' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wmemmove,  Next: wmemset,  Prev: wmemcpy,  Up: Wchar strings
+
+6.4 `wmemmove'--copy wide characters in memory with overlapping areas
+=====================================================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wmemmove(wchar_t *D, const wchar_t *S, size_t N);
+   *Description*
+The `wmemmove' function copies N wide characters from the object
+pointed to by S to the object pointed to by D. Copying takes place as
+if the N wide characters from the object pointed to by S are first
+copied into a temporary array of N wide characters that does not
+overlap the objects pointed to by D or S, and then the N wide
+characters from the temporary array are copied into the object pointed
+to by D.
+
+   This function is not affected by locale and all wchar_t values are
+treated identically. The null wide character and wchar_t values not
+corresponding to valid characters are not treated specially.
+
+   If N is zero, D and S must be a valid pointers, and the function
+copies zero wide characters.
+
+*Returns*
+The `wmemmove' function returns the value of D.
+
+*Portability*
+`wmemmove' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wmemset,  Next: wcscat,  Prev: wmemmove,  Up: Wchar strings
+
+6.5 `wmemset'--set wide characters in memory
+============================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wmemset(wchar_t *S, wchar_t C, size_t N);
+   *Description*
+The `wmemset' function copies the value of C into each of the first N
+wide characters of the object pointed to by S.  This function is not
+affected by locale and all wchar_t values are treated identically.  The
+null wide character and wchar_t values not corresponding to valid
+characters are not treated specially.
+
+   If N is zero, S must be a valid pointer and the function copies zero
+wide characters.
+
+*Returns*
+The `wmemset' function returns the value of S.
+
+*Portability*
+`wmemset' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcscat,  Next: wcschr,  Prev: wmemset,  Up: Wchar strings
+
+6.6 `wcscat'--concatenate two wide-character strings
+====================================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wcscat(wchar_t *S1, const wchar_t *S2);
+   *Description*
+The `wcscat' function appends a copy of the wide-character string
+pointed to by S2 (including the terminating null wide-character code)
+to the end of the wide-character string pointed to by S1.  The initial
+wide-character code of S2 overwrites the null wide-character code at
+the end of S1. If copying takes place between objects that overlap, the
+behaviour is undefined.
+
+*Returns*
+The `wcscat' function returns S1; no return value is reserved to
+indicate an error.
+
+*Portability*
+`wcscat' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcschr,  Next: wcscmp,  Prev: wcscat,  Up: Wchar strings
+
+6.7 `wcschr'--wide-character string scanning operation
+======================================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wcschr(const wchar_t *S, wchar_t C);
+   *Description*
+The `wcschr' function locates the first occurrence of C in the
+wide-character string pointed to by S. The value of C must be a
+character representable as a type wchar_t and must be a wide-character
+code corresponding to a valid character in the current locale.  The
+terminating null wide-character string.
+
+*Returns*
+Upon completion, `wcschr' returns a pointer to the wide-character code,
+or a null pointer if the wide-character code is not found.
+
+*Portability*
+`wcschr' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcscmp,  Next: wcscoll,  Prev: wcschr,  Up: Wchar strings
+
+6.8 `wcscmp'--compare two wide-character strings
+================================================
+
+*Synopsis*
+     #include <wchar.h>
+     int wcscmp(const wchar_t *S1, *S2);
+   *Description*
+The `wcscmp' function compares the wide-character string pointed to by
+S1 to the wide-character string pointed to by S2.
+
+   The sign of a non-zero return value is determined by the sign of the
+difference between the values of the first pair of wide-character codes
+that differ in the objects being compared.
+
+*Returns*
+Upon completion, `wcscmp' returns an integer greater than, equal to or
+less than 0, if the wide-character string pointed to by S1 is greater
+than, equal to or less than the wide-character string pointed to by S2
+respectively.
+
+*Portability*
+`wcscmp' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcscoll,  Next: wcscpy,  Prev: wcscmp,  Up: Wchar strings
+
+6.9 `wcscoll'--locale-specific wide-character string compare
+============================================================
+
+*Synopsis*
+     #include <wchar.h>
+     int wcscoll(const wchar_t *STRA, const wchar_t * STRB);
+   *Description*
+`wcscoll' compares the wide-character string pointed to by STRA to the
+wide-character string pointed to by STRB, using an interpretation
+appropriate to the current `LC_COLLATE' state.
+
+   The current implementation of `wcscoll' simply uses `wcscmp' and
+does not support any language-specific sorting.
+
+*Returns*
+If the first string is greater than the second string, `wcscoll'
+returns a number greater than zero.  If the two strings are equivalent,
+`wcscoll' returns zero.  If the first string is less than the second
+string, `wcscoll' returns a number less than zero.
+
+*Portability*
+`wcscoll' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+
+File: libc.info,  Node: wcscpy,  Next: wcpcpy,  Prev: wcscoll,  Up: Wchar strings
+
+6.10 `wcscpy'--copy a wide-character string
+===========================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wcscpy(wchar_t *S1, const wchar_t *,S2);
+   *Description*
+The `wcscpy' function copies the wide-character string pointed to by S2
+(including the terminating null wide-character code) into the array
+pointed to by S1. If copying takes place between objects that overlap,
+the behaviour is undefined.
+
+*Returns*
+The `wcscpy' function returns S1; no return value is reserved to
+indicate an error.
+
+*Portability*
+`wcscpy' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcpcpy,  Next: wcscspn,  Prev: wcscpy,  Up: Wchar strings
+
+6.11 `wcpcpy'--copy a wide-character string returning a pointer to its end
+==========================================================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wcpcpy(wchar_t *S1, const wchar_t *,S2);
+   *Description*
+The `wcpcpy' function copies the wide-character string pointed to by S2
+(including the terminating null wide-character code) into the array
+pointed to by S1. If copying takes place between objects that overlap,
+the behaviour is undefined.
+
+*Returns*
+This function returns a pointer to the end of the destination string,
+thus pointing to the trailing '\0'.
+
+*Portability*
+`wcpcpy' is a GNU extension.
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcscspn,  Next: wcsftime,  Prev: wcpcpy,  Up: Wchar strings
+
+6.12 `wcscspn'--get length of a complementary wide substring
+============================================================
+
+*Synopsis*
+     #include <wchar.h>
+     size_t wcscspn(const wchar_t *S, wchar_t *SET);
+   *Description*
+The `wcscspn' function computes the length of the maximum initial
+segment of the wide-character string pointed to by S which consists
+entirely of wide-character codes not from the wide-character string
+pointed to by SET.
+
+*Returns*
+The `wcscspn' function returns the length of the initial substring of
+S1; no return value is reserved to indicate an error.
+
+*Portability*
+`wcscspn' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcsftime,  Next: wcslcat,  Prev: wcscspn,  Up: Wchar strings
+
+6.13 `wcsftime'-convert date and time to a formatted wide-character string
+==========================================================================
+
+*Synopsis*
+     #include <time.h>
+     #include <wchar.h>
+     size_t wcsftime(wchar_t *S, size_t MAXSIZE,
+         const wchar_t *FORMAT, const struct tm *TIMP);
+   *Description*
+`wcsftime' is equivalent to `strftime', except that:
+   * The argument s points to the initial element of an array of wide
+     characters into which the generated output is to be placed.
+
+   * The argument maxsize indicates the limiting number of wide
+     characters.
+
+   * The argument format is a wide-character string and the conversion
+     specifiers are replaced by corresponding sequences of wide
+     characters.
+
+   * The return value indicates the number of wide characters.
+
+   (The difference in all of the above being wide characters versus
+regular characters.)  See `strftime' for the details of the format
+specifiers.
+
+*Returns*
+When the formatted time takes up no more than MAXSIZE wide characters,
+the result is the length of the formatted wide string.  Otherwise, if
+the formatting operation was abandoned due to lack of room, the result
+is `0', and the wide-character string starting at S corresponds to just
+those parts of `*FORMAT' that could be completely filled in within the
+MAXSIZE limit.
+
+*Portability*
+C99 and POSIX require `wcsftime', but do not specify the contents of
+`*S' when the formatted string would require more than MAXSIZE
+characters.  Unrecognized specifiers and fields of `timp' that are out
+of range cause undefined results.  Since some formats expand to 0
+bytes, it is wise to set `*S' to a nonzero value beforehand to
+distinguish between failure and an empty string.  This implementation
+does not support `s' being NULL, nor overlapping `s' and `format'.
+
+   `wcsftime' requires no supporting OS subroutines.
+
+*See Also*
+`strftime'
+
+
+File: libc.info,  Node: wcslcat,  Next: wcslcpy,  Prev: wcsftime,  Up: Wchar strings
+
+6.14 `wcslcat'--concatenate wide-character strings to specified length
+======================================================================
+
+*Synopsis*
+     #include <wchar.h>
+     size_t wcslcat(wchar_t *DST, const wchar_t *SRC, size_t SIZ);
+   *Description*
+The `wcslcat' function appends wide characters from SRC to end of the
+DST wide-character string so that the resultant wide-character string
+is not more than SIZ wide characters including the terminating null
+wide-character code.  A terminating null wide character is always added
+unless SIZ is 0.  Thus, the maximum number of wide characters that can
+be appended from SRC is SIZ - 1. If copying takes place between objects
+that overlap, the behaviour is undefined.
+
+*Returns*
+Wide-character string length of initial DST plus the wide-character
+string length of SRC (does not include terminating null
+wide-characters).  If the return value is greater than or equal to SIZ,
+then truncation occurred and not all wide characters from SRC were
+appended.
+
+*Portability*
+No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcslcpy,  Next: wcslen,  Prev: wcslcat,  Up: Wchar strings
+
+6.15 `wcslcpy'--copy a wide-character string to specified length
+================================================================
+
+*Synopsis*
+     #include <wchar.h>
+     size_t wcslcpy(wchar_t *DST, const wchar_t *SRC, size_t SIZ);
+   *Description*
+`wcslcpy' copies wide characters from SRC to DST such that up to SIZ -
+1 characters are copied.  A terminating null is appended to the result,
+unless SIZ is zero.
+
+*Returns*
+`wcslcpy' returns the number of wide characters in SRC, not including
+the terminating null wide character.  If the return value is greater
+than or equal to SIZ, then not all wide characters were copied from SRC
+and truncation occurred.
+
+*Portability*
+No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcslen,  Next: wcsncat,  Prev: wcslcpy,  Up: Wchar strings
+
+6.16 `wcslen'--get wide-character string length
+===============================================
+
+*Synopsis*
+     #include <wchar.h>
+     size_t wcslen(const wchar_t *S);
+   *Description*
+The `wcslen' function computes the number of wide-character codes in
+the wide-character string to which S points, not including the
+terminating null wide-character code.
+
+*Returns*
+The `wcslen' function returns the length of S; no return value is
+reserved to indicate an error.
+
+*Portability*
+`wcslen' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcsncat,  Next: wcsncmp,  Prev: wcslen,  Up: Wchar strings
+
+6.17 `wcsncat'--concatenate part of two wide-character strings
+==============================================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wcsncat(wchar_t *S1, const wchar_t *S2, size_t N);
+   *Description*
+The `wcsncat' function appends not more than N wide-character codes (a
+null wide-character code and wide-character codes that follow it are
+not appended) from the array pointed to by S2 to the end of the
+wide-character string pointed to by S1. The initial wide-character code
+of S2 overwrites the null wide-character code at the end of S1.  A
+terminating null wide-character code is always appended to the result.
+If copying takes place between objects that overlap, the behaviour is
+undefined.
+
+*Returns*
+The `wcsncat' function returns S1; no return value is reserved to
+indicate an error.
+
+*Portability*
+`wcsncat' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcsncmp,  Next: wcsncpy,  Prev: wcsncat,  Up: Wchar strings
+
+6.18 `wcsncmp'--compare part of two wide-character strings
+==========================================================
+
+*Synopsis*
+     #include <wchar.h>
+     int wcsncmp(const wchar_t *S1, const wchar_t *S2, size_t N);
+   *Description*
+The `wcsncmp' function compares not more than N wide-character codes
+(wide-character codes that follow a null wide-character code are not
+compared) from the array pointed to by S1 to the array pointed to by S2.
+
+   The sign of a non-zero return value is determined by the sign of the
+difference between the values of the first pair of wide-character codes
+that differ in the objects being compared.
+
+*Returns*
+Upon successful completion, `wcsncmp' returns an integer greater than,
+equal to or less than 0, if the possibly null-terminated array pointed
+to by S1 is greater than, equal to or less than the possibly
+null-terminated array pointed to by S2 respectively.
+
+*Portability*
+`wcsncmp' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcsncpy,  Next: wcpncpy,  Prev: wcsncmp,  Up: Wchar strings
+
+6.19 `wcsncpy'--copy part of a wide-character string
+====================================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wcsncpy(wchar_t *S1, const wchar_t *S2, size_t N);
+   *Description*
+The `wcsncpy' function copies not more than N wide-character codes
+(wide-character codes that follow a null wide-character code are not
+copied) from the array pointed to by S2 to the array pointed to by S1.
+If copying takes place between objects that overlap, the behaviour is
+undefined.  Note that if S1 contains more than N wide characters before
+its terminating null, the result is not null-terminated.
+
+   If the array pointed to by S2 is a wide-character string that is
+shorter than N wide-character codes, null wide-character codes are
+appended to the copy in the array pointed to by S1, until N
+wide-character codes in all are written.
+
+*Returns*
+The `wcsncpy' function returns S1; no return value is reserved to
+indicate an error.
+
+*Portability*
+ISO/IEC 9899; POSIX.1.
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcpncpy,  Next: wcsnlen,  Prev: wcsncpy,  Up: Wchar strings
+
+6.20 `wcpncpy'--copy part of a wide-character string returning a pointer to its end
+===================================================================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wcpncpy(wchar_t *S1, const wchar_t *S2, size_t N);
+   *Description*
+The `wcpncpy' function copies not more than n wide-character codes
+(wide-character codes that follow a null wide-character code are not
+copied) from the array pointed to by S2 to the array pointed to by S1.
+If copying takes place between objects that overlap, the behaviour is
+undefined.
+
+   If the array pointed to by S2 is a wide-character string that is
+shorter than N wide-character codes, null wide-character codes are
+appended to the copy in the array pointed to by S1, until N
+wide-character codes in all are written.
+
+*Returns*
+The `wcpncpy' function returns S1; no return value is reserved to
+indicate an error.
+
+*Portability*
+`wcpncpy' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcsnlen,  Next: wcspbrk,  Prev: wcpncpy,  Up: Wchar strings
+
+6.21 `wcsnlen'--get fixed-size wide-character string length
+===========================================================
+
+*Synopsis*
+     #include <wchar.h>
+     size_t wcsnlen(const wchar_t *S, size_t MAXLEN);
+   *Description*
+The `wcsnlen' function computes the number of wide-character codes in
+the wide-character string pointed to by S not including the terminating
+L'\0' wide character but at most MAXLEN wide characters.
+
+*Returns*
+`wcsnlen' returns the length of S if it is less then MAXLEN, or MAXLEN
+if there is no L'\0' wide character in first MAXLEN characters.
+
+*Portability*
+`wcsnlen' is a GNU extension.
+
+   `wcsnlen' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: wcspbrk,  Next: wcsrchr,  Prev: wcsnlen,  Up: Wchar strings
+
+6.22 `wcspbrk'---scan wide-character string for a wide-character code
+=====================================================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wcspbrk(const wchar_t *S, const wchar_t *SET);
+   *Description*
+The `wcspbrk' function locates the first occurrence in the
+wide-character string pointed to by S of any wide-character code from
+the wide-character string pointed to by SET.
+
+*Returns*
+Upon successful completion, `wcspbrk' returns a pointer to the
+wide-character code or a null pointer if no wide-character code from
+SET occurs in S.
+
+*Portability*
+`wcspbrk' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcsrchr,  Next: wcsspn,  Prev: wcspbrk,  Up: Wchar strings
+
+6.23 `wcsrchr'--wide-character string scanning operation
+========================================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wcsrchr(const wchar_t *S, wchar_t C);
+   *Description*
+The `wcsrchr' function locates the last occurrence of C in the
+wide-character string pointed to by S. The value of C must be a
+character representable as a type wchar_t and must be a wide-character
+code corresponding to a valid character in the current locale.  The
+terminating null wide-character code is considered to be part of the
+wide-character string.
+
+*Returns*
+Upon successful completion, `wcsrchr' returns a pointer to the
+wide-character code or a null pointer if C does not occur in the
+wide-character string.
+
+*Portability*
+`wcsrchr' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcsspn,  Next: wcsstr,  Prev: wcsrchr,  Up: Wchar strings
+
+6.24 `wcsspn'--get length of a wide substring
+=============================================
+
+*Synopsis*
+     #include <wchar.h>
+     size_t wcsspn(const wchar_t *S, const wchar_t *SET);
+   *Description*
+The `wcsspn' function computes the length of the maximum initial
+segment of the wide-character string pointed to by S which consists
+entirely of wide-character codes from the wide-character string pointed
+to by SET.
+
+*Returns*
+The wcsspn() function returns the length S1; no return value is
+reserved to indicate an error.
+
+*Portability*
+`wcsspn' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: wcsstr,  Next: wcstok,  Prev: wcsspn,  Up: Wchar strings
+
+6.25 `wcsstr'--find a wide-character substring
+==============================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wcsstr(const wchar_t *BIG, const wchar_t *LITTLE);
+   *Description*
+The `wcsstr' function locates the first occurrence in the
+wide-character string pointed to by BIG of the sequence of wide
+characters (excluding the terminating null wide character) in the
+wide-character string pointed to by LITTLE.
+
+*Returns*
+On successful completion, `wcsstr' returns a pointer to the located
+wide-character string, or a null pointer if the wide-character string
+is not found.
+
+   If LITTLE points to a wide-character string with zero length, the
+function returns BIG.
+
+*Portability*
+`wcsstr' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+
+File: libc.info,  Node: wcstok,  Next: wcswidth,  Prev: wcsstr,  Up: Wchar strings
+
+6.26 `wcstok'--get next token from a string
+===========================================
+
+*Synopsis*
+     #include <wchar.h>
+     wchar_t *wcstok(wchar_t *SOURCE, const wchar_t *DELIMITERS,
+         wchar_t **LASTS)
+   *Description*
+The `wcstok' function is the wide-character equivalent of the
+`strtok_r' function (which in turn is the same as the `strtok' function
+with an added argument to make it thread-safe).
+
+   The `wcstok' function is used to isolate (one at a time) sequential
+tokens in a null-terminated wide-character string, `*SOURCE'.  A token
+is defined as a substring not containing any wide-characters from
+`*DELIMITERS'.
+
+   The first time that `wcstok' is called, `*SOURCE' should be
+specified with the wide-character string to be searched, and
+`*LASTS'-but not `lasts', which must be non-NULL-may be random;
+subsequent calls, wishing to obtain further tokens from the same
+string, should pass a null pointer for `*SOURCE' instead but must
+supply `*LASTS' unchanged from the last call.  The separator
+wide-character string, `*DELIMITERS', must be supplied each time and
+may change between calls.  A pointer to placeholder `*LASTS' must be
+supplied by the caller, and is set each time as needed to save the state
+by `wcstok'.	Every call to `wcstok' with `*SOURCE' == `NULL'
+must pass the value of `*LASTS' as last set by `wcstok'.
+
+   The `wcstok' function returns a pointer to the beginning of each
+subsequent token in the string, after replacing the separator
+wide-character itself with a null wide-character.  When no more tokens
+remain, a null pointer is returned.
+
+*Returns*
+`wcstok' returns a pointer to the first wide character of a token, or
+`NULL' if there is no token.
+
+*Portability*
+`wcstok' is C99 and POSIX.1-2001.
+
+   `wcstok' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: wcswidth,  Next: wcsxfrm,  Prev: wcstok,  Up: Wchar strings
+
+6.27 `wcswidth'--number of column positions of a wide-character string
+======================================================================
+
+*Synopsis*
+     #include <wchar.h>
+     int wcswidth(const wchar_t *PWCS, size_t N);
+   *Description*
+The `wcswidth' function shall determine the number of column positions
+required for N wide-character codes (or fewer than N wide-character
+codes if a null wide-character code is encountered before N
+wide-character codes are exhausted) in the string pointed to by PWCS.
+
+*Returns*
+The `wcswidth' function either shall return 0 (if PWCS points to a null
+wide-character code), or return the number of column positions to be
+occupied by the wide-character string pointed to by PWCS, or return -1
+(if any of the first N wide-character codes in the wide-character
+string pointed to by PWCS is not a printable wide-character code).
+
+*Portability*
+`wcswidth' has been introduced in the Single UNIX Specification Volume
+2.  `wcswidth' has been marked as an extension in the Single UNIX
+Specification Volume 3.
+
+
+File: libc.info,  Node: wcsxfrm,  Next: wcwidth,  Prev: wcswidth,  Up: Wchar strings
+
+6.28 `wcsxfrm'--locale-specific wide-character string transformation
+====================================================================
+
+*Synopsis*
+     #include <wchar.h>
+     int wcsxfrm(wchar_t *STRA, const wchar_t * STRB, size_t N);
+   *Description*
+`wcsxfrm' transforms the wide-character string pointed to by STRB to
+the wide-character string pointed to by STRA, Comparing two transformed
+wide strings with `wcscmp' should return the same result as comparing
+the original strings with `wcscoll'.  No more than N wide characters
+are transformed, including the trailing null character.
+
+   If N is 0, STRA may be a NULL pointer.
+
+   The current implementation of `wcsxfrm' simply uses `wcslcpy' and
+does not support any language-specific transformations.
+
+*Returns*
+`wcsxfrm' returns the length of the transformed wide character string.
+if the return value is greater or equal to N, the content of STRA is
+undefined.
+
+*Portability*
+`wcsxfrm' is ISO/IEC 9899/AMD1:1995 (ISO C).
+
+
+File: libc.info,  Node: wcwidth,  Prev: wcsxfrm,  Up: Wchar strings
+
+6.29 `wcwidth'--number of column positions of a wide-character code
+===================================================================
+
+*Synopsis*
+     #include <wchar.h>
+     int wcwidth(const wchar_t WC);
+   *Description*
+The `wcwidth' function shall determine the number of column positions
+required for the wide character WC. The application shall ensure that
+the value of WC is a character representable as a wchar_t, and is a
+wide-character code corresponding to a valid character in the current
+locale.
+
+*Returns*
+The `wcwidth' function shall either return 0 (if WC is a null
+wide-character code), or return the number of column positions to be
+occupied by the wide-character code WC, or return -1 (if WC does not
+correspond to a printable wide-character code).
+
+*Portability*
+`wcwidth' has been introduced in the Single UNIX Specification Volume 2.
+`wcwidth' has been marked as an extension in the Single UNIX
+Specification Volume 3.
+
+
+File: libc.info,  Node: Signals,  Next: Timefns,  Prev: Wchar strings,  Up: Top
+
+7 Signal Handling (`signal.h')
+******************************
+
+A "signal" is an event that interrupts the normal flow of control in
+your program.  Your operating environment normally defines the full set
+of signals available (see `sys/signal.h'), as well as the default means
+of dealing with them--typically, either printing an error message and
+aborting your program, or ignoring the signal.
+
+   All systems support at least the following signals:
+`SIGABRT'
+     Abnormal termination of a program; raised by the <<abort>>
+     function.
+
+`SIGFPE'
+     A domain error in arithmetic, such as overflow, or division by
+     zero.
+
+`SIGILL'
+     Attempt to execute as a function data that is not executable.
+
+`SIGINT'
+     Interrupt; an interactive attention signal.
+
+`SIGSEGV'
+     An attempt to access a memory location that is not available.
+
+`SIGTERM'
+     A request that your program end execution.
+
+   Two functions are available for dealing with asynchronous
+signals--one to allow your program to send signals to itself (this is
+called "raising" a signal), and one to specify subroutines (called
+"handlers" to handle particular signals that you anticipate may
+occur--whether raised by your own program or the operating environment.
+
+   To support these functions, `signal.h' defines three macros:
+
+`SIG_DFL'
+     Used with the `signal' function in place of a pointer to a handler
+     subroutine, to select the operating environment's default handling
+     of a signal.
+
+`SIG_IGN'
+     Used with the `signal' function in place of a pointer to a
+     handler, to ignore a particular signal.
+
+`SIG_ERR'
+     Returned by the `signal' function in place of a pointer to a
+     handler, to indicate that your request to set up a handler could
+     not be honored for some reason.
+
+   `signal.h' also defines an integral type, `sig_atomic_t'.  This type
+is not used in any function declarations; it exists only to allow your
+signal handlers to declare a static storage location where they may
+store a signal value.  (Static storage is not otherwise reliable from
+signal handlers.)
+
+* Menu:
+
+* raise::   Send a signal
+* signal::  Specify handler subroutine for a signal
+
+
+File: libc.info,  Node: raise,  Next: signal,  Up: Signals
+
+7.1 `raise'--send a signal
+==========================
+
+*Synopsis*
+     #include <signal.h>
+     int raise(int SIG);
+
+     int _raise_r(void *REENT, int SIG);
+   *Description*
+Send the signal SIG (one of the macros from ``sys/signal.h'').  This
+interrupts your program's normal flow of execution, and allows a signal
+handler (if you've defined one, using `signal') to take control.
+
+   The alternate function `_raise_r' is a reentrant version.  The extra
+argument REENT is a pointer to a reentrancy structure.
+
+*Returns*
+The result is `0' if SIG was successfully raised, `1' otherwise.
+However, the return value (since it depends on the normal flow of
+execution) may not be visible, unless the signal handler for SIG
+terminates with a `return' or unless `SIG_IGN' is in effect for this
+signal.
+
+*Portability*
+ANSI C requires `raise', but allows the full set of signal numbers to
+vary from one implementation to another.
+
+   Required OS subroutines: `getpid', `kill'.
+
+
+File: libc.info,  Node: signal,  Prev: raise,  Up: Signals
+
+7.2 `signal'--specify handler subroutine for a signal
+=====================================================
+
+*Synopsis*
+     #include <signal.h>
+     void (*signal(int SIG, void(*FUNC)(int))) (int);
+
+     void (*_signal_r(void *REENT, int SIG, void(*FUNC)(int))) (int);
+   *Description*
+`signal' provides a simple signal-handling implementation for embedded
+targets.
+
+   `signal' allows you to request changed treatment for a particular
+signal SIG.  You can use one of the predefined macros `SIG_DFL' (select
+system default handling) or `SIG_IGN' (ignore this signal) as the value
+of FUNC; otherwise, FUNC is a function pointer that identifies a
+subroutine in your program as the handler for this signal.
+
+   Some of the execution environment for signal handlers is
+unpredictable; notably, the only library function required to work
+correctly from within a signal handler is `signal' itself, and only
+when used to redefine the handler for the current signal value.
+
+   Static storage is likewise unreliable for signal handlers, with one
+exception: if you declare a static storage location as ``volatile
+sig_atomic_t'', then you may use that location in a signal handler to
+store signal values.
+
+   If your signal handler terminates using `return' (or implicit
+return), your program's execution continues at the point where it was
+when the signal was raised (whether by your program itself, or by an
+external event).  Signal handlers can also use functions such as `exit'
+and `abort' to avoid returning.
+
+   The alternate function `_signal_r' is the reentrant version.  The
+extra argument REENT is a pointer to a reentrancy structure.
+
+*Returns*
+If your request for a signal handler cannot be honored, the result is
+`SIG_ERR'; a specific error number is also recorded in `errno'.
+
+   Otherwise, the result is the previous handler (a function pointer or
+one of the predefined macros).
+
+*Portability*
+ANSI C requires `signal'.
+
+   No supporting OS subroutines are required to link with `signal', but
+it will not have any useful effects, except for software generated
+signals, without an operating system that can actually raise exceptions.
+
+
+File: libc.info,  Node: Timefns,  Next: Locale,  Prev: Signals,  Up: Top
+
+8 Time Functions (`time.h')
+***************************
+
+This chapter groups functions used either for reporting on time
+(elapsed, current, or compute time) or to perform calculations based on
+time.
+
+   The header file `time.h' defines three types.  `clock_t' and
+`time_t' are both used for representations of time particularly
+suitable for arithmetic.  (In this implementation, quantities of type
+`clock_t' have the highest resolution possible on your machine, and
+quantities of type `time_t' resolve to seconds.)  `size_t' is also
+defined if necessary for quantities representing sizes.
+
+   `time.h' also defines the structure `tm' for the traditional
+representation of Gregorian calendar time as a series of numbers, with
+the following fields:
+
+`tm_sec'
+     Seconds, between 0 and 60 inclusive (60 allows for leap seconds).
+
+`tm_min'
+     Minutes, between 0 and 59 inclusive.
+
+`tm_hour'
+     Hours, between 0 and 23 inclusive.
+
+`tm_mday'
+     Day of the month, between 1 and 31 inclusive.
+
+`tm_mon'
+     Month, between 0 (January) and 11 (December).
+
+`tm_year'
+     Year (since 1900), can be negative for earlier years.
+
+`tm_wday'
+     Day of week, between 0 (Sunday) and 6 (Saturday).
+
+`tm_yday'
+     Number of days elapsed since last January 1, between 0 and 365
+     inclusive.
+
+`tm_isdst'
+     Daylight Savings Time flag: positive means DST in effect, zero
+     means DST not in effect, negative means no information about DST
+     is available.  Although for mktime(), negative means that it
+     should decide if DST is in effect or not.
+
+* Menu:
+
+* asctime::     Format time as string
+* clock::       Cumulative processor time
+* ctime::       Convert time to local and format as string
+* difftime::    Subtract two times
+* gmtime::      Convert time to UTC (GMT) traditional representation
+* localtime::   Convert time to local representation
+* mktime::      Convert time to arithmetic representation
+* strftime::    Convert date and time to a user-formatted string
+* time::        Get current calendar time (as single number)
+* __tz_lock::   Lock time zone global variables
+* tzset::       Set timezone info
+
+
+File: libc.info,  Node: asctime,  Next: clock,  Up: Timefns
+
+8.1 `asctime'--format time as string
+====================================
+
+*Synopsis*
+     #include <time.h>
+     char *asctime(const struct tm *CLOCK);
+     char *_asctime_r(const struct tm *CLOCK, char *BUF);
+   *Description*
+Format the time value at CLOCK into a string of the form
+      Wed Jun 15 11:38:07 1988\n\0
+   The string is generated in a static buffer; each call to `asctime'
+overwrites the string generated by previous calls.
+
+*Returns*
+A pointer to the string containing a formatted timestamp.
+
+*Portability*
+ANSI C requires `asctime'.
+
+   `asctime' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: clock,  Next: ctime,  Prev: asctime,  Up: Timefns
+
+8.2 `clock'--cumulative processor time
+======================================
+
+*Synopsis*
+     #include <time.h>
+     clock_t clock(void);
+   *Description*
+Calculates the best available approximation of the cumulative amount of
+time used by your program since it started.  To convert the result into
+seconds, divide by the macro `CLOCKS_PER_SEC'.
+
+*Returns*
+The amount of processor time used so far by your program, in units
+defined by the machine-dependent macro `CLOCKS_PER_SEC'.  If no
+measurement is available, the result is (clock_t)`-1'.
+
+*Portability*
+ANSI C requires `clock' and `CLOCKS_PER_SEC'.
+
+   Supporting OS subroutine required: `times'.
+
+
+File: libc.info,  Node: ctime,  Next: difftime,  Prev: clock,  Up: Timefns
+
+8.3 `ctime'--convert time to local and format as string
+=======================================================
+
+*Synopsis*
+     #include <time.h>
+     char *ctime(const time_t *CLOCK);
+     char *ctime_r(const time_t *CLOCK, char *BUF);
+   *Description*
+Convert the time value at CLOCK to local time (like `localtime') and
+format it into a string of the form
+      Wed Jun 15 11:38:07 1988\n\0
+   (like `asctime').
+
+*Returns*
+A pointer to the string containing a formatted timestamp.
+
+*Portability*
+ANSI C requires `ctime'.
+
+   `ctime' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: difftime,  Next: gmtime,  Prev: ctime,  Up: Timefns
+
+8.4 `difftime'--subtract two times
+==================================
+
+*Synopsis*
+     #include <time.h>
+     double difftime(time_t TIM1, time_t TIM2);
+   *Description*
+Subtracts the two times in the arguments: ``TIM1 - TIM2''.
+
+*Returns*
+The difference (in seconds) between TIM2 and TIM1, as a `double'.
+
+*Portability*
+ANSI C requires `difftime', and defines its result to be in seconds in
+all implementations.
+
+   `difftime' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: gmtime,  Next: localtime,  Prev: difftime,  Up: Timefns
+
+8.5 `gmtime'--convert time to UTC traditional form
+==================================================
+
+*Synopsis*
+     #include <time.h>
+     struct tm *gmtime(const time_t *CLOCK);
+     struct tm *gmtime_r(const time_t *CLOCK, struct tm *RES);
+   *Description*
+`gmtime' takes the time at CLOCK representing the number of elapsed
+seconds since 00:00:00 on January 1, 1970, Universal Coordinated Time
+(UTC, also known in some countries as GMT, Greenwich Mean time) and
+converts it to a `struct tm' representation.
+
+   `gmtime' constructs the traditional time representation in static
+storage; each call to `gmtime' or `localtime' will overwrite the
+information generated by previous calls to either function.
+
+*Returns*
+A pointer to the traditional time representation (`struct tm').
+
+*Portability*
+ANSI C requires `gmtime'.
+
+   `gmtime' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: localtime,  Next: mktime,  Prev: gmtime,  Up: Timefns
+
+8.6 `localtime'--convert time to local representation
+=====================================================
+
+*Synopsis*
+     #include <time.h>
+     struct tm *localtime(time_t *CLOCK);
+     struct tm *localtime_r(time_t *CLOCK, struct tm *RES);
+   *Description*
+`localtime' converts the time at CLOCK into local time, then converts
+its representation from the arithmetic representation to the
+traditional representation defined by `struct tm'.
+
+   `localtime' constructs the traditional time representation in static
+storage; each call to `gmtime' or `localtime' will overwrite the
+information generated by previous calls to either function.
+
+   `mktime' is the inverse of `localtime'.
+
+*Returns*
+A pointer to the traditional time representation (`struct tm').
+
+*Portability*
+ANSI C requires `localtime'.
+
+   `localtime' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: mktime,  Next: strftime,  Prev: localtime,  Up: Timefns
+
+8.7 `mktime'--convert time to arithmetic representation
+=======================================================
+
+*Synopsis*
+     #include <time.h>
+     time_t mktime(struct tm *TIMP);
+   *Description*
+`mktime' assumes the time at TIMP is a local time, and converts its
+representation from the traditional representation defined by `struct
+tm' into a representation suitable for arithmetic.
+
+   `localtime' is the inverse of `mktime'.
+
+*Returns*
+If the contents of the structure at TIMP do not form a valid calendar
+time representation, the result is `-1'.  Otherwise, the result is the
+time, converted to a `time_t' value.
+
+*Portability*
+ANSI C requires `mktime'.
+
+   `mktime' requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: strftime,  Next: time,  Prev: mktime,  Up: Timefns
+
+8.8 `strftime'--convert date and time to a formatted string
+===========================================================
+
+*Synopsis*
+     #include <time.h>
+     size_t strftime(char *S, size_t MAXSIZE,
+         const char *FORMAT, const struct tm *TIMP);
+   *Description*
+`strftime' converts a `struct tm' representation of the time (at TIMP)
+into a null-terminated string, starting at S and occupying no more than
+MAXSIZE characters.
+
+   You control the format of the output using the string at FORMAT.
+`*FORMAT' can contain two kinds of specifications: text to be copied
+literally into the formatted string, and time conversion
+specifications.  Time conversion specifications are two- and
+three-character sequences beginning with ``%'' (use ``%%'' to include a
+percent sign in the output).  Each defined conversion specification
+selects only the specified field(s) of calendar time data from `*TIMP',
+and converts it to a string in one of the following ways:
+
+`%a'
+     The abbreviated weekday name according to the current locale.
+     [tm_wday]
+
+`%A'
+     The full weekday name according to the current locale.  In the
+     default "C" locale, one of ``Sunday'', ``Monday'', ``Tuesday'',
+     ``Wednesday'', ``Thursday'', ``Friday'', ``Saturday''. [tm_wday]
+
+`%b'
+     The abbreviated month name according to the current locale.
+     [tm_mon]
+
+`%B'
+     The full month name according to the current locale.  In the
+     default "C" locale, one of ``January'', ``February'', ``March'',
+     ``April'', ``May'', ``June'', ``July'', ``August'', ``September'',
+     ``October'', ``November'', ``December''. [tm_mon]
+
+`%c'
+     The preferred date and time representation for the current locale.
+     [tm_sec, tm_min, tm_hour, tm_mday, tm_mon, tm_year, tm_wday]
+
+`%C'
+     The century, that is, the year divided by 100 then truncated.  For
+     4-digit years, the result is zero-padded and exactly two
+     characters; but for other years, there may a negative sign or more
+     digits.  In this way, ``%C%y'' is equivalent to ``%Y''. [tm_year]
+
+`%d'
+     The day of the month, formatted with two digits (from ``01'' to
+     ``31''). [tm_mday]
+
+`%D'
+     A string representing the date, in the form ``"%m/%d/%y"''.
+     [tm_mday, tm_mon, tm_year]
+
+`%e'
+     The day of the month, formatted with leading space if single digit
+     (from ``1'' to ``31''). [tm_mday]
+
+`%E`x''
+     In some locales, the E modifier selects alternative
+     representations of certain modifiers `x'.  In newlib, it is
+     ignored, and treated as %`x'.
+
+`%F'
+     A string representing the ISO 8601:2000 date format, in the form
+     ``"%Y-%m-%d"''. [tm_mday, tm_mon, tm_year]
+
+`%g'
+     The last two digits of the week-based year, see specifier %G (from
+     ``00'' to ``99''). [tm_year, tm_wday, tm_yday]
+
+`%G'
+     The week-based year. In the ISO 8601:2000 calendar, week 1 of the
+     year includes January 4th, and begin on Mondays. Therefore, if
+     January 1st, 2nd, or 3rd falls on a Sunday, that day and earlier
+     belong to the last week of the previous year; and if December
+     29th, 30th, or 31st falls on Monday, that day and later belong to
+     week 1 of the next year.  For consistency with %Y, it always has
+     at least four characters.  Example: "%G" for Saturday 2nd January
+     1999 gives "1998", and for Tuesday 30th December 1997 gives
+     "1998". [tm_year, tm_wday, tm_yday]
+
+`%h'
+     Synonym for "%b". [tm_mon]
+
+`%H'
+     The hour (on a 24-hour clock), formatted with two digits (from
+     ``00'' to ``23''). [tm_hour]
+
+`%I'
+     The hour (on a 12-hour clock), formatted with two digits (from
+     ``01'' to ``12''). [tm_hour]
+
+`%j'
+     The count of days in the year, formatted with three digits (from
+     ``001'' to ``366''). [tm_yday]
+
+`%k'
+     The hour (on a 24-hour clock), formatted with leading space if
+     single digit (from ``0'' to ``23''). Non-POSIX extension (c.p.
+     %I). [tm_hour]
+
+`%l'
+     The hour (on a 12-hour clock), formatted with leading space if
+     single digit (from ``1'' to ``12''). Non-POSIX extension (c.p.
+     %H). [tm_hour]
+
+`%m'
+     The month number, formatted with two digits (from ``01'' to
+     ``12'').  [tm_mon]
+
+`%M'
+     The minute, formatted with two digits (from ``00'' to ``59'').
+     [tm_min]
+
+`%n'
+     A newline character (``\n'').
+
+`%O`x''
+     In some locales, the O modifier selects alternative digit
+     characters for certain modifiers `x'.  In newlib, it is ignored,
+     and treated as %`x'.
+
+`%p'
+     Either ``AM'' or ``PM'' as appropriate, or the corresponding
+     strings for the current locale. [tm_hour]
+
+`%P'
+     Same as '`%p'', but in lowercase.  This is a GNU extension.
+     [tm_hour]
+
+`%r'
+     Replaced by the time in a.m. and p.m. notation.  In the "C" locale
+     this is equivalent to "%I:%M:%S %p".  In locales which don't
+     define a.m./p.m.  notations, the result is an empty string.
+     [tm_sec, tm_min, tm_hour]
+
+`%R'
+     The 24-hour time, to the minute.  Equivalent to "%H:%M". [tm_min,
+     tm_hour]
+
+`%S'
+     The second, formatted with two digits (from ``00'' to ``60'').  The
+     value 60 accounts for the occasional leap second. [tm_sec]
+
+`%t'
+     A tab character (``\t'').
+
+`%T'
+     The 24-hour time, to the second.  Equivalent to "%H:%M:%S".
+     [tm_sec, tm_min, tm_hour]
+
+`%u'
+     The weekday as a number, 1-based from Monday (from ``1'' to
+     ``7''). [tm_wday]
+
+`%U'
+     The week number, where weeks start on Sunday, week 1 contains the
+     first Sunday in a year, and earlier days are in week 0.  Formatted
+     with two digits (from ``00'' to ``53'').  See also `%W'. [tm_wday,
+     tm_yday]
+
+`%V'
+     The week number, where weeks start on Monday, week 1 contains
+     January 4th, and earlier days are in the previous year.  Formatted
+     with two digits (from ``01'' to ``53'').  See also `%G'. [tm_year,
+     tm_wday, tm_yday]
+
+`%w'
+     The weekday as a number, 0-based from Sunday (from ``0'' to ``6'').
+     [tm_wday]
+
+`%W'
+     The week number, where weeks start on Monday, week 1 contains the
+     first Monday in a year, and earlier days are in week 0.  Formatted
+     with two digits (from ``00'' to ``53''). [tm_wday, tm_yday]
+
+`%x'
+     Replaced by the preferred date representation in the current
+     locale.  In the "C" locale this is equivalent to "%m/%d/%y".
+     [tm_mon, tm_mday, tm_year]
+
+`%X'
+     Replaced by the preferred time representation in the current
+     locale.  In the "C" locale this is equivalent to "%H:%M:%S".
+     [tm_sec, tm_min, tm_hour]
+
+`%y'
+     The last two digits of the year (from ``00'' to ``99''). [tm_year]
+     (Implementation interpretation:  always positive, even for
+     negative years.)
+
+`%Y'
+     The full year, equivalent to `%C%y'.  It will always have at least
+     four characters, but may have more.  The year is accurate even
+     when tm_year added to the offset of 1900 overflows an int.
+     [tm_year]
+
+`%z'
+     The offset from UTC.  The format consists of a sign (negative is
+     west of Greewich), two characters for hour, then two characters
+     for minutes (-hhmm or +hhmm).  If tm_isdst is negative, the offset
+     is unknown and no output is generated; if it is zero, the offset
+     is the standard offset for the current time zone; and if it is
+     positive, the offset is the daylight savings offset for the
+     current timezone. The offset is determined from the TZ environment
+     variable, as if by calling tzset(). [tm_isdst]
+
+`%Z'
+     The time zone name.  If tm_isdst is negative, no output is
+     generated.  Otherwise, the time zone name is based on the TZ
+     environment variable, as if by calling tzset(). [tm_isdst]
+
+`%%'
+     A single character, ``%''.
+
+*Returns*
+When the formatted time takes up no more than MAXSIZE characters, the
+result is the length of the formatted string.  Otherwise, if the
+formatting operation was abandoned due to lack of room, the result is
+`0', and the string starting at S corresponds to just those parts of
+`*FORMAT' that could be completely filled in within the MAXSIZE limit.
+
+*Portability*
+ANSI C requires `strftime', but does not specify the contents of `*S'
+when the formatted string would require more than MAXSIZE characters.
+Unrecognized specifiers and fields of `timp' that are out of range
+cause undefined results.  Since some formats expand to 0 bytes, it is
+wise to set `*S' to a nonzero value beforehand to distinguish between
+failure and an empty string.  This implementation does not support `s'
+being NULL, nor overlapping `s' and `format'.
+
+   `strftime' requires no supporting OS subroutines.
+
+*Bugs*
+`strftime' ignores the LC_TIME category of the current locale,
+hard-coding the "C" locale settings.
+
+
+File: libc.info,  Node: time,  Next: __tz_lock,  Prev: strftime,  Up: Timefns
+
+8.9 `time'--get current calendar time (as single number)
+========================================================
+
+*Synopsis*
+     #include <time.h>
+     time_t time(time_t *T);
+   *Description*
+`time' looks up the best available representation of the current time
+and returns it, encoded as a `time_t'.  It stores the same value at T
+unless the argument is `NULL'.
+
+*Returns*
+A `-1' result means the current time is not available; otherwise the
+result represents the current time.
+
+*Portability*
+ANSI C requires `time'.
+
+   Supporting OS subroutine required: Some implementations require
+`gettimeofday'.
+
+
+File: libc.info,  Node: __tz_lock,  Next: tzset,  Prev: time,  Up: Timefns
+
+8.10 `__tz_lock', `__tz_unlock'--lock time zone global variables
+================================================================
+
+*Synopsis*
+     #include "local.h"
+     void __tz_lock (void);
+     void __tz_unlock (void);
+   *Description*
+The `tzset' facility functions call these functions when they need to
+ensure the values of global variables.  The version of these routines
+supplied in the library use the lock API defined in sys/lock.h.  If
+multiple threads of execution can call the time functions and give up
+scheduling in the middle, then you you need to define your own versions
+of these functions in order to safely lock the time zone variables
+during a call.  If you do not, the results of `localtime', `mktime',
+`ctime', and `strftime' are undefined.
+
+   The lock `__tz_lock' may not be called recursively; that is, a call
+`__tz_lock' will always lock all subsequent `__tz_lock' calls until the
+corresponding `__tz_unlock' call on the same thread is made.
+
+
+File: libc.info,  Node: tzset,  Prev: __tz_lock,  Up: Timefns
+
+8.11 `tzset'--set timezone characteristics from TZ environment variable
+=======================================================================
+
+*Synopsis*
+     #include <time.h>
+     void tzset(void);
+     void _tzset_r (struct _reent *);
+   *Description*
+`tzset' examines the TZ environment variable and sets up the three
+external variables: `_timezone', `_daylight', and `tzname'.  The value
+of `_timezone' shall be the offset from the current time zone to GMT.
+The value of `_daylight' shall be 0 if there is no daylight savings
+time for the current time zone, otherwise it will be non-zero.  The
+`tzname' array has two entries: the first is the name of the standard
+time zone, the second is the name of the daylight-savings time zone.
+
+   The TZ environment variable is expected to be in the following POSIX
+format:
+
+   stdoffset1[dst[offset2][,start[/time1],end[/time2]]]
+
+   where: std is the name of the standard time-zone (minimum 3 chars)
+offset1 is the value to add to local time to arrive at Universal time
+it has the form:  hh[:mm[:ss]] dst is the name of the alternate
+(daylight-savings) time-zone (min 3 chars) offset2 is the value to add
+to local time to arrive at Universal time it has the same format as the
+std offset start is the day that the alternate time-zone starts time1
+is the optional time that the alternate time-zone starts (this is in
+local time and defaults to 02:00:00 if not specified) end is the day
+that the alternate time-zone ends time2 is the time that the alternate
+time-zone ends (it is in local time and defaults to 02:00:00 if not
+specified)
+
+   Note that there is no white-space padding between fields.  Also note
+that if TZ is null, the default is Universal GMT which has no
+daylight-savings time.  If TZ is empty, the default EST5EDT is used.
+
+   The function `_tzset_r' is identical to `tzset' only it is reentrant
+and is used for applications that use multiple threads.
+
+*Returns*
+There is no return value.
+
+*Portability*
+`tzset' is part of the POSIX standard.
+
+   Supporting OS subroutine required: None
+
+
+File: libc.info,  Node: Locale,  Next: Reentrancy,  Prev: Timefns,  Up: Top
+
+9 Locale (`locale.h')
+*********************
+
+A "locale" is the name for a collection of parameters (affecting
+collating sequences and formatting conventions) that may be different
+depending on location or culture.  The `"C"' locale is the only one
+defined in the ANSI C standard.
+
+   This is a minimal implementation, supporting only the required `"C"'
+value for locale; strings representing other locales are not honored.
+(`""' is also accepted; it represents the default locale for an
+implementation, here equivalent to `"C"'.
+
+   `locale.h' defines the structure `lconv' to collect the information
+on a locale, with the following fields:
+
+`char *decimal_point'
+     The decimal point character used to format "ordinary" numbers (all
+     numbers except those referring to amounts of money).  `"."' in the
+     C locale.
+
+`char *thousands_sep'
+     The character (if any) used to separate groups of digits, when
+     formatting ordinary numbers.  `""' in the C locale.
+
+`char *grouping'
+     Specifications for how many digits to group (if any grouping is
+     done at all) when formatting ordinary numbers.  The _numeric
+     value_ of each character in the string represents the number of
+     digits for the next group, and a value of `0' (that is, the
+     string's trailing `NULL') means to continue grouping digits using
+     the last value specified.  Use `CHAR_MAX' to indicate that no
+     further grouping is desired.  `""' in the C locale.
+
+`char *int_curr_symbol'
+     The international currency symbol (first three characters), if
+     any, and the character used to separate it from numbers.  `""' in
+     the C locale.
+
+`char *currency_symbol'
+     The local currency symbol, if any.  `""' in the C locale.
+
+`char *mon_decimal_point'
+     The symbol used to delimit fractions in amounts of money.  `""' in
+     the C locale.
+
+`char *mon_thousands_sep'
+     Similar to `thousands_sep', but used for amounts of money.  `""'
+     in the C locale.
+
+`char *mon_grouping'
+     Similar to `grouping', but used for amounts of money.  `""' in the
+     C locale.
+
+`char *positive_sign'
+     A string to flag positive amounts of money when formatting.  `""'
+     in the C locale.
+
+`char *negative_sign'
+     A string to flag negative amounts of money when formatting.  `""'
+     in the C locale.
+
+`char int_frac_digits'
+     The number of digits to display when formatting amounts of money to
+     international conventions.  `CHAR_MAX' (the largest number
+     representable as a `char') in the C locale.
+
+`char frac_digits'
+     The number of digits to display when formatting amounts of money to
+     local conventions.  `CHAR_MAX' in the C locale.
+
+`char p_cs_precedes'
+     `1' indicates the local currency symbol is used before a _positive
+     or zero_ formatted amount of money; `0' indicates the currency
+     symbol is placed after the formatted number.  `CHAR_MAX' in the C
+     locale.
+
+`char p_sep_by_space'
+     `1' indicates the local currency symbol must be separated from
+     _positive or zero_ numbers by a space; `0' indicates that it is
+     immediately adjacent to numbers.  `CHAR_MAX' in the C locale.
+
+`char n_cs_precedes'
+     `1' indicates the local currency symbol is used before a
+     _negative_ formatted amount of money; `0' indicates the currency
+     symbol is placed after the formatted number.  `CHAR_MAX' in the C
+     locale.
+
+`char n_sep_by_space'
+     `1' indicates the local currency symbol must be separated from
+     _negative_ numbers by a space; `0' indicates that it is
+     immediately adjacent to numbers.  `CHAR_MAX' in the C locale.
+
+`char p_sign_posn'
+     Controls the position of the _positive_ sign for numbers
+     representing money.  `0' means parentheses surround the number;
+     `1' means the sign is placed before both the number and the
+     currency symbol; `2' means the sign is placed after both the number
+     and the currency symbol; `3' means the sign is placed just before
+     the currency symbol; and `4' means the sign is placed just after
+     the currency symbol.  `CHAR_MAX' in the C locale.
+
+`char n_sign_posn'
+     Controls the position of the _negative_ sign for numbers
+     representing money, using the same rules as `p_sign_posn'.
+     `CHAR_MAX' in the C locale.
+
+* Menu:
+
+* setlocale::  Select or query locale
+
+
+File: libc.info,  Node: setlocale,  Up: Locale
+
+9.1 `setlocale', `localeconv'--select or query locale
+=====================================================
+
+*Synopsis*
+     #include <locale.h>
+     char *setlocale(int CATEGORY, const char *LOCALE);
+     lconv *localeconv(void);
+
+     char *_setlocale_r(void *REENT,
+         int CATEGORY, const char *LOCALE);
+     lconv *_localeconv_r(void *REENT);
+   *Description*
+`setlocale' is the facility defined by ANSI C to condition the
+execution environment for international collating and formatting
+information; `localeconv' reports on the settings of the current locale.
+
+   This is a minimal implementation, supporting only the required
+`"POSIX"' and `"C"' values for LOCALE; strings representing other
+locales are not honored unless _MB_CAPABLE is defined.
+
+   If _MB_CAPABLE is defined, POSIX locale strings are allowed,
+following the form
+
+   language[_TERRITORY][.charset][@modifier]
+
+   `"language"' is a two character string per ISO 639, or, if not
+available for a given language, a three character string per ISO 639-3.
+`"TERRITORY"' is a country code per ISO 3166.  For `"charset"' and
+`"modifier"' see below.
+
+   Additionally to the POSIX specifier, the following extension is
+supported for backward compatibility with older implementations using
+newlib: `"C-charset"'.  Instead of `"C-"', you can also specify `"C."'.
+Both variations allow to specify language neutral locales while using
+other charsets than ASCII, for instance `"C.UTF-8"', which keeps all
+settings as in the C locale, but uses the UTF-8 charset.
+
+   The following charsets are recognized: `"UTF-8"', `"JIS"',
+`"EUCJP"', `"SJIS"', `"KOI8-R"', `"KOI8-U"', `"GEORGIAN-PS"',
+`"PT154"', `"TIS-620"', `"ISO-8859-x"' with 1 <= x <= 16, or `"CPxxx"'
+with xxx in [437, 720, 737, 775, 850, 852, 855, 857, 858, 862, 866,
+874, 932, 1125, 1250, 1251, 1252, 1253, 1254, 1255, 1256, 1257, 1258].
+
+   Charsets are case insensitive.  For instance, `"EUCJP"' and `"eucJP"'
+are equivalent.  Charset names with dashes can also be written without
+dashes, as in `"UTF8"', `"iso88591"' or `"koi8r"'.  `"EUCJP"' and
+`"EUCKR"' are also recognized with dash, `"EUC-JP"' and `"EUC-KR"'.
+
+   Full support for all of the above charsets requires that newlib has
+been build with multibyte support and support for all ISO and Windows
+Codepage.  Otherwise all singlebyte charsets are simply mapped to
+ASCII.  Right now, only newlib for Cygwin is built with full charset
+support by default.  Under Cygwin, this implementation additionally
+supports the charsets `"GBK"', `"GB2312"', `"eucCN"', `"eucKR"', and
+`"Big5"'.  Cygwin does not support `"JIS"'.
+
+   Cygwin additionally supports locales from the file
+/usr/share/locale/locale.alias.
+
+   (`""' is also accepted; if given, the settings are read from the
+corresponding LC_* environment variables and $LANG according to POSIX
+rules.
+
+   This implementation also supports the modifier `"cjknarrow"', which
+affects how the functions `wcwidth' and `wcswidth' handle characters
+from the "CJK Ambiguous Width" category of characters described at
+http://www.unicode.org/reports/tr11/#Ambiguous. These characters have a
+width of 1 for singlebyte charsets and a width of 2 for multibyte
+charsets other than UTF-8. For UTF-8, their width depends on the
+language specifier: it is 2 for `"zh"' (Chinese), `"ja"' (Japanese),
+and `"ko"' (Korean), and 1 for everything else. Specifying
+`"cjknarrow"' forces a width of 1, independent of charset and language.
+
+   If you use `NULL' as the LOCALE argument, `setlocale' returns a
+pointer to the string representing the current locale.  The acceptable
+values for CATEGORY are defined in ``locale.h'' as macros beginning
+with `"LC_"'.
+
+   `localeconv' returns a pointer to a structure (also defined in
+``locale.h'') describing the locale-specific conventions currently in
+effect.
+
+   `_localeconv_r' and `_setlocale_r' are reentrant versions of
+`localeconv' and `setlocale' respectively.  The extra argument REENT is
+a pointer to a reentrancy structure.
+
+*Returns*
+A successful call to `setlocale' returns a pointer to a string
+associated with the specified category for the new locale.  The string
+returned by `setlocale' is such that a subsequent call using that
+string will restore that category (or all categories in case of LC_ALL),
+to that state.  The application shall not modify the string returned
+which may be overwritten by a subsequent call to `setlocale'.  On
+error, `setlocale' returns `NULL'.
+
+   `localeconv' returns a pointer to a structure of type `lconv', which
+describes the formatting and collating conventions in effect (in this
+implementation, always those of the C locale).
+
+*Portability*
+ANSI C requires `setlocale', but the only locale required across all
+implementations is the C locale.
+
+
+File: libc.info,  Node: Reentrancy,  Next: Misc,  Prev: Locale,  Up: Top
+
+10 Reentrancy
+*************
+
+Reentrancy is a characteristic of functions which allows them to be
+safely called recursively or from concurrent processes.  Libraries of
+reentrant functions enable multiple processes to use the same address
+space with assurance that the values stored in those spaces will remain
+constant between calls.  A fully reentrant library function does not
+access any resources that could be shared with another concurrent or
+recursive invocation of that function.  The reentrancy features
+described here provide a mechanism for each process to have separate
+resources.
+
+   A system with multiple threads may share resources such as the heap,
+environment, file pointers, writable static data, or devices.  Any
+library function that deals with such shared resources cannot be fully
+reentrant.  If you want to share resources across threads, you may need
+a mechanism such as locking to protect access to them and make the
+relevant functions thread-safe.  See the `Xtensa Linker Support
+Packages (LSPs) Reference Manual' for more information about reentrancy
+and thread safety.
+
+   The Red Hat newlib implementation of the library functions ensures
+that whenever possible, these library functions are reentrant.  However,
+there are some functions that can not be trivially made reentrant.
+Hooks have been provided to allow you to use these functions in a fully
+reentrant fashion.
+
+   These hooks use the structure `_reent' defined in `reent.h'.  A
+variable defined as `struct _reent' is called a "reentrancy structure".
+All functions which must manipulate global information are available
+in two versions.  The first version has the usual name, and uses a
+single global instance of the reentrancy structure.  The second has a
+different name, normally formed by prepending `_' and appending `_r',
+and takes a pointer to the particular reentrancy structure to use.
+
+   For example, the function `fopen' takes two arguments, FILE and
+MODE, and uses the global reentrancy structure.  The function
+`_fopen_r' takes the arguments, STRUCT_REENT, which is a pointer to an
+instance of the reentrancy structure, FILE and MODE.
+
+   There are two versions of `struct _reent', a normal one and one for
+small memory systems, controlled by the `_REENT_SMALL' definition from
+the (automatically included) `<sys/config.h>'.
+
+   Each function which uses the global reentrancy structure uses the
+global variable `_impure_ptr', which points to a reentrancy structure.
+
+   This means that you have two ways to achieve reentrancy.  Both
+require that each thread of execution control initialize a unique global
+variable of type `struct _reent':
+
+  1. Use the reentrant versions of the library functions, after
+     initializing a global reentrancy structure for each process.  Use
+     the pointer to this structure as the extra argument for all
+     library functions.
+
+  2. Ensure that each thread of execution control has a pointer to its
+     own unique reentrancy structure in the global variable
+     `_impure_ptr', and call the standard library subroutines.
+
+   The following functions are provided in both reentrant and
+non-reentrant versions.
+
+_Equivalent for errno variable:_
+     _errno_r
+
+_Locale functions:_
+     _localeconv_r  _setlocale_r
+
+_Equivalents for stdio variables:_
+     _stdin_r        _stdout_r       _stderr_r
+
+
+_Stdio functions:_
+     _fdopen_r       _perror_r       _tempnam_r
+     _fopen_r        _putchar_r      _tmpnam_r
+     _getchar_r      _puts_r         _tmpfile_r
+     _gets_r         _remove_r       _vfprintf_r
+     _iprintf_r      _rename_r       _vsnprintf_r
+     _mkstemp_r      _snprintf_r     _vsprintf_r
+     _mktemp_t       _sprintf_r
+
+_Signal functions:_
+     _init_signal_r  _signal_r
+     _kill_r         __sigtramp_r
+     _raise_r
+
+_Stdlib functions:_
+     _calloc_r       _mblen_r        _setenv_r
+     _dtoa_r         _mbstowcs_r     _srand_r
+     _free_r         _mbtowc_r       _strtod_r
+     _getenv_r       _memalign_r     _strtol_r
+     _mallinfo_r     _mstats_r       _strtoul_r
+     _malloc_r       _putenv_r       _system_r
+     _malloc_r       _rand_r         _wcstombs_r
+     _malloc_stats_r _realloc_r      _wctomb_r
+
+_String functions:_
+     _strdup_r       _strtok_r
+
+_System functions:_
+     _close_r        _link_r         _unlink_r
+     _execve_r       _lseek_r        _wait_r
+     _fcntl_r        _open_r         _write_r
+     _fork_r         _read_r
+     _fstat_r        _sbrk_r
+     _gettimeofday_r _stat_r
+     _getpid_r       _times_r
+
+
+_Time function:_
+     _asctime_r
+
+
+File: libc.info,  Node: Misc,  Next: Xtensa,  Prev: Reentrancy,  Up: Top
+
+11 Miscellaneous Macros and Functions
+*************************************
+
+This chapter describes miscellaneous routines not covered elsewhere.
+
+* Menu:
+
+* ffs::      Return first bit set in a word
+* unctrl::   Return printable representation of a character
+
+
+File: libc.info,  Node: ffs,  Next: unctrl,  Up: Misc
+
+11.1 `ffs'--find first bit set in a word
+========================================
+
+*Synopsis*
+     int ffs(int WORD);
+   *Description*
+`ffs' returns the first bit set in a word.
+
+*Returns*
+`ffs' returns 0 if C is 0, 1 if C is odd, 2 if C is a multiple of 2,
+etc.
+
+*Portability*
+`ffs' is not ANSI C.
+
+   No supporting OS subroutines are required.
+
+File: libc.info,  Node: unctrl,  Prev: ffs,  Up: Misc
+
+11.2 `unctrl'--get printable representation of a character
+==========================================================
+
+*Synopsis*
+     #include <unctrl.h>
+     char *unctrl(int C);
+     int unctrllen(int C);
+   *Description*
+`unctrl' is a macro which returns the printable representation of C as
+a string.  `unctrllen' is a macro which returns the length of the
+printable representation of C.
+
+*Returns*
+`unctrl' returns a string of the printable representation of C.
+
+   `unctrllen' returns the length of the string which is the printable
+representation of C.
+
+*Portability*
+`unctrl' and `unctrllen' are not ANSI C.
+
+   No supporting OS subroutines are required.
+
+
+File: libc.info,  Node: Xtensa,  Next: Syscalls,  Prev: Misc,  Up: Top
+
+12 Functions for Xtensa Processors
+**********************************
+
+This chapter describes machine-dependent functions that are included in
+the C library when it is built for Xtensa processors.
+
+* Menu:
+
+* setjmp::      Save stack environment
+* longjmp::     Non-local goto
+
+
+File: libc.info,  Node: setjmp,  Next: longjmp,  Up: Xtensa
+
+12.1 `setjmp'--save stack environment
+=====================================
+
+*Synopsis*
+     #include <setjmp.h>
+     int setjmp(jmp_buf env);
+   *Description*
+`setjmp' and `longjmp' are useful for dealing with errors and
+interrupts encountered in a low-level subroutine of a program.
+`setjmp' saves the stack context/environment in `env' for later use by
+`longjmp'.  The stack context will be invalidated if the function which
+called `setjmp' returns.
+
+*Returns*
+`setjmp' returns 0 if returning directly, and non-zero when returning
+from `longjmp' using the saved context.
+
+*Portability*
+`setjmp' is ANSI C and POSIX.1.
+
+   setjmp requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: longjmp,  Prev: setjmp,  Up: Xtensa
+
+12.2 `longjmp'--non-local goto
+==============================
+
+*Synopsis*
+     #include <setjmp.h>
+     void longjmp(jmp_buf env, int val);
+   *Description*
+`longjmp' and `setjmp' are useful for dealing with errors and
+interrupts encountered in a low-level subroutine of a program.
+`longjmp' restores the environment saved by the last call of `setjmp'
+with the corresponding `env' argument.  After `longjmp' is completed,
+program execution continues as if the corresponding call of `setjmp'
+had just returned the value `val'.  `longjmp' cannot cause 0 to be
+returned.  If `longjmp' is invoked with a second argument of 0, 1 will
+be returned instead.
+
+*Returns*
+This function never returns.
+
+*Portability*
+`longjmp' is ANSI C and POSIX.1.
+
+   longjmp requires no supporting OS subroutines.
+
+
+File: libc.info,  Node: Syscalls,  Next: Arglists,  Prev: Xtensa,  Up: Top
+
+13 System Calls
+***************
+
+The C subroutine library depends on a handful of subroutine calls for
+operating system services.  If you use the C library on a system that
+complies with the POSIX.1 standard (also known as IEEE 1003.1), most of
+these subroutines are supplied with your operating system.
+
+   If some of these subroutines are not provided with your system--in
+the extreme case, if you are developing software for a "bare board"
+system, without an OS--you will at least need to provide do-nothing
+stubs (or subroutines with minimal functionality) to allow your
+programs to link with the subroutines in `libc.a'.
+
+   System routines may be provided in either reentrant or non-reentrant
+versions.  The reentrant versions take an extra argument for the
+reentrancy structure and have different names, formed by prepending `_'
+and appending `_r' (e.g., `_close_r' instead of `close').  If newlib is
+configured to use reentrant system routines, the non-reentrant versions
+of the system routines are provided as cover routines.  Likewise, if
+newlib is configured to use non-reentrant system routines, reentrant
+cover routines are provided that achieve reentrancy by using a reserved
+global data block.  *Note Reentrancy: Reentrancy.
+
+* Menu:
+
+* Stubs::		Definitions for OS interface
+
+* Xtensa Syscalls::     System calls in the default Xtensa runtime
+
+
+File: libc.info,  Node: Stubs,  Next: Xtensa Syscalls,  Up: Syscalls
+
+13.1 Definitions for OS interface
+=================================
+
+This is the complete set of system definitions (primarily subroutines)
+required; the examples shown implement the minimal functionality
+required to allow `libc' to link, and fail gracefully where OS services
+are not available.
+
+   Graceful failure is permitted by returning an error code.  If newlib
+is configured to use non-reentrant system routines, a minor
+complication arises here: the C library must be compatible with
+development environments that supply fully functional versions of these
+subroutines.  Such environments usually return error codes in a global
+`errno'.  However, the Red Hat newlib C library provides a _macro_
+definition for `errno' in the header file `errno.h', as part of its
+support for reentrant routines (*note Reentrancy: Reentrancy.).
+
+   The bridge between these two interpretations of `errno' is
+straightforward: the C library routines with OS interface calls capture
+the `errno' values returned globally, and record them in the
+appropriate field of the reentrancy structure (so that you can query
+them using the `errno' macro from `errno.h').
+
+   This mechanism becomes visible when you write non-reentrant stub
+routines for OS interfaces.  You must include `errno.h', then disable
+the macro, like this:
+
+     #include <errno.h>
+     #undef errno
+     extern int errno;
+
+The examples in this chapter include this treatment of `errno'.  If you
+are writing reentrant stub routines, this issue is irrelevant because
+the error code is stored into the reentrancy structure and there is no
+need for a global variable.
+
+   For simplicity, only the non-reentrant versions of the system
+routines are shown here.  The reentrant versions are similar except for
+the function names, the extra reentrancy structure argument, and the
+error codes being stored into the reentrancy structure instead of the
+global `errno' variable.
+
+`_exit'
+     Exit a program without cleaning up files.  If your system doesn't
+     provide this, it is best to avoid linking with subroutines that
+     require it (`exit', `system').  Note that there is no separate
+     reentrant version of this routine, even when newlib is configured
+     to use reentrant system routines.
+
+`close'
+     Close a file.  Minimal implementation:
+
+          int close(int file) {
+            return -1;
+          }
+
+`environ'
+     A pointer to a list of environment variables and their values.
+     For a minimal environment, this empty list is adequate:
+
+          char *__env[1] = { 0 };
+          char **environ = __env;
+
+`execve'
+     Transfer control to a new process.  Minimal implementation (for a
+     system without processes):
+
+          #include <errno.h>
+          #undef errno
+          extern int errno;
+          int execve(char *name, char **argv, char **env) {
+            errno = ENOMEM;
+            return -1;
+          }
+
+`fcntl'
+     File control commands.  Minimal implementation:
+
+          int fcntl(int fildes, int cmd, int arg) {
+            errno = EAGAIN;
+            return -1;
+          }
+
+`fork'
+     Create a new process.  Minimal implementation (for a system
+     without processes):
+
+          #include <errno.h>
+          #undef errno
+          extern int errno;
+          int fork(void) {
+            errno = EAGAIN;
+            return -1;
+          }
+
+`fstat'
+     Status of an open file.  For consistency with other minimal
+     implementations in these examples, all files are regarded as
+     character special devices.  The `sys/stat.h' header file required
+     is distributed in the `include' subdirectory for this C library.
+
+          #include <sys/stat.h>
+          int fstat(int file, struct stat *st) {
+            st->st_mode = S_IFCHR;
+            return 0;
+          }
+
+`getpid'
+     Process-ID; this is sometimes used to generate strings unlikely to
+     conflict with other processes.  Minimal implementation, for a
+     system without processes:
+
+          int getpid(void) {
+            return 1;
+          }
+
+`gettimeofday'
+     Get the current time.  Minimal implementation:
+
+          #include <sys/time.h>
+          int gettimeofday(struct timeval *tv,
+                           struct timezone *tz) {
+            errno = EINVAL;
+            return -1;
+          }
+
+`kill'
+     Send a signal.  Minimal implementation:
+
+          #include <errno.h>
+          #undef errno
+          extern int errno;
+          int kill(int pid, int sig) {
+            errno = EINVAL;
+            return -1;
+          }
+
+`link'
+     Establish a new name for an existing file.  Minimal implementation:
+
+          #include <errno.h>
+          #undef errno
+          extern int errno;
+          int link(char *old, char *new) {
+            errno = EMLINK;
+            return -1;
+          }
+
+`lseek'
+     Set position in a file.  Minimal implementation:
+
+          int lseek(int file, int ptr, int dir) {
+            return 0;
+          }
+
+`open'
+     Open a file.  Minimal implementation:
+
+          int open(const char *name, int flags, int mode) {
+            return -1;
+          }
+
+`read'
+     Read from a file.  Minimal implementation:
+
+          int read(int file, char *ptr, int len) {
+            return 0;
+          }
+
+`_rename'
+     Rename a file.  For systems that do not support the `link' system
+     routine, newlib can be configured to use this optional routine for
+     renaming files.  Note that the reentrant version of this routine is
+     named `_rename_r'.  Minimal implementation:
+
+          int _rename(char *oldpath, char *newpath) {
+            errno = EINVAL;
+            return -1;
+          }
+
+`sbrk'
+     Increase program data space.  As `malloc' and related functions
+     depend on this, it is useful to have a working implementation.  The
+     following suffices for a standalone system; it exploits the symbol
+     `_end' automatically defined by the GNU linker.
+
+          caddr_t sbrk(int incr) {
+            extern char _end;		/* Defined by the linker */
+            static char *heap_end;
+            char *prev_heap_end;
+
+            if (heap_end == 0) {
+              heap_end = &_end;
+            }
+            prev_heap_end = heap_end;
+            if (heap_end + incr > stack_ptr) {
+              write (1, "Heap and stack collision\n", 25);
+              abort ();
+            }
+
+            heap_end += incr;
+            return (caddr_t) prev_heap_end;
+          }
+
+`stat'
+     Status of a file (by name).  Minimal implementation:
+
+          int stat(char *file, struct stat *st) {
+            st->st_mode = S_IFCHR;
+            return 0;
+          }
+
+`times'
+     Timing information for current process.  Minimal implementation:
+
+          int times(struct tms *buf) {
+            return -1;
+          }
+
+`unlink'
+     Remove a file's directory entry.  Minimal implementation:
+
+          #include <errno.h>
+          #undef errno
+          extern int errno;
+          int unlink(char *name) {
+            errno = ENOENT;
+            return -1;
+          }
+
+`wait'
+     Wait for a child process.  Minimal implementation:
+          #include <errno.h>
+          #undef errno
+          extern int errno;
+          int wait(int *status) {
+            errno = ECHILD;
+            return -1;
+          }
+
+`write'
+     Write to a file.  `libc' subroutines will use this system routine
+     for output to all files, _including_ `stdout'--so if you need to
+     generate any output, for example to a serial port for debugging,
+     you should make your minimal `write' capable of doing this.  The
+     following minimal implementation is an incomplete example; it
+     relies on an `outbyte' subroutine (not shown; typically, you must
+     write this in assembler from examples provided by your hardware
+     manufacturer) to actually perform the output.
+
+          int write(int file, char *ptr, int len) {
+            int todo;
+
+            for (todo = 0; todo < len; todo++) {
+              outbyte (*ptr++);
+            }
+            return len;
+          }
+
+
+
+File: libc.info,  Node: Xtensa Syscalls,  Prev: Stubs,  Up: Syscalls
+
+13.2 Xtensa system calls
+========================
+
+If you are not using an operating system, the default Xtensa runtime
+environment provides three options for system calls.  The first option
+is the GNU low-level operating system support library (libgloss), which
+provides minimal stub routines, similar to those described above (*note
+Stubs::).  Please refer to the `Xtensa Linker Support Packages (LSPs)
+Reference Manual' for instructions on modifying and rebuilding libgloss.
+
+   The second and third options both pass some system calls to a host
+machine, where they are evaluated before passing the results back to
+the target system.  With this approach, your Xtensa system can access
+the file system of the host machine, which is often useful for
+development and debugging.  The "sim" library uses the "semihosting"
+feature of the Xtensa instruction set simulator (ISS) to implement
+system calls that pass through to the host running the ISS.  This is
+the default when running on the Xtensa ISS.  The "gdbio" library uses
+the "File-I/O" remote protocol extension of the GNU debugger (GDB) to
+pass system calls via the On-Chip Debugging (OCD) interface to a host
+machine running GDB.  See the `Xtensa Software Development Toolkit
+User's Guide' for information about using the gdbio library.  The
+"File-I/O remote protocol extension" appendix section in the `GNU
+Debugger User's Guide' describes the details of this feature.
+
+   Tensilica configures newlib to use reentrant system call interfaces.
+The actual system call implementations may not all be reentrant; see
+the `Xtensa Linker Support Packages (LSPs) Reference Manual' for
+details.  The system routines are listed in this section with the
+reentrant function names.
+
+* Menu:
+
+* Xtensa Libgloss::		The Xtensa version of libgloss.
+* Xtensa ISS Syscalls:: 	System calls supported by the ISS.
+* Xtensa gdbio::		System calls supported by gdbio.
+
+
+File: libc.info,  Node: Xtensa Libgloss,  Next: Xtensa ISS Syscalls,  Up: Xtensa Syscalls
+
+13.2.1 System calls with the libgloss library
+---------------------------------------------
+
+The Xtensa libgloss library implements the system routines as described
+below.  Some of the routines are not implemented; programs using
+libgloss must avoid linking with functions that require those
+unimplemented routines.
+
+`_exit'
+     Not implemented.  It is assumed that this function is provided
+     elsewhere, typically in the `crt1' file.
+
+`_close_r'
+     Does nothing.  Returns 0.
+
+`environ'
+     Not implemented.  The default implementation in newlib is used
+     unless another definition is provided elsewhere.
+
+`_execve_r'
+     Not implemented.
+
+`_fcntl_r'
+     Not implemented.
+
+`_fork_r'
+     Not implemented.
+
+`_fstat_r'
+     Assumes terminal I/O and sets `st_mode' to `S_IFCHR'.  Returns 0.
+
+`_getpid_r'
+     Returns 1.
+
+`_gettimeofday_r'
+     Not implemented.
+
+`_kill_r'
+     Calls `_exit' if the specified process ID is 1 (as returned by
+     `getpid'); otherwise, does nothing.  Returns 0.
+
+`_link_r'
+     Not implemented.
+
+`_lseek_r'
+     Sets `errno' to `ESPIPE'.  Returns -1.
+
+`_open_r'
+     Sets `errno' to `EIO'.  Returns -1.
+
+`_read_r'
+     Reads the specified number of bytes from the serial port using a
+     board-specific `inbyte' function.  Ignores the file descriptor
+     argument.  The `inbyte' function is not part of libgloss and must
+     be provided elsewhere.
+
+`_rename_r'
+     Not implemented.
+
+`_sbrk_r'
+     Grows the heap.  If the end of the heap extends beyond the
+     `_heap_sentry' symbol (set by the linker), sets `errno' to
+     `ENOMEM' and returns -1.  Note that unlike the ISS semihosting
+     version of `_sbrk_r', this version does not currently check if the
+     heap collides with the stack.
+
+`_stat_r'
+     Sets `errno' to `EIO' and returns -1.
+
+`_times_r'
+     Returns the current cycle count value if the Xtensa processor
+     configuration includes the Timer Interrupt Option; otherwise, sets
+     `errno' to `ENOSYS' and returns -1.
+
+`_unlink_r'
+     Sets `errno' to `EIO'.  Returns -1.
+
+`_wait_r'
+     Not implemented.
+
+`_write_r'
+     Writes the specified number of bytes to the serial port using the
+     board-specific `outbyte' function.  Ignores the file descriptor
+     argument.  The `outbyte' function is not included in libgloss and
+     must be provided elsewhere.
+
+
+File: libc.info,  Node: Xtensa ISS Syscalls,  Next: Xtensa gdbio,  Prev: Xtensa Libgloss,  Up: Xtensa Syscalls
+
+13.2.2 System calls with the Xtensa ISS
+---------------------------------------
+
+The Xtensa ISS semihosting library provides the following system
+routines (all the routines using ISS semihosting set `errno' and the
+return value based on the status of the host system call):
+
+`_exit'
+     Terminates the Xtensa ISS simulation.
+
+`_close_r'
+     Closes the specified host file using the ISS semihosting interface.
+
+`environ'
+     Not implemented.  It is assumed that this is provided in the
+     `crt1-sim' file.
+
+`_execve_r'
+     Not implemented.
+
+`_fcntl_r'
+     Not implemented.
+
+`_fork_r'
+     Not implemented.
+
+`_fstat_r'
+     Assumes terminal I/O and sets `st_mode' to `S_IFCHR'.  Returns 0.
+
+`_getpid_r'
+     Returns 1.
+
+`_gettimeofday_r'
+     Gets the host system's current time expressed in elapsed seconds
+     and microseconds since January 1, 1970 using the ISS semihosting
+     interface.
+
+`_kill_r'
+     Calls `_exit' if the specified process ID is 1 (as returned by
+     `getpid'); otherwise, does nothing.  Returns 0.
+
+`_link_r'
+     Adds a hard link to a host file using the ISS semihosting
+     interface.  (Only supported on Unix platforms.)
+
+`_lseek_r'
+     Seeks to the specified location in a host file using the ISS
+     semihosting interface.
+
+`_open_r'
+     Opens the specified file on the host using the ISS semihosting
+     interface.  The following flags are supported: `O_RDONLY',
+     `O_WRONLY', `O_RDWR', `O_APPEND', `O_CREAT', `O_TRUNC', `O_EXCL',
+     `O_NDELAY', `O_NONBLOCK', `O_BINARY', and `O_TEXT'.
+
+`_read_r'
+     Reads from a host file using the ISS semihosting interface.
+
+`_rename_r'
+     Renames a host file using the ISS semihosting interface.
+
+`_sbrk_r'
+     Grows the heap.  If the end of the heap extends beyond the
+     `_heap_sentry' symbol (set by the linker) or if it collides with
+     the stack, sets `errno' to `ENOMEM' and returns -1.
+
+`_stat_r'
+     Sets `errno' to `EIO' and returns -1.
+
+`_times_r'
+     Returns the Xtensa simulation cycle count.
+
+`_unlink_r'
+     Unlinks (i.e., removes) a host file using the ISS semihosting
+     interface.
+
+`_wait_r'
+     Not implemented.
+
+`_write_r'
+     Writes to a host file using the ISS semihosting interface.
+
+
+File: libc.info,  Node: Xtensa gdbio,  Prev: Xtensa ISS Syscalls,  Up: Xtensa Syscalls
+
+13.2.3 System calls with the gdbio library
+------------------------------------------
+
+The Xtensa "gdbio" library (libgdbio) implements the system routines as
+described below.  Some of the routines are not implemented; programs
+using libgdbio must avoid linking with functions that require those
+unimplemented routines.
+
+`_exit'
+     Not implemented. It is assumed that this function is provided
+     elsewhere, typically in the `crt1' file.
+
+`_close_r'
+     Closes the specified host file using GDB's File-I/O protocol.
+
+`environ'
+     Not implemented. The default implementation in newlib is used
+     unless another definition is provided elsewhere.
+
+`_execve_r'
+     Not implemented.
+
+`_fcntl_r'
+     Not implemented.
+
+`_fork_r'
+     Not implemented.
+
+`_fstat_r'
+     Gets the status of an open file using GDB's File-I/O protocol.
+
+`_getpid_r'
+     Returns 1.
+
+`_gettimeofday_r'
+     Gets the host system's current time expressed in elapsed seconds
+     and microseconds since January 1, 1970 using GDB's File-I/O
+     protocol.
+
+`_kill_r'
+     Calls _exit if the specified process ID is 1 (as returned by
+     _getpid_r); otherwise, does nothing. Returns 0.
+
+`_link_r'
+     Not implemented.
+
+`_lseek_r'
+     Seeks to the specified location in a host file using GDB's
+     File-I/O protocol.
+
+`_open_r'
+     Opens the specified file on the host using GDB's File-I/O
+     protocol.  The following flags are supported: `O_RDONLY',
+     `O_WRONLY', `O_RDWR', `O_APPEND', `O_CREAT', `O_TRUNC', and
+     `O_EXCL'.
+
+`_read_r'
+     Reads from a host file using GDB's File-I/O protocol.
+
+`_rename_r'
+     Renames a host file using GDB's File-I/O protocol.
+
+`_sbrk_r'
+     Grows the heap. If the end of the heap extends beyond the
+     _heap_sentry symbol (set by the linker), sets errno to ENOMEM and
+     returns -1.  Note that unlike the ISS semihosting version of
+     _sbrk_r, this version does not currently check if the heap
+     collides with the stack.
+
+`_stat_r'
+     Gets the status of the specified host file using GDB's File-I/O
+     protocol.
+
+`_times_r'
+     Returns the current cycle count value if the Xtensa processor
+     configuration includes the Timer Interrupt Option; otherwise, sets
+     `errno' to `ENOSYS' and returns -1.
+
+`_unlink_r'
+     Unlinks (i.e., removes) a host file using GDB's File-I/O protocol.
+
+`_wait_r'
+     Not implemented.
+
+`_write_r'
+     Writes to a host file using GDB's File-I/O protocol.
+
+`gdbio_system'
+     This function provides access to the GDB File-I/O protocol's
+     `system' function.  It is renamed to avoid conflicting with
+     newlib's standard `system' function.  It is only supported on Unix
+     platforms.
+          int gdbio_system(const char *command);
+     The specified command is executed on the host by running "`/bin/sh
+     -c COMMAND'".  The return value is -1 on error, or the exit status
+     of the command otherwise.  Note that this feature is disabled by
+     default in GDB and must be enabled by changing the "remote
+     system-call-allowed" setting to a nonzero value.
+
+
+File: libc.info,  Node: Arglists,  Next: Library Index,  Prev: Syscalls,  Up: Top
+
+14 Variable Argument Lists
+**************************
+
+The `printf' family of functions is defined to accept a variable number
+of arguments, rather than a fixed argument list.  You can define your
+own functions with a variable argument list, by using macro definitions
+from either `stdarg.h' (for compatibility with ANSI C) or from
+`varargs.h' (for compatibility with a popular convention prior to ANSI
+C).
+
+* Menu:
+
+* Stdarg::
+* Varargs::
+
+
+File: libc.info,  Node: Stdarg,  Next: Varargs,  Up: Arglists
+
+14.1 ANSI-standard macros, `stdarg.h'
+=====================================
+
+In ANSI C, a function has a variable number of arguments when its
+parameter list ends in an ellipsis (`...').  The parameter list must
+also include at least one explicitly named argument; that argument is
+used to initialize the variable list data structure.
+
+   ANSI C defines three macros (`va_start', `va_arg', and `va_end') to
+operate on variable argument lists.  `stdarg.h' also defines a special
+type to represent variable argument lists: this type is called
+`va_list'.
+
+* Menu:
+
+* va_start::
+* va_arg::
+* va_end::
+
+
+File: libc.info,  Node: va_start,  Next: va_arg,  Up: Stdarg
+
+14.1.1 Initialize variable argument list
+----------------------------------------
+
+*Synopsis*
+     #include <stdarg.h>
+     void va_start(va_list AP, RIGHTMOST);
+
+   *Description*
+Use `va_start' to initialize the variable argument list AP, so that
+`va_arg' can extract values from it.  RIGHTMOST is the name of the last
+explicit argument in the parameter list (the argument immediately
+preceding the ellipsis `...' that flags variable arguments in an ANSI C
+function header).  You can only use `va_start' in a function declared
+using this ellipsis notation (not, for example, in one of its
+subfunctions).
+
+   *Returns*
+`va_start' does not return a result.
+
+   *Portability*
+ANSI C requires `va_start'.
+
+
+File: libc.info,  Node: va_arg,  Next: va_end,  Prev: va_start,  Up: Stdarg
+
+14.1.2 Extract a value from argument list
+-----------------------------------------
+
+*Synopsis*
+     #include <stdarg.h>
+     TYPE va_arg(va_list AP, TYPE);
+
+   *Description*
+`va_arg' returns the next unprocessed value from a variable argument
+list AP (which you must previously create with VA_START).  Specify the
+type for the value as the second parameter to the macro, TYPE.
+
+   You may pass a `va_list' object AP to a subfunction, and use
+`va_arg' from the subfunction rather than from the function actually
+declared with an ellipsis in the header; however, in that case you may
+_only_ use `va_arg' from the subfunction.  ANSI C does not permit
+extracting successive values from a single variable-argument list from
+different levels of the calling stack.
+
+   There is no mechanism for testing whether there is actually a next
+argument available; you might instead pass an argument count (or some
+other data that implies an argument count) as one of the fixed arguments
+in your function call.
+
+   *Returns*
+`va_arg' returns the next argument, an object of type TYPE.
+
+   *Portability*
+ANSI C requires `va_arg'.
+
+
+File: libc.info,  Node: va_end,  Prev: va_arg,  Up: Stdarg
+
+14.1.3 Abandon a variable argument list
+---------------------------------------
+
+*Synopsis*
+     #include <stdarg.h>
+     void va_end(va_list AP);
+
+   *Description*
+Use `va_end' to declare that your program will not use the variable
+argument list AP any further.
+
+   *Returns*
+`va_end' does not return a result.
+
+   *Portability*
+ANSI C requires `va_end'.
+
+
+File: libc.info,  Node: Varargs,  Prev: Stdarg,  Up: Arglists
+
+14.2 Traditional macros, `varargs.h'
+====================================
+
+If your C compiler predates ANSI C, you may still be able to use
+variable argument lists using the macros from the `varargs.h' header
+file.  These macros resemble their ANSI counterparts, but have
+important differences in usage.   In particular, since traditional C has
+no declaration mechanism for variable argument lists, two additional
+macros are provided simply for the purpose of defining functions with
+variable argument lists.
+
+   As with `stdarg.h', the type `va_list' is used to hold a data
+structure representing a variable argument list.
+
+* Menu:
+
+* va_alist::
+* va_start-trad::
+* va_arg-trad::
+* va_end-trad::
+
+
+File: libc.info,  Node: va_alist,  Next: va_start-trad,  Up: Varargs
+
+14.2.1 Declare variable arguments
+---------------------------------
+
+*Synopsis*
+     #include <varargs.h>
+     FUNCTION(va_alist)
+     va_dcl
+
+   *Description*
+To use the `varargs.h' version of variable argument lists, you must
+declare your function with a call to the macro `va_alist' as its
+argument list, and use `va_dcl' as the declaration.  _Do not use a
+semicolon after `va_dcl'._
+
+   *Returns*
+These macros cannot be used in a context where a return is syntactically
+possible.
+
+   *Portability*
+VA_ALIST and VA_DCL were the most widespread method of declaring
+variable argument lists prior to ANSI C.
+
+
+File: libc.info,  Node: va_start-trad,  Next: va_arg-trad,  Prev: va_alist,  Up: Varargs
+
+14.2.2 Initialize variable argument list
+----------------------------------------
+
+*Synopsis*
+     #include <varargs.h>
+     va_list AP;
+     va_start(AP);
+
+   *Description*
+With the `varargs.h' macros, use `va_start' to initialize a data
+structure AP to permit manipulating a variable argument list.  AP must
+have the type VA_ALIST.
+
+   *Returns*
+`va_start' does not return a result.
+
+   *Portability*
+`va_start' is also defined as a macro in ANSI C, but the definitions
+are incompatible; the ANSI version has another parameter besides AP.
+
+
+File: libc.info,  Node: va_arg-trad,  Next: va_end-trad,  Prev: va_start-trad,  Up: Varargs
+
+14.2.3 Extract a value from argument list
+-----------------------------------------
+
+*Synopsis*
+     #include <varargs.h>
+     TYPE va_arg(va_list AP, TYPE);
+
+   *Description*
+`va_arg' returns the next unprocessed value from a variable argument
+list AP (which you must previously create with VA_START).  Specify the
+type for the value as the second parameter to the macro, TYPE.
+
+   *Returns*
+`va_arg' returns the next argument, an object of type TYPE.
+
+   *Portability*
+The `va_arg' defined in `varargs.h' has the same syntax and usage as
+the ANSI C version from `stdarg.h'.
+
+
+File: libc.info,  Node: va_end-trad,  Prev: va_arg-trad,  Up: Varargs
+
+14.2.4 Abandon a variable argument list
+---------------------------------------
+
+*Synopsis*
+     #include <varargs.h>
+     va_end(va_list AP);
+
+   *Description*
+Use `va_end' to declare that your program will not use the variable
+argument list AP any further.
+
+   *Returns*
+`va_end' does not return a result.
+
+   *Portability*
+The `va_end' defined in `varargs.h' has the same syntax and usage as
+the ANSI C version from `stdarg.h'.
+
+
+File: libc.info,  Node: Library Index,  Prev: Arglists,  Up: Top
+
+Index
+*****
+
+ [index ]
+* Menu:
+
+* __env_lock:                            __env_lock.          (line   6)
+* __env_unlock:                          __env_lock.          (line   6)
+* __malloc_lock:                         __malloc_lock.       (line   6)
+* __malloc_unlock:                       __malloc_lock.       (line   6)
+* __tz_lock:                             __tz_lock.           (line   6)
+* __tz_unlock:                           __tz_lock.           (line   6)
+* _asctime_r:                            asctime.             (line   6)
+* _asiprintf_r:                          siprintf.            (line   6)
+* _asniprintf_r:                         siprintf.            (line   6)
+* _asnprintf_r:                          sprintf.             (line   6)
+* _asprintf_r:                           sprintf.             (line   6)
+* _atoi_r:                               atoi.                (line   6)
+* _atol_r:                               atoi.                (line   6)
+* _atoll_r:                              atoll.               (line   6)
+* _calloc_r:                             calloc.              (line   6)
+* _diprintf_r:                           diprintf.            (line   6)
+* _dprintf_r:                            dprintf.             (line   6)
+* _exit:                                 Stubs.               (line  45)
+* _Exit:                                 _Exit.               (line   6)
+* _fclose_r:                             fclose.              (line   6)
+* _fcloseall_r:                          fcloseall.           (line   6)
+* _fdopen_r:                             fdopen.              (line   6)
+* _fflush_r:                             fflush.              (line   6)
+* _fgetc_r:                              fgetc.               (line   6)
+* _fgetpos_r:                            fgetpos.             (line   6)
+* _fgets_r:                              fgets.               (line   6)
+* _fgetwc_r:                             fgetwc.              (line   6)
+* _fgetws_r:                             fgetws.              (line   6)
+* _fiprintf_r:                           siprintf.            (line   6)
+* _fiscanf_r:                            siscanf.             (line   6)
+* _fopen_r:                              fopen.               (line   6)
+* _fprintf_r:                            sprintf.             (line   6)
+* _fpurge_r:                             fpurge.              (line   6)
+* _fputc_r:                              fputc.               (line   6)
+* _fputs_r:                              fputs.               (line   6)
+* _fputwc_r:                             fputwc.              (line   6)
+* _fputws_r:                             fputws.              (line   6)
+* _fread_r:                              fread.               (line   6)
+* _free_r:                               malloc.              (line   6)
+* _freopen_r:                            freopen.             (line   6)
+* _fscanf_r:                             sscanf.              (line   6)
+* _fseek_r:                              fseek.               (line   6)
+* _fseeko_r:                             fseek.               (line   6)
+* _fsetpos_r:                            fsetpos.             (line   6)
+* _ftell_r:                              ftell.               (line   6)
+* _ftello_r:                             ftell.               (line   6)
+* _fwide_r:                              fwide.               (line   6)
+* _fwprintf_r:                           swprintf.            (line   6)
+* _fwrite_r:                             fwrite.              (line   6)
+* _fwscanf_r:                            swscanf.             (line   6)
+* _getc_r:                               getc.                (line   6)
+* _getc_unlocked_r:                      getc_unlocked.       (line   6)
+* _getchar_r:                            getchar.             (line   6)
+* _getchar_unlocked_r:                   getchar_unlocked.    (line   6)
+* _gets_r:                               gets.                (line   6)
+* _getwc_r:                              fgetwc.              (line   6)
+* _getwchar_r:                           getwchar.            (line   6)
+* _impure_ptr:                           Reentrancy.          (line  48)
+* _iprintf_r:                            siprintf.            (line   6)
+* _iscanf_r:                             siscanf.             (line   6)
+* _localeconv_r:                         setlocale.           (line   6)
+* _mallinfo_r:                           mallinfo.            (line   6)
+* _malloc_r:                             malloc.              (line   6)
+* _malloc_stats_r:                       mallinfo.            (line   6)
+* _malloc_usable_size_r:                 malloc.              (line   6)
+* _mallopt_r:                            mallinfo.            (line   6)
+* _mbsnrtowcs_r:                         mbsrtowcs.           (line   6)
+* _mbsrtowcs_r:                          mbsrtowcs.           (line   6)
+* _memalign_r:                           malloc.              (line   6)
+* _mkdtemp_r:                            mktemp.              (line   6)
+* _mkostemp_r:                           mktemp.              (line   6)
+* _mkostemps_r:                          mktemp.              (line   6)
+* _mkstemp_r:                            mktemp.              (line   6)
+* _mkstemps_r:                           mktemp.              (line   6)
+* _mktemp_r:                             mktemp.              (line   6)
+* _perror_r:                             perror.              (line   6)
+* _printf_r:                             sprintf.             (line   6)
+* _putc_r:                               putc.                (line   6)
+* _putc_unlocked_r:                      putc_unlocked.       (line   6)
+* _putchar_r:                            putchar.             (line   6)
+* _puts_r:                               puts.                (line   6)
+* _putwc_r:                              fputwc.              (line   6)
+* _putwchar_r:                           putwchar.            (line   6)
+* _raise_r:                              raise.               (line   6)
+* _realloc_r:                            malloc.              (line   6)
+* _reallocf_r:                           malloc.              (line   6)
+* _reent:                                Reentrancy.          (line  31)
+* _remove_r:                             remove.              (line   6)
+* _rename:                               Stubs.               (line 172)
+* _rewind_r:                             rewind.              (line   6)
+* _scanf_r:                              sscanf.              (line   6)
+* _setlocale_r:                          setlocale.           (line   6)
+* _signal_r:                             signal.              (line   6)
+* _siprintf_r:                           siprintf.            (line   6)
+* _siscanf_r:                            siscanf.             (line   6)
+* _sniprintf_r:                          siprintf.            (line   6)
+* _snprintf_r:                           sprintf.             (line   6)
+* _sprintf_r:                            sprintf.             (line   6)
+* _sscanf_r:                             sscanf.              (line   6)
+* _strtod_r:                             strtod.              (line   6)
+* _strtol_r:                             strtol.              (line   6)
+* _strtoll_r:                            strtoll.             (line   6)
+* _strtoul_r:                            strtoul.             (line   6)
+* _strtoull_r:                           strtoull.            (line   6)
+* _swprintf_r:                           swprintf.            (line   6)
+* _swscanf_r:                            swscanf.             (line   6)
+* _system_r:                             system.              (line   6)
+* _tempnam_r:                            tmpnam.              (line   6)
+* _tmpfile_r:                            tmpfile.             (line   6)
+* _tmpnam_r:                             tmpnam.              (line   6)
+* _tolower:                              tolower.             (line   6)
+* _toupper:                              toupper.             (line   6)
+* _tzset_r:                              tzset.               (line   6)
+* _ungetc_r:                             ungetc.              (line   6)
+* _ungetwc_r:                            ungetwc.             (line   6)
+* _vasiprintf_r:                         viprintf.            (line   6)
+* _vasniprintf_r:                        viprintf.            (line   6)
+* _vasnprintf_r:                         vfprintf.            (line   6)
+* _vasprintf_r:                          vfprintf.            (line   6)
+* _vdiprintf_r:                          diprintf.            (line   6)
+* _vdprintf_r:                           dprintf.             (line   6)
+* _vfiprintf_r:                          viprintf.            (line   6)
+* _vfiscanf_r:                           viscanf.             (line   6)
+* _vfprintf_r:                           vfprintf.            (line   6)
+* _vfscanf_r:                            vfscanf.             (line   6)
+* _vfwprintf_r:                          vfwprintf.           (line   6)
+* _vfwscanf:                             vfwscanf.            (line   6)
+* _viprintf_r:                           viprintf.            (line   6)
+* _viscanf_r:                            viscanf.             (line   6)
+* _vprintf_r:                            vfprintf.            (line   6)
+* _vscanf_r:                             vfscanf.             (line   6)
+* _vsiprintf_r:                          viprintf.            (line   6)
+* _vsiscanf_r:                           viscanf.             (line   6)
+* _vsniprintf_r:                         viprintf.            (line   6)
+* _vsnprintf_r:                          vfprintf.            (line   6)
+* _vsprintf_r:                           vfprintf.            (line   6)
+* _vsscanf_r:                            vfscanf.             (line   6)
+* _vswprintf_r:                          vfwprintf.           (line   6)
+* _vswscanf:                             vfwscanf.            (line   6)
+* _vwprintf_r:                           vfwprintf.           (line   6)
+* _vwscanf:                              vfwscanf.            (line   6)
+* _wcsdup_r:                             wcsdup.              (line   6)
+* _wcsnrtombs_r:                         wcsrtombs.           (line   6)
+* _wcsrtombs_r:                          wcsrtombs.           (line   6)
+* _wcstod_r:                             wcstod.              (line   6)
+* _wcstof_r:                             wcstod.              (line   6)
+* _wcstol_r:                             wcstol.              (line   6)
+* _wcstoll_r:                            wcstoll.             (line   6)
+* _wcstoul_r:                            wcstoul.             (line   6)
+* _wcstoull_r:                           wcstoull.            (line   6)
+* _wprintf_r:                            swprintf.            (line   6)
+* _wscanf_r:                             swscanf.             (line   6)
+* a64l:                                  a64l.                (line   6)
+* abort:                                 abort.               (line   6)
+* abs:                                   abs.                 (line   6)
+* asctime:                               asctime.             (line   6)
+* asiprintf:                             siprintf.            (line   6)
+* asniprintf:                            siprintf.            (line   6)
+* asnprintf:                             sprintf.             (line   6)
+* asprintf:                              sprintf.             (line   6)
+* assert:                                assert.              (line   6)
+* atexit:                                atexit.              (line   6)
+* atof:                                  atof.                (line   6)
+* atoff:                                 atof.                (line   6)
+* atoi:                                  atoi.                (line   6)
+* atol:                                  atoi.                (line   6)
+* atoll:                                 atoll.               (line   6)
+* bcmp:                                  bcmp.                (line   6)
+* bsearch:                               bsearch.             (line   6)
+* bzero:                                 bzero.               (line   6)
+* calloc:                                calloc.              (line   6)
+* clearerr:                              clearerr.            (line   6)
+* clock:                                 clock.               (line   6)
+* close:                                 Stubs.               (line  52)
+* ctime:                                 ctime.               (line   6)
+* ctime_r:                               ctime.               (line   6)
+* difftime:                              difftime.            (line   6)
+* diprintf:                              diprintf.            (line   6)
+* div:                                   div.                 (line   6)
+* dprintf:                               dprintf.             (line   6)
+* drand48:                               rand48.              (line   6)
+* ecvt:                                  ecvt.                (line   6)
+* ecvtbuf:                               ecvtbuf.             (line   6)
+* ecvtf:                                 ecvt.                (line   6)
+* environ <1>:                           Stubs.               (line  59)
+* environ:                               getenv.              (line   6)
+* erand48:                               rand48.              (line   6)
+* errno global vs macro:                 Stubs.               (line  20)
+* execve:                                Stubs.               (line  66)
+* exit:                                  exit.                (line   6)
+* extra argument, reentrant fns:         Reentrancy.          (line  55)
+* fclose:                                fclose.              (line   6)
+* fcloseall:                             fcloseall.           (line   6)
+* fcntl:                                 Stubs.               (line  78)
+* fcvt:                                  ecvt.                (line   6)
+* fcvtbuf:                               ecvtbuf.             (line   6)
+* fcvtf:                                 ecvt.                (line   6)
+* fdopen:                                fdopen.              (line   6)
+* feof:                                  feof.                (line   6)
+* ferror:                                ferror.              (line   6)
+* fflush:                                fflush.              (line   6)
+* ffs:                                   ffs.                 (line   6)
+* fgetc:                                 fgetc.               (line   6)
+* fgetpos:                               fgetpos.             (line   6)
+* fgets:                                 fgets.               (line   6)
+* fgetwc:                                fgetwc.              (line   6)
+* fgetws:                                fgetws.              (line   6)
+* fileno:                                fileno.              (line   6)
+* fiprintf:                              siprintf.            (line   6)
+* fiscanf:                               siscanf.             (line   6)
+* fmemopen:                              fmemopen.            (line   6)
+* fopen:                                 fopen.               (line   6)
+* fopencookie:                           fopencookie.         (line   6)
+* fork:                                  Stubs.               (line  86)
+* fprintf:                               sprintf.             (line   6)
+* fpurge:                                fpurge.              (line   6)
+* fputc:                                 fputc.               (line   6)
+* fputs:                                 fputs.               (line   6)
+* fputwc:                                fputwc.              (line   6)
+* fputws:                                fputws.              (line   6)
+* fread:                                 fread.               (line   6)
+* free:                                  malloc.              (line   6)
+* freopen:                               freopen.             (line   6)
+* fropen:                                funopen.             (line   6)
+* fscanf:                                sscanf.              (line   6)
+* fseek:                                 fseek.               (line   6)
+* fseeko:                                fseek.               (line   6)
+* fsetpos:                               fsetpos.             (line   6)
+* fstat:                                 Stubs.               (line  98)
+* ftell:                                 ftell.               (line   6)
+* ftello:                                ftell.               (line   6)
+* funopen:                               funopen.             (line   6)
+* fwide:                                 fwide.               (line   6)
+* fwopen:                                funopen.             (line   6)
+* fwprintf:                              swprintf.            (line   6)
+* fwrite:                                fwrite.              (line   6)
+* fwscanf:                               swscanf.             (line   6)
+* gcvt:                                  gvcvt.               (line   6)
+* gcvtf:                                 gvcvt.               (line   6)
+* getc:                                  getc.                (line   6)
+* getc_unlocked:                         getc_unlocked.       (line   6)
+* getchar:                               getchar.             (line   6)
+* getchar_unlocked:                      getchar_unlocked.    (line   6)
+* getdelim:                              getdelim.            (line   6)
+* getenv:                                getenv.              (line   6)
+* getline:                               getline.             (line   6)
+* getpid:                                Stubs.               (line 110)
+* gets:                                  gets.                (line   6)
+* gettimeofday:                          Stubs.               (line 119)
+* getw:                                  getw.                (line   6)
+* getwc:                                 fgetwc.              (line   6)
+* getwchar:                              getwchar.            (line   6)
+* global reentrancy structure:           Reentrancy.          (line  48)
+* gmtime:                                gmtime.              (line   6)
+* gmtime_r:                              gmtime.              (line   6)
+* index:                                 index.               (line   6)
+* iprintf:                               siprintf.            (line   6)
+* isalnum:                               isalnum.             (line   6)
+* isalpha:                               isalpha.             (line   6)
+* isascii:                               isascii.             (line   6)
+* iscanf:                                siscanf.             (line   6)
+* iscntrl:                               iscntrl.             (line   6)
+* isdigit:                               isdigit.             (line   6)
+* isgraph:                               isprint.             (line   6)
+* islower:                               islower.             (line   6)
+* isprint:                               isprint.             (line   6)
+* ispunct:                               ispunct.             (line   6)
+* isspace:                               isspace.             (line   6)
+* isupper:                               isupper.             (line   6)
+* iswalnum:                              iswalnum.            (line   6)
+* iswalpha:                              iswalpha.            (line   6)
+* iswblank:                              iswblank.            (line   6)
+* iswcntrl:                              iswcntrl.            (line   6)
+* iswctype:                              iswctype.            (line   6)
+* iswdigit:                              iswdigit.            (line   6)
+* iswgraph:                              iswgraph.            (line   6)
+* iswlower:                              iswlower.            (line   6)
+* iswprint:                              iswprint.            (line   6)
+* iswpunct:                              iswpunct.            (line   6)
+* iswspace:                              iswspace.            (line   6)
+* iswupper:                              iswupper.            (line   6)
+* iswxdigit:                             iswxdigit.           (line   6)
+* isxdigit:                              isxdigit.            (line   6)
+* jrand48:                               rand48.              (line   6)
+* kill:                                  Stubs.               (line 129)
+* l64a:                                  a64l.                (line   6)
+* labs:                                  labs.                (line   6)
+* lcong48:                               rand48.              (line   6)
+* ldiv:                                  ldiv.                (line   6)
+* link:                                  Stubs.               (line 140)
+* linking the C library:                 Syscalls.            (line   6)
+* list of reentrant functions:           Reentrancy.          (line  64)
+* llabs:                                 llabs.               (line   6)
+* lldiv:                                 lldiv.               (line   6)
+* localeconv:                            setlocale.           (line   6)
+* localtime:                             localtime.           (line   6)
+* localtime_r:                           localtime.           (line   6)
+* longjmp:                               longjmp.             (line   6)
+* lrand48:                               rand48.              (line   6)
+* lseek:                                 Stubs.               (line 151)
+* mallinfo:                              mallinfo.            (line   6)
+* malloc:                                malloc.              (line   6)
+* malloc_stats:                          mallinfo.            (line   6)
+* malloc_usable_size:                    malloc.              (line   6)
+* mallopt:                               mallinfo.            (line   6)
+* mblen:                                 mblen.               (line   6)
+* mbsnrtowcs:                            mbsrtowcs.           (line   6)
+* mbsrtowcs:                             mbsrtowcs.           (line   6)
+* mbstowcs:                              mbstowcs.            (line   6)
+* mbtowc:                                mbtowc.              (line   6)
+* memalign:                              malloc.              (line   6)
+* memchr:                                memchr.              (line   6)
+* memcmp:                                memcmp.              (line   6)
+* memmem:                                memmem.              (line   6)
+* memmove:                               memmove.             (line   6)
+* memset:                                memset.              (line   6)
+* mkdtemp:                               mktemp.              (line   6)
+* mkostemp:                              mktemp.              (line   6)
+* mkostemps:                             mktemp.              (line   6)
+* mkstemp:                               mktemp.              (line   6)
+* mkstemps:                              mktemp.              (line   6)
+* mktemp:                                mktemp.              (line   6)
+* mktime:                                mktime.              (line   6)
+* mrand48:                               rand48.              (line   6)
+* nrand48:                               rand48.              (line   6)
+* on_exit:                               on_exit.             (line   6)
+* open:                                  Stubs.               (line 158)
+* open_memstream:                        open_memstream.      (line   6)
+* open_wmemstream:                       open_memstream.      (line   6)
+* OS interface subroutines:              Stubs.               (line   6)
+* perror:                                perror.              (line   6)
+* printf:                                sprintf.             (line   6)
+* putc:                                  putc.                (line   6)
+* putc_unlocked:                         putc_unlocked.       (line   6)
+* putchar:                               putchar.             (line   6)
+* putchar_unlocked:                      putchar_unlocked.    (line   6)
+* puts:                                  puts.                (line   6)
+* putw:                                  putw.                (line   6)
+* putwc:                                 fputwc.              (line   6)
+* putwchar:                              putwchar.            (line   6)
+* qsort:                                 qsort.               (line   6)
+* raise:                                 raise.               (line   6)
+* rand:                                  rand.                (line   6)
+* rand48:                                rand48.              (line   6)
+* rand_r:                                rand.                (line   6)
+* read:                                  Stubs.               (line 165)
+* realloc:                               malloc.              (line   6)
+* reallocf:                              malloc.              (line   6)
+* reent.h:                               Reentrancy.          (line  31)
+* reentrancy:                            Reentrancy.          (line   6)
+* reentrancy structure:                  Reentrancy.          (line  31)
+* reentrant function list:               Reentrancy.          (line  64)
+* remove:                                remove.              (line   6)
+* rename:                                rename.              (line   6)
+* rewind:                                rewind.              (line   6)
+* rindex:                                rindex.              (line   6)
+* sbrk:                                  Stubs.               (line 183)
+* scanf:                                 sscanf.              (line   6)
+* seed48:                                rand48.              (line   6)
+* setbuf:                                setbuf.              (line   6)
+* setbuffer:                             setbuffer.           (line   6)
+* setjmp:                                setjmp.              (line   6)
+* setlinebuf:                            setlinebuf.          (line   6)
+* setlocale:                             setlocale.           (line   6)
+* setvbuf:                               setvbuf.             (line   6)
+* signal:                                signal.              (line   6)
+* siprintf:                              siprintf.            (line   6)
+* siscanf:                               siscanf.             (line   6)
+* sniprintf:                             siprintf.            (line   6)
+* snprintf:                              sprintf.             (line   6)
+* sprintf:                               sprintf.             (line   6)
+* srand:                                 rand.                (line   6)
+* srand48:                               rand48.              (line   6)
+* sscanf:                                sscanf.              (line   6)
+* stat:                                  Stubs.               (line 207)
+* stpcpy:                                stpcpy.              (line   6)
+* stpncpy:                               stpncpy.             (line   6)
+* strcasecmp:                            strcasecmp.          (line   6)
+* strcasestr:                            strcasestr.          (line   6)
+* strcat:                                strcat.              (line   6)
+* strchr:                                strchr.              (line   6)
+* strcmp:                                strcmp.              (line   6)
+* strcoll:                               strcoll.             (line   6)
+* strcpy:                                strcpy.              (line   6)
+* strcspn:                               strcspn.             (line   6)
+* strerror:                              strerror.            (line   6)
+* strerror_r:                            strerror_r.          (line   6)
+* strftime:                              strftime.            (line   6)
+* strlen:                                strlen.              (line   6)
+* strlwr:                                strlwr.              (line   6)
+* strncasecmp:                           strncasecmp.         (line   6)
+* strncat:                               strncat.             (line   6)
+* strncmp:                               strncmp.             (line   6)
+* strncpy:                               strncpy.             (line   6)
+* strnlen:                               strnlen.             (line   6)
+* strpbrk:                               strpbrk.             (line   6)
+* strrchr:                               strrchr.             (line   6)
+* strsep:                                strtok.              (line   6)
+* strsignal:                             strsignal.           (line   6)
+* strspn:                                strspn.              (line   6)
+* strstr:                                strstr.              (line   6)
+* strtod:                                strtod.              (line   6)
+* strtof:                                strtod.              (line   6)
+* strtok:                                strtok.              (line   6)
+* strtok_r:                              strtok.              (line   6)
+* strtol:                                strtol.              (line   6)
+* strtoll:                               strtoll.             (line   6)
+* strtoul:                               strtoul.             (line   6)
+* strtoull:                              strtoull.            (line   6)
+* strupr:                                strupr.              (line   6)
+* strxfrm:                               strxfrm.             (line   6)
+* stubs:                                 Stubs.               (line   6)
+* subroutines for OS interface:          Stubs.               (line   6)
+* swprintf:                              swprintf.            (line   6)
+* swscanf:                               swscanf.             (line   6)
+* system:                                system.              (line   6)
+* tempnam:                               tmpnam.              (line   6)
+* time:                                  time.                (line   6)
+* times:                                 Stubs.               (line 215)
+* tmpfile:                               tmpfile.             (line   6)
+* tmpnam:                                tmpnam.              (line   6)
+* toascii:                               toascii.             (line   6)
+* tolower:                               tolower.             (line   6)
+* toupper:                               toupper.             (line   6)
+* towctrans:                             towctrans.           (line   6)
+* towlower:                              towlower.            (line   6)
+* towupper:                              towupper.            (line   6)
+* tzset:                                 tzset.               (line   6)
+* unctrl:                                unctrl.              (line   6)
+* unctrllen:                             unctrl.              (line   6)
+* ungetc:                                ungetc.              (line   6)
+* ungetwc:                               ungetwc.             (line   6)
+* unlink:                                Stubs.               (line 222)
+* va_alist:                              va_alist.            (line   6)
+* va_arg <1>:                            va_arg-trad.         (line   6)
+* va_arg:                                va_arg.              (line   6)
+* va_dcl:                                va_alist.            (line   6)
+* va_end <1>:                            va_end-trad.         (line   6)
+* va_end:                                va_end.              (line   6)
+* va_start <1>:                          va_start-trad.       (line   6)
+* va_start:                              va_start.            (line   6)
+* vasiprintf:                            viprintf.            (line   6)
+* vasniprintf:                           viprintf.            (line   6)
+* vasnprintf:                            vfprintf.            (line   6)
+* vasprintf:                             vfprintf.            (line   6)
+* vdiprintf:                             diprintf.            (line   6)
+* vdprintf:                              dprintf.             (line   6)
+* vfiprintf:                             viprintf.            (line   6)
+* vfiscanf:                              viscanf.             (line   6)
+* vfprintf:                              vfprintf.            (line   6)
+* vfscanf:                               vfscanf.             (line   6)
+* vfwprintf:                             vfwprintf.           (line   6)
+* vfwscanf:                              vfwscanf.            (line   6)
+* viprintf:                              viprintf.            (line   6)
+* viscanf:                               viscanf.             (line   6)
+* vprintf:                               vfprintf.            (line   6)
+* vscanf:                                vfscanf.             (line   6)
+* vsiprintf:                             viprintf.            (line   6)
+* vsiscanf:                              viscanf.             (line   6)
+* vsniprintf:                            viprintf.            (line   6)
+* vsnprintf:                             vfprintf.            (line   6)
+* vsprintf:                              vfprintf.            (line   6)
+* vsscanf:                               vfscanf.             (line   6)
+* vswprintf:                             vfwprintf.           (line   6)
+* vswscanf:                              vfwscanf.            (line   6)
+* vwprintf:                              vfwprintf.           (line   6)
+* vwscanf:                               vfwscanf.            (line   6)
+* wait:                                  Stubs.               (line 233)
+* wcscasecmp:                            wcscasecmp.          (line   6)
+* wcscat:                                wcscat.              (line   6)
+* wcscoll:                               wcscoll.             (line   6)
+* wcsdup:                                wcsdup.              (line   6)
+* wcsftime:                              wcsftime.            (line   6)
+* wcsncasecmp:                           wcsncasecmp.         (line   6)
+* wcsnlen:                               wcsnlen.             (line   6)
+* wcsnrtombs:                            wcsrtombs.           (line   6)
+* wcsrtombs:                             wcsrtombs.           (line   6)
+* wcstod:                                wcstod.              (line   6)
+* wcstof:                                wcstod.              (line   6)
+* wcstok:                                wcstok.              (line   6)
+* wcstol:                                wcstol.              (line   6)
+* wcstoll:                               wcstoll.             (line   6)
+* wcstombs:                              wcstombs.            (line   6)
+* wcstoul:                               wcstoul.             (line   6)
+* wcstoull:                              wcstoull.            (line   6)
+* wcswidth:                              wcswidth.            (line   6)
+* wcsxfrm:                               wcsxfrm.             (line   6)
+* wctomb:                                wctomb.              (line   6)
+* wctrans:                               wctrans.             (line   6)
+* wctype:                                wctype.              (line   6)
+* wcwidth:                               wcwidth.             (line   6)
+* wprintf:                               swprintf.            (line   6)
+* write:                                 Stubs.               (line 243)
+* wscanf:                                swscanf.             (line   6)
+
+

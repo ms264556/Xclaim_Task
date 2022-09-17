@@ -1,0 +1,429 @@
+#! /usr/xtensa/tools-6.1/bin/perl -w
+# $Id: //depot/rel/Cottonwood/Xtensa/TIE/sfgen/sfgen#1 $
+
+# Copyright (c) 2003-2009 by Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+
+##########################################################################
+# declare input argument name to the shared function
+##########################################################################
+sub sf_write_input_arg_decl {
+    my ($definition, $stage, $inst) = @_;
+    my @input_names = @{$definition->{INPUT_NAMES}};
+    my $out = "";
+
+    foreach my $name (@input_names) {
+	$out .= "${name}_${inst}_C${stage}, ";
+    }
+
+    $out .= "tie_input${inst}_use${stage}_C0, ";
+    return $out;
+}
+
+##########################################################################
+# declare input argument width to the shared function
+##########################################################################
+sub sf_write_input_arg_width {
+    my ($definition, $stage, $inst) = @_;
+    my @input_names = @{$definition->{INPUT_NAMES}};
+    my @input_width = @{$definition->{INPUT_WIDTH}};
+    my $out = "";
+
+    for (my $i = 0; $i < @input_names; $i++) {
+	my $name = $input_names[$i];
+	my $width = $input_width[$i];
+	$out .= "input [$width-1:0] ${name}_${inst}_C${stage};\n";
+    }
+
+    $out .= "input tie_input${inst}_use${stage}_C0;\n";
+    return $out;
+}
+
+##########################################################################
+# write shared function module declaration
+##########################################################################
+sub sf_write_module {
+    my($sf, $suffix) = @_;
+    my $out = "";
+
+    # extract input
+    my %definition = %{$sf->{DEFINITION}};
+    my @instances = @{$sf->{INSTANCES}};
+    my $sf_name = $sf->{NAME};
+    my $prefix = $sf->{PREFIX};
+    my $sf_width = $definition{OUTPUT_WIDTH};
+    my $max_stage = $sf->{MAX_STAGE};
+    my $i;
+
+    # declare input names
+    $out .= "module ${prefix}TIE_sf_${sf_name}${suffix}(";
+    for ($i = 0; $i < @instances; $i++) {
+	my $stage = $instances[$i];
+	$out .= sf_write_input_arg_decl(\%definition, $stage, $i);
+	$out .= "${sf_name}_${i}_C${stage}, ";
+    }
+
+    $out .= "tie_usage_C0, tie_stall, Kill_E, KillPipe_W, GlobalStall, localReset, logicalReset, clk);\n";
+
+    # declare input width
+    for ($i = 0; $i < @instances; $i++) {
+	my $stage = $instances[$i];
+	$out .= sf_write_input_arg_width(\%definition, $stage, $i);
+	$out .= "output \[$sf_width-1:0] ${sf_name}_${i}_C${stage};\n";
+    }
+
+    # declare control signals
+    $out .= "input [$max_stage:0] tie_usage_C0;\n";
+    $out .= "output tie_stall;\n";
+    $out .= "input Kill_E;\n";
+    $out .= "input KillPipe_W;\n";
+    $out .= "input GlobalStall;\n";
+    $out .= "input localReset;\n";
+    $out .= "input logicalReset;\n";
+    $out .= "input clk;\n";
+
+    return $out;
+}
+
+##########################################################################
+# delay the input selection signals
+##########################################################################
+sub sf_write_selection_delay {
+    my($sf) = @_;
+    my $out = "";
+
+    my @instances = @{$sf->{INSTANCES}};
+    my $commit = $sf->{COMMIT_STAGE};
+    my $clkgate = $sf->{CLK_GATE_GLOBAL};
+    my $reset = $sf->{RESET_FLOP};
+    my $async_reset = $sf->{ASYNC_RESET_FLOP};
+
+    $out .= "\n// delay the selection signals\n";
+    for (my $s = 0; $s < @instances; $s++) {
+	$stage = $instances[$s];
+	for (my $t = 0; $t <= $stage; $t++) {
+	    $out .= "wire tie_input${s}_use${stage}_C${t}, ";
+	    $out .= "tie_input${s}_sel${stage}_C${t};\n";
+	}
+    }
+
+    for (my $s = 0; $s < @instances; $s++) {
+	$stage = $instances[$s];
+	if ($stage > 0) {
+	    $out .= "assign tie_input${s}_sel${stage}_C0 = ";
+	    $out .= "tie_input${s}_use${stage}_C0;\n";
+	    for (my $t = 1; $t <= $stage; $t++) {
+		my $p = $t - 1;
+		$out .= "xt";
+                $out .=  $reset ? $async_reset ? "asc" : "sc" : "";
+                $out .=  "en" if !$clkgate;
+                $out .=  "delay1";
+		$out .= " #(1) input${s}_select_delay${t}(";
+		$out .= ".xtout(tie_input${s}_use${stage}_C${t}), ";
+		$out .= ".xtin(tie_input${s}_sel${stage}_C${p}";
+		if ($t <= $commit+1 ) {
+		    $out .= " & (~KillPipe_W)";
+		}
+		$out .="),";
+		$out .= ".xten(~GlobalStall), " if ( !$clkgate );
+		$out .= ".clrb(~localReset), " if ( $reset );
+		$out .= ".clk(clk));\n";
+		$out .= "assign tie_input${s}_sel${stage}_C${t} = ";
+		$out .= "tie_input${s}_use${stage}_C${t}";
+		if ($t == 1) {
+		    $out .= " & (~Kill_E)";
+		}
+#               Per James request, the KillPipe_W is removed from gating
+#               the current signal, but to gate the select signal in the 
+#               next cycle. This change is mostly for timing reasons
+#		if ($t <= $commit) {
+#		    $out .= " & (~KillPipe_W)";
+#		}
+		$out .= ";\n";
+	    }
+	}
+    }
+
+    #
+    # R-stage input selection is special and can't be active
+    # if a previous instruction is using it.
+    #
+    for (my $s = 0; $s < @instances; $s++) {
+	if ($instances[$s] == 0) {
+	    $out .= "assign tie_input${s}_sel0_C0 = tie_input${s}_use0_C0";
+	    for (my $u = 0; $u < @instances; $u++) {
+		$stage = $instances[$u];
+		if ($stage > 0) {
+		    $out .= " & (~tie_input${u}_sel${stage}_C${stage})";
+		}
+	    }
+	    $out .= ";\n";
+	}
+    }
+
+    return $out;
+}
+
+##########################################################################
+# write shared function input selection logic
+##########################################################################
+sub sf_write_input_selection {
+    my($sf) = @_;
+    my $out = "";
+
+    my $definition = $sf->{DEFINITION};
+    my @instances = @{$sf->{INSTANCES}};
+    my @input_names = @{$definition->{INPUT_NAMES}};
+    my @input_width = @{$definition->{INPUT_WIDTH}};
+
+    $out .= "\n// input selection\n";
+    for (my $i = 0; $i < @input_names; $i++) {
+	my $name = $input_names[$i];
+	my $width = $input_width[$i];
+
+	$out .= "wire [${width}-1:0] tie_$name = ";
+	for (my $s = 0; $s < @instances; $s++) {
+	    $stage = $instances[$s];
+	    $out .= "{" . ${width} . "{tie_input${s}_sel${stage}_C${stage}}}";
+	    $out .= " & ${name}_${s}_C${stage} | ";
+	}
+	$out .= "${width}'b0;\n";
+    }
+
+    return $out;
+}
+
+##########################################################################
+# write shared function input selection assertion
+##########################################################################
+sub sf_write_input_selection_pragma {
+    my($sf) = @_;
+    my $out = "";
+
+    my $definition = $sf->{DEFINITION};
+    my $prefix = $sf->{PREFIX};
+    my $sf_name = $sf->{NAME};
+    my @instances = @{$sf->{INSTANCES}};
+    my @input_names = @{$definition->{INPUT_NAMES}};
+    my @input_width = @{$definition->{INPUT_WIDTH}};
+
+    $out .= "\n/* sv_pragma\n";
+    for (my $i = 0; $i < @input_names; $i++) {
+	my $name = $input_names[$i];
+	my $width = $input_width[$i];
+
+	$out .= "${prefix}TIE_sf_${sf_name}_${name}_sel : assert property (\n ";
+	$out .= " \@(posedge clk)       (\`GLBRST == 0) |->\n";
+        $out .= " (\$countones({ ";
+        my $sep = "";
+	for (my $s = 0; $s < @instances; $s++) {
+	    $stage = $instances[$s];
+	    $out .=  $sep . "tie_input${s}_sel${stage}_C${stage}";
+	    $sep = "\n,";
+	}
+	$out .= "}) <=1))\n";
+	$out .= " else  \$display(\"SVA Error: ${sf_name} : >1 input select asserted for input ${name}\");\n";
+    }
+    $out .= "*/\n";
+    return $out;
+}
+##########################################################################
+# write outputs
+##########################################################################
+sub sf_write_output {
+    my($sf) = @_;
+    my $out = "";
+    my @instances = @{$sf->{INSTANCES}};
+    my $sf_name = $sf->{NAME};
+    my $i;
+
+    for ($i = 0; $i < @instances; $i++) {
+	my $stage = $instances[$i];
+        $out .= "assign ${sf_name}_${i}_C${stage} = tie_${sf_name};\n";
+    }
+
+    return $out;
+}
+
+##########################################################################
+# instantiate the shared function
+##########################################################################
+sub sf_write_function_instance {
+    my($sf) = @_;
+    my $out = "";
+
+    my %definition = %{$sf->{DEFINITION}};
+    my @input_names = @{$definition{INPUT_NAMES}};
+    my $sf_name = $sf->{NAME};
+    my $prefix = $sf->{PREFIX};
+    my $sf_width = $definition{OUTPUT_WIDTH};
+
+    $out .= "\n// instantiate the shared function\n";
+    $out .= "wire [${sf_width}-1:0] tie_${sf_name};\n";
+    $out .= "${prefix}TIE_function_${sf_name} i${sf_name}(";
+    foreach my $name (@input_names) {
+	$out .= ".${name}_C0(tie_${name}), ";
+    }
+    $out .= ".${sf_name}_C0(tie_${sf_name}), ";
+    $out .= ".GlobalStall(GlobalStall), ";
+    $out .= ".localReset(localReset), ";
+    $out .= ".logicalReset(logicalReset), ";
+    $out .= ".clk(1'b0));\n";
+
+    $out .= sf_write_output($sf);
+    return $out;
+}
+
+##########################################################################
+# pipeline the usage vector
+##########################################################################
+sub sf_write_usage_pipeline {
+    my($sf) = @_;
+    my $out = "";
+
+    my $max_stage = $sf->{MAX_STAGE};
+    my $commit = $sf->{COMMIT_STAGE};
+    my $clkgate = $sf->{CLK_GATE_GLOBAL};
+    my $reset = $sf->{RESET_FLOP};
+    my $async_reset = $sf->{ASYNC_RESET_FLOP};
+
+    $out .= "\n// usage pipeline\n";
+    for (my $s = 1; $s <= $max_stage; $s++) {
+	my $width = $max_stage + 1 - $s;
+	my $p = $s - 1;
+	$out .= "wire [${width}-1:0] tie_usage_C${s}, tie_usage_uq_C${s};\n";
+	$out .= "xt";
+        $out .=  $reset ? $async_reset ? "asc" : "sc" : "";
+        $out .=  "en" if !$clkgate;
+        $out .=  "delay1";
+	$out .= " #(${width}) usage_delay_C${s}(";
+	$out .= ".xtout(tie_usage_uq_C${s}), ";
+	$out .= ".xtin(tie_usage_C${p}\[${width}:1]), ";
+	$out .= ".xten(~GlobalStall), " if !$clkgate;
+	$out .= ".clrb(~localReset), " if $reset;
+	$out .= ".clk(clk));\n";
+
+	$out .= "assign tie_usage_C${s} = tie_usage_uq_C${s}";
+	if ($s == 1) {
+	    $out .= " & {" . ${width} . "{~Kill_E}}";
+	}
+	if ($s <= $commit) {
+	    $out .= " & {" . ${width} . "{~KillPipe_W}}";
+	}
+	$out .= ";\n";
+    }
+
+    return $out;
+}
+
+##########################################################################
+# stall logic
+##########################################################################
+sub sf_write_stall {
+    my($sf) = @_;
+    my $out = "";
+
+    my $max_stage = $sf->{MAX_STAGE};
+
+    $out .= "\n// stall logic\n";
+    for (my $s = 1; $s <= $max_stage; $s++) {
+	$out .= "wire tie_stall_C${s} = |(tie_usage_C0 & {${s}'b0, tie_usage_C${s}});\n";
+    }
+
+    $out .= "assign tie_stall = ";
+    for (my $s = 1; $s <= $max_stage; $s++) {
+	$out .= "tie_stall_C${s} | ";
+    }
+    $out .= "1'b0;\n";
+
+    return $out;
+}
+
+
+##########################################################################
+# write out implementation RTL
+##########################################################################
+sub write_implementation {
+    my($sf, $suffix) = @_;
+
+    print "\n";
+    print sf_write_module($sf, $suffix);
+    print sf_write_selection_delay($sf);
+    print sf_write_input_selection($sf);
+    print sf_write_input_selection_pragma($sf) if defined $ENV{'TEN4_INTERNAL'};
+    print sf_write_function_instance($sf);
+    print sf_write_usage_pipeline($sf);
+    print sf_write_stall($sf);
+    print "endmodule\n";
+}
+  
+##########################################################################
+# instantiate the function for each context
+##########################################################################
+sub sf_write_function_instance_unshared {
+    my($sf) = @_;
+    my $out = "";
+
+    my %definition = %{$sf->{DEFINITION}};
+    my @instances = @{$sf->{INSTANCES}};
+    my @input_names = @{$definition{INPUT_NAMES}};
+    my $sf_name = $sf->{NAME};
+    my $prefix = $sf->{PREFIX};
+
+    my $i;
+    for ($i = 0; $i < @instances; $i++) {
+        my $stage = $instances[$i];
+	$out .= "${prefix}TIE_function_${sf_name} i${sf_name}_${i}(";
+	foreach my $name (@input_names) {
+	    $out .= ".${name}_C0(${name}_${i}_C${stage}), ";
+	}
+	$out .= ".${sf_name}_C0(${sf_name}_${i}_C${stage}), ";
+        $out .= ".GlobalStall(GlobalStall), ";
+        $out .= ".localReset(localReset), ";
+        $out .= ".logicalReset(logicalReset), ";
+	$out .= ".clk(1'b0));\n";
+    }
+    return $out;
+}
+
+##########################################################################
+# write out implementation RTL
+##########################################################################
+sub write_verification {
+    my($sf, $suffix) = @_;
+
+    print "\n";
+    print sf_write_module($sf, $suffix);
+    print sf_write_selection_delay($sf);
+    print sf_write_function_instance_unshared($sf);
+    print sf_write_usage_pipeline($sf);
+    print sf_write_stall($sf);
+    print "endmodule\n";
+}
+
+##########################################################################
+# main program
+##########################################################################
+$sfs = join(" ", <>);
+# print "/*\n$sfs*/\n";
+$sfs = '$sfs = [ ' . $sfs . '] ;';
+eval($sfs) || die "Syntax error in input description";
+
+foreach $sf (@$sfs) {
+    my $iterative = $sf->{ITERATIVE};
+    my $verify = $sf->{VERIFY};
+    my $suffix = (defined $sf->{SLOT})? '_'.$sf->{SLOT}: "";
+    $suffix   .= "_golden" if ($iterative && $verify);
+
+    write_implementation($sf, $suffix);
+
+    if ($iterative && $verify) {
+        $suffix = (defined $sf->{SLOT})? '_'.$sf->{SLOT}: "";
+	write_verification($sf, $suffix);
+    }
+}

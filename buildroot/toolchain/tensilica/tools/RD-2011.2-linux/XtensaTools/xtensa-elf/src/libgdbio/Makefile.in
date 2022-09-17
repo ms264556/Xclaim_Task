@@ -1,0 +1,128 @@
+# Makefile for libgdbio.a
+# (mostly for testing GDB on XOCD, but can be used for other purposes)
+
+# Copyright (c) 2006-2008 Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+SHELL = /bin/sh
+
+srcdir = @srcdir@
+VPATH = $(srcdir)
+prefix = @prefix@
+target_alias = @target_alias@
+target_libdir = $(prefix)/$(target_alias)/lib
+
+top_builddir = @abs_top_builddir@
+top_srcdir = @top_srcdir@
+
+default: all
+include $(top_builddir)/../../Makefile.env
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+
+# NOTE:  gdbio.h is in ../include , which gets installed in the
+# Xtensa Tools xtensa-elf/include/xtensa directory.
+
+TPP = $(TENSILICA_TOOLS)/bin/tpp
+
+CFLAGS = -O2 -g -mlongcalls -Wall
+
+CC_FOR_TARGET = $(XTTOOLS)/bin/$(XTENSA_CC_FOR_TARGET)
+AR_FOR_TARGET = $(XTTOOLS)/bin/xt-ar
+AR_FLAGS = rc
+
+LIB_GDBIO_C_FILES = \
+	close.c \
+	fstat.c \
+	getpid.c \
+	gettimeofday.c \
+	kill.c \
+	lseek.c \
+	miniboard.c \
+	open.c \
+	read.c \
+	rename.c \
+	sbrk.c \
+	semihosting.c \
+	stat.c \
+	system.c \
+	times.c \
+	unlink.c \
+	write.c
+
+LIB_GDBIO_ASM_FILES = syscall.S
+LIB_GDBIO_OBJS = \
+   $(LIB_GDBIO_C_FILES:.c=.o) \
+   $(LIB_GDBIO_ASM_FILES:.S=.o) 
+
+LIB_GDBIO_NSS_C_FILES = \
+	close.c \
+	fstat.c \
+	gettimeofday.c \
+	kill.c \
+	lseek.c \
+	open.c \
+	read.c \
+	rename.c \
+	semihosting.c \
+	stat.c \
+	system.c \
+	unlink.c \
+	write.c
+
+LIB_GDBIO_NSS_ASM_FILES = syscall.S
+LIB_GDBIO_NSS_OBJS = \
+   $(LIB_GDBIO_NSS_C_FILES:.c=.nss.o) \
+   $(LIB_GDBIO_NSS_ASM_FILES:.S=.nss.o) 
+
+%.nss.o : %.c
+	$(CC_FOR_TARGET) -c $(CFLAGS) -DNON_STANDARD_SYSCALL -o $@ $<
+
+%.nss.o : %.S
+	$(CC_FOR_TARGET) -c $(CFLAGS)  -DNON_STANDARD_SYSCALL -g -o $@ $<
+
+%.o : %.c
+	$(CC_FOR_TARGET) -c $(CFLAGS) -o $@ $<
+
+%.o : %.S
+	$(CC_FOR_TARGET) -c $(CFLAGS) -o $@ $<
+
+LIB_GDBIO = libgdbio.a
+
+$(LIB_GDBIO) : $(LIB_GDBIO_OBJS)
+	$(AR_FOR_TARGET) rc $@ $^
+
+LIB_GDBIO_NSS = libgdbionss.a
+
+$(LIB_GDBIO_NSS) : $(LIB_GDBIO_NSS_OBJS)
+	$(AR_FOR_TARGET) rc $@ $^
+
+.PHONY: default all all-target install install-target clean
+
+all: $(LIB_GDBIO) $(LIB_GDBIO_NSS)
+
+all-target: all
+
+install: all
+	$(INSTALL) $(LIB_GDBIO) $(target_libdir)
+	$(INSTALL) $(LIB_GDBIO_NSS) $(target_libdir)
+
+install-target: install
+
+clean:
+	rm -f *.o *.a *.d $(TARGET_EXE) $(HOST_EXE)
+
+###########################################################################
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) && $(SHELL) ./config.status
+
+$(top_builddir)/config.status: $(top_srcdir)/configure
+	cd $(top_builddir) && $(SHELL) ./config.status --recheck
+

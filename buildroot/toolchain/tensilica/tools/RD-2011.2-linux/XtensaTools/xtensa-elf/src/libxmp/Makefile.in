@@ -1,0 +1,162 @@
+# Makefile for libxmp.
+
+# Copyright (c) 2003-2009 Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+default:
+
+SHELL = /bin/sh
+
+srcdir = @srcdir@
+VPATH = $(srcdir)
+prefix = @prefix@
+target_alias = @target_alias@
+target_libdir = $(prefix)/$(target_alias)/lib
+target_incdir = $(prefix)/$(target_alias)/arch/include/xtensa/
+target_example_dir = $(prefix)/examples/xmp-cmd-line
+TEST_DIR = $(srcdir)/xmp-cmd-line
+
+top_builddir = @abs_top_builddir@
+top_srcdir = @top_srcdir@
+
+
+include $(top_builddir)/../../Makefile.env
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+
+TPP = $(TENSILICA_TOOLS)/bin/tpp
+
+CC_FOR_TARGET = $(XTTOOLS)/bin/$(XTENSA_CC_FOR_TARGET)
+AR_FOR_TARGET = $(XTTOOLS)/bin/xt-ar
+AR_FLAGS = rc
+
+CFLAGS = -O2 -g -Wall -Werror -DM -mlongcalls -MD
+ASFLAGS =
+
+SHARED_C_FILES =  xmp-shared-data.c xmp-malloc-data.c 
+SHARED_OBJS = $(SHARED_C_FILES:.c=.o)
+
+C_FILES = \
+	xmp-mutex.c \
+	xmp-internal.c \
+	xmp-barrier.c \
+	xmp-sbrk.c \
+	xmp-condition.c 
+
+ASM_FILES =
+
+HEADERS = $(srcdir)/xmp-library.h
+
+OBJS = $(C_FILES:.c=.o) $(ASM_FILES:.S=.o) 
+DEBUG_OBJS = $(C_FILES:.c=.debug.o) $(ASM_FILES:.S=.debug.o) 
+
+COMPILE_COMMAND = $(CC_FOR_TARGET) $(CFLAGS) -c
+
+%.o : %.c
+	$(COMPILE_COMMAND) -o $@ $<
+
+%.o : %.S
+	$(COMPILE_COMMAND) $(ASFLAGS) -o $@ $<
+
+%.debug.o : %.c
+	$(COMPILE_COMMAND) -DXMP_DEBUG -o $@ $<
+
+%.debug.o : %.S
+	$(COMPILE_COMMAND) $(ASFLAGS) -DXMP_DEBUG -o $@ $<
+
+
+# Funky malloc stuff, copied from newlib
+MALLOC_OBJS = xmp-freer.o xmp-reallocr.o xmp-callocr.o xmp-cfreer.o \
+		xmp-mallinfor.o xmp-mallstatsr.o xmp-msizer.o xmp-malloc.o
+
+xmp-malloc.o: xmp-malloc.c
+	$(COMPILE_COMMAND) -DDEFINE_MALLOC -c $(srcdir)/xmp-malloc.c -o $@
+
+xmp-freer.o: xmp-malloc.c
+	$(COMPILE_COMMAND) -DDEFINE_FREE -c $(srcdir)/xmp-malloc.c -o $@
+
+xmp-reallocr.o: xmp-malloc.c
+	$(COMPILE_COMMAND) -DDEFINE_REALLOC -c $(srcdir)/xmp-malloc.c -o $@
+
+xmp-callocr.o: xmp-malloc.c
+	$(COMPILE_COMMAND) -DDEFINE_CALLOC -c $(srcdir)/xmp-malloc.c -o $@
+
+xmp-cfreer.o: xmp-malloc.c
+	$(COMPILE_COMMAND) -DDEFINE_CFREE -c $(srcdir)/xmp-malloc.c -o $@
+
+xmp-malignr.o: xmp-malloc.c
+	$(COMPILE_COMMAND) -DDEFINE_MEMALIGN -c $(srcdir)/xmp-malloc.c -o $@
+
+xmp-vallocr.o: xmp-malloc.c
+	$(COMPILE_COMMAND) -DDEFINE_VALLOC -c $(srcdir)/xmp-malloc.c -o $@
+
+xmp-pvallocr.o: xmp-malloc.c
+	$(COMPILE_COMMAND) -DDEFINE_PVALLOC -c $(srcdir)/xmp-malloc.c -o $@
+
+xmp-mallinfor.o: xmp-malloc.c
+	$(COMPILE_COMMAND) -DDEFINE_MALLINFO -c $(srcdir)/xmp-malloc.c -o $@
+
+xmp-mallstatsr.o: xmp-malloc.c
+	$(COMPILE_COMMAND) -DDEFINE_MALLOC_STATS -c $(srcdir)/xmp-malloc.c -o $@
+
+xmp-msizer.o: xmp-malloc.c
+	$(COMPILE_COMMAND) -DDEFINE_MALLOC_USABLE_SIZE -c $(srcdir)/xmp-malloc.c -o $@
+
+xmp-malloptr.o: xmp-malloc.c
+	$(COMPILE_COMMAND) -DDEFINE_MALLOPT -c $(srcdir)/xmp-malloc.c -o $@
+
+.PHONY: default all all-target install install-target clean
+
+LIB = libxmp.a
+DEBUG_LIB = libxmp-debug.a
+SHARED_LIB = libxmp-shared.a
+TARGETS = $(SHARED_LIB)
+INSTALL_TARGETS = $(SHARED_LIB)
+
+-include Makefile.frag
+
+$(LIB) : $(OBJECTS)  empty_obj.o
+	$(AR_FOR_TARGET) rc $@ $^
+
+$(DEBUG_LIB) : $(DEBUG_OBJECTS) $(MALLOC_OBJS) empty_obj.o
+	$(AR_FOR_TARGET) rc $@ $^
+
+$(SHARED_LIB) : $(SHARED_OBJS)
+	$(AR_FOR_TARGET) rc $@ $^
+
+Makefile.frag: %: %.tpp
+	$(TPP) -s $(CONFIG) -m xtb.pr -o $@ $<
+
+all: all-target
+
+targets: $(SHARED_LIB) $(LIB) $(DEBUG_LIB)
+
+all-target: targets
+
+install: install-targets
+
+install-target: install-targets
+
+install-targets: $(LIB) $(DEBUG_LIB) $(HEADERS) $(SHARED_LIB)
+	$(INSTALL) $(HEADERS) $(target_incdir)
+	$(INSTALL) $(SHARED_LIB) $(target_libdir)
+	$(INSTALL) $(LIB) $(target_libdir)
+	$(INSTALL) $(DEBUG_LIB) $(target_libdir)
+	mkdir -p $(target_example_dir)
+	cp -rf $(TEST_DIR)/* $(target_example_dir)
+
+clean:
+	rm -f *.o *.a *.d $(LIB)
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) && $(SHELL) ./config.status
+
+$(top_builddir)/config.status: $(top_srcdir)/configure
+	cd $(top_builddir) && $(SHELL) ./config.status --recheck
+

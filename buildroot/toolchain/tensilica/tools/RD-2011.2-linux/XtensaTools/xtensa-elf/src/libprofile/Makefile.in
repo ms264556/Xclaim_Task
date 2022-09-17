@@ -1,0 +1,117 @@
+# Makefile for libprofile.
+
+# Copyright (c) 2003-2008 Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+SHELL = /bin/sh
+
+srcdir = @srcdir@
+VPATH = $(srcdir)
+prefix = @prefix@
+target_alias = @target_alias@
+target_libdir = $(prefix)/$(target_alias)/lib
+target_incdir = $(prefix)/$(target_alias)/arch/include/xtensa/
+
+top_builddir = @abs_top_builddir@
+top_srcdir = @top_srcdir@
+
+default: all
+include $(top_builddir)/../../Makefile.env
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+
+TPP = $(TENSILICA_TOOLS)/bin/tpp
+
+CC_FOR_TARGET = $(XTTOOLS)/bin/$(XTENSA_CC_FOR_TARGET)
+AR_FOR_TARGET = $(XTTOOLS)/bin/xt-ar
+AR_FLAGS = rc
+
+CFLAGS = -O2 -g -Wall -DM -mlongcalls
+
+C_FILES = hw_profiler.c timer_control.c
+ASM_FILES = timer.S
+HEADERS = $(srcdir)/xt_profiling.h
+OBJS0 = $(C_FILES:.c=.0.o) $(ASM_FILES:.S=.0.o) 
+OBJS1 = $(C_FILES:.c=.1.o) $(ASM_FILES:.S=.1.o) 
+OBJS2 = $(C_FILES:.c=.2.o) $(ASM_FILES:.S=.2.o) 
+OBJS3 = $(C_FILES:.c=.3.o) $(ASM_FILES:.S=.3.o) 
+
+COMPILE_COMMAND = $(CC_FOR_TARGET) $(CFLAGS) -c
+
+%.0.o : %.c
+	$(COMPILE_COMMAND) -DTIMER=0 -o $@ $<
+
+%.0.o : %.S
+	$(COMPILE_COMMAND) -DTIMER=0 -g -c -o $@ $<
+
+%.1.o : %.c
+	$(COMPILE_COMMAND) -DTIMER=1 -o $@ $<
+
+%.1.o : %.S
+	$(COMPILE_COMMAND) -DTIMER=1 -g -c -o $@ $<
+
+%.2.o : %.c
+	$(COMPILE_COMMAND) -DTIMER=2 -o $@ $<
+
+%.2.o : %.S
+	$(COMPILE_COMMAND) -DTIMER=2 -g -c -o $@ $<
+
+%.3.o : %.c
+	$(COMPILE_COMMAND) -DTIMER=3 -o $@ $<
+
+%.3.o : %.S
+	$(COMPILE_COMMAND) -DTIMER=3 -g -c -o $@ $<
+
+.PHONY: default all all-target install install-target clean
+
+LIB_HWPROFILE0 = libhwprofile0.a
+LIB_HWPROFILE1 = libhwprofile1.a
+LIB_HWPROFILE2 = libhwprofile2.a
+LIB_HWPROFILE3 = libhwprofile3.a
+
+$(LIB_HWPROFILE0) : $(OBJS0)
+	$(AR_FOR_TARGET) rc $@ $^
+
+$(LIB_HWPROFILE1) : $(OBJS1)
+	$(AR_FOR_TARGET) rc $@ $^
+
+$(LIB_HWPROFILE2) : $(OBJS2)
+	$(AR_FOR_TARGET) rc $@ $^
+
+$(LIB_HWPROFILE3) : $(OBJS3)
+	$(AR_FOR_TARGET) rc $@ $^
+
+Makefile.frag: %: %.tpp 
+	$(TPP) -s $(CONFIG) -m xtb.pr -o $@ $<
+
+-include Makefile.frag
+
+all: all-target
+install: install-target
+
+all-target: $(TARGETS)
+
+ifneq ($(TARGETS), )
+install-target: $(TARGETS)
+	$(INSTALL) $(TARGETS) $(target_libdir)
+	$(INSTALL) $(HEADERS) $(target_incdir)
+else
+install-target:
+	echo No legal timers found
+endif
+
+clean:
+	rm -f *.o *.a *.d $(TARGETS)
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) && $(SHELL) ./config.status
+
+$(top_builddir)/config.status: $(top_srcdir)/configure
+	cd $(top_builddir) && $(SHELL) ./config.status --recheck
+

@@ -1,0 +1,3176 @@
+<html>
+  <head>
+    <title>
+      Instruction Pipelining
+    </title>
+    <style type="text/css">
+      <!--
+	body {
+		background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+		margin-left: 2em;
+		margin-right: 2em;
+	}
+	#boundingbox {
+	        background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+	        position: relative;
+	        width: 865px;
+	        margin: 0 auto;
+	        padding: 20px;
+	        border-style: dashed;
+	        border-width: 1px;
+	        border-spacing: 10px;
+	        border-collapse: separate;
+	}
+	a {
+		text-decoration: none;
+	}
+	a:visited {
+		color: blue;
+	}
+	a:link {
+		color: green;
+	}
+	a:active {
+		color: green;
+	}
+	a:hover {
+		color: green;
+	}
+	a:offsite {
+		color: green;
+	}
+	h1 {
+		font-size: 14pt;
+		font-weight: bold;
+	}
+	h1.center {
+		font-size: 14pt;
+		font-weight: bold;
+	        text-align: center;
+	}
+	h2 {
+		font-size: 12pt;
+	}
+	caption {
+		padding-top: 1em;
+	}
+	table.thin {
+		border-width: thin;
+		border-spacing: 0px;
+		border-style: inset;
+		border-color: gray;
+		border-collapse: collapse;
+		background-color: rgb(250, 240, 230);
+	}
+	table th.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table th.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	pre {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	}
+	.proto {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 1em;
+	        text-indent: -1em;
+	}
+	.protohead {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 2em;
+	        text-indent: -2em;
+	}
+	.protobody {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 4em;
+	        text-indent: -2em;
+	}
+	.rotate {
+	        display: block;
+	        -webkit-transform: rotate(-90deg); 
+	        -moz-transform: rotate(-90deg);
+	        filter:
+	progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	        padding-top: 20px;                       
+	}
+	.light {
+	        font-size: 75%;
+	        color: SlateGrey;
+	}
+	
+        -->
+    </style>
+  </head>
+  <body>
+    <h1>
+      Instruction Pipelining
+    </h1>
+    <h2>
+      Pipeline Stages
+    </h2>
+    <ul>
+      <li>
+	P-Stage: PC Generation
+      </li>
+      <li>
+	I-Stage: Instruction Alignment
+      </li>
+      <li>
+	R-Stage (0): Decode and Dispatch
+      </li>
+      <li>
+	E-Stage (1): Execute, Branch Resolution, and Load/Store Address
+	Generation
+      </li>
+      <li>
+	M-Stage (2): Memory Access
+      </li>
+      <li>
+	W-Stage (3): Commit and Writeback
+      </li>
+    </ul>
+    <table class="thin">
+      <col width=192><col width=264><col width=264>
+      <thead>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    Instruction
+	  </th>
+	  <th align="left" class="thin">
+	    In
+	  </th>
+	  <th align="left" class="thin">
+	    Out
+	  </th>
+	</tr>
+      </thead>
+      <tbody>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Absolute Value"><a href="instruction/ABS.html">ABS</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Add"><a href="instruction/ADD.html">ADD</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Narrow Add"><a href="instruction/ADDN.html">ADD.N</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Add Immediate"><a href="instruction/ADDI.html">ADDI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Narrow Add Immediate"><a href="instruction/ADDIN.html">ADDI.N</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Add Immediate with Shift by 8"><a href="instruction/ADDMI.html">ADDMI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Add with Shift by 1"><a href="instruction/ADDX2.html">ADDX2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Add with Shift by 2"><a href="instruction/ADDX4.html">ADDX4</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Add with Shift by 3"><a href="instruction/ADDX8.html">ADDX8</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Bitwise Logical And"><a href="instruction/AND.html">AND</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if All Bits Set"><a href="instruction/BALL.html">BALL</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Any Bit Set"><a href="instruction/BANY.html">BANY</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Bit Clear"><a href="instruction/BBC.html">BBC</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Bit Clear Immediate"><a href="instruction/BBCI.html">BBCI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Bit Set"><a href="instruction/BBS.html">BBS</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Bit Set Immediate"><a href="instruction/BBSI.html">BBSI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Equal"><a href="instruction/BEQ.html">BEQ</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Equal Immediate"><a href="instruction/BEQI.html">BEQI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Equal to Zero"><a href="instruction/BEQZ.html">BEQZ</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Narrow Branch if Equal Zero"><a href="instruction/BEQZN.html">BEQZ.N</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Greater Than or Equal"><a href="instruction/BGE.html">BGE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Greater Than or Equal Immediate"><a href="instruction/BGEI.html">BGEI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Greater Than or Equal Unsigned"><a href="instruction/BGEU.html">BGEU</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Greater Than or Equal Unsigned Immediate"><a href="instruction/BGEUI.html">BGEUI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Greater Than or Equal to Zero"><a href="instruction/BGEZ.html">BGEZ</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Less Than"><a href="instruction/BLT.html">BLT</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Less Than Immediate"><a href="instruction/BLTI.html">BLTI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Less Than Unsigned"><a href="instruction/BLTU.html">BLTU</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Less Than Unsigned Immediate"><a href="instruction/BLTUI.html">BLTUI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Less Than Zero"><a href="instruction/BLTZ.html">BLTZ</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Not-All Bits Set"><a href="instruction/BNALL.html">BNALL</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Not Equal"><a href="instruction/BNE.html">BNE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Not Equal Immediate"><a href="instruction/BNEI.html">BNEI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if Not-Equal to Zero"><a href="instruction/BNEZ.html">BNEZ</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Narrow Branch if Not Equal Zero"><a href="instruction/BNEZN.html">BNEZ.N</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Branch if No Bit Set"><a href="instruction/BNONE.html">BNONE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Breakpoint"><a href="instruction/BREAK.html">BREAK</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>PSEXCM&nbsp;Mstage</code>, <code>PSINTLEVEL&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Narrow Breakpoint"><a href="instruction/BREAKN.html">BREAK.N</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>PSEXCM&nbsp;Mstage</code>, <code>PSINTLEVEL&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Non-windowed Call"><a href="instruction/CALL0.html">CALL0</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Call PC-relative, Rotate Window by 4"><a href="instruction/CALL4.html">CALL4</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>PSCALLINC&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Call PC-relative, Rotate Window by 8"><a href="instruction/CALL8.html">CALL8</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>PSCALLINC&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Call PC-relative, Rotate Window by 12"><a href="instruction/CALL12.html">CALL12</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>PSCALLINC&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Non-windowed Call Register"><a href="instruction/CALLX0.html">CALLX0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Call Register, Rotate Window by 4"><a href="instruction/CALLX4.html">CALLX4</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>PSCALLINC&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Call Register, Rotate Window by 8"><a href="instruction/CALLX8.html">CALLX8</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>PSCALLINC&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Call Register, Rotate Window by 12"><a href="instruction/CALLX12.html">CALLX12</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>PSCALLINC&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Signed Clamp"><a href="instruction/CLAMPS.html">CLAMPS</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Load/store Synchronize"><a href="instruction/DSYNC.html">DSYNC</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Subroutine Entry"><a href="instruction/ENTRY.html">ENTRY</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>PSCALLINC&nbsp;Rstage</code>, <code>PSEXCM&nbsp;Rstage</code>,
+	    <code>PSWOE&nbsp;Rstage</code>, <code>WindowBase&nbsp;Rstage</code>,
+	    <code>WindowStart&nbsp;Rstage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Rstage</code>, <code>WindowStart&nbsp;Rstage</code>,
+	    <code>ars_entry&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Execute Synchronize"><a href="instruction/ESYNC.html">ESYNC</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exception Wait"><a href="instruction/EXCW.html">EXCW</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Extract Unsigned Immediate"><a href="instruction/EXTUI.html">EXTUI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/EXTW.html">EXTW</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Invalidate Data TLB Entry"><a href="instruction/IDTLB.html">IDTLB</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Invalidate Instruction TLB Entry"><a href="instruction/IITLB.html">IITLB</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/ILL.html">ILL</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/ILLN.html">ILL.N</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Instruction Fetch Synchronize"><a href="instruction/ISYNC.html">ISYNC</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Unconditional Jump"><a href="instruction/J.html">J</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Unconditional Jump Register"><a href="instruction/JX.html">JX</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Load 8-bit Unsigned"><a href="instruction/L8UI.html">L8UI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Load 16-bit Signed"><a href="instruction/L16SI.html">L16SI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Load 16-bit Unsigned"><a href="instruction/L16UI.html">L16UI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Load 32-bit for Window Exceptions"><a href="instruction/L32E.html">L32E</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Load 32-bit"><a href="instruction/L32I.html">L32I</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Narrow Load 32-bit"><a href="instruction/L32IN.html">L32I.N</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Load 32-bit PC-Relative"><a href="instruction/L32R.html">L32R</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>LITBADDR&nbsp;Estage</code>, <code>LITBEN&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Loop"><a href="instruction/LOOP.html">LOOP</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>LBEG&nbsp;Estage</code>, <code>LEND&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Loop if Greater Than Zero"><a href="instruction/LOOPGTZ.html">LOOPGTZ</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>LBEG&nbsp;Estage</code>, <code>LEND&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Loop if Not-Equal Zero"><a href="instruction/LOOPNEZ.html">LOOPNEZ</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>LBEG&nbsp;Estage</code>, <code>LEND&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Maximum"><a href="instruction/MAX.html">MAX</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Maximum Unsigned"><a href="instruction/MAXU.html">MAXU</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Memory Wait"><a href="instruction/MEMW.html">MEMW</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Minimum"><a href="instruction/MIN.html">MIN</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Minimum Unsigned"><a href="instruction/MINU.html">MINU</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Narrow Move"><a href="instruction/MOVN.html">MOV.N</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Move if Equal to Zero"><a href="instruction/MOVEQZ.html">MOVEQZ</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Move if Greater Than or Equal to Zero"><a href="instruction/MOVGEZ.html">MOVGEZ</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Move Immediate"><a href="instruction/MOVI.html">MOVI</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Narrow Move Immediate"><a href="instruction/MOVIN.html">MOVI.N</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Move if Less Than Zero"><a href="instruction/MOVLTZ.html">MOVLTZ</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Move if Not-Equal to Zero"><a href="instruction/MOVNEZ.html">MOVNEZ</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Move to Stack Pointer"><a href="instruction/MOVSP.html">MOVSP</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Rstage</code>, <code>WindowStart&nbsp;Rstage</code>,
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Multiply 16-bit Signed"><a href="instruction/MUL16S.html">MUL16S</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Multiply 16-bit Unsigned"><a href="instruction/MUL16U.html">MUL16U</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Multiply Low"><a href="instruction/MULL.html">MULL</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Multiply Signed High"><a href="instruction/MULSH.html">MULSH</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Multiply Unsigned High"><a href="instruction/MULUH.html">MULUH</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Negate"><a href="instruction/NEG.html">NEG</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="No-operation"><a href="instruction/NOP.html">NOP</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Narrow No-operation"><a href="instruction/NOPN.html">NOP.N</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Normalization Shift Amount"><a href="instruction/NSA.html">NSA</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Normalization Shift Amount Unsigned"><a href="instruction/NSAU.html">NSAU</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Bitwise Logical Or"><a href="instruction/OR.html">OR</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Probe Data TLB"><a href="instruction/PDTLB.html">PDTLB</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Probe Instruction TLB"><a href="instruction/PITLB.html">PITLB</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read Data TLB Entry Virtual"><a href="instruction/RDTLB0.html">RDTLB0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read Data TLB Entry Translation"><a href="instruction/RDTLB1.html">RDTLB1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Non-windowed Return"><a href="instruction/RET.html">RET</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Narrow Non-windowed Return"><a href="instruction/RETN.html">RET.N</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Windowed Return"><a href="instruction/RETW.html">RETW</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Rstage</code>, <code>WindowStart&nbsp;Rstage</code>,
+	    <code>PSEXCM&nbsp;Rstage</code>, <code>PSWOE&nbsp;Rstage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Estage</code>, <code>WindowStart&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Narrow Windowed Return"><a href="instruction/RETWN.html">RETW.N</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Rstage</code>, <code>WindowStart&nbsp;Rstage</code>,
+	    <code>PSEXCM&nbsp;Rstage</code>, <code>PSWOE&nbsp;Rstage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Estage</code>, <code>WindowStart&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/RFDD.html">RFDD</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>InOCDMode&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>InOCDMode&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Return from Double Exception"><a href="instruction/RFDE.html">RFDE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DEPC&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/RFDO.html">RFDO</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>InOCDMode&nbsp;Estage</code>, <code>EPC5&nbsp;Estage</code>,
+	    <code>EPS5&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>InOCDMode&nbsp;Wstage</code>, <code>PSWOE&nbsp;Estage</code>,
+	    <code>PSCALLINC&nbsp;Estage</code>, <code>PSOWB&nbsp;Mstage</code>,
+	    <code>PSUM&nbsp;Mstage</code>, <code>PSEXCM&nbsp;Estage</code>, <code>PSINTLEVEL&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Return from Exception"><a href="instruction/RFE.html">RFE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC1&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>PSEXCM&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Return from High-Priority Interrupt"><a href="instruction/RFI.html">RFI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC1&nbsp;Estage</code>, <code>EPC2&nbsp;Estage</code>, <code>EPC3&nbsp;Estage</code>,
+	    <code>EPC4&nbsp;Estage</code>, <code>EPC5&nbsp;Estage</code>, <code>EPS2&nbsp;Estage</code>,
+	    <code>EPS3&nbsp;Estage</code>, <code>EPS4&nbsp;Estage</code>, <code>EPS5&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>PSWOE&nbsp;Estage</code>, <code>PSCALLINC&nbsp;Estage</code>,
+	    <code>PSOWB&nbsp;Mstage</code>, <code>PSUM&nbsp;Mstage</code>, <code>PSEXCM&nbsp;Estage</code>,
+	    <code>PSINTLEVEL&nbsp;Mstage</code>, <code>InOCDMode&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Return from Window Overflow"><a href="instruction/RFWO.html">RFWO</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC1&nbsp;Estage</code>, <code>WindowBase&nbsp;Estage</code>,
+	    <code>WindowStart&nbsp;Estage</code>, <code>PSOWB&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>PSEXCM&nbsp;Estage</code>, <code>WindowBase&nbsp;Estage</code>,
+	    <code>WindowStart&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Return From Window Underflow"><a href="instruction/RFWU.html">RFWU</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC1&nbsp;Estage</code>, <code>WindowBase&nbsp;Estage</code>,
+	    <code>WindowStart&nbsp;Estage</code>, <code>PSOWB&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>PSEXCM&nbsp;Estage</code>, <code>WindowBase&nbsp;Estage</code>,
+	    <code>WindowStart&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read Instruction TLB Entry Virtual"><a href="instruction/RITLB0.html">RITLB0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read Instruction TLB Entry Translation"><a href="instruction/RITLB1.html">RITLB1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Rotate Window"><a href="instruction/ROTW.html">ROTW</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Rstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Rstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read and Set Interrupt Level"><a href="instruction/RSIL.html">RSIL</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>PSWOE&nbsp;Rstage</code>, <code>PSCALLINC&nbsp;Estage</code>,
+	    <code>PSOWB&nbsp;Estage</code>, <code>PSUM&nbsp;Estage</code>, <code>PSEXCM&nbsp;Rstage</code>,
+	    <code>PSINTLEVEL&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>PSINTLEVEL&nbsp;Mstage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/RSRCCOMPARE0.html">RSR.CCOMPARE0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>CCOMPARE0&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/RSRCCOUNT.html">RSR.CCOUNT</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/RSRCONFIGID0.html">RSR.CONFIGID0</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/RSRCONFIGID1.html">RSR.CONFIGID1</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register DBREAKA0"><a href="instruction/RSRDBREAKA0.html">RSR.DBREAKA0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DBREAKA0&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register DBREAKA1"><a href="instruction/RSRDBREAKA1.html">RSR.DBREAKA1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DBREAKA1&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register DBREAKC0"><a href="instruction/RSRDBREAKC0.html">RSR.DBREAKC0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DBREAKC0&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register DBREAKC1"><a href="instruction/RSRDBREAKC1.html">RSR.DBREAKC1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DBREAKC1&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/RSRDDR.html">RSR.DDR</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register DEBUGCAUSE"><a href="instruction/RSRDEBUGCAUSE.html">RSR.DEBUGCAUSE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DEBUGCAUSE&nbsp;Mstage</code>, <code>DBNUM&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register DEPC"><a href="instruction/RSRDEPC.html">RSR.DEPC</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DEPC&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EPC1"><a href="instruction/RSREPC1.html">RSR.EPC1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC1&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EPC2"><a href="instruction/RSREPC2.html">RSR.EPC2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC2&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EPC3"><a href="instruction/RSREPC3.html">RSR.EPC3</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC3&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EPC4"><a href="instruction/RSREPC4.html">RSR.EPC4</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC4&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EPC5"><a href="instruction/RSREPC5.html">RSR.EPC5</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC5&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EPS2"><a href="instruction/RSREPS2.html">RSR.EPS2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPS2&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EPS3"><a href="instruction/RSREPS3.html">RSR.EPS3</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPS3&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EPS4"><a href="instruction/RSREPS4.html">RSR.EPS4</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPS4&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EPS5"><a href="instruction/RSREPS5.html">RSR.EPS5</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPS5&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EXCCAUSE"><a href="instruction/RSREXCCAUSE.html">RSR.EXCCAUSE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCCAUSE&nbsp;Mstage</code>, <code>XTSYNC&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EXCSAVE1"><a href="instruction/RSREXCSAVE1.html">RSR.EXCSAVE1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCSAVE1&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EXCSAVE2"><a href="instruction/RSREXCSAVE2.html">RSR.EXCSAVE2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCSAVE2&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EXCSAVE3"><a href="instruction/RSREXCSAVE3.html">RSR.EXCSAVE3</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCSAVE3&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EXCSAVE4"><a href="instruction/RSREXCSAVE4.html">RSR.EXCSAVE4</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCSAVE4&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EXCSAVE5"><a href="instruction/RSREXCSAVE5.html">RSR.EXCSAVE5</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCSAVE5&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register EXCVADDR"><a href="instruction/RSREXCVADDR.html">RSR.EXCVADDR</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCVADDR&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register IBREAKA0"><a href="instruction/RSRIBREAKA0.html">RSR.IBREAKA0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>IBREAKA0&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register IBREAKA1"><a href="instruction/RSRIBREAKA1.html">RSR.IBREAKA1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>IBREAKA1&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register IBREAKENABLE"><a href="instruction/RSRIBREAKENABLE.html">RSR.IBREAKENABLE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>IBREAKENABLE&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/RSRICOUNT.html">RSR.ICOUNT</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register ICOUNTLEVEL"><a href="instruction/RSRICOUNTLEVEL.html">RSR.ICOUNTLEVEL</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ICOUNTLEVEL&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register INTENABLE"><a href="instruction/RSRINTENABLE.html">RSR.INTENABLE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>INTENABLE&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/RSRINTERRUPT.html">RSR.INTERRUPT</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/RSRLBEG.html">RSR.LBEG</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>LBEG&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/RSRLCOUNT.html">RSR.LCOUNT</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/RSRLEND.html">RSR.LEND</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>LEND&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register LITBASE"><a href="instruction/RSRLITBASE.html">RSR.LITBASE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>LITBADDR&nbsp;Mstage</code>, <code>LITBEN&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register MISC0"><a href="instruction/RSRMISC0.html">RSR.MISC0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>MISC0&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register MISC1"><a href="instruction/RSRMISC1.html">RSR.MISC1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>MISC1&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register MISC2"><a href="instruction/RSRMISC2.html">RSR.MISC2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>MISC2&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register MISC3"><a href="instruction/RSRMISC3.html">RSR.MISC3</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>MISC3&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register PS"><a href="instruction/RSRPS.html">RSR.PS</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>PSWOE&nbsp;Rstage</code>, <code>PSCALLINC&nbsp;Mstage</code>,
+	    <code>PSOWB&nbsp;Mstage</code>, <code>PSUM&nbsp;Mstage</code>, <code>PSEXCM&nbsp;Rstage</code>,
+	    <code>PSINTLEVEL&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register SAR"><a href="instruction/RSRSAR.html">RSR.SAR</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register WINDOWBASE"><a href="instruction/RSRWINDOWBASE.html">RSR.WINDOWBASE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Rstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Read System Register WINDOWSTART"><a href="instruction/RSRWINDOWSTART.html">RSR.WINDOWSTART</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>WindowStart&nbsp;Rstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Register Read Synchronize"><a href="instruction/RSYNC.html">RSYNC</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Store 8-bit"><a href="instruction/S8I.html">S8I</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Store 16-bit"><a href="instruction/S16I.html">S16I</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Store 32-bit for Window Exceptions"><a href="instruction/S32E.html">S32E</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Store 32-bit"><a href="instruction/S32I.html">S32I</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Narrow Store 32-bit"><a href="instruction/S32IN.html">S32I.N</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Sign Extend"><a href="instruction/SEXT.html">SEXT</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Simulator Call"><a href="instruction/SIMCALL.html">SIMCALL</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Shift Left Logical"><a href="instruction/SLL.html">SLL</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Shift Left Logical Immediate"><a href="instruction/SLLI.html">SLLI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Shift Right Arithmetic"><a href="instruction/SRA.html">SRA</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Shift Right Arithmetic Immediate"><a href="instruction/SRAI.html">SRAI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Shift Right Combined"><a href="instruction/SRC.html">SRC</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>, <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Shift Right Logical"><a href="instruction/SRL.html">SRL</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Shift Right Logical Immediate"><a href="instruction/SRLI.html">SRLI</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Set Shift Amount for BE Byte Shift"><a href="instruction/SSA8B.html">SSA8B</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Set Shift Amount for LE Byte Shift"><a href="instruction/SSA8L.html">SSA8L</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Set Shift Amount Immediate"><a href="instruction/SSAI.html">SSAI</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Set Shift Amount for Left Shift"><a href="instruction/SSL.html">SSL</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Set Shift Amount for Right Shift"><a href="instruction/SSR.html">SSR</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Subtract"><a href="instruction/SUB.html">SUB</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Subtract with Shift by 1"><a href="instruction/SUBX2.html">SUBX2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Subtract with Shift by 2"><a href="instruction/SUBX4.html">SUBX4</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Subtract with Shift by 3"><a href="instruction/SUBX8.html">SUBX8</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="System Call"><a href="instruction/SYSCALL.html">SYSCALL</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Wait for Interrupt"><a href="instruction/WAITI.html">WAITI</a></code>
+	  </th>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>PSINTLEVEL&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write Data TLB Entry"><a href="instruction/WDTLB.html">WDTLB</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write Instruction TLB Entry"><a href="instruction/WITLB.html">WITLB</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/WSRCCOMPARE0.html">WSR.CCOMPARE0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>CCOMPARE0&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/WSRCCOUNT.html">WSR.CCOUNT</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register DBREAKA0"><a href="instruction/WSRDBREAKA0.html">WSR.DBREAKA0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>DBREAKA0&nbsp;Wstage</code>, <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register DBREAKA1"><a href="instruction/WSRDBREAKA1.html">WSR.DBREAKA1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>DBREAKA1&nbsp;Wstage</code>, <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register DBREAKC0"><a href="instruction/WSRDBREAKC0.html">WSR.DBREAKC0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>DBREAKC0&nbsp;Wstage</code>, <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register DBREAKC1"><a href="instruction/WSRDBREAKC1.html">WSR.DBREAKC1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>DBREAKC1&nbsp;Wstage</code>, <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/WSRDDR.html">WSR.DDR</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register DEBUGCAUSE"><a href="instruction/WSRDEBUGCAUSE.html">WSR.DEBUGCAUSE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>DEBUGCAUSE&nbsp;Wstage</code>, <code>DBNUM&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register DEPC"><a href="instruction/WSRDEPC.html">WSR.DEPC</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>DEPC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EPC1"><a href="instruction/WSREPC1.html">WSR.EPC1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPC1&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EPC2"><a href="instruction/WSREPC2.html">WSR.EPC2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPC2&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EPC3"><a href="instruction/WSREPC3.html">WSR.EPC3</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPC3&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EPC4"><a href="instruction/WSREPC4.html">WSR.EPC4</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPC4&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EPC5"><a href="instruction/WSREPC5.html">WSR.EPC5</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPC5&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EPS2"><a href="instruction/WSREPS2.html">WSR.EPS2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPS2&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EPS3"><a href="instruction/WSREPS3.html">WSR.EPS3</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPS3&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EPS4"><a href="instruction/WSREPS4.html">WSR.EPS4</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPS4&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EPS5"><a href="instruction/WSREPS5.html">WSR.EPS5</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPS5&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EXCCAUSE"><a href="instruction/WSREXCCAUSE.html">WSR.EXCCAUSE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCCAUSE&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EXCSAVE1"><a href="instruction/WSREXCSAVE1.html">WSR.EXCSAVE1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCSAVE1&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EXCSAVE2"><a href="instruction/WSREXCSAVE2.html">WSR.EXCSAVE2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCSAVE2&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EXCSAVE3"><a href="instruction/WSREXCSAVE3.html">WSR.EXCSAVE3</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCSAVE3&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EXCSAVE4"><a href="instruction/WSREXCSAVE4.html">WSR.EXCSAVE4</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCSAVE4&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EXCSAVE5"><a href="instruction/WSREXCSAVE5.html">WSR.EXCSAVE5</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCSAVE5&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register EXCVADDR"><a href="instruction/WSREXCVADDR.html">WSR.EXCVADDR</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCVADDR&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register IBREAKA0"><a href="instruction/WSRIBREAKA0.html">WSR.IBREAKA0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>IBREAKA0&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register IBREAKA1"><a href="instruction/WSRIBREAKA1.html">WSR.IBREAKA1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>IBREAKA1&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register IBREAKENABLE"><a href="instruction/WSRIBREAKENABLE.html">WSR.IBREAKENABLE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>IBREAKENABLE&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/WSRICOUNT.html">WSR.ICOUNT</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register ICOUNTLEVEL"><a href="instruction/WSRICOUNTLEVEL.html">WSR.ICOUNTLEVEL</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>ICOUNTLEVEL&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/WSRINTCLEAR.html">WSR.INTCLEAR</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register INTENABLE"><a href="instruction/WSRINTENABLE.html">WSR.INTENABLE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>INTENABLE&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/WSRINTSET.html">WSR.INTSET</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/WSRLBEG.html">WSR.LBEG</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>LBEG&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/WSRLCOUNT.html">WSR.LCOUNT</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/WSRLEND.html">WSR.LEND</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>LEND&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register LITBASE"><a href="instruction/WSRLITBASE.html">WSR.LITBASE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>LITBADDR&nbsp;Wstage</code>, <code>LITBEN&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register MISC0"><a href="instruction/WSRMISC0.html">WSR.MISC0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>MISC0&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register MISC1"><a href="instruction/WSRMISC1.html">WSR.MISC1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>MISC1&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register MISC2"><a href="instruction/WSRMISC2.html">WSR.MISC2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>MISC2&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register MISC3"><a href="instruction/WSRMISC3.html">WSR.MISC3</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>MISC3&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register PS"><a href="instruction/WSRPS.html">WSR.PS</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>PSWOE&nbsp;Wstage</code>, <code>PSCALLINC&nbsp;Estage</code>,
+	    <code>PSOWB&nbsp;Wstage</code>, <code>PSUM&nbsp;Wstage</code>, <code>PSEXCM&nbsp;Estage</code>,
+	    <code>PSINTLEVEL&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register SAR"><a href="instruction/WSRSAR.html">WSR.SAR</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>, <code>XTSYNC&nbsp;Wstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register WINDOWBASE"><a href="instruction/WSRWINDOWBASE.html">WSR.WINDOWBASE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Write System Register WINDOWSTART"><a href="instruction/WSRWINDOWSTART.html">WSR.WINDOWSTART</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>WindowStart&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Bitwise Logical Exclusive Or"><a href="instruction/XOR.html">XOR</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ars&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/XSRCCOMPARE0.html">XSR.CCOMPARE0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>CCOMPARE0&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>CCOMPARE0&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/XSRCCOUNT.html">XSR.CCOUNT</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register DBREAKA0"><a href="instruction/XSRDBREAKA0.html">XSR.DBREAKA0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DBREAKA0&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>DBREAKA0&nbsp;Wstage</code>, <code>XTSYNC&nbsp;Wstage</code>,
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register DBREAKA1"><a href="instruction/XSRDBREAKA1.html">XSR.DBREAKA1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DBREAKA1&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>DBREAKA1&nbsp;Wstage</code>, <code>XTSYNC&nbsp;Wstage</code>,
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register DBREAKC0"><a href="instruction/XSRDBREAKC0.html">XSR.DBREAKC0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DBREAKC0&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>DBREAKC0&nbsp;Wstage</code>, <code>XTSYNC&nbsp;Wstage</code>,
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register DBREAKC1"><a href="instruction/XSRDBREAKC1.html">XSR.DBREAKC1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DBREAKC1&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>DBREAKC1&nbsp;Wstage</code>, <code>XTSYNC&nbsp;Wstage</code>,
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/XSRDDR.html">XSR.DDR</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register DEBUGCAUSE"><a href="instruction/XSRDEBUGCAUSE.html">XSR.DEBUGCAUSE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DEBUGCAUSE&nbsp;Mstage</code>, <code>DBNUM&nbsp;Mstage</code>,
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>DEBUGCAUSE&nbsp;Wstage</code>, <code>DBNUM&nbsp;Wstage</code>,
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register DEPC"><a href="instruction/XSRDEPC.html">XSR.DEPC</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>DEPC&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>DEPC&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EPC1"><a href="instruction/XSREPC1.html">XSR.EPC1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC1&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPC1&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EPC2"><a href="instruction/XSREPC2.html">XSR.EPC2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC2&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPC2&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EPC3"><a href="instruction/XSREPC3.html">XSR.EPC3</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC3&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPC3&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EPC4"><a href="instruction/XSREPC4.html">XSR.EPC4</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC4&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPC4&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EPC5"><a href="instruction/XSREPC5.html">XSR.EPC5</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPC5&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPC5&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EPS2"><a href="instruction/XSREPS2.html">XSR.EPS2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPS2&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPS2&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EPS3"><a href="instruction/XSREPS3.html">XSR.EPS3</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPS3&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPS3&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EPS4"><a href="instruction/XSREPS4.html">XSR.EPS4</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPS4&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPS4&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EPS5"><a href="instruction/XSREPS5.html">XSR.EPS5</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EPS5&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EPS5&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EXCCAUSE"><a href="instruction/XSREXCCAUSE.html">XSR.EXCCAUSE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCCAUSE&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCCAUSE&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EXCSAVE1"><a href="instruction/XSREXCSAVE1.html">XSR.EXCSAVE1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCSAVE1&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCSAVE1&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EXCSAVE2"><a href="instruction/XSREXCSAVE2.html">XSR.EXCSAVE2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCSAVE2&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCSAVE2&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EXCSAVE3"><a href="instruction/XSREXCSAVE3.html">XSR.EXCSAVE3</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCSAVE3&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCSAVE3&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EXCSAVE4"><a href="instruction/XSREXCSAVE4.html">XSR.EXCSAVE4</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCSAVE4&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCSAVE4&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EXCSAVE5"><a href="instruction/XSREXCSAVE5.html">XSR.EXCSAVE5</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCSAVE5&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCSAVE5&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register EXCVADDR"><a href="instruction/XSREXCVADDR.html">XSR.EXCVADDR</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>EXCVADDR&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>EXCVADDR&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register IBREAKA0"><a href="instruction/XSRIBREAKA0.html">XSR.IBREAKA0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>IBREAKA0&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>IBREAKA0&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register IBREAKA1"><a href="instruction/XSRIBREAKA1.html">XSR.IBREAKA1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>IBREAKA1&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>IBREAKA1&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register IBREAKENABLE"><a href="instruction/XSRIBREAKENABLE.html">XSR.IBREAKENABLE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>IBREAKENABLE&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>IBREAKENABLE&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/XSRICOUNT.html">XSR.ICOUNT</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register ICOUNTLEVEL"><a href="instruction/XSRICOUNTLEVEL.html">XSR.ICOUNTLEVEL</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>ICOUNTLEVEL&nbsp;Mstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>ICOUNTLEVEL&nbsp;Mstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register INTENABLE"><a href="instruction/XSRINTENABLE.html">XSR.INTENABLE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>INTENABLE&nbsp;Mstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>INTENABLE&nbsp;Mstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/XSRLBEG.html">XSR.LBEG</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>LBEG&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>LBEG&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/XSRLCOUNT.html">XSR.LCOUNT</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>XTSYNC&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code><a href="instruction/XSRLEND.html">XSR.LEND</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>LEND&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>LEND&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register LITBASE"><a href="instruction/XSRLITBASE.html">XSR.LITBASE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>LITBADDR&nbsp;Mstage</code>, <code>LITBEN&nbsp;Mstage</code>,
+	    <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>LITBADDR&nbsp;Wstage</code>, <code>LITBEN&nbsp;Wstage</code>,
+	    <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register MISC0"><a href="instruction/XSRMISC0.html">XSR.MISC0</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>MISC0&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>MISC0&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register MISC1"><a href="instruction/XSRMISC1.html">XSR.MISC1</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>MISC1&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>MISC1&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register MISC2"><a href="instruction/XSRMISC2.html">XSR.MISC2</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>MISC2&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>MISC2&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register MISC3"><a href="instruction/XSRMISC3.html">XSR.MISC3</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>MISC3&nbsp;Mstage</code>, <code>art&nbsp;Wstage</code>
+	  </td>
+	  <td class="thin">
+	    <code>MISC3&nbsp;Wstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register PS"><a href="instruction/XSRPS.html">XSR.PS</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>PSWOE&nbsp;Rstage</code>, <code>PSCALLINC&nbsp;Mstage</code>,
+	    <code>PSOWB&nbsp;Mstage</code>, <code>PSUM&nbsp;Mstage</code>, <code>PSEXCM&nbsp;Rstage</code>,
+	    <code>PSINTLEVEL&nbsp;Mstage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>PSWOE&nbsp;Wstage</code>, <code>PSCALLINC&nbsp;Estage</code>,
+	    <code>PSOWB&nbsp;Wstage</code>, <code>PSUM&nbsp;Wstage</code>, <code>PSEXCM&nbsp;Estage</code>,
+	    <code>PSINTLEVEL&nbsp;Mstage</code>, <code>art&nbsp;Mstage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register SAR"><a href="instruction/XSRSAR.html">XSR.SAR</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>SAR&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register WINDOWBASE"><a href="instruction/XSRWINDOWBASE.html">XSR.WINDOWBASE</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Rstage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+	<tr class="thin">
+	  <th align="left" class="thin">
+	    <code title="Exchange System Register WINDOWSTART"><a href="instruction/XSRWINDOWSTART.html">XSR.WINDOWSTART</a></code>
+	  </th>
+	  <td class="thin">
+	    <code>WindowStart&nbsp;Rstage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>WindowStart&nbsp;Estage</code>, <code>art&nbsp;Estage</code>
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,177 @@
+#! /usr/xtensa/tools-6.1/bin/perl -w
+
+# Script to generate TIEPort code 
+# $Id: $
+
+# Copyright (c) 2006-2008 by Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+# #################################################################################
+# This is the wrapper script that is invoked from tcgen. It calls tietpp on the
+# interface C/RTL code and keeps it in a string. Then it reads the spec of each
+# interface from tcgen and sets the variables and evals the tppcode for each
+# interface. 
+# #################################################################################
+
+package ifgen;
+use strict;
+# Perl standard libraries
+use Getopt::Long;
+use FindBin;
+use File::Temp qw(tempfile);
+use File::Spec;
+use Cwd;
+
+{ # main
+
+  #my $perlbin = ($^O eq 'MSWin32')?"/perl/bin/MSWin32-x86/perl.exe":"/bin/perl";
+  #my $perlexe = "/usr/xtensa/tools-6.1" . $perlbin;
+  my $perlexe = $^X;
+  my $tppdir = $FindBin::RealBin;
+  my $usage = <<EOF;
+usage: $0 options 
+      -c 	Generate C code
+      -rtl 	Generate RTL code 
+		At least one must be true
+EOF
+    my $tietpp = $tppdir . '/tietpp';
+    my $genC = 0;
+    my $CSource = $tppdir . '/../lib/TIE/interface.c.tpp';
+    my $genRTL = 0;
+    my $RTLSource = $tppdir . '/../lib/TIE/interface.tpp';
+    my $debug = 0;
+    my $verify = 0;
+    my $ret = GetOptions(
+       "-debug"	=> \$debug,
+       "-verify"=> \$verify,
+       "-c" 	=> \$genC,
+       "-rtl"	=> \$genRTL);
+  
+   die "Could not find $tietpp\n" if (! -e $tietpp );
+   die "Could not find $CSource\n" if (! -e $CSource );
+   die "Could not find $RTLSource\n" if (! -e $RTLSource );
+
+   if ( ! $ret || (!$genC && !$genRTL) ) {
+      print $usage;
+      exit(1);
+   }
+
+   my $sourceFile = ($genC)?$CSource:(($genRTL)?$RTLSource:undef);
+   die "Could not find $sourceFile\n" if !$sourceFile;
+   my $temp_dir  = File::Spec->tmpdir( CLEANUP => 1 );
+   if ($^O eq 'MSWin32') {
+        my ($vol, $dir, $file) = File::Spec->splitpath ($temp_dir, 1);
+        if (!defined($vol) || $vol eq '') {
+            my ($curdir, $curfile);
+            ($vol, $curdir, $curfile) = File::Spec->splitpath (cwd(), 1);
+            $temp_dir = File::Spec->catpath($vol, $dir, $file);
+        }
+    }
+    my ($fh, $perl_file) = tempfile("tietpp_XXXXXXXX", DIR => $temp_dir);
+    close($fh);
+
+    #Run tietpp to dump the output into a temp file and read it back.
+    my @tietppargs = ('-w', $tietpp, '-p', $perl_file, $sourceFile);
+    if ( $^O eq 'MSWin32') {
+	@tietppargs = map("\"$_\"", @tietppargs);
+    }
+    print STDERR "Executing $perlexe " . join(' ', @tietppargs) . "\n" if $debug;
+    system($perlexe, @tietppargs) == 0 || die "Could not execute $tietpp\n";
+    open TPPOUT, "$perl_file" || die "Could not read output of tietpp $perl_file\n";
+    my @tppcode = (<TPPOUT>);
+    close TPPOUT;
+
+    #Now get the params from stdin
+    my $ifs = join(" ", <>);
+    $ifs = '$ifs = [ ' . $ifs . '] ;';
+    print STDERR "$ifs\n" if $debug;
+    eval($ifs) || die "Syntax error in interface input description\n";
+
+    foreach my $intf ( @$ifs ) {
+        my $evalstr = "";
+	$evalstr .= '$main::name = "' . $intf->{NAME} . '";';
+	$evalstr .= '$main::type = "' . $intf->{TYPE} . '";';
+	$evalstr .= '$main::dir = "' .  $intf->{DIR} . '";';
+	$evalstr .= '$main::width = ' .  $intf->{WIDTH} . ';';
+	$evalstr .= '$main::depth = ' .  $intf->{DEPTH} . ';';
+	$evalstr .= '$main::stall = ' .  $intf->{STALL} . ';';
+	$evalstr .= '$main::commit = ' .  $intf->{COMMIT} . ';';
+        if ( $genC ) {
+	    $evalstr .= '$main::target = "' .  $intf->{TARGETHW} . '";';
+	    $evalstr .= '$main::clkgate = "' .  $intf->{CLKGATEGLOBAL} . '";';
+	    $evalstr .= '$main::stage = ' .  $intf->{STAGE} . ';';
+	    $evalstr .= '$main::words = ' .  $intf->{WORDS} . ';';
+	    $evalstr .= '$main::reg  = ' .  $intf->{REGISTER} . ';';
+            if ( defined $intf->{ENABLE} ) {
+	        $evalstr .= '$main::enable = "' .  $intf->{ENABLE} . '";';
+            } else {
+	        $evalstr .= '$main::enable = undef;';
+	    }
+            if ( defined $intf->{KILL} ) {
+	        $evalstr .= '$main::kill = "' .  $intf->{KILL} . '";';
+            } else {
+	        $evalstr .= '$main::kill = undef;';
+	    }
+            if ( defined $intf->{EKILL} ) {
+	        $evalstr .= '$main::ekill = "' .  $intf->{EKILL} . '";';
+            } else {
+	        $evalstr .= '$main::ekill = undef;';
+	    }
+            if ( defined $intf->{DEFVAL} ) {
+	        $evalstr .= '$main::defavl = "' .  $intf->{DEFVAL} . '";';
+            } else {
+	        $evalstr .= '$main::defavl = undef;';
+	    }
+            if ( defined $intf->{RDWRFUNC} ) {
+	        $evalstr .= '$main::rdwrfunc = "' .  $intf->{RDWRFUNC} . '";';
+            } else {
+	        $evalstr .= '$main::rdwrfunc = undef;';
+	    }
+	    $evalstr .= '$main::gen_data = ' .  $intf->{GENDATA} . ';';
+       
+        } elsif ( $genRTL ) {
+            my $kill = ( defined $intf->{KILL} )  ?  1 : 0;
+            my $ekill = ( defined $intf->{EKILL} )  ?  1 : 0;
+	    $evalstr .= '$main::direction = "' .  $intf->{DIRECTION} . '";';
+	    $evalstr .= '$main::prefix = "' .  $intf->{PREFIX} . '";';
+	    $evalstr .= '$main::latency = ' .  $intf->{LATENCY} . ';';
+	    $evalstr .= '$main::register = ' .  $intf->{REGISTER} . ';';
+	    $evalstr .= '$main::use_stage = ' .  $intf->{USE_STAGE} . ';'
+				if ( $intf->{DIRECTION} eq 'input');
+	    $evalstr .= '$main::def_stage = ' .  $intf->{DEF_STAGE} . ';'
+				if ( $intf->{DIRECTION} eq 'output');
+	    $evalstr .= '$main::TMode = ' .  $intf->{TMODE} . ';';
+	    $evalstr .= '$main::ClkGateGlobal = ' .  $intf->{CLKGATEGLOBAL} . ';';
+	    $evalstr .= '$main::ClkGateFunc = ' .  $intf->{CLKGATEFUNC} . ';';
+	    $evalstr .= '$main::ResetFlop = ' .  $intf->{RESETFLOP} . ';';
+	    $evalstr .= '$main::AsyncResetFlop = ' .  $intf->{ASYNCRESETFLOP} . ';';
+	    $evalstr .= '$main::trace = ' .  $intf->{TRACE} . ';';
+	    $evalstr .= '$main::Kill = ' . $kill . ';';
+	    $evalstr .= '$main::eKill = ' . $ekill . ';';
+        }
+        print STDERR "Interface " . $intf->{NAME} . "\t$evalstr\n" if $debug;
+        $evalstr .= join(" ", @tppcode);
+        eval($evalstr) || die "Could not evaluate tppcode";
+    }
+    unlink($perl_file);
+
+sub main::ceillog2 {
+   my ($num) = @_;
+   my $i;
+   return 1 if $num < 2;
+   if ($num > 0x80000000) { $i = 32;}
+   else { for ($i = 0;$num > (1 << $i);$i += 1) {} }
+   $i;
+}
+sub main::max {
+   ($_[0] > $_[1]) ? $_[0] : $_[1];
+}
+sub main::min {
+   ($_[0] < $_[1]) ? $_[0] : $_[1];
+}
+
+}

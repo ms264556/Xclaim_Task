@@ -1,0 +1,540 @@
+ 
+----------------------------- DISCLAIMER ------------------------------
+The power reported here is an estimate of the actual power.
+The actual power should be obtained using hardware power analysis tools.
+The actual power depends on many factors beyond the control of the
+estimator. These factors include but are not limited to 
+technology process, standard cell library, synthesis tool quality,
+synthesis scripts, optimization switches, MHz / performance goal,
+and power goal. Furthermore, the power reported here is in pJ/cycle (uW/MHz)
+for 0.13 micron lv technology.
+
+Every attempt has been made to provide an accurate estimate, however,
+the actual power may vary. TIE developer is advised to rely on the 
+power estimate during the early phases of the design and validate the
+estimated power using hardware synthesis tool as design attains maturity.
+------------------------------ DISCLAIMER ------------------------------
+
+  538584 TIE
+
+
+  ACTIVATED BLOCK POWER BEGIN
+
+  decoder    12.371 toplogic  115.585
+  Instruction                            core semantic    state  regfile
+  EXCW                                    nop    0.000    0.000    0.000
+  SYSCALL                                 nop    0.070    0.000    0.000
+  ENTRY                                   nop    1.328    2.817   35.458
+  MOVSP                                   nop    0.744    0.000   35.458
+  ROTW                                    nop    0.284    1.128    0.000
+  L32E                                   load    1.493    0.000   35.458
+  S32E                                  store    1.493    0.000   35.458
+  RSR_WINDOWBASE                          nop    0.035    0.000   35.458
+  WSR_WINDOWBASE                          nop    0.035    1.128   35.458
+  XSR_WINDOWBASE                          nop    0.035    1.128   35.458
+  RSR_WINDOWSTART                         nop    0.035    0.000   35.458
+  WSR_WINDOWSTART                         nop    0.035    1.689   35.458
+  XSR_WINDOWSTART                         nop    0.035    1.689   35.458
+  ADD_N                                   nop    1.117    0.000   35.458
+  ADDI_N                                  nop    1.458    0.000   35.458
+  ILL_N                                   nop    0.035    0.000    0.000
+  L32I_N                                 load    1.493    0.000   35.458
+  MOV_N                                   nop    0.035    0.000   35.458
+  MOVI_N                                  nop    0.376    0.000   35.458
+  NOP_N                                   nop    0.000    0.000    0.000
+  S32I_N                                store    1.493    0.000   35.458
+  ADDI                                    nop    1.458    0.000   35.458
+  ADDMI                                   nop    1.458    0.000   35.458
+  ADD                                     nop    1.117    0.000   35.458
+  SUB                                     nop    1.157    0.000   35.458
+  ADDX2                                   nop    1.117    0.000   35.458
+  ADDX4                                   nop    1.117    0.000   35.458
+  ADDX8                                   nop    1.117    0.000   35.458
+  SUBX2                                   nop    1.157    0.000   35.458
+  SUBX4                                   nop    1.157    0.000   35.458
+  SUBX8                                   nop    1.157    0.000   35.458
+  AND                                     nop    0.415    0.000   35.458
+  OR                                      nop    0.552    0.000   35.458
+  XOR                                     nop    0.674    0.000   35.458
+  EXTUI                                   nop    6.451    0.000   35.458
+  ILL                                     nop    0.035    0.000    0.000
+  L16UI                                  load    2.167    0.000   35.458
+  L16SI                                  load    2.167    0.000   35.458
+  L32I                                   load    2.167    0.000   35.458
+  L8UI                                   load    2.167    0.000   35.458
+  MOVI                                    nop    0.376    0.000   35.458
+  MOVEQZ                                  nop    0.244    0.000   35.458
+  MOVNEZ                                  nop    0.244    0.000   35.458
+  MOVLTZ                                  nop    0.041    0.000   35.458
+  MOVGEZ                                  nop    0.266    0.000   35.458
+  NEG                                     nop    1.157    0.000   35.458
+  ABS                                     nop    1.819    0.000   35.458
+  NOP                                     nop    0.000    0.000    0.000
+  SIMCALL                                 nop    0.000    0.000    0.000
+  S16I                                  store    2.167    0.000   35.458
+  S32I                                  store    2.167    0.000   35.458
+  S8I                                   store    2.167    0.000   35.458
+  SSR                                     nop    0.035    0.578   35.458
+  SSL                                     nop    1.349    0.578   35.458
+  SSA8L                                   nop    0.035    0.578   35.458
+  SSA8B                                   nop    1.349    0.578   35.458
+  SSAI                                    nop    0.087    0.578    0.000
+  SLL                                     nop    0.075    0.000   35.458
+  SRC                                     nop    0.075    0.000   35.458
+  SRL                                     nop    5.155    0.000   35.458
+  SRA                                     nop    0.075    0.000   35.458
+  SLLI                                    nop    3.213    0.000   35.458
+  SRAI                                    nop    3.526    0.000   35.458
+  SRLI                                    nop    3.149    0.000   35.458
+  MEMW                                    nop    0.000    0.000    0.000
+  EXTW                                    nop    0.000    0.000    0.000
+  ISYNC                                   nop    0.000    0.000    0.000
+  RSYNC                                   nop    0.000    0.000    0.000
+  ESYNC                                   nop    0.000    0.000    0.000
+  DSYNC                                   nop    0.000    0.000    0.000
+  RSIL                                    nop    0.154    0.659   35.458
+  RSR_LEND                                nop    0.035    0.000   35.458
+  WSR_LEND                                nop    0.035    2.253   35.458
+  XSR_LEND                                nop    0.035    2.253   35.458
+  RSR_LCOUNT                              nop    0.070    0.000   35.458
+  WSR_LCOUNT                              nop    0.105    0.187   35.458
+  XSR_LCOUNT                              nop    0.105    0.187   35.458
+  RSR_LBEG                                nop    0.035    0.000   35.458
+  WSR_LBEG                                nop    0.035    2.253   35.458
+  XSR_LBEG                                nop    0.035    2.253   35.458
+  RSR_SAR                                 nop    0.035    0.000   35.458
+  WSR_SAR                                 nop    0.990    0.765   35.458
+  XSR_SAR                                 nop    0.035    0.578   35.458
+  RSR_LITBASE                             nop    0.070    0.000   35.458
+  WSR_LITBASE                             nop    0.105    0.700   35.458
+  XSR_LITBASE                             nop    0.105    0.700   35.458
+  RSR_CONFIGID0                           nop    0.070    0.000   35.458
+  RSR_CONFIGID1                           nop    0.070    0.000   35.458
+  RSR_PS                                  nop    0.070    0.000   35.458
+  WSR_PS                                  nop    0.787    3.671   35.458
+  XSR_PS                                  nop    0.787    3.671   35.458
+  RSR_EPC1                                nop    0.070    0.000   35.458
+  WSR_EPC1                                nop    0.105    1.412   35.458
+  XSR_EPC1                                nop    0.105    1.412   35.458
+  RSR_EXCSAVE1                            nop    0.070    0.000   35.458
+  WSR_EXCSAVE1                            nop    0.105    0.672   35.458
+  XSR_EXCSAVE1                            nop    0.105    0.672   35.458
+  RSR_EPC2                                nop    0.070    0.000   35.458
+  WSR_EPC2                                nop    0.105    1.412   35.458
+  XSR_EPC2                                nop    0.105    1.412   35.458
+  RSR_EXCSAVE2                            nop    0.070    0.000   35.458
+  WSR_EXCSAVE2                            nop    0.105    0.672   35.458
+  XSR_EXCSAVE2                            nop    0.105    0.672   35.458
+  RSR_EPC3                                nop    0.070    0.000   35.458
+  WSR_EPC3                                nop    0.105    1.412   35.458
+  XSR_EPC3                                nop    0.105    1.412   35.458
+  RSR_EXCSAVE3                            nop    0.070    0.000   35.458
+  WSR_EXCSAVE3                            nop    0.105    0.672   35.458
+  XSR_EXCSAVE3                            nop    0.105    0.672   35.458
+  RSR_EPC4                                nop    0.070    0.000   35.458
+  WSR_EPC4                                nop    0.105    1.412   35.458
+  XSR_EPC4                                nop    0.105    1.412   35.458
+  RSR_EXCSAVE4                            nop    0.070    0.000   35.458
+  WSR_EXCSAVE4                            nop    0.105    0.672   35.458
+  XSR_EXCSAVE4                            nop    0.105    0.672   35.458
+  RSR_EPC5                                nop    0.070    0.000   35.458
+  WSR_EPC5                                nop    0.105    1.412   35.458
+  XSR_EPC5                                nop    0.105    1.412   35.458
+  RSR_EXCSAVE5                            nop    0.070    0.000   35.458
+  WSR_EXCSAVE5                            nop    0.105    0.672   35.458
+  XSR_EXCSAVE5                            nop    0.105    0.672   35.458
+  RSR_EPS2                                nop    0.070    0.000   35.458
+  WSR_EPS2                                nop    0.105    0.742   35.458
+  XSR_EPS2                                nop    0.105    0.742   35.458
+  RSR_EPS3                                nop    0.070    0.000   35.458
+  WSR_EPS3                                nop    0.105    0.742   35.458
+  XSR_EPS3                                nop    0.105    0.742   35.458
+  RSR_EPS4                                nop    0.070    0.000   35.458
+  WSR_EPS4                                nop    0.105    0.742   35.458
+  XSR_EPS4                                nop    0.105    0.742   35.458
+  RSR_EPS5                                nop    0.070    0.000   35.458
+  WSR_EPS5                                nop    0.105    0.742   35.458
+  XSR_EPS5                                nop    0.105    0.742   35.458
+  RSR_EXCVADDR                            nop    0.070    0.000   35.458
+  WSR_EXCVADDR                            nop    0.105    1.372   35.458
+  XSR_EXCVADDR                            nop    0.105    1.372   35.458
+  RSR_DEPC                                nop    0.070    0.000   35.458
+  WSR_DEPC                                nop    0.105    1.412   35.458
+  XSR_DEPC                                nop    0.105    1.412   35.458
+  RSR_EXCCAUSE                            nop    0.070    0.000   35.458
+  WSR_EXCCAUSE                            nop    0.105    0.418   35.458
+  XSR_EXCCAUSE                            nop    0.105    0.418   35.458
+  RSR_MISC0                               nop    0.070    0.000   35.458
+  WSR_MISC0                               nop    0.105    0.672   35.458
+  XSR_MISC0                               nop    0.105    0.672   35.458
+  RSR_MISC1                               nop    0.070    0.000   35.458
+  WSR_MISC1                               nop    0.105    0.672   35.458
+  XSR_MISC1                               nop    0.105    0.672   35.458
+  RSR_MISC2                               nop    0.070    0.000   35.458
+  WSR_MISC2                               nop    0.105    0.672   35.458
+  XSR_MISC2                               nop    0.105    0.672   35.458
+  RSR_MISC3                               nop    0.070    0.000   35.458
+  WSR_MISC3                               nop    0.105    0.672   35.458
+  XSR_MISC3                               nop    0.105    0.672   35.458
+  MUL16U                                  nop   77.351    0.000   35.458
+  MUL16S                                  nop   77.351    0.000   35.458
+  MULL                                    nop   77.351    0.000   35.458
+  MULUH                                   nop   77.351    0.000   35.458
+  MULSH                                   nop   77.351    0.000   35.458
+  WAITI                                   nop    0.154    0.659    0.000
+  RSR_INTERRUPT                           nop    0.070    0.000   35.458
+  WSR_INTSET                              nop    0.105    0.187   35.458
+  WSR_INTCLEAR                            nop    0.105    0.187   35.458
+  RSR_INTENABLE                           nop    0.070    0.000   35.458
+  WSR_INTENABLE                           nop    0.070    1.895   35.458
+  XSR_INTENABLE                           nop    0.070    1.895   35.458
+  BREAK                                   nop    2.005    0.000    0.000
+  BREAK_N                                 nop    2.005    0.000    0.000
+  RSR_DBREAKA0                            nop    0.070    0.000   35.458
+  WSR_DBREAKA0                            nop    0.105    0.859   35.458
+  XSR_DBREAKA0                            nop    0.105    0.859   35.458
+  RSR_DBREAKC0                            nop    0.070    0.000   35.458
+  WSR_DBREAKC0                            nop    0.105    0.417   35.458
+  XSR_DBREAKC0                            nop    0.105    0.417   35.458
+  RSR_DBREAKA1                            nop    0.070    0.000   35.458
+  WSR_DBREAKA1                            nop    0.105    0.859   35.458
+  XSR_DBREAKA1                            nop    0.105    0.859   35.458
+  RSR_DBREAKC1                            nop    0.070    0.000   35.458
+  WSR_DBREAKC1                            nop    0.105    0.417   35.458
+  XSR_DBREAKC1                            nop    0.105    0.417   35.458
+  RSR_IBREAKA0                            nop    0.070    0.000   35.458
+  WSR_IBREAKA0                            nop    0.105    0.672   35.458
+  XSR_IBREAKA0                            nop    0.105    0.672   35.458
+  RSR_IBREAKA1                            nop    0.070    0.000   35.458
+  WSR_IBREAKA1                            nop    0.105    0.672   35.458
+  XSR_IBREAKA1                            nop    0.105    0.672   35.458
+  RSR_IBREAKENABLE                        nop    0.070    0.000   35.458
+  WSR_IBREAKENABLE                        nop    0.105    0.163   35.458
+  XSR_IBREAKENABLE                        nop    0.105    0.163   35.458
+  RSR_DEBUGCAUSE                          nop    0.070    0.000   35.458
+  WSR_DEBUGCAUSE                          nop    0.105    0.764   35.458
+  XSR_DEBUGCAUSE                          nop    0.105    0.764   35.458
+  RSR_ICOUNT                              nop    0.070    0.000   35.458
+  WSR_ICOUNT                              nop    0.105    0.187   35.458
+  XSR_ICOUNT                              nop    0.105    0.187   35.458
+  RSR_ICOUNTLEVEL                         nop    0.070    0.000   35.458
+  WSR_ICOUNTLEVEL                         nop    0.070    0.392   35.458
+  XSR_ICOUNTLEVEL                         nop    0.070    0.392   35.458
+  RSR_DDR                                 nop    0.070    0.000   35.458
+  WSR_DDR                                 nop    0.105    0.187   35.458
+  XSR_DDR                                 nop    0.105    0.187   35.458
+  RSR_CCOUNT                              nop    0.070    0.000   35.458
+  WSR_CCOUNT                              nop    0.105    0.187   35.458
+  XSR_CCOUNT                              nop    0.105    0.187   35.458
+  RSR_CCOMPARE0                           nop    0.070    0.000   35.458
+  WSR_CCOMPARE0                           nop    0.105    0.672   35.458
+  XSR_CCOMPARE0                           nop    0.105    0.672   35.458
+  IDTLB                                   nop    0.105    0.187   35.458
+  PDTLB                                   nop    0.105    0.000   35.458
+  RDTLB0                                  nop    0.105    0.000   35.458
+  RDTLB1                                  nop    0.105    0.000   35.458
+  WDTLB                                   nop    0.105    0.187   35.458
+  IITLB                                   nop    0.105    0.000   35.458
+  PITLB                                   nop    0.105    0.000   35.458
+  RITLB0                                  nop    0.105    0.000   35.458
+  RITLB1                                  nop    0.105    0.000   35.458
+  WITLB                                   nop    0.105    0.000   35.458
+  CLAMPS                                  nop    5.864    0.000   35.458
+  MIN                                     nop    2.120    0.000   35.458
+  MAX                                     nop    2.120    0.000   35.458
+  MINU                                    nop    2.120    0.000   35.458
+  MAXU                                    nop    2.120    0.000   35.458
+  NSA                                     nop   15.948    0.000   35.458
+  NSAU                                    nop   15.948    0.000   35.458
+  SEXT                                    nop    5.057    0.000   35.458
+
+
+  ACTIVATED BLOCK POWER END
+
+
+
+  INSTRUCTION POWER BEGIN
+
+  excw                                    nop    0.000
+  rfe                                     add    0.051
+  rfde                                    add    0.031
+  syscall                                 nop    0.063
+  call12                                  add    5.791
+  call8                                   add    5.791
+  call4                                   add    5.791
+  callx12                                 add    4.651
+  callx8                                  add    4.651
+  callx4                                  add    4.651
+  entry                                   nop    5.096
+  movsp                                   nop    4.434
+  rotw                                    nop    0.310
+  retw                                    add    5.289
+  retw.n                                  add    5.289
+  rfwo                                    add    0.320
+  rfwu                                    add    0.307
+  l32e                                   load    5.103
+  s32e                                  store    5.103
+  rsr.windowbase                          nop    3.800
+  wsr.windowbase                          nop    3.857
+  xsr.windowbase                          nop    3.857
+  rsr.windowstart                         nop    3.800
+  wsr.windowstart                         nop    3.885
+  xsr.windowstart                         nop    3.885
+  add.n                                   nop    4.767
+  addi.n                                  nop    5.072
+  beqz.n                                  add    5.253
+  bnez.n                                  add    5.253
+  ill.n                                   nop    0.031
+  l32i.n                                 load    5.103
+  mov.n                                   nop    3.800
+  movi.n                                  nop    4.105
+  nop.n                                   nop    0.000
+  ret.n                                   add    3.800
+  s32i.n                                store    5.103
+  addi                                    nop    5.072
+  addmi                                   nop    5.072
+  add                                     nop    4.767
+  sub                                     nop    4.803
+  addx2                                   nop    4.767
+  addx4                                   nop    4.767
+  addx8                                   nop    4.767
+  subx2                                   nop    4.803
+  subx4                                   nop    4.803
+  subx8                                   nop    4.803
+  and                                     nop    4.140
+  or                                      nop    4.262
+  xor                                     nop    4.371
+  beqi                                    add    6.082
+  bnei                                    add    6.006
+  bgei                                    add    6.460
+  blti                                    add    6.507
+  bbci                                    add    5.213
+  bbsi                                    add    5.207
+  bgeui                                   add    6.449
+  bltui                                   add    6.496
+  beq                                     add    5.777
+  bne                                     add    5.701
+  bge                                     add    6.155
+  blt                                     add    6.203
+  bgeu                                    add    6.144
+  bltu                                    add    6.192
+  bany                                    add    5.592
+  bnone                                   add    5.592
+  ball                                    add    5.763
+  bnall                                   add    5.763
+  bbc                                     add    5.166
+  bbs                                     add    5.161
+  beqz                                    add    5.253
+  bnez                                    add    5.253
+  bgez                                    add    5.077
+  bltz                                    add    5.072
+  call0                                   add    6.038
+  callx0                                  add    4.767
+  extui                                   nop    9.532
+  ill                                     nop    0.031
+  j                                       add    1.302
+  jx                                      add    3.800
+  l16ui                                  load    5.705
+  l16si                                  load    5.705
+  l32i                                   load    5.705
+  l32r                                   load    7.860
+  l8ui                                   load    5.705
+  loop                                    add    9.036
+  loopnez                                 add    9.218
+  loopgtz                                 add    9.232
+  movi                                    nop    4.105
+  moveqz                                  nop    3.987
+  movnez                                  nop    3.987
+  movltz                                  nop    3.806
+  movgez                                  nop    4.007
+  neg                                     nop    4.803
+  abs                                     nop    5.394
+  nop                                     nop    0.000
+  ret                                     add    3.800
+  simcall                                 nop    0.000
+  s16i                                  store    5.705
+  s32i                                  store    5.705
+  s8i                                   store    5.705
+  ssr                                     nop    3.829
+  ssl                                     nop    5.003
+  ssa8l                                   nop    3.829
+  ssa8b                                   nop    5.003
+  ssai                                    nop    0.107
+  sll                                     nop    3.836
+  src                                     nop    3.836
+  srl                                     nop    8.374
+  sra                                     nop    3.836
+  slli                                    nop    6.639
+  srai                                    nop    6.919
+  srli                                    nop    6.582
+  memw                                    nop    0.000
+  extw                                    nop    0.000
+  isync                                   nop    0.000
+  rsync                                   nop    0.000
+  esync                                   nop    0.000
+  dsync                                   nop    0.000
+  rsil                                    nop    3.940
+  rsr.lend                                nop    3.800
+  wsr.lend                                nop    3.913
+  xsr.lend                                nop    3.913
+  rsr.lcount                              nop    3.832
+  wsr.lcount                              nop    3.872
+  xsr.lcount                              nop    3.872
+  rsr.lbeg                                nop    3.800
+  wsr.lbeg                                nop    3.913
+  xsr.lbeg                                nop    3.913
+  rsr.sar                                 nop    3.800
+  wsr.sar                                 nop    4.692
+  xsr.sar                                 nop    3.829
+  rsr.litbase                             nop    3.832
+  wsr.litbase                             nop    3.898
+  xsr.litbase                             nop    3.898
+  rsr.configid0                           nop    3.832
+  rsr.configid1                           nop    3.832
+  rsr.ps                                  nop    3.832
+  wsr.ps                                  nop    4.656
+  xsr.ps                                  nop    4.656
+  rsr.epc1                                nop    3.832
+  wsr.epc1                                nop    3.934
+  xsr.epc1                                nop    3.934
+  rsr.excsave1                            nop    3.832
+  wsr.excsave1                            nop    3.897
+  xsr.excsave1                            nop    3.897
+  rsr.epc2                                nop    3.832
+  wsr.epc2                                nop    3.934
+  xsr.epc2                                nop    3.934
+  rsr.excsave2                            nop    3.832
+  wsr.excsave2                            nop    3.897
+  xsr.excsave2                            nop    3.897
+  rsr.epc3                                nop    3.832
+  wsr.epc3                                nop    3.934
+  xsr.epc3                                nop    3.934
+  rsr.excsave3                            nop    3.832
+  wsr.excsave3                            nop    3.897
+  xsr.excsave3                            nop    3.897
+  rsr.epc4                                nop    3.832
+  wsr.epc4                                nop    3.934
+  xsr.epc4                                nop    3.934
+  rsr.excsave4                            nop    3.832
+  wsr.excsave4                            nop    3.897
+  xsr.excsave4                            nop    3.897
+  rsr.epc5                                nop    3.832
+  wsr.epc5                                nop    3.934
+  xsr.epc5                                nop    3.934
+  rsr.excsave5                            nop    3.832
+  wsr.excsave5                            nop    3.897
+  xsr.excsave5                            nop    3.897
+  rsr.eps2                                nop    3.832
+  wsr.eps2                                nop    3.900
+  xsr.eps2                                nop    3.900
+  rsr.eps3                                nop    3.832
+  wsr.eps3                                nop    3.900
+  xsr.eps3                                nop    3.900
+  rsr.eps4                                nop    3.832
+  wsr.eps4                                nop    3.900
+  xsr.eps4                                nop    3.900
+  rsr.eps5                                nop    3.832
+  wsr.eps5                                nop    3.900
+  xsr.eps5                                nop    3.900
+  rsr.excvaddr                            nop    3.832
+  wsr.excvaddr                            nop    3.932
+  xsr.excvaddr                            nop    3.932
+  rsr.depc                                nop    3.832
+  wsr.depc                                nop    3.934
+  xsr.depc                                nop    3.934
+  rsr.exccause                            nop    3.832
+  wsr.exccause                            nop    3.884
+  xsr.exccause                            nop    3.884
+  rsr.misc0                               nop    3.832
+  wsr.misc0                               nop    3.897
+  xsr.misc0                               nop    3.897
+  rsr.misc1                               nop    3.832
+  wsr.misc1                               nop    3.897
+  xsr.misc1                               nop    3.897
+  rsr.misc2                               nop    3.832
+  wsr.misc2                               nop    3.897
+  xsr.misc2                               nop    3.897
+  rsr.misc3                               nop    3.832
+  wsr.misc3                               nop    3.897
+  xsr.misc3                               nop    3.897
+  mul16u                                  nop   72.867
+  mul16s                                  nop   72.867
+  mull                                    nop   72.867
+  muluh                                   nop   72.867
+  mulsh                                   nop   72.867
+  rfi                                     add    4.065
+  waiti                                   nop    0.171
+  rsr.interrupt                           nop    3.832
+  wsr.intset                              nop    3.872
+  wsr.intclear                            nop    3.872
+  rsr.intenable                           nop    3.832
+  wsr.intenable                           nop    3.926
+  xsr.intenable                           nop    3.926
+  break                                   nop    1.791
+  break.n                                 nop    1.791
+  rsr.dbreaka0                            nop    3.832
+  wsr.dbreaka0                            nop    3.906
+  xsr.dbreaka0                            nop    3.906
+  rsr.dbreakc0                            nop    3.832
+  wsr.dbreakc0                            nop    3.884
+  xsr.dbreakc0                            nop    3.884
+  rsr.dbreaka1                            nop    3.832
+  wsr.dbreaka1                            nop    3.906
+  xsr.dbreaka1                            nop    3.906
+  rsr.dbreakc1                            nop    3.832
+  wsr.dbreakc1                            nop    3.884
+  xsr.dbreakc1                            nop    3.884
+  rsr.ibreaka0                            nop    3.832
+  wsr.ibreaka0                            nop    3.897
+  xsr.ibreaka0                            nop    3.897
+  rsr.ibreaka1                            nop    3.832
+  wsr.ibreaka1                            nop    3.897
+  xsr.ibreaka1                            nop    3.897
+  rsr.ibreakenable                        nop    3.832
+  wsr.ibreakenable                        nop    3.871
+  xsr.ibreakenable                        nop    3.871
+  rsr.debugcause                          nop    3.832
+  wsr.debugcause                          nop    3.901
+  xsr.debugcause                          nop    3.901
+  rsr.icount                              nop    3.832
+  wsr.icount                              nop    3.872
+  xsr.icount                              nop    3.872
+  rsr.icountlevel                         nop    3.832
+  wsr.icountlevel                         nop    3.851
+  xsr.icountlevel                         nop    3.851
+  rsr.ddr                                 nop    3.832
+  wsr.ddr                                 nop    3.872
+  xsr.ddr                                 nop    3.872
+  rfdo                                    add    1.356
+  rfdd                                    add    0.073
+  rsr.ccount                              nop    3.832
+  wsr.ccount                              nop    3.872
+  xsr.ccount                              nop    3.872
+  rsr.ccompare0                           nop    3.832
+  wsr.ccompare0                           nop    3.897
+  xsr.ccompare0                           nop    3.897
+  idtlb                                   nop    3.872
+  pdtlb                                   nop    3.863
+  rdtlb0                                  nop    3.863
+  rdtlb1                                  nop    3.863
+  wdtlb                                   nop    3.872
+  iitlb                                   nop    3.863
+  pitlb                                   nop    3.863
+  ritlb0                                  nop    3.863
+  ritlb1                                  nop    3.863
+  witlb                                   nop    3.863
+  clamps                                  nop    9.007
+  min                                     nop    5.663
+  max                                     nop    5.663
+  minu                                    nop    5.663
+  maxu                                    nop    5.663
+  nsa                                     nop   18.016
+  nsau                                    nop   18.016
+  sext                                    nop    8.287
+
+
+  INSTRUCTION POWER END
+
+
+
+cpu_seconds 0.28

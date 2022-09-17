@@ -1,0 +1,73 @@
+# Makefile for libxtload
+
+# Copyright (c) 2010 Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+SHELL = /bin/sh
+
+srcdir = @srcdir@/../../Software/txload
+VPATH = $(srcdir)
+prefix = @prefix@
+target_alias = @target_alias@
+target_libdir = $(prefix)/$(target_alias)/lib
+target_incdir = $(prefix)/$(target_alias)/arch/include/xtensa/
+
+top_builddir = @abs_top_builddir@
+top_srcdir = @top_srcdir@
+
+default: all
+include $(top_builddir)/../../Makefile.env
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+
+TPP = $(TENSILICA_TOOLS)/bin/tpp
+
+CC_FOR_TARGET = $(XTTOOLS)/bin/$(XTENSA_CC_FOR_TARGET)
+AR_FOR_TARGET = $(XTTOOLS)/bin/xt-ar
+AR_FLAGS = rc
+
+CFLAGS = -O2 -g -Wall -DM -mlongcalls
+
+C_FILES = xtload-library.c
+ASM_FILES = 
+HEADERS = $(srcdir)/xtload-api.h
+OBJS = $(C_FILES:.c=.o) $(ASM_FILES:.S=.o) 
+
+COMPILE_COMMAND = $(CC_FOR_TARGET) $(CFLAGS) -c
+
+%.o : %.c
+	$(COMPILE_COMMAND) -o $@ $<
+
+.PHONY: default all all-target install install-target clean
+
+LIB_XTLOAD = libxtload.a
+
+$(LIB_XTLOAD) : $(OBJS)
+	$(AR_FOR_TARGET) rc $@ $^
+
+all: all-target
+install: install-target
+
+TARGETS = $(LIB_XTLOAD)
+
+all-target: $(TARGETS)
+
+install-target: $(TARGETS)
+	$(INSTALL) $(TARGETS) $(target_libdir)
+	$(INSTALL) $(HEADERS) $(target_incdir)
+
+clean:
+	rm -f *.o *.a *.d $(TARGETS)
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) && $(SHELL) ./config.status
+
+$(top_builddir)/config.status: $(top_srcdir)/configure
+	cd $(top_builddir) && $(SHELL) ./config.status --recheck
+

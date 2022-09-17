@@ -1,0 +1,92 @@
+#// Customer ID=8327; Build=0x3b95c; Copyright (c) 2007-2008 by Tensilica Inc.  ALL RIGHTS RESERVED.
+#// These coded instructions, statements, and computer programs are the
+#// copyrighted works and confidential proprietary information of
+#// Tensilica Inc.  They may be adapted and modified by bona fide
+#// purchasers for internal use, but neither the original nor any adapted
+#// or modified version may be disclosed or distributed to third parties
+#// in any manner, medium, or form, in whole or in part, without the prior
+#// written consent of Tensilica Inc.
+
+
+system "sys"
+(
+  properties
+  (
+    type = "System";
+    version = "1.0";
+    variant = "";
+    loadfile_extension = "";
+    description = "";
+    onecyclevalue = "1.0";
+    onecycletime = "ns";
+    simulationresolution = "1 ps";
+    simulationdefaulttime = "1 ns";
+  )
+  parameters ()
+  components
+  (
+
+    instance "master"
+    (
+      model   = "xtsc_ahb_master_sd";
+      version = "";
+      variant = "";
+
+      parameters
+      (
+        "byte_width" = "16";
+        "script_file" = "../xtsc_ahb_master_sd/master.vec";
+      )
+
+    )
+
+    instance "trace"
+    (
+      model   = "xtsc_ahb_trace_sd";
+      version = "";
+      variant = "";
+
+      parameters
+      (
+        "byte_width" = "16";
+        "trace_file" = "waveforms";
+      )
+
+    )
+
+    instance "ahb"
+    (
+      model   = "MxAHB2";
+      version = "";
+      variant = "";
+
+      parameters
+      (
+        "Data Width" = "128";
+      )
+
+    )
+
+    instance "mem"
+    (
+      model   = "xtsc_ahb_memory_sd";
+      version = "";
+      variant = "";
+
+      parameters
+      (
+        "big_endian" = "false";
+        "byte_width" = "16";
+      )
+
+    )
+
+  )
+  connections
+  (
+    "master::m_ahb_master_port<-->ahb::bslave0" = "master":"m_ahb_master_port" to "ahb":"bslave0";
+    "trace::m_ahb_master_port<-->ahb::bslave1" = "trace":"m_ahb_master_port" to "ahb":"bslave1";
+    "ahb::bmaster<-->mem::m_p_ahb_slave_port" = "ahb":"bmaster" to "mem":"m_p_ahb_slave_port";
+  )
+  portmaps ()
+)

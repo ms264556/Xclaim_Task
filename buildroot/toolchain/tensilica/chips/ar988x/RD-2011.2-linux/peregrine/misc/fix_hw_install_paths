@@ -1,0 +1,43 @@
+#!/bin/sh
+# Set the installation directories for the Xtensa hardware files.
+
+# Customer ID=8327; Build=0x3b95c; Copyright (c) 2004-2007 Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+#
+# usage: fix_hw_install_path <tools_root> <xtensa_root> <config_root>
+#
+
+tools="$1"
+swtools="$2"
+prefix="$3"
+
+factory_tools='/././usr/xtensa/tools-6.1';
+factory_swtools='/././home/customer/tree/RD-2011.2/tools/swtools-x86-linux';
+factory_prefix='/././project/cust/genapp/RD-2011.2/build/qualcomm_sw/swupgrade_qca/peregrine/142610/RD-2011.2/peregrine';
+
+# Directories to search under PREFIX
+subdirs="Hardware CSM";
+
+for sname in $subdirs; do
+  SDIR="$prefix/$sname";
+  if [ -d "$SDIR" ]; then
+    echo "Setting paths in the $sname directory. (This may take a while.)"
+    echo "    temporarily making files writable...."
+    # Save owner permissions as group permissions
+    find $SDIR -type f -perm -u+w | xargs -r chmod -f ug+w
+    # Do not make regular files group writeable 
+    find $SDIR -type f ! -perm -u+w | xargs -r chmod -f u+w
+    echo "    setting the paths...."
+    find $SDIR -type f | xargs "$tools/bin/perl" -p -i \
+	-e "s'$factory_prefix'$prefix'g ; s'$factory_swtools'$swtools'g ; s'$factory_tools'$tools'g"
+    echo "    restoring the original file permissions...."
+    # Restore owner permission from group permission
+    find $SDIR -type f ! -perm -g+w | xargs -r chmod -f ug-w
+    find $SDIR -type f -perm -ug+w | xargs -r chmod -f g-w
+  fi
+done

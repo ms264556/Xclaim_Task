@@ -1,0 +1,8 @@
+# Copyright (C) 2007--2009 Tensilica, Inc.
+CC_FOR_TARGET = xt-xcc -compat-v7
+CXX_FOR_TARGET = xt-xc++ -compat-v7
+AS_FOR_TARGET = xt-as
+LD_FOR_TARGET = xt-ld
+AR_FOR_TARGET = xt-ar
+RANLIB_FOR_TARGET = xt-ranlib
+NM_FOR_TARGET = xt-nm

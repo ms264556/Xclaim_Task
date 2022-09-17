@@ -1,0 +1,56 @@
+// Customer ID=8327; Build=0x3b95c; Copyright (c) 2009 by Tensilica Inc.  ALL RIGHTS RESERVED.
+// These coded instructions, statements, and computer programs are the
+// copyrighted works and confidential proprietary information of
+// Tensilica Inc.  They may be adapted and modified by bona fide
+// purchasers for internal use, but neither the original nor any adapted
+// or modified version may be disclosed or distributed to third parties
+// in any manner, medium, or form, in whole or in part, without the prior
+// written consent of Tensilica Inc.
+
+#if 0
+input <InputName> <BitWidth> {<InitialValue>}
+output <OutputName> <BitWidth> {<InitialValue> {<WritePolicy> {<Delay> {clock_period}}}}
+iterator <Iterator> <Start> <Stop> {<StepSize>}
+assign <OutputName> = <RpnExpression>
+assign <OutputName>[<Iterator>] = <RpnExpression>
+assign <OutputName>[<Index>] = <RpnExpression>
+#endif
+
+
+/*
+input <InputName> <BitWidth> {<InitialValue>} */
+
+input A           32          0x00000000
+input B           32          0x00000000
+
+
+/*
+output <OutputName> <BitWidth> {<InitialValue> {<WritePolicy> {<Delay> {clock_period}}}} */
+
+output not_A        32
+output A_and_B      32
+output A_or_B       32
+output A_xor_B      32
+output A0           1
+output A1           1
+output A_dup1       32
+output A_dup2       32
+output A_B          64
+
+
+/*
+assign <OutputName> = <RpnExpression> */
+
+assign not_A    = A !
+assign A_and_B  = A B &
+assign A_or_B   = A B |
+assign A_xor_B  = A B ^
+assign A0       = A[0]
+assign A1       = A[1]
+assign A_dup1   = A
+assign A_dup2   = A
+
+iterator i 0  31
+iterator j 32 63
+assign A_B[i] = B[i]
+assign A_B[j] = A[i]

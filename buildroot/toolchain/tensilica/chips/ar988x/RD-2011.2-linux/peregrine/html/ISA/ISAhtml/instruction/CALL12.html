@@ -1,0 +1,296 @@
+<html>
+  <head>
+    <title>
+      CALL12 - Call PC-relative, Rotate Window by 12
+    </title>
+    <style type="text/css">
+      <!--
+	body {
+		background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+		margin-left: 2em;
+		margin-right: 2em;
+	}
+	#boundingbox {
+	        background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+	        position: relative;
+	        width: 865px;
+	        margin: 0 auto;
+	        padding: 20px;
+	        border-style: dashed;
+	        border-width: 1px;
+	        border-spacing: 10px;
+	        border-collapse: separate;
+	}
+	a {
+		text-decoration: none;
+	}
+	a:visited {
+		color: blue;
+	}
+	a:link {
+		color: green;
+	}
+	a:active {
+		color: green;
+	}
+	a:hover {
+		color: green;
+	}
+	a:offsite {
+		color: green;
+	}
+	h1 {
+		font-size: 14pt;
+		font-weight: bold;
+	}
+	h1.center {
+		font-size: 14pt;
+		font-weight: bold;
+	        text-align: center;
+	}
+	h2 {
+		font-size: 12pt;
+	}
+	caption {
+		padding-top: 1em;
+	}
+	table.thin {
+		border-width: thin;
+		border-spacing: 0px;
+		border-style: inset;
+		border-color: gray;
+		border-collapse: collapse;
+		background-color: rgb(250, 240, 230);
+	}
+	table th.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table th.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	pre {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	}
+	.proto {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 1em;
+	        text-indent: -1em;
+	}
+	.protohead {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 2em;
+	        text-indent: -2em;
+	}
+	.protobody {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 4em;
+	        text-indent: -2em;
+	}
+	.rotate {
+	        display: block;
+	        -webkit-transform: rotate(-90deg); 
+	        -moz-transform: rotate(-90deg);
+	        filter:
+	progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	        padding-top: 20px;                       
+	}
+	.light {
+	        font-size: 75%;
+	        color: SlateGrey;
+	}
+	
+        -->
+    </style>
+  </head>
+  <body>
+    <h1>
+      CALL12 &#8212; Call PC-relative, Rotate Window by 12
+    </h1>
+    <h2>
+      Instruction Word
+    </h2>
+    <table frame="void" rules="groups" cellspacing=0 cellpadding=0>
+      <caption>x24 : x24_Inst_0</caption>
+      <colgroup colspan=18>
+	<col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=6>
+	<col width=33><col width=33><col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <thead>
+	<tr>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>2
+	    3</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>6</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>5</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>0</small>
+	  </td>
+	</tr>
+      </thead>
+      <tfoot>
+	<tr>
+	  <td colspan=18 width=594 align="center">
+	    <small>18</small>
+	  </td>
+	  <td colspan=6 width=198 align="center">
+	    <small>6</small>
+	  </td>
+	</tr>
+      </tfoot>
+      <tbody>
+	<tr>
+	  <td colspan=18 width=594 align="center" bgcolor="#FFE4E1">
+	    offset
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <h2>
+      Assembler Syntax
+    </h2>
+    <p>
+      <code>CALL12 label</code><br>
+
+    </p>
+    <h2>
+      Description
+    </h2>
+    <p><small>(please consult the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for any cross references and additional information)</small></p><P><code>CALL12</code> calls subroutines using the register windows mechanism, requesting the callee rotate the window by 12 registers. The <code>CALL12</code> instruction does not rotate the window itself, but instead stores the window increment for later use by the <code>ENTRY</code> instruction. The return address and window increment are placed in the caller"s <code>a12</code> (the callee"s <code>a0</code>), and the processor then branches to the target address. The return address is the address of the next instruction (the address of the <code>CALL12</code> instruction plus three). The window increment is also stored in the <code>CALLINC</code> field of the <code>PS</code> register, where it is accessed by the <code>ENTRY</code> instruction.</P><P>The target instruction address must be a 32-bit aligned <code>ENTRY</code> instruction. This allows <code>CALL12</code> to have a larger effective range (<code>&#8722;</code>524284 to 524288 bytes). The target instruction address of the call is given by the address of the <code>CALL12</code> instruction with the two least significant bits set to zero, plus the sign-extended 18-bit <code>offset</code> field of the instruction shifted by two, plus four.</P><P>See the <code>CALLX12</code> instruction for calling routines where the target address is given by the contents of a register.</P><P>The <code>RETW</code> and <code>RETW.N</code> instructions return from a subroutine called by <code>CALL12</code>.</P><P>The window increment stored with the return address register in <code>a12</code> occupies the two most significant bits of the register, and therefore those bits must be filled in by the subroutine return. The <code>RETW</code> and <code>RETW.N</code> instructions fill in these bits from the two most significant bits of their own address. This prevents register-window calls from being used to call a routine in a different 1GB region of the address space.</P><P>See the <code>CALL0</code> instruction for calling routines using the non-windowed subroutine protocol.</P><P>The caller"s <code>a12</code>..<code>a15</code> are the same registers as the callee"s <code>a0</code>..<code>a3</code> after the callee executes the <code>ENTRY</code> instruction. You can use these registers for parameter passing. The caller"s <code>a0</code>..<code>a11</code> are hidden by <code>CALL12</code>, and therefore you may use them to keep values that are live across the call.</P>    <h2>Operation</h2>      <pre>
+WindowCheck (00, 00, 11)
+PS.CALLINC &#8592; 11
+AR[1100] &#8592; 11 || (PC + 3)<SUB>29..0</SUB>
+nextPC &#8592; (PC<SUB>31..2</SUB> + (offset<SUB>17</SUB><SUP>12</SUP>||offset) + 1)||00</pre>    <h2>Exceptions</h2>      <LI>EveryInstR Group (see the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for more information)</LI>
+    <h2>
+      Implementation Pipeline
+    </h2>
+    <table class="thin">
+      <thead>
+	<tr>
+	  <th align="left" class="thin">
+	    In
+	  </th>
+	  <th align="left" class="thin">
+	    Out
+	  </th>
+	</tr>
+      </thead>
+      <tbody>
+	<tr>
+	  <td class="thin">
+	  </td>
+	  <td class="thin">
+	    <code>PSCALLINC&nbsp;Estage</code>
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <h2>
+      Protos that use CALL12
+    </h2>
+    <div>
+      <div class=protohead>proto <a href=../protos.html#CALL12>CALL12</a> { in
+      void * soffsetx4 }{}{</div><div class=protobody><a
+      href=CALL12.html>CALL12</a> soffsetx4 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+  </body>
+</html>

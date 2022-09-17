@@ -1,0 +1,135 @@
+// Customer ID=8327; Build=0x3b95c; Copyright (c) 2006-2008 Tensilica Inc.  ALL RIGHTS RESERVED.
+// 
+// These coded instructions, statements, and computer programs are the
+// copyrighted works and confidential proprietary information of
+// Tensilica Inc.  They may be adapted and modified by bona fide
+// purchasers for internal use, but neither the original nor any adapted
+// or modified version may be disclosed or distributed to third parties
+// in any manner, medium, or form, in whole or in part, without the prior
+// written consent of Tensilica Inc.
+
+info &grep master.* End-Of-Script
+
+info  
+info  **************************************************************
+info  *                    Testing WRITE's                         *
+info  **************************************************************
+info  
+
+// Clear contents
+1     WRITE 0x00400000 4  0  0  0  0  0x000F 0 0 0 0
+wait  rsp
+1     WRITE 0x00400004 4  0  0  0  0  0x000F 0 0 0 0
+wait  rsp
+1     WRITE 0x00400008 4  0  0  0  0  0x000F 0 0 0 0
+wait  rsp
+1     WRITE 0x0040000C 4  0  0  0  0  0x000F 0 0 0 0
+wait  rsp
+
+
+info  Self-description:  &grep master.* WRITE's completed << Self-description
+
+/*
+delay WRITE address    sz rt id pr pc BE     byt0 byt1 byt2 byt3 */
+
+1     WRITE 0x00400000 1  0  0  0  0  0x000F 0x00
+wait  rsp
+1     WRITE 0x00400001 1  0  0  0  0  0x000F 0x01
+wait  rsp
+
+1     WRITE 0x00400002 2  0  0  0  0  0x000F 0x02 0x03
+wait  rsp
+
+1     WRITE 0x00400004 4  0  0  0  0  0x000F 0x04 0x05 0x06 0x07
+wait  rsp
+
+info WRITE's completed
+
+info  Self-description:  &grep master.*RSP_OK.*: 00 01 02 03 *$ << Self-description
+1     READ  0x00400000 4  0  0  0  0  
+wait rsp
+info  Self-description:  &grep master.*RSP_OK.*: 04 05 06 07 *$ << Self-description
+1     READ  0x00400004 4  0  0  0  0  
+wait rsp
+info  Self-description:  &grep master.*RSP_OK.*: 00 00 00 00 *$ << Self-description
+1     READ  0x00400008 4  0  0  0  0  
+wait rsp
+info  Self-description:  
+
+
+
+info  
+info  **************************************************************
+info  *                    Testing READ's                          *
+info  **************************************************************
+info  
+
+/*
+delay READ  address    sz rt id pr pc  */
+
+info  Self-description:  &grep master.*RSP_OK.*: 00 *$ << Self-description
+1     READ  0x00400000 1  0  0  0  0  
+wait  rsp
+info  Self-description:  &grep master.*RSP_OK.*: 01 *$ << Self-description
+1     READ  0x00400001 1  0  0  0  0  
+wait  rsp
+info  Self-description:  &grep master.*RSP_OK.*: 02 03 *$ << Self-description
+1     READ  0x00400002 2  0  0  0  0  
+wait  rsp
+info  Self-description:  &grep master.*RSP_OK.*: 04 05 06 07 *$ << Self-description
+1     READ  0x00400004 4  0  0  0  0  
+wait  rsp
+info  Self-description:  
+
+
+info  
+info  **************************************************************
+info  *                Testing BLOCK_WRITE's                       *
+info  **************************************************************
+info  
+
+/*
+delay BLOCK_WRITE address    sz rt id pr pc num last first  b0 b1 b2 b3 */
+
+10    BLOCK_WRITE 0x00400300  4 0  0  0  0  4   0    1       0  1  2  3
+10    BLOCK_WRITE 0x00400304  4 0  0  0  0  4   0    0       4  5  6  7
+10    BLOCK_WRITE 0x00400308  4 0  0  0  0  4   0    0       8  9 10 11
+10    BLOCK_WRITE 0x0040030C  4 0  0  0  0  4   1    0      12 13 14 15
+wait  rsp
+
+info  Self-description:  &grep master.*RSP_OK.*: 00 01 02 03 *$ << Self-description
+1     READ  0x00400300 4  0  0  0  0  
+wait rsp
+info  Self-description:  &grep master.*RSP_OK.*: 04 05 06 07 *$ << Self-description
+1     READ  0x00400304 4  0  0  0  0  
+wait rsp
+info  Self-description:  &grep master.*RSP_OK.*: 08 09 0a 0b *$ << Self-description
+1     READ  0x00400308 4  0  0  0  0  
+wait rsp
+info  Self-description:  &grep master.*RSP_OK.*: 0c 0d 0e 0f *$ << Self-description
+1     READ  0x0040030C 4  0  0  0  0  
+wait rsp
+info  Self-description:  
+
+
+info  
+info  **************************************************************
+info  *                Testing BLOCK_READ's                        *
+info  **************************************************************
+info  
+
+/*
+delay BLOCK_READ  address    sz rt id pr pc num */
+10    BLOCK_READ  0x00400300  4 0  0  0  0  4   
+info  Self-description:  &grep master.*RSP_OK.*: 00 01 02 03 *$ << Self-description
+wait  rsp
+info  Self-description:  &grep master.*RSP_OK.*: 04 05 06 07 *$ << Self-description
+wait  rsp
+info  Self-description:  &grep master.*RSP_OK.*: 08 09 0a 0b *$ << Self-description
+wait  rsp
+info  Self-description:  &grep master.*RSP_OK.*: 0c 0d 0e 0f *$ << Self-description
+wait  rsp
+info  Self-description:
+
+wait 10
+info End-Of-Script

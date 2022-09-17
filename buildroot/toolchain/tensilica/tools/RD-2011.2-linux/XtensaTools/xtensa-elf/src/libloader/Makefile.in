@@ -1,0 +1,85 @@
+# Copyright (c) 2006-2008 Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+SHELL = /bin/sh
+
+srcdir = @srcdir@
+VPATH = $(srcdir)
+prefix = @prefix@
+target_alias = @target_alias@
+target_libdir = $(prefix)/$(target_alias)/lib
+target_include_dir = $(prefix)/$(target_alias)/include
+target_example_dir = $(prefix)/$(target_alias)/include
+target_example_dir = $(prefix)/examples/LibraryLoader
+TEST_DIR = $(srcdir)/test
+LSP_DIR = $(srcdir)/piload
+
+top_builddir = @abs_top_builddir@
+top_srcdir = @top_srcdir@
+
+default: all
+include $(top_builddir)/../../Makefile.env
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+
+CFLAGS = -O2 -g -mlongcalls -Wall -Werror -DM
+
+CC_FOR_TARGET = $(XTTOOLS)/bin/$(XTENSA_CC_FOR_TARGET)
+AR_FOR_TARGET = $(XTTOOLS)/bin/xt-ar
+AR_FLAGS = rc
+
+C_FILES = \
+	overlay_load.c \
+        pi_library_load.c \
+	pi_library_symbols.c \
+	common.c
+
+PUBLIC_HEADERS = $(srcdir)/xt_library_loader.h
+OBJS = $(C_FILES:.c=.o) $(ASM_FILES:.S=.o) 
+
+COMPILE_COMMAND = $(CC_FOR_TARGET) $(CFLAGS) -c
+
+%.o : %.c
+	$(COMPILE_COMMAND) -o $@ $<
+
+.PHONY: all clean
+
+
+LIB_LIBRARY_LOADER = libloader.a
+
+$(LIB_LIBRARY_LOADER) : $(OBJS)
+	$(AR_FOR_TARGET) rc $@ $^
+
+.PHONY: all all-target clean install install-target
+
+all: $(LIB_LIBRARY_LOADER)
+
+all-target: all
+
+install: all
+	$(INSTALL) $(LIB_LIBRARY_LOADER) $(target_libdir)
+	$(INSTALL) $(PUBLIC_HEADERS) $(target_include_dir)
+	mkdir -p $(target_example_dir)
+	cp -rf $(TEST_DIR)/* $(target_example_dir)
+	mkdir -p $(target_libdir)/piload
+	cp -rf $(LSP_DIR)/*  $(target_libdir)/piload
+
+install-target: install
+
+clean:
+	rm -f *.o *.a *.d $(TARGET_EXE) $(HOST_EXE)
+
+###########################################################################
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) && $(SHELL) ./config.status
+
+$(top_builddir)/config.status: $(top_srcdir)/configure
+	cd $(top_builddir) && $(SHELL) ./config.status --recheck
+

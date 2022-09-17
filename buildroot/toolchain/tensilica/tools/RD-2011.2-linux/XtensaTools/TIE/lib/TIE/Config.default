@@ -1,0 +1,28 @@
+# Copyright (c) 2002 by Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+# $Id: //depot/rel/Cottonwood/Xtensa/TIE/tc/lib/Config.default#1 $
+
+DataCacheBytes			16k
+InstCacheBytes			16k
+IsaCoprocessorCount		8
+IsaMemoryOrder			LittleEndian
+IsaUseAthensCacheTest		1
+IsaUseBooleans			1
+IsaUseCustomer			1
+IsaUseDebug			1
+IsaUseDensityInstruction	1
+IsaUseException			1
+IsaUseInterrupt			1
+IsaUseMAC16			0
+IsaUseMul16			0
+IsaUseTimer			1
+IsaUseWindowedRegisters		1
+PIFReadDataBits			128
+PIFWriteDataBits		128
+LoadStoreUnitCount		3
+IsaMaxInstructionSize		3

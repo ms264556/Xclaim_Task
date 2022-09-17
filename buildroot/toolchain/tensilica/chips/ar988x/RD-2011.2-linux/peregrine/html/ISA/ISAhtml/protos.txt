@@ -1,0 +1,1716 @@
+proto ABS { out int32 r, in int32 t }
+{}
+{
+  ABS r, t;
+}
+
+proto ADD { out int32 r, in int32 s, in int32 t }
+{}
+{
+  ADD r, s, t;
+}
+
+proto ADD.N { out int32 r, in int32 s, in int32 t }
+{}
+{
+  ADD.N r, s, t;
+}
+
+proto ADDI { out int32 r, in int32 s, in immediate i }
+{}
+{
+  ADDI r, s, i + 0;
+}
+
+proto ADDI.N { out int32 r, in int32 s, in immediate i }
+{}
+{
+  ADDI.N r, s, i + 0;
+}
+
+proto ADDMI { out int32 r, in int32 s, in immediate i }
+{}
+{
+  ADDMI r, s, i + 0;
+}
+
+proto ADDX2 { out int32 r, in int32 s, in int32 t }
+{}
+{
+  ADDX2 r, s, t;
+}
+
+proto ADDX4 { out int32 r, in int32 s, in int32 t }
+{}
+{
+  ADDX4 r, s, t;
+}
+
+proto ADDX8 { out int32 r, in int32 s, in int32 t }
+{}
+{
+  ADDX8 r, s, t;
+}
+
+proto AND { out int32 r, in int32 s, in int32 t }
+{}
+{
+  AND r, s, t;
+}
+
+proto BALL { in uint32 ars, in uint32 art, in void * label8 }
+{}
+{
+  BALL ars, art, label8 + 0;
+}
+
+proto BANY { in uint32 ars, in uint32 art, in void * label8 }
+{}
+{
+  BANY ars, art, label8 + 0;
+}
+
+proto BBC { in uint32 ars, in uint32 art, in void * label8 }
+{}
+{
+  BBC ars, art, label8 + 0;
+}
+
+proto BBCI { in uint32 ars, in immediate bbi, in void * label8 }
+{}
+{
+  BBCI ars, bbi + 0, label8 + 0;
+}
+
+proto BBS { in uint32 ars, in uint32 art, in void * label8 }
+{}
+{
+  BBS ars, art, label8 + 0;
+}
+
+proto BBSI { in uint32 ars, in immediate bbi, in void * label8 }
+{}
+{
+  BBSI ars, bbi + 0, label8 + 0;
+}
+
+proto BEQ { in uint32 ars, in uint32 art, in void * label8 }
+{}
+{
+  BEQ ars, art, label8 + 0;
+}
+
+proto BEQI { in uint32 ars, in immediate b4const, in void * label8 }
+{}
+{
+  BEQI ars, b4const + 0, label8 + 0;
+}
+
+proto BEQZ { in uint32 ars, in void * label12 }
+{}
+{
+  BEQZ ars, label12 + 0;
+}
+
+proto BEQZ.N { in uint32 ars, in void * uimm6 }
+{}
+{
+  BEQZ.N ars, uimm6 + 0;
+}
+
+proto BGE { in uint32 ars, in uint32 art, in void * label8 }
+{}
+{
+  BGE ars, art, label8 + 0;
+}
+
+proto BGEI { in uint32 ars, in immediate b4const, in void * label8 }
+{}
+{
+  BGEI ars, b4const + 0, label8 + 0;
+}
+
+proto BGEU { in uint32 ars, in uint32 art, in void * label8 }
+{}
+{
+  BGEU ars, art, label8 + 0;
+}
+
+proto BGEUI { in uint32 ars, in immediate b4constu, in void * label8 }
+{}
+{
+  BGEUI ars, b4constu + 0, label8 + 0;
+}
+
+proto BGEZ { in uint32 ars, in void * label12 }
+{}
+{
+  BGEZ ars, label12 + 0;
+}
+
+proto BLT { in uint32 ars, in uint32 art, in void * label8 }
+{}
+{
+  BLT ars, art, label8 + 0;
+}
+
+proto BLTI { in uint32 ars, in immediate b4const, in void * label8 }
+{}
+{
+  BLTI ars, b4const + 0, label8 + 0;
+}
+
+proto BLTU { in uint32 ars, in uint32 art, in void * label8 }
+{}
+{
+  BLTU ars, art, label8 + 0;
+}
+
+proto BLTUI { in uint32 ars, in immediate b4constu, in void * label8 }
+{}
+{
+  BLTUI ars, b4constu + 0, label8 + 0;
+}
+
+proto BLTZ { in uint32 ars, in void * label12 }
+{}
+{
+  BLTZ ars, label12 + 0;
+}
+
+proto BNALL { in uint32 ars, in uint32 art, in void * label8 }
+{}
+{
+  BNALL ars, art, label8 + 0;
+}
+
+proto BNE { in uint32 ars, in uint32 art, in void * label8 }
+{}
+{
+  BNE ars, art, label8 + 0;
+}
+
+proto BNEI { in uint32 ars, in immediate b4const, in void * label8 }
+{}
+{
+  BNEI ars, b4const + 0, label8 + 0;
+}
+
+proto BNEZ { in uint32 ars, in void * label12 }
+{}
+{
+  BNEZ ars, label12 + 0;
+}
+
+proto BNEZ.N { in uint32 ars, in void * uimm6 }
+{}
+{
+  BNEZ.N ars, uimm6 + 0;
+}
+
+proto BNONE { in uint32 ars, in uint32 art, in void * label8 }
+{}
+{
+  BNONE ars, art, label8 + 0;
+}
+
+proto BREAK { in immediate imms, in immediate immt }
+{}
+{
+  BREAK imms + 0, immt + 0;
+}
+
+proto BREAK.N { in immediate imms }
+{}
+{
+  BREAK.N imms + 0;
+}
+
+proto CALL0 { in void * soffsetx4 }
+{}
+{
+  CALL0 soffsetx4 + 0;
+}
+
+proto CALL12 { in void * soffsetx4 }
+{}
+{
+  CALL12 soffsetx4 + 0;
+}
+
+proto CALL4 { in void * soffsetx4 }
+{}
+{
+  CALL4 soffsetx4 + 0;
+}
+
+proto CALL8 { in void * soffsetx4 }
+{}
+{
+  CALL8 soffsetx4 + 0;
+}
+
+proto CALLX0 { in uint32 ars }
+{}
+{
+  CALLX0 ars;
+}
+
+proto CALLX12 { in uint32 ars }
+{}
+{
+  CALLX12 ars;
+}
+
+proto CALLX4 { in uint32 ars }
+{}
+{
+  CALLX4 ars;
+}
+
+proto CALLX8 { in uint32 ars }
+{}
+{
+  CALLX8 ars;
+}
+
+proto CLAMPS { out int32 r, in int32 s, in immediate i }
+{}
+{
+  CLAMPS r, s, i + 0;
+}
+
+proto DSYNC { }
+{}
+{
+  DSYNC;
+}
+
+proto ENTRY { inout uint32 ars, in immediate uimm12x8 }
+{}
+{
+  ENTRY ars, uimm12x8 + 0;
+}
+
+proto ESYNC { }
+{}
+{
+  ESYNC;
+}
+
+proto EXCW { }
+{}
+{
+  EXCW;
+}
+
+proto EXTUI { out uint32 r, in uint32 t, in immediate i, in immediate o }
+{}
+{
+  EXTUI r, t, i + 0, o + 0;
+}
+
+proto EXTW { }
+{}
+{
+  EXTW;
+}
+
+proto IDTLB { in uint32 ars }
+{}
+{
+  IDTLB ars;
+}
+
+proto IITLB { in uint32 ars }
+{}
+{
+  IITLB ars;
+}
+
+proto ILL { }
+{}
+{
+  ILL;
+}
+
+proto ILL.N { }
+{}
+{
+  ILL.N;
+}
+
+proto ISYNC { }
+{}
+{
+  ISYNC;
+}
+
+proto J { in void * soffset }
+{}
+{
+  J soffset + 0;
+}
+
+proto JX { in uint32 ars }
+{}
+{
+  JX ars;
+}
+
+proto L16SI { out int16 r, in const int16 * p, in immediate i }
+{}
+{
+  L16SI r, p, i + 0;
+}
+
+proto L16UI { out uint16 r, in const uint16 * p, in immediate i }
+{}
+{
+  L16UI r, p, i + 0;
+}
+
+proto L32E { out int32 t, in const int32 * s, in immediate o }
+{}
+{
+  L32E t, s, o + 0;
+}
+
+proto L32I { out int32 r, in const int32 * p, in immediate i }
+{}
+{
+  L32I r, p, i + 0;
+}
+
+proto L32I.N { out int32 t, in const int32 * p, in immediate i }
+{}
+{
+  L32I.N t, p, i + 0;
+}
+
+proto L32R { out int32 r, in immediate i }
+{}
+{
+  L32R r, i + 0;
+}
+
+proto L8UI { out uint8 r, in const uint8 * p, in immediate i }
+{}
+{
+  L8UI r, p, i + 0;
+}
+
+proto LOOP { in uint32 ars, in void * ulabel8 }
+{}
+{
+  LOOP ars, ulabel8 + 0;
+}
+
+proto LOOPGTZ { in uint32 ars, in void * ulabel8 }
+{}
+{
+  LOOPGTZ ars, ulabel8 + 0;
+}
+
+proto LOOPNEZ { in uint32 ars, in void * ulabel8 }
+{}
+{
+  LOOPNEZ ars, ulabel8 + 0;
+}
+
+proto MAX { out int32 r, in int32 s, in int32 t }
+{}
+{
+  MAX r, s, t;
+}
+
+proto MAXU { out uint32 r, in uint32 s, in uint32 t }
+{}
+{
+  MAXU r, s, t;
+}
+
+proto MEMW { }
+{}
+{
+  MEMW;
+}
+
+proto MIN { out int32 r, in int32 s, in int32 t }
+{}
+{
+  MIN r, s, t;
+}
+
+proto MINU { out uint32 r, in uint32 s, in uint32 t }
+{}
+{
+  MINU r, s, t;
+}
+
+proto MOV.N { out int32 t, in int32 s }
+{}
+{
+  MOV.N t, s;
+}
+
+proto MOVEQZ { inout int32 r, in int32 s, in int32 t }
+{}
+{
+  MOVEQZ r, s, t;
+}
+
+proto MOVGEZ { inout int32 r, in int32 s, in int32 t }
+{}
+{
+  MOVGEZ r, s, t;
+}
+
+proto MOVI { out int32 t, in immediate i }
+{}
+{
+  MOVI t, i + 0;
+}
+
+proto MOVI.N { out int32 s, in immediate i }
+{}
+{
+  MOVI.N s, i + 0;
+}
+
+proto MOVLTZ { inout int32 r, in int32 s, in int32 t }
+{}
+{
+  MOVLTZ r, s, t;
+}
+
+proto MOVNEZ { inout int32 r, in int32 s, in int32 t }
+{}
+{
+  MOVNEZ r, s, t;
+}
+
+proto MOVSP { out int32 t, in int32 s }
+{}
+{
+  MOVSP t, s;
+}
+
+proto MUL16S { out int32 r, in int16 s, in int16 t }
+{}
+{
+  MUL16S r, s, t;
+}
+
+proto MUL16U { out uint32 r, in uint16 s, in uint16 t }
+{}
+{
+  MUL16U r, s, t;
+}
+
+proto MULL { out int32 r, in int32 s, in int32 t }
+{}
+{
+  MULL r, s, t;
+}
+
+proto MULSH { out int32 r, in int32 s, in int32 t }
+{}
+{
+  MULSH r, s, t;
+}
+
+proto MULUH { out uint32 r, in uint32 s, in uint32 t }
+{}
+{
+  MULUH r, s, t;
+}
+
+proto NEG { out int32 r, in int32 t }
+{}
+{
+  NEG r, t;
+}
+
+proto NOP { }
+{}
+{
+  NOP;
+}
+
+proto NOP.N { }
+{}
+{
+  NOP.N;
+}
+
+proto NSA { out int32 t, in int32 s }
+{}
+{
+  NSA t, s;
+}
+
+proto NSAU { out uint32 t, in uint32 s }
+{}
+{
+  NSAU t, s;
+}
+
+proto OR { out int32 r, in int32 s, in int32 t }
+{}
+{
+  OR r, s, t;
+}
+
+proto PDTLB { out uint32 art, in uint32 ars }
+{}
+{
+  PDTLB art, ars;
+}
+
+proto PITLB { out uint32 art, in uint32 ars }
+{}
+{
+  PITLB art, ars;
+}
+
+proto RDTLB0 { out uint32 art, in uint32 ars }
+{}
+{
+  RDTLB0 art, ars;
+}
+
+proto RDTLB1 { out uint32 art, in uint32 ars }
+{}
+{
+  RDTLB1 art, ars;
+}
+
+proto RET { }
+{}
+{
+  RET;
+}
+
+proto RET.N { }
+{}
+{
+  RET.N;
+}
+
+proto RETW { }
+{}
+{
+  RETW;
+}
+
+proto RETW.N { }
+{}
+{
+  RETW.N;
+}
+
+proto RFDD { }
+{}
+{
+  RFDD;
+}
+
+proto RFDE { }
+{}
+{
+  RFDE;
+}
+
+proto RFDO { in immediate imms }
+{}
+{
+  RFDO imms + 0;
+}
+
+proto RFE { }
+{}
+{
+  RFE;
+}
+
+proto RFI { in immediate s }
+{}
+{
+  RFI s + 0;
+}
+
+proto RFWO { }
+{}
+{
+  RFWO;
+}
+
+proto RFWU { }
+{}
+{
+  RFWU;
+}
+
+proto RITLB0 { out uint32 art, in uint32 ars }
+{}
+{
+  RITLB0 art, ars;
+}
+
+proto RITLB1 { out uint32 art, in uint32 ars }
+{}
+{
+  RITLB1 art, ars;
+}
+
+proto ROTW { in immediate simm4 }
+{}
+{
+  ROTW simm4 + 0;
+}
+
+proto RSIL { out int32 s, in immediate t }
+{}
+{
+  RSIL s, t + 0;
+}
+
+proto RSR.CCOMPARE0 { out uint32 art }
+{}
+{
+  RSR.CCOMPARE0 art;
+}
+
+proto RSR.CCOUNT { out uint32 art }
+{}
+{
+  RSR.CCOUNT art;
+}
+
+proto RSR.CONFIGID0 { out uint32 art }
+{}
+{
+  RSR.CONFIGID0 art;
+}
+
+proto RSR.CONFIGID1 { out uint32 art }
+{}
+{
+  RSR.CONFIGID1 art;
+}
+
+proto RSR.DBREAKA0 { out uint32 art }
+{}
+{
+  RSR.DBREAKA0 art;
+}
+
+proto RSR.DBREAKA1 { out uint32 art }
+{}
+{
+  RSR.DBREAKA1 art;
+}
+
+proto RSR.DBREAKC0 { out uint32 art }
+{}
+{
+  RSR.DBREAKC0 art;
+}
+
+proto RSR.DBREAKC1 { out uint32 art }
+{}
+{
+  RSR.DBREAKC1 art;
+}
+
+proto RSR.DDR { out uint32 art }
+{}
+{
+  RSR.DDR art;
+}
+
+proto RSR.DEBUGCAUSE { out uint32 art }
+{}
+{
+  RSR.DEBUGCAUSE art;
+}
+
+proto RSR.DEPC { out uint32 t }
+{}
+{
+  RSR.DEPC t;
+}
+
+proto RSR.EPC1 { out uint32 t }
+{}
+{
+  RSR.EPC1 t;
+}
+
+proto RSR.EPC2 { out uint32 t }
+{}
+{
+  RSR.EPC2 t;
+}
+
+proto RSR.EPC3 { out uint32 t }
+{}
+{
+  RSR.EPC3 t;
+}
+
+proto RSR.EPC4 { out uint32 t }
+{}
+{
+  RSR.EPC4 t;
+}
+
+proto RSR.EPC5 { out uint32 t }
+{}
+{
+  RSR.EPC5 t;
+}
+
+proto RSR.EPS2 { out uint32 t }
+{}
+{
+  RSR.EPS2 t;
+}
+
+proto RSR.EPS3 { out uint32 t }
+{}
+{
+  RSR.EPS3 t;
+}
+
+proto RSR.EPS4 { out uint32 t }
+{}
+{
+  RSR.EPS4 t;
+}
+
+proto RSR.EPS5 { out uint32 t }
+{}
+{
+  RSR.EPS5 t;
+}
+
+proto RSR.EXCCAUSE { out uint32 t }
+{}
+{
+  RSR.EXCCAUSE t;
+}
+
+proto RSR.EXCSAVE1 { out uint32 t }
+{}
+{
+  RSR.EXCSAVE1 t;
+}
+
+proto RSR.EXCSAVE2 { out uint32 t }
+{}
+{
+  RSR.EXCSAVE2 t;
+}
+
+proto RSR.EXCSAVE3 { out uint32 t }
+{}
+{
+  RSR.EXCSAVE3 t;
+}
+
+proto RSR.EXCSAVE4 { out uint32 t }
+{}
+{
+  RSR.EXCSAVE4 t;
+}
+
+proto RSR.EXCSAVE5 { out uint32 t }
+{}
+{
+  RSR.EXCSAVE5 t;
+}
+
+proto RSR.EXCVADDR { out uint32 t }
+{}
+{
+  RSR.EXCVADDR t;
+}
+
+proto RSR.IBREAKA0 { out uint32 art }
+{}
+{
+  RSR.IBREAKA0 art;
+}
+
+proto RSR.IBREAKA1 { out uint32 art }
+{}
+{
+  RSR.IBREAKA1 art;
+}
+
+proto RSR.IBREAKENABLE { out uint32 art }
+{}
+{
+  RSR.IBREAKENABLE art;
+}
+
+proto RSR.ICOUNT { out uint32 art }
+{}
+{
+  RSR.ICOUNT art;
+}
+
+proto RSR.ICOUNTLEVEL { out uint32 art }
+{}
+{
+  RSR.ICOUNTLEVEL art;
+}
+
+proto RSR.INTENABLE { out uint32 art }
+{}
+{
+  RSR.INTENABLE art;
+}
+
+proto RSR.INTERRUPT { out uint32 art }
+{}
+{
+  RSR.INTERRUPT art;
+}
+
+proto RSR.LBEG { out uint32 art }
+{}
+{
+  RSR.LBEG art;
+}
+
+proto RSR.LCOUNT { out int32 t }
+{}
+{
+  RSR.LCOUNT t;
+}
+
+proto RSR.LEND { out int32 t }
+{}
+{
+  RSR.LEND t;
+}
+
+proto RSR.LITBASE { out uint32 t }
+{}
+{
+  RSR.LITBASE t;
+}
+
+proto RSR.MISC0 { out uint32 t }
+{}
+{
+  RSR.MISC0 t;
+}
+
+proto RSR.MISC1 { out uint32 t }
+{}
+{
+  RSR.MISC1 t;
+}
+
+proto RSR.MISC2 { out uint32 t }
+{}
+{
+  RSR.MISC2 t;
+}
+
+proto RSR.MISC3 { out uint32 t }
+{}
+{
+  RSR.MISC3 t;
+}
+
+proto RSR.PS { out uint32 t }
+{}
+{
+  RSR.PS t;
+}
+
+proto RSR.SAR { out uint32 t }
+{}
+{
+  RSR.SAR t;
+}
+
+proto RSR.WINDOWBASE { out uint32 t }
+{}
+{
+  RSR.WINDOWBASE t;
+}
+
+proto RSR.WINDOWSTART { out uint32 t }
+{}
+{
+  RSR.WINDOWSTART t;
+}
+
+proto RSYNC { }
+{}
+{
+  RSYNC;
+}
+
+proto S16I { in int16 r, in int16 * p, in immediate i }
+{}
+{
+  S16I r, p, i + 0;
+}
+
+proto S32E { in int32 t, in int32 * s, in immediate o }
+{}
+{
+  S32E t, s, o + 0;
+}
+
+proto S32I { in int32 r, in int32 * p, in immediate i }
+{}
+{
+  S32I r, p, i + 0;
+}
+
+proto S32I.N { in int32 t, in int32 * p, in immediate i }
+{}
+{
+  S32I.N t, p, i + 0;
+}
+
+proto S8I { in int8 r, in int8 * p, in immediate i }
+{}
+{
+  S8I r, p, i + 0;
+}
+
+proto SEXT { out int32 r, in int32 s, in immediate i }
+{}
+{
+  SEXT r, s, i + 0;
+}
+
+proto SIMCALL { }
+{}
+{
+  SIMCALL;
+}
+
+proto SLL { out int32 r, in int32 s }
+{}
+{
+  SLL r, s;
+}
+
+proto SLLI { out int32 r, in int32 s, in immediate i }
+{}
+{
+  SLLI r, s, i + 0;
+}
+
+proto SRA { out int32 r, in int32 t }
+{}
+{
+  SRA r, t;
+}
+
+proto SRAI { out int32 r, in int32 t, in immediate i }
+{}
+{
+  SRAI r, t, i + 0;
+}
+
+proto SRC { out int32 r, in int32 s, in int32 t }
+{}
+{
+  SRC r, s, t;
+}
+
+proto SRL { out uint32 r, in uint32 t }
+{}
+{
+  SRL r, t;
+}
+
+proto SRLI { out uint32 r, in uint32 t, in immediate i }
+{}
+{
+  SRLI r, t, i + 0;
+}
+
+proto SSA8B { in int32 s }
+{}
+{
+  SSA8B s;
+}
+
+proto SSA8L { in int32 s }
+{}
+{
+  SSA8L s;
+}
+
+proto SSAI { in immediate i }
+{}
+{
+  SSAI i + 0;
+}
+
+proto SSAI_SRC { out int32 dst, in int32 src1, in int32 src2, in immediate amount }
+{}
+{
+  SSAI amount + 0;
+  SRC dst, src1, src2;
+}
+
+proto SSL { in int32 s }
+{}
+{
+  SSL s;
+}
+
+proto SSL_SLL { out int32 dst, in int32 src, in int32 amount }
+{}
+{
+  SSL amount;
+  SLL dst, src;
+}
+
+proto SSR { in int32 s }
+{}
+{
+  SSR s;
+}
+
+proto SSR_SRA { out int32 dst, in int32 src, in int32 amount }
+{}
+{
+  SSR amount;
+  SRA dst, src;
+}
+
+proto SSR_SRC { out int32 dst, in int32 src1, in int32 src2, in int32 amount }
+{}
+{
+  SSR amount;
+  SRC dst, src1, src2;
+}
+
+proto SSR_SRL { out uint32 dst, in uint32 src, in int32 amount }
+{}
+{
+  SSR amount;
+  SRL dst, src;
+}
+
+proto SUB { out int32 r, in int32 s, in int32 t }
+{}
+{
+  SUB r, s, t;
+}
+
+proto SUBX2 { out int32 r, in int32 s, in int32 t }
+{}
+{
+  SUBX2 r, s, t;
+}
+
+proto SUBX4 { out int32 r, in int32 s, in int32 t }
+{}
+{
+  SUBX4 r, s, t;
+}
+
+proto SUBX8 { out int32 r, in int32 s, in int32 t }
+{}
+{
+  SUBX8 r, s, t;
+}
+
+proto SYSCALL { }
+{}
+{
+  SYSCALL;
+}
+
+proto WAITI { in immediate s }
+{}
+{
+  WAITI s + 0;
+}
+
+proto WDTLB { in uint32 art, in uint32 ars }
+{}
+{
+  WDTLB art, ars;
+}
+
+proto WITLB { in uint32 art, in uint32 ars }
+{}
+{
+  WITLB art, ars;
+}
+
+proto WSR.CCOMPARE0 { in uint32 art }
+{}
+{
+  WSR.CCOMPARE0 art;
+}
+
+proto WSR.CCOUNT { in uint32 art }
+{}
+{
+  WSR.CCOUNT art;
+}
+
+proto WSR.DBREAKA0 { in uint32 art }
+{}
+{
+  WSR.DBREAKA0 art;
+}
+
+proto WSR.DBREAKA1 { in uint32 art }
+{}
+{
+  WSR.DBREAKA1 art;
+}
+
+proto WSR.DBREAKC0 { in uint32 art }
+{}
+{
+  WSR.DBREAKC0 art;
+}
+
+proto WSR.DBREAKC1 { in uint32 art }
+{}
+{
+  WSR.DBREAKC1 art;
+}
+
+proto WSR.DDR { in uint32 art }
+{}
+{
+  WSR.DDR art;
+}
+
+proto WSR.DEBUGCAUSE { in uint32 art }
+{}
+{
+  WSR.DEBUGCAUSE art;
+}
+
+proto WSR.DEPC { in uint32 t }
+{}
+{
+  WSR.DEPC t;
+}
+
+proto WSR.EPC1 { in uint32 t }
+{}
+{
+  WSR.EPC1 t;
+}
+
+proto WSR.EPC2 { in uint32 t }
+{}
+{
+  WSR.EPC2 t;
+}
+
+proto WSR.EPC3 { in uint32 t }
+{}
+{
+  WSR.EPC3 t;
+}
+
+proto WSR.EPC4 { in uint32 t }
+{}
+{
+  WSR.EPC4 t;
+}
+
+proto WSR.EPC5 { in uint32 t }
+{}
+{
+  WSR.EPC5 t;
+}
+
+proto WSR.EPS2 { in uint32 t }
+{}
+{
+  WSR.EPS2 t;
+}
+
+proto WSR.EPS3 { in uint32 t }
+{}
+{
+  WSR.EPS3 t;
+}
+
+proto WSR.EPS4 { in uint32 t }
+{}
+{
+  WSR.EPS4 t;
+}
+
+proto WSR.EPS5 { in uint32 t }
+{}
+{
+  WSR.EPS5 t;
+}
+
+proto WSR.EXCCAUSE { in uint32 t }
+{}
+{
+  WSR.EXCCAUSE t;
+}
+
+proto WSR.EXCSAVE1 { in uint32 t }
+{}
+{
+  WSR.EXCSAVE1 t;
+}
+
+proto WSR.EXCSAVE2 { in uint32 t }
+{}
+{
+  WSR.EXCSAVE2 t;
+}
+
+proto WSR.EXCSAVE3 { in uint32 t }
+{}
+{
+  WSR.EXCSAVE3 t;
+}
+
+proto WSR.EXCSAVE4 { in uint32 t }
+{}
+{
+  WSR.EXCSAVE4 t;
+}
+
+proto WSR.EXCSAVE5 { in uint32 t }
+{}
+{
+  WSR.EXCSAVE5 t;
+}
+
+proto WSR.EXCVADDR { in uint32 t }
+{}
+{
+  WSR.EXCVADDR t;
+}
+
+proto WSR.IBREAKA0 { in uint32 art }
+{}
+{
+  WSR.IBREAKA0 art;
+}
+
+proto WSR.IBREAKA1 { in uint32 art }
+{}
+{
+  WSR.IBREAKA1 art;
+}
+
+proto WSR.IBREAKENABLE { in uint32 art }
+{}
+{
+  WSR.IBREAKENABLE art;
+}
+
+proto WSR.ICOUNT { in uint32 art }
+{}
+{
+  WSR.ICOUNT art;
+}
+
+proto WSR.ICOUNTLEVEL { in uint32 art }
+{}
+{
+  WSR.ICOUNTLEVEL art;
+}
+
+proto WSR.INTCLEAR { in uint32 art }
+{}
+{
+  WSR.INTCLEAR art;
+}
+
+proto WSR.INTENABLE { in uint32 art }
+{}
+{
+  WSR.INTENABLE art;
+}
+
+proto WSR.INTSET { in uint32 art }
+{}
+{
+  WSR.INTSET art;
+}
+
+proto WSR.LBEG { in uint32 art }
+{}
+{
+  WSR.LBEG art;
+}
+
+proto WSR.LCOUNT { in int32 t }
+{}
+{
+  WSR.LCOUNT t;
+}
+
+proto WSR.LEND { in int32 t }
+{}
+{
+  WSR.LEND t;
+}
+
+proto WSR.LITBASE { in uint32 t }
+{}
+{
+  WSR.LITBASE t;
+}
+
+proto WSR.MISC0 { in uint32 t }
+{}
+{
+  WSR.MISC0 t;
+}
+
+proto WSR.MISC1 { in uint32 t }
+{}
+{
+  WSR.MISC1 t;
+}
+
+proto WSR.MISC2 { in uint32 t }
+{}
+{
+  WSR.MISC2 t;
+}
+
+proto WSR.MISC3 { in uint32 t }
+{}
+{
+  WSR.MISC3 t;
+}
+
+proto WSR.PS { in uint32 t }
+{}
+{
+  WSR.PS t;
+}
+
+proto WSR.SAR { in uint32 t }
+{}
+{
+  WSR.SAR t;
+}
+
+proto WSR.WINDOWBASE { in uint32 t }
+{}
+{
+  WSR.WINDOWBASE t;
+}
+
+proto WSR.WINDOWSTART { in uint32 t }
+{}
+{
+  WSR.WINDOWSTART t;
+}
+
+proto WSR_SAR_SRC { out int32 dst, in int32 src1, in int32 src2, in int32 amount }
+{}
+{
+  WSR.SAR amount;
+  SRC dst, src1, src2;
+}
+
+proto XOR { out int32 r, in int32 s, in int32 t }
+{}
+{
+  XOR r, s, t;
+}
+
+proto XSR.CCOMPARE0 { inout uint32 art }
+{}
+{
+  XSR.CCOMPARE0 art;
+}
+
+proto XSR.CCOUNT { inout uint32 art }
+{}
+{
+  XSR.CCOUNT art;
+}
+
+proto XSR.DBREAKA0 { inout uint32 art }
+{}
+{
+  XSR.DBREAKA0 art;
+}
+
+proto XSR.DBREAKA1 { inout uint32 art }
+{}
+{
+  XSR.DBREAKA1 art;
+}
+
+proto XSR.DBREAKC0 { inout uint32 art }
+{}
+{
+  XSR.DBREAKC0 art;
+}
+
+proto XSR.DBREAKC1 { inout uint32 art }
+{}
+{
+  XSR.DBREAKC1 art;
+}
+
+proto XSR.DDR { inout uint32 art }
+{}
+{
+  XSR.DDR art;
+}
+
+proto XSR.DEBUGCAUSE { inout uint32 art }
+{}
+{
+  XSR.DEBUGCAUSE art;
+}
+
+proto XSR.DEPC { inout uint32 t }
+{}
+{
+  XSR.DEPC t;
+}
+
+proto XSR.EPC1 { inout uint32 t }
+{}
+{
+  XSR.EPC1 t;
+}
+
+proto XSR.EPC2 { inout uint32 t }
+{}
+{
+  XSR.EPC2 t;
+}
+
+proto XSR.EPC3 { inout uint32 t }
+{}
+{
+  XSR.EPC3 t;
+}
+
+proto XSR.EPC4 { inout uint32 t }
+{}
+{
+  XSR.EPC4 t;
+}
+
+proto XSR.EPC5 { inout uint32 t }
+{}
+{
+  XSR.EPC5 t;
+}
+
+proto XSR.EPS2 { inout uint32 t }
+{}
+{
+  XSR.EPS2 t;
+}
+
+proto XSR.EPS3 { inout uint32 t }
+{}
+{
+  XSR.EPS3 t;
+}
+
+proto XSR.EPS4 { inout uint32 t }
+{}
+{
+  XSR.EPS4 t;
+}
+
+proto XSR.EPS5 { inout uint32 t }
+{}
+{
+  XSR.EPS5 t;
+}
+
+proto XSR.EXCCAUSE { inout uint32 t }
+{}
+{
+  XSR.EXCCAUSE t;
+}
+
+proto XSR.EXCSAVE1 { inout uint32 t }
+{}
+{
+  XSR.EXCSAVE1 t;
+}
+
+proto XSR.EXCSAVE2 { inout uint32 t }
+{}
+{
+  XSR.EXCSAVE2 t;
+}
+
+proto XSR.EXCSAVE3 { inout uint32 t }
+{}
+{
+  XSR.EXCSAVE3 t;
+}
+
+proto XSR.EXCSAVE4 { inout uint32 t }
+{}
+{
+  XSR.EXCSAVE4 t;
+}
+
+proto XSR.EXCSAVE5 { inout uint32 t }
+{}
+{
+  XSR.EXCSAVE5 t;
+}
+
+proto XSR.EXCVADDR { inout uint32 t }
+{}
+{
+  XSR.EXCVADDR t;
+}
+
+proto XSR.IBREAKA0 { inout uint32 art }
+{}
+{
+  XSR.IBREAKA0 art;
+}
+
+proto XSR.IBREAKA1 { inout uint32 art }
+{}
+{
+  XSR.IBREAKA1 art;
+}
+
+proto XSR.IBREAKENABLE { inout uint32 art }
+{}
+{
+  XSR.IBREAKENABLE art;
+}
+
+proto XSR.ICOUNT { inout uint32 art }
+{}
+{
+  XSR.ICOUNT art;
+}
+
+proto XSR.ICOUNTLEVEL { inout uint32 art }
+{}
+{
+  XSR.ICOUNTLEVEL art;
+}
+
+proto XSR.INTENABLE { inout uint32 art }
+{}
+{
+  XSR.INTENABLE art;
+}
+
+proto XSR.LBEG { inout uint32 art }
+{}
+{
+  XSR.LBEG art;
+}
+
+proto XSR.LCOUNT { inout int32 t }
+{}
+{
+  XSR.LCOUNT t;
+}
+
+proto XSR.LEND { inout int32 t }
+{}
+{
+  XSR.LEND t;
+}
+
+proto XSR.LITBASE { inout uint32 t }
+{}
+{
+  XSR.LITBASE t;
+}
+
+proto XSR.MISC0 { inout uint32 t }
+{}
+{
+  XSR.MISC0 t;
+}
+
+proto XSR.MISC1 { inout uint32 t }
+{}
+{
+  XSR.MISC1 t;
+}
+
+proto XSR.MISC2 { inout uint32 t }
+{}
+{
+  XSR.MISC2 t;
+}
+
+proto XSR.MISC3 { inout uint32 t }
+{}
+{
+  XSR.MISC3 t;
+}
+
+proto XSR.PS { inout uint32 t }
+{}
+{
+  XSR.PS t;
+}
+
+proto XSR.SAR { inout uint32 t }
+{}
+{
+  XSR.SAR t;
+}
+
+proto XSR.WINDOWBASE { inout uint32 t }
+{}
+{
+  XSR.WINDOWBASE t;
+}
+
+proto XSR.WINDOWSTART { inout uint32 t }
+{}
+{
+  XSR.WINDOWSTART t;
+}
+
+proto uint32_loadi { out uint32 c, in const uint32 * p, in immediate o }
+{}
+{
+  L32I c, p, o + 0;
+}
+
+proto uint32_move { out uint32 a, in uint32 b }
+{}
+{
+  OR a, b, b;
+}
+
+proto uint32_storei { in uint32 c, in uint32 * p, in immediate o }
+{}
+{
+  S32I c, p, o + 0;
+}
+

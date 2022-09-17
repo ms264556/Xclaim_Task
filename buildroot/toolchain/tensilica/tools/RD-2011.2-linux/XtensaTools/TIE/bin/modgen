@@ -1,0 +1,144 @@
+#! /usr/xtensa/tools-6.1/bin/perl -w
+
+# Copyright (c) 2003-2008 by Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+use strict;
+use Getopt::Long;
+use File::Basename;
+use FindBin qw($RealBin);
+use English;
+
+my $tctools = $ENV{'TCTOOLS'};
+if (!defined($tctools)) {
+  my($tctools_base, $tctools_suffix);
+  ($tctools_base, $tctools, $tctools_suffix) = fileparse($RealBin);
+}
+
+require "$tctools/lib/modgen.pl";
+
+# parse the command line options
+my($ret, $usage);
+my $TestLatchesTransparent = 0;
+my $UseFlipFlops = 0;
+my $FPGABuild = 0;
+my $UseGatedClocks = 0;
+my $ClkGateFuncUnit = 0;
+my $TestFullScan = 0;
+my $ResetFlops = 0;
+my $AsyncReset = 0;
+my $all = 0;
+my @srcdirs = (); 
+my $echo = 0;
+my $help = 0;
+my $list = 0;
+my $verify = 0; 
+my $multiply_verify = 0; 
+my $SimplePrimitives = 0;
+$usage = <<EOF;
+usage: $PROGRAM_NAME [options]
+    -TestLatchesTransparent	build xtregfile with transparent latches
+    -UseFlipFlops		build xtregfile using flip-flops
+    -UseGatedClocks		build xtregfile with gated clocks
+    -TestFullScan		build xtregfile with full-scan support
+    -ClkGateFuncUnit		build xtregfile with power-management
+    -ResetFlops			clear flops on Reset
+    -AsyncReset		        asynchronous reset of flops
+    -all			generate all primitives
+    -srcdirs			comma separated list of dirs containing
+                                the *.v files to be processed
+    -echo			echo the input to the output
+    -help			print this list
+    -list			list available modules
+    -verify			turn xtdelay into a wire
+    -multiply-verify		replace MAC/MUL with verification hacks
+    -simple			simplify expressions for certain modules (xtaddn,
+				xtaddc, xtaddcin, xtaddcout, xtmul) and do
+				direct DesignWare instantiation of others (xtlzc,
+				xtmulpp, xtmac, xtcmp)
+EOF
+$ret = GetOptions(
+    "UseFlipFlops" =>		\$UseFlipFlops,
+    "FPGABuild" =>              \$FPGABuild,
+    "UseGatedClocks" =>		\$UseGatedClocks,
+    "ClkGateFuncUnit" =>	\$ClkGateFuncUnit,
+    "ResetFlops" =>		\$ResetFlops,
+    "AsyncReset" =>		\$AsyncReset,
+    "TestLatchesTransparent" =>	\$TestLatchesTransparent,
+    "TestFullScan" =>		\$TestFullScan,
+    "all" =>			\$all,
+    "srcdirs=s@" =>		\@srcdirs,
+    "echo" =>			\$echo,
+    "help" =>			\$help,
+    "list" =>			\$list,
+    "verify" =>			\$verify,
+    "multiply-verify" =>	\$multiply_verify,
+    "simple" =>			\$SimplePrimitives
+);
+if (! $ret) {
+    print "$usage";
+    exit 1;
+}
+if ($help) {
+    print "$usage";
+    $list = 1;
+}
+
+@srcdirs = map(split(',', $_), @srcdirs);
+
+modgen( {
+    ALL => $all,
+    LIST => $list,
+    ECHO => $echo,
+    SRCDIRS => \@srcdirs,
+    FILES => \@ARGV,
+    USE_FLIP_FLOPS => $UseFlipFlops,
+    USE_GATED_CLOCKS => $UseGatedClocks,
+    CLK_GATE_FUNC_UNIT => $ClkGateFuncUnit,
+    RESET_FLOPS => $ResetFlops,
+    ASYNC_RESET => $AsyncReset,
+    TEST_LATCHES_TRANSPARENT => $TestLatchesTransparent,
+    TEST_FULL_SCAN => $TestFullScan,
+    FORCE_TMODE => 0,
+    VERIFY => $verify,
+    MULTIPLY_VERIFY => $multiply_verify,
+    SIMPLE => $SimplePrimitives
+});
+
+
+#A more complete description of the impact of various options:
+#
+#xtregfile is impacted by several switches:
+#
+#    If USE_FLIP_FLOP, then the xtregfile is built with "xtenflop" and
+#    not latches; the other flags don't matter.
+#
+#    If ~USE_FLIP_FLOP & USE_GATED_CLOCKS & ~TEST_LATCHES_TRANSPARENT,
+#    then use an xtRFlatch and an xtclock_gate_or to gate the clock of
+#    the latch.
+#
+#    If ~USE_FLIP_FLOP & USE_GATED_CLOCKS & TEST_LATCHES_TRANSPARENT,
+#    then use an xtRFLatch with a gated clock and the TMode signal to
+#    make the latch transparent.
+#
+#    If ~USE_FLIP_FLOP & ~ USE_GATED_CLOCKS, then use an xtRFenlatch
+#    as the storage element.
+#
+#    Finally, if TEST_LATCHES_TRANSPARENT | TEST_FULL_SCAN, then the
+#    xtregfile has a TMode input signal.   If TEST_FULL_SCAN, then this
+#    signal is used to disable the clock gating on the negative-edge
+#    flop used for hold times.
+#
+#
+#VERIFY: Affects only the generate of xtdelay and replaces xtdelay with
+#a wire when verify is enabled
+#
+#MULTIPLY_VERIFY: replace xtmul and xtmac with logic which doesn't choke
+#the combinational equivalence checkers.  The logic is not the same as
+#a multiply!  False errors can occur depending on the surrounding logic.
+#The intention is that "for most applications" replacing the multiply with
+#simpler logic will not mislead the verification.

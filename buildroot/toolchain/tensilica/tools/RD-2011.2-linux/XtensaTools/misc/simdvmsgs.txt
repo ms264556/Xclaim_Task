@@ -1,0 +1,471 @@
+MSGID: FUSION_AR_OPERAND_LIMIT
+AR operand count limit (%d) exceeded.
+MSGID: FUSION_CHECKSUM
+The data-flow graph for the region has changed.
+MSGID: FUSION_CLOSURE
+Additional nodes need to be included.
+MSGID: FUSION_DEAD_COPY
+An unused copy node can't be included in the fusion.
+MSGID: FUSION_IMPOSSIBLE
+Cannot create a valid fusion starting from the selected node(s).
+MSGID: FUSION_IN_OPERAND_LIMIT
+Input operand count limit (%d) exceeded.
+MSGID: FUSION_INTERFACE_LATENCY
+Interface %s must be defined in stage %d but the logic latency is %d cycles.
+MSGID: FUSION_INVALID
+The manual fusion is invalid.
+MSGID: FUSION_LATENCY
+Estimated fusion latency (%d cycles) exceeds the limit (%d cycles).
+MSGID: FUSION_MATCH
+The compiler is unable to apply the generated fusion.
+MSGID: FUSION_MULTI_INLINE
+Multiple fused operations need to be inlined.
+MSGID: FUSION_MULTI_INTERFACE_DEF
+Multiple definitions of interface %s required.
+MSGID: FUSION_MULTI_INTERFACE_USE
+Multiple uses of interface %s required.
+MSGID: FUSION_MULTI_MEMORY
+Unable to combine multiple memory operations.
+MSGID: FUSION_MULTI_STATE_DEF
+Multiple definitions of state %s required.
+MSGID: FUSION_MULTI_STATE_USE
+Multiple uses of state %s required.
+MSGID: FUSION_NODE_BAD
+Unsupported node.
+MSGID: FUSION_NODE_BRANCH
+Branches can't be fused.
+MSGID: FUSION_NODE_CORE_STATE
+Operation uses a core state.
+MSGID: FUSION_NODE_EXCEPTION
+Operation raises an exception.
+MSGID: FUSION_NODE_FUSIBLE
+The node can be included in fusions.
+MSGID: FUSION_NODE_IMMEDIATE
+Operation contains an unsupported immediate operand.
+MSGID: FUSION_NODE_NO_GENERATE
+Operation is not extended or replaced.
+MSGID: FUSION_NODE_NO_REFERENCE
+Operation has no reference.
+MSGID: FUSION_NODE_MEMORY
+Memory operations can't be fused (the 'memory_fusions' option is turned off).
+MSGID: FUSION_NODE_OPERAND
+Operand nodes exist for visualization purposes only.
+MSGID: FUSION_NODE_PROTO
+Non-instruction protos can't be fused.
+MSGID: FUSION_NODE_SHARED_FUNC
+Unable to fuse operations that call shared functions.
+MSGID: FUSION_NODE_TIECOMP_DISALLOWED
+Operation is not allowed in a TIEcomp construct.
+MSGID: FUSION_NODE_VECTOR_MEMORY
+Vector memory operations can't be fused.
+MSGID: FUSION_NOT_FOUND
+Unable to find the fusion region.
+MSGID: FUSION_OP_COUNT_THRESHOLD
+Fused operations count below threshold (%d).
+MSGID: FUSION_OPERAND_LIMIT
+Operand count limit (%d) exceeded.
+MSGID: FUSION_OUT_OPERAND_LIMIT
+Output operand count limit (%d) exceeded.
+MSGID: FUSION_READ_REGPORT_LIMIT
+The regfile %s read port count limit (%d) exceeded.
+MSGID: FUSION_REGFILE_LIMIT
+The regfile for type %s exceeds the allowed or supported resource limits.
+MSGID: FUSION_VALID
+The manual fusion is valid.
+MSGID: FUSION_WRITE_REGPORT_LIMIT
+The regfile %s write port count limit (%d) exceeded.
+MSGID: REGION_INDEXED_OP_MEMORY_WIDTH
+Vectorization by %d requires a PIF width >= %d bits to support indexed memory operations.
+LONGDESC
+The region requires an indexed memory operation with width that exceeds the current PIF width. You can increase the PIF width by editing the processor configuration.
+MSGID: REGION_OP_MEMORY_WIDTH
+Vectorization by %d requires that the PIF width be >= %d bits.
+LONGDESC
+The region requires a memory operation with width that exceeds the current PIF width. You can increase the PIF width by editing the processor configuration.
+MSGID: REGION_OP_STORE_DISABLE
+Vectorization by %d requires arbitrary byte enables to support unaligned stores.
+LONGDESC
+The region requires unaligned store operations. These operations require arbitrary byte enables. You can add arbitrary byte enables by editing the processor configuration.
+MSGID: REGION_UNALIGNED_LOAD
+Vectorization by %d requires unaligned loads.
+LONGDESC
+Vectorization of this region will generate unaligned load operations. The extra hardware and opcode space required by these operations may be avoided by using '#pragma aligned', or by accessing global or local arrays directly.
+MSGID: REGION_UNALIGNED_STORE
+Vectorization by %d requires unaligned stores.
+LONGDESC
+Vectorization of this region will generate unaligned store operations. The extra hardware and opcode space required by these operations may be avoided by using '#pragma aligned', or by accessing global or local arrays directly.
+MSGID: SIMD_ACCESS_GAPS
+Gaps in memory access sequence (base '%s').
+LONGDESC
+The compiler is unable to vectorize array accesses with gaps. A loop can only be vectorized if it can be transformed so that it accesses sequential array elements on each loop iteration. The example loop below can't be vectorized because it accesses only the even elements of the arrays.
+
+for (i = 0; i < N; i += 2)
+  a[i] = b[i] + c[i];
+
+MSGID: SIMD_ANALYSIS_OP
+Unable to analyze %s.
+LONGDESC
+The current version of the compiler does not support vectorization of this type of operation.
+MSGID: SIMD_ANALYSIS_REDUCTION
+Unable to analyze reduction of %s.
+LONGDESC
+The current version of the compiler does not support this type of vector reduction.
+MSGID: SIMD_ARRAY_ALIAS
+Array base '%s' is aliased with array base '%s' at line %d.
+LONGDESC
+The compiler conservatively assumes that the two array bases may point to the same memory location. In certain cases, e.g. direct references to global arrays, the concurrent or simd pragma, the __restrict qualifier, or the -OPT:alias=restrict option can be used to prevent aliasing and allow vectorization.
+MSGID: SIMD_ARRAY_DEPENDENCE
+Dependence between array access '%s' and array access '%s' at line %d.
+LONGDESC
+Vectorization requires that loop iterations can be executed in parallel. This message indicates that data dependences make parallel execution illegal. The example loop below can't be vectorized because the data computed in each iteration (i) depends on the data computed in the previous iteration (i-1).
+
+for (i = 1; i < N; i++)
+  b[i] = b[i - 1] + a[i];
+
+MSGID: SIMD_BAD_ACCESS
+%s is not a simple array access.
+LONGDESC
+The compiler is unable to vectorize loops that contain complex indirect memory accesses. The example loops below can't be vectorized because XPRES is unable to determine that sequential elements of array 'b' are accessed on each iteration of the loop.
+
+for (i = 1; i < N; i++)
+  a[i] = b[c[i]];
+
+for (i = 1; i < N; i++)
+  a[i] = b[i % 4];
+
+MSGID: SIMD_BAD_ACCESS_STRIDE
+Bad array access stride (base '%s').
+LONGDESC
+The compiler is unable to vectorize array accesses with non-unit strides. A loop can only be vectorized if it can be transformed so that it accesses sequential array elements on each loop iteration. Loop 'i' below can't be vectorized because it doesn't access sequential elements from array 'b'. Loop 'j' can't be vectorized because it doesn't access sequential elements from array 'a'.
+
+for (i = 0; i < N; i++)
+  for (j = 0; j < N; j++)
+    a[j][i] = b[i][j];
+
+MSGID: SIMD_BAD_CALL
+Loop contains call to function '%s'.
+LONGDESC
+The compiler is unable to vectorize loops that contain function calls.
+MSGID: SIMD_BAD_DGRAPH
+Dependence analysis overflow -- too many array accesses.
+LONGDESC
+The compiler is unable to vectorize loops because the function is too large and/or the function contains too many array accesses. This error can be avoided by splitting the function into several smaller functions.
+MSGID: SIMD_BAD_LOOP
+Non-array indirect memory accesses, calls or unhandled control-flow.
+LONGDESC
+Loops with non-array indirect memory accesses, function calls, use of non-vectorizable TIE intrinsics or unsupported control-flow such as GOTO statements and loops with non-computable trip counts can't be vectorized.
+MSGID: SIMD_BAD_LOOP_UPPER_BOUND
+Unsupported loop upper bound expression.
+LONGDESC
+The compiler tries to standardize all for-loop upper bounds to 'index <= bound' expressions. Vectorization is not possible if the compiler is unable to perform this transformation.
+MSGID: SIMD_BAD_TIE_OP
+Non-vectorizable input TIE instruction '%s'.
+LONGDESC
+The compiler is unable to vectorize loops containing TIE instructions that access states, memory or queues.
+MSGID: SIMD_BOOLEAN
+Boolean coprocessor required.
+LONGDESC
+Vector if-conversion requires the boolean coprocessor option. You can enable the boolean coprocessor option by editing the processor configuration.
+MSGID: SIMD_DATA_DEPENDENCE
+Data dependences prevent vectorization.
+LONGDESC
+Vectorization requires that loop iterations can be executed in parallel. This message indicates that data dependences make parallel execution illegal. The example loop below can't be vectorized because the data computed in each iteration (i) depends on the data computed in the previous iteration (i-1).
+
+for (i = 1; i < N; i++)
+  b[i] = b[i - 1] + a[i];
+
+MSGID: SIMD_DISABLED
+To enable vectorization use -O3 -LNO:simd.
+LONGDESC
+The verbosity option was set (-LNO:simd_v) without setting the appropriate optimization options (-O3 -LNO:simd).
+MSGID: SIMD_IF_DIFF_VL
+Mismatched if-statement vector lengths.
+LONGDESC
+Vectorization of if-statements is performed through a code transformation called 'if-conversion'. If-coversion is implemented by executing the expressions in the then and the else branches together and merging the results based on the if-condition. For example:
+
+Original code:
+
+if (a > b)
+  c = a - b;
+else
+  c = a + b;
+
+If-converted code:
+
+t1 = a - b;
+t2 = a + b;
+c = (a > b) ? t1 : t2;
+
+MSGID: SIMD_IF_HAS_LOOP
+Loop in if-statement.
+LONGDESC
+The current version of the compiler is unable to apply if-conversion in the presence of loops in the then or else branch of an if-statement.
+
+Vectorization of if-statements is performed through a code transformation called 'if-conversion'. If-coversion is implemented by executing the expressions in the then and the else branches together and merging the results based on the if-condition. For example:
+
+Original code:
+
+if (a > b)
+  c = a - b;
+else
+  c = a + b;
+
+If-converted code:
+
+t1 = a - b;
+t2 = a + b;
+c = (a > b) ? t1 : t2;
+
+The following is an example of a loop contained within the then branch of an if-statement. In this example, the 'j' loop can not be vectorized because it contains an if-statement with a loop in the then branch. The compiler can vectorize a loop that is within the then or else branch, so it may be possible to vectorize the 'i' loop (assuming other vectorization requirements are satisfied).
+
+for (j = 0; j < 16; j++) {
+  if (a < b)
+    for (i = 0; i < 16; i++) x[i] = y[i];
+  ...
+}
+MSGID: SIMD_IF_UNSAFE_ACCESS
+Unsafe memory accesses in if-statement.
+LONGDESC
+Vectorization of if-statements is performed through a code transformation called 'if-conversion'. If-coversion is implemented by executing the expressions in the then and the else branches together and merging the results based on the if-condition. For example:
+
+Original code:
+
+if (a > b)
+  c = a - b;
+else
+  c = a + b;
+
+If-converted code:
+
+t1 = a - b;
+t2 = a + b;
+c = (a > b) ? t1 : t2;
+
+Since if-conversion executes the then- and the else- branches of the if-statement before testing the if-condition, safe transformation requires that each memory access is present on both branches of the if-statement. If a memory access is not on both sides of the if-statement but it can be speculated safely, the -LNO:simd_agg_if_conv compiler option or the simd_if_convert pragma can be used to force transformation.
+For example, the following code cannot be vectorized because 'a' is only written when the condition is true.
+
+for (i = 0; i < n; i++)
+  if (b[i] < c[i]) a[i] = b[i]
+
+By adding the simd_if_convert pragma to the loop as shown below, we inform the compiler that it is safe to write to 'a' on every iteration (that is, it is safe for the compiler to treat the code as if it were written a[i] = (b[i] < c[i]) ? b[i] : a[i]).
+
+#pragma simd_if_convert
+for (i = 0; i < n; i++)
+  if (b[i] < c[i]) a[i] = b[i]
+MSGID: SIMD_LOOP_BEGIN
+Vectorization analysis begins with a new loop.
+LONGDESC
+Before vectorizing a loop, the compiler performs complete operator and data dependence analysis on the loop to check the legality of the transformation.
+MSGID: SIMD_LOOP_COST_MODEL
+Vectorization of this loop is not beneficial.
+LONGDESC
+The compiler may choose not to vectorize a loop because the estimated performance of the vectorized loop is worse than the original, non-vector loop performance or than the performance achieved by vectorizing another loop in the same loop nest.
+MSGID: SIMD_LOOP_NON_VECTORIZABLE
+Loop is not vectorizable.
+LONGDESC
+The compiler is unable to vectorize this loop.
+MSGID: SIMD_LOOP_VECTORIZATION_SKIP
+Loop vectorization is skipped for loop %d from -LNO:simd_skip
+LONGDESC
+The compiler skips to vectorize this loop from option -LNO:simd_skip.
+MSGID: SIMD_LOOP_VECTORIZATION_RETRY
+Retrying loop vectorization %s
+LONGDESC
+The compiler is retrying vectorization with a different strategy.
+MSGID: SIMD_LOOP_STEP
+Non-unit loop step %d.
+LONGDESC
+Vectorization is supported only if the for-loop step is equal to one.
+MSGID: SIMD_LOOP_TOO_DEEP
+Loop nest is too deep.
+LONGDESC
+Vectorization analysis is not performed on outer loops that contain too deeply nested inner loops.
+MSGID: SIMD_LOOP_VECTORIZABLE
+Loop is vectorizable.
+LONGDESC
+Although the operator and data dependence analysis determined that the loop can be vectorized, the required SIMD TIE may not necessarily be generated. The loop may not be important enough or the current version of the XPRES compiler may be unable to generate the necessary vector semantics.
+MSGID: SIMD_LOOP_VECTORIZED
+Loop %d is vectorized by %d.
+MSGID: SIMD_NEGATIVE_ACCESS_STRIDE
+Negative memory access stride (base '%s').
+LONGDESC
+The compiler is unable to vectorize array accesses with negative stride. For example, the loop below can't be vectorized because of array 'b' is accessed with a negative stride.
+
+for (i = 0; i < N; i ++)
+  a[i] = b[N - i - 1];
+
+MSGID: SIMD_NO_COMMON_VL
+No common vectorization length is available.
+MSGID: SIMD_NO_COND_MOVE
+No conditional move instruction for vector type %s.
+LONGDESC
+Vectorization of if-statements is performed through a code transformation called 'if-conversion'. If-coversion is implemented by executing the expressions in the then and the else branches together and merging the results based on the if-condition. For example:
+
+Original code:
+
+if (a > b)
+  c = a - b;
+else
+  c = a + b;
+
+If-converted code:
+
+t1 = a - b;
+t2 = a + b;
+c = (a > b) ? t1 : t2;
+
+Vector if-conversion requires a conditional move instruction for merging a result of the specified vector type but no such instruction is available in the current processor configuration.
+MSGID: SIMD_NO_COPROC
+Vectorization turned off by -mno-use-coproc
+LONGDESC
+Vectorization may generate co-processor instructions which is disabled with -mno-use-coproc. If it should be allowed, remove -mno-use-coproc from the command line.
+MSGID: SIMD_NO_GUARDS
+Insufficient guard bits.
+MSGID: SIMD_NO_LOAD_CONV
+The processor configuration does not support load conversion from %s to %s.
+MSGID: SIMD_NO_LOOP
+No well-formed for-loops in function.
+LONGDESC
+The compiler can only vectorize for-loops with clear data dependences.
+MSGID: SIMD_NO_REDUCTION
+The processor configuration does not support vector reduction of %s.
+MSGID: SIMD_NO_SCALAR_CONV
+The processor configuration does not support scalar to vector conversion of %s.
+MSGID: SIMD_NO_SELECT
+No %d-way vector select instruction available to transform %s accesses.
+LONGDESC
+In certain cases, the data needs to be rearranged in order to vectorize a loop successfully. However, the required vector select instructions are not available in the current processor configuration.
+MSGID: SIMD_NO_SNL
+Function contains no well-formed simply-nested for-loops.
+LONGDESC
+The compiler can vectorize inner or outer simply-nested for-loops. In a simply-nested loop, there is only one loop at each nesting depth. For example:
+
+for (i = 0; i < N; i++) {
+  ...
+  for (j = 0; j < M; j++) { ... }
+  ...
+  for (k = 0; k < M; k++) { ... }
+  ...
+}
+
+Loop j and k are at the same nesting depth, so loop i is not simply-nested. The compiler may transform the loop nest into two simply nested loops -- one for i and j, and another one for i and k. If an outer loop can't be transformed to simply-nested loops, it won't be vectorized.
+MSGID: SIMD_NO_STORE_CONV
+The processor configuration does not support store conversion from %s to %s.
+MSGID: SIMD_NO_TYPE_CONV
+The processor configuration does not support type conversion from %s to %s.
+MSGID: SIMD_NO_VECTOR_OP
+The processor configuration does not support vector %s.
+MSGID: SIMD_NO_VECTOR_TYPE
+The processor configuration does not support vector %s.
+MSGID: SIMD_NO_VECTOR_TYPE_SIZE
+The processor configuration does not support %d-way vector %s.
+MSGID: SIMD_NON_COUNTABLE_LOOP
+The loop is not a countable for-loop.
+LONGDESC
+The compiler can vectorize only single induction variable countable for-loops, or loops that can be transformed automatically into this form. Use of non-int induction variables or pointer accesses may prevent the compiler from recognizing countable for-loops.
+MSGID: SIMD_OUTER_LOOP
+This is an outer loop. Refer to the enclosed inner loops for analysis messages.
+MSGID: SIMD_PRAGMA_IGNORED
+Unable to apply the #pragma at line %d to a for-loop.
+LONGDESC
+#pragma 'concurrent', 'simd' or 'simd_if_convert' must be placed immediately before the countable for-loop it applies to. For example,
+
+#pragma simd
+  for (i = 0; i < N; i++)
+    a[i] = b[i];
+
+MSGID: SIMD_PROC_BEGIN
+Vectorization analysis for function '%s'.
+MSGID: SIMD_SCALAR_ARRAY_STORE
+Scalar array store '%s' prevents vectorization.
+LONGDESC
+A non-vector store to an array element prevents vectorization. For example, the loop below can't be vectorized because of the use of array 'temp'. In order to vectorize such loops, one should use temporary scalar variables instead.
+
+int temp[2];
+for (i = 0; i < 100; i += 2) {
+  temp[0] = a[i];
+  temp[1] = a[i + 1];
+  b[i] = temp[0] + temp[1];
+  b[i + 1] = temp[0] - temp[1];
+}
+
+MSGID: SIMD_SCALAR_DEPENDENCE
+Bad scalar dependences (variable '%s').
+LONGDESC
+Data dependences on a scalar variable prevent vectorization. For example, the loop below can't be vectorized because of the data dependence on 'partial_sum'.
+
+int partial_sum = 0;
+for (i = 0; i < 100; i++) {
+  partial_sum += a[i];
+  b[i] = partial_sum;
+}
+
+MSGID: SIMD_SIGNED_POW_TWO_DIV
+Unsupported division of a signed value by a power-of-two amount.
+LONGDESC
+In order to vectorize a loop by converting a power-of-two division operation into an equivalent right-shift operation, the type of the shifted value must be unsigned. The sample expressions below demonstrate the difference between signed and unsigned division:
+
+1 / 2 = 0
+1 >> 1 = 0
+(-1) / 2 = 0
+(-1) >> 1 = -1
+
+One possible conversion from division to right-shift operations is illustrated by the following example:
+
+unsigned int ui;
+signed int si;
+
+ui = ui / 4;
+si = si / 4;
+
+The equivalent shift expressions for the two variables are:
+
+ui = ui >> 2;
+si = ((si >= 0) ? si : (si + 3)) >> 2;
+
+MSGID: SIMD_SMALL_TRIP_COUNT
+Loop trip count is too small.
+LONGDESC
+Vectorization is not supported if the smallest available vectorization factor is greater than the loop iteration count.
+MSGID: SIMD_TRAPEZOIDAL_INNER_LOOP
+Inner loop bounds depend on outer loop index.
+LONGDESC
+Loop nests where the loop bound of an inner loop depends on an outer loop index are called trapezoidal. The compiler may vectorize trapezoidal loops of depth 2. In this example, loops j and k can be vectorized but loop i cannot because it contains trapezoidal inner loops.
+
+for (i = 0; i < 100; i++)
+  for (j = 0; j < i; j++)
+    for (k = 0; k < i; k++)
+      s += a[i + j + k];
+
+MSGID: SIMD_UNALIGNED_LOAD
+The processor configuration does not support unaligned %s loads.
+MSGID: SIMD_UNALIGNED_STORE
+The processor configuration does not support unaligned %s stores.
+MSGID: SIMD_UNSIGNED_LOOP_UPPER_BOUND
+Unsigned '<' upper bound expression may prevent loop vectorization.
+LONGDESC
+The compiler tries to standardize all for-loop upper bounds to 'index <= bound' expressions. When an unsigned '<' loop bound expression is transformed to '<=', the extra code required to guarantee correctness can't be vectorized. Therefore, unsigned '<' upper bounds may prevent vectorization of enclosing loops.
+MSGID: SIMD_VARIANT_SHIFT
+Shift by loop-variant shift amount not supported (%s).
+LONGDESC
+The compiler is unable to vectorize expressions with shift-amounts that vary for different loop iterations. For example, if 'i' is the loop index, the left-shift 'a[i] << b[i]' has a shift-amount 'b[i]' that potentially varies on every iteration, and so a loop containing this expression cannot be vectorized.
+MSGID: SIMD_VAR_STRIDE
+The processor configuration does not support variable stride accesses.
+LONGDESC
+In certain cases, variable stride accesses can be vectorized using indexed updating, scalar-to-vector loads (LS.XU), and vector select instructions. However, these instructions are not available in the current processor configuration.
+MSGID: TIE_COPROCESSOR
+Unable to replace TIE with coprocessor '%s'. Remove the coprocessor statement or use the 'generate' option to extend the TIE.
+MSGID: TIE_BIG_CTYPE
+Unable to replace input TIE -- ctype '%s' has size %d, which is greater than the containing regfile size.
+MSGID: SIMD_NOANALYSIS_LOOP
+Already vectorized or non-analyzable loop.
+LONGDESC
+The loop cannot be analyzed to determine if it is vectorizable or not. The loop may contain non-array indirect memory accesses, function calls, use of non-vectorizable TIE intrinsics or unsupported control-flow such as GOTO statements. Or the loop may already be vectorized using SIMD operations specified in the input TIE.
+MSGID: SIMD_FUSED_LOOP
+Loop at line %d fused into loop at line %d
+LONGDESC
+This loop has been combined with an adjacent loop.
+MSGID: SIMD_DELETED_LOOP
+Loop at line %d deleted as dead code
+LONGDESC
+This loop has been deleted as redundant or unreachable code.

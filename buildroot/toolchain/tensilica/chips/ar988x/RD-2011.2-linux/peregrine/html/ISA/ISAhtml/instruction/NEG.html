@@ -1,0 +1,359 @@
+<html>
+  <head>
+    <title>
+      NEG - Negate
+    </title>
+    <style type="text/css">
+      <!--
+	body {
+		background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+		margin-left: 2em;
+		margin-right: 2em;
+	}
+	#boundingbox {
+	        background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+	        position: relative;
+	        width: 865px;
+	        margin: 0 auto;
+	        padding: 20px;
+	        border-style: dashed;
+	        border-width: 1px;
+	        border-spacing: 10px;
+	        border-collapse: separate;
+	}
+	a {
+		text-decoration: none;
+	}
+	a:visited {
+		color: blue;
+	}
+	a:link {
+		color: green;
+	}
+	a:active {
+		color: green;
+	}
+	a:hover {
+		color: green;
+	}
+	a:offsite {
+		color: green;
+	}
+	h1 {
+		font-size: 14pt;
+		font-weight: bold;
+	}
+	h1.center {
+		font-size: 14pt;
+		font-weight: bold;
+	        text-align: center;
+	}
+	h2 {
+		font-size: 12pt;
+	}
+	caption {
+		padding-top: 1em;
+	}
+	table.thin {
+		border-width: thin;
+		border-spacing: 0px;
+		border-style: inset;
+		border-color: gray;
+		border-collapse: collapse;
+		background-color: rgb(250, 240, 230);
+	}
+	table th.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table th.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	pre {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	}
+	.proto {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 1em;
+	        text-indent: -1em;
+	}
+	.protohead {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 2em;
+	        text-indent: -2em;
+	}
+	.protobody {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 4em;
+	        text-indent: -2em;
+	}
+	.rotate {
+	        display: block;
+	        -webkit-transform: rotate(-90deg); 
+	        -moz-transform: rotate(-90deg);
+	        filter:
+	progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	        padding-top: 20px;                       
+	}
+	.light {
+	        font-size: 75%;
+	        color: SlateGrey;
+	}
+	
+        -->
+    </style>
+  </head>
+  <body>
+    <h1>
+      NEG &#8212; Negate
+    </h1>
+    <h2>
+      Instruction Word
+    </h2>
+    <table frame="void" rules="groups" cellspacing=0 cellpadding=0>
+      <caption>x24 : x24_Inst_0</caption>
+      <colgroup colspan=8>
+	<col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=4>
+	<col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=4>
+	<col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=4>
+	<col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=4>
+	<col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <thead>
+	<tr>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>2
+	    3</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>1
+	    6</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>1
+	    5</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>1
+	    2</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>1
+	    1</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>8</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>7</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>4</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>3</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>0</small>
+	  </td>
+	</tr>
+      </thead>
+      <tfoot>
+	<tr>
+	  <td colspan=8 width=264 align="center">
+	    <small>8</small>
+	  </td>
+	  <td colspan=4 width=132 align="center">
+	    <small>4</small>
+	  </td>
+	  <td colspan=4 width=132 align="center">
+	    <small>4</small>
+	  </td>
+	  <td colspan=4 width=132 align="center">
+	    <small>4</small>
+	  </td>
+	  <td colspan=4 width=132 align="center">
+	    <small>4</small>
+	  </td>
+	</tr>
+      </tfoot>
+      <tbody>
+	<tr>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td colspan=4 width=132 align="center" bgcolor="#FFE4E1">
+	    r
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td colspan=4 width=132 align="center" bgcolor="#FFE4E1">
+	    t
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <h2>
+      Assembler Syntax
+    </h2>
+    <p>
+      <code>NEG ar, at</code><br>
+
+    </p>
+    <h2>
+      C Syntax
+    </h2>
+    <P>extern int XT_NEG(int t);
+</P>
+    <h2>
+      Description
+    </h2>
+    <p><small>(please consult the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for any cross references and additional information)</small></p><P><code>NEG</code> calculates the two"s complement negation of the contents of address register <code>at</code> and writes it to address register <code>ar</code>. Arithmetic overflow is not detected.</P>    <h2>Operation</h2>      <pre>
+AR[r] &#8592; 0 &#8722; AR[t]</pre>    <h2>Exceptions</h2>      <LI>EveryInstR Group (see the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for more information)</LI>
+    <h2>
+      Implementation Pipeline
+    </h2>
+    <table class="thin">
+      <thead>
+	<tr>
+	  <th align="left" class="thin">
+	    In
+	  </th>
+	  <th align="left" class="thin">
+	    Out
+	  </th>
+	</tr>
+      </thead>
+      <tbody>
+	<tr>
+	  <td class="thin">
+	    <code>art&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>arr&nbsp;Estage</code>
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <h2>
+      Protos that use NEG
+    </h2>
+    <div>
+      <div class=protohead>proto <a href=../protos.html#NEG>NEG</a> { out
+      int32 r, in int32 t }{}{</div><div class=protobody><a
+      href=NEG.html>NEG</a> r, t;</div><div class=protohead>}</div>
+    </div>
+  </body>
+</html>

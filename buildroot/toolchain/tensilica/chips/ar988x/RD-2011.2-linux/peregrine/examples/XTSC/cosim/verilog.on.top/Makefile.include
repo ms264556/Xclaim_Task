@@ -1,0 +1,35 @@
+# Customer ID=8327; Build=0x3b95c; Copyright (c) 2006-2009 Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of
+# Tensilica Inc.  They may be adapted and modified by bona fide
+# purchasers for internal use, but neither the original nor any adapted
+# or modified version may be disclosed or distributed to third parties
+# in any manner, medium, or form, in whole or in part, without the prior
+# written consent of Tensilica Inc.
+
+
+XTTOOLS = /home/spatel/depot/private/11ac/buildroot/toolchain/tensilica/tools/RD-2011.2-linux/XtensaTools
+
+
+ifndef XTSC_RUN_COSIM_VENDOR
+XTSC_RUN_COSIM_VENDOR=cadence
+endif
+
+export XTENSA_SYSTEM = /home/spatel/depot/private/11ac/buildroot/toolchain/tensilica/chips/ar988x/RD-2011.2-linux/peregrine/config
+export XTENSA_CORE = peregrine
+
+
+XTENSA_XMP_ROOT    = $(CURDIR)/../../../XMP
+XTENSA_XMP_XSYS    = $(XTENSA_XMP_ROOT)/$(SYSTEM).xsys
+XTENSA_XMP_SYSTEM  = $(XTENSA_XMP_ROOT)/sys-x86-linux/$(SYSTEM)
+XTENSA_XMP_PACKAGE = $(XTENSA_XMP_SYSTEM)/package
+XTENSA_XMP_DEFS    = $(XTENSA_XMP_PACKAGE)/sys-defs.mk
+XTENSA_XMP_CORES   = $(XTENSA_XMP_PACKAGE)/cores
+XMP_XTENSA_SYSTEM  = $(XTENSA_XMP_PACKAGE)/config
+
+
+TARGET_CXX = $(XTTOOLS)/bin/xt-xcc
+TARGET_CFLAGS  = -g $(CUSTOM_TARGET_CFLAGS)
+TARGET_LIBS = -lm
+
+

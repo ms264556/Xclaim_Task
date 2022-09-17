@@ -1,0 +1,5 @@
+EXPORTS
+  interface_version
+  get_xml_compiler
+  get_xml_post_parse
+  get_xml_post_rewrite

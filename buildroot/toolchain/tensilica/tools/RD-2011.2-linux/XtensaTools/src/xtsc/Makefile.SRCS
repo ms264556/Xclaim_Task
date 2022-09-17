@@ -1,0 +1,25 @@
+
+SRCS = \
+        xtsc_arbiter.cpp \
+        xtsc_dma_engine.cpp \
+        xtsc_lookup.cpp \
+        xtsc_lookup_driver.cpp \
+        xtsc_lookup_pin.cpp \
+        xtsc_master.cpp \
+        xtsc_memory.cpp \
+        xtsc_memory_base.cpp \
+        xtsc_memory_pin.cpp \
+        xtsc_memory_trace.cpp \
+        xtsc_mmio.cpp \
+        xtsc_module_pin_base.cpp \
+        xtsc_pin2tlm_memory_transactor.cpp \
+        xtsc_queue.cpp \
+        xtsc_queue_consumer.cpp \
+        xtsc_queue_pin.cpp \
+        xtsc_queue_producer.cpp \
+        xtsc_router.cpp \
+        xtsc_slave.cpp \
+        xtsc_tlm2pin_memory_transactor.cpp \
+        xtsc_wire.cpp \
+        xtsc_wire_logic.cpp \
+        xtsc_wire_source.cpp \

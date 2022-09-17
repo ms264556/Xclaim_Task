@@ -1,0 +1,264 @@
+This file describes how to build and run the XTSC examples.  The top-level
+XTSC example directory (the directory this README file is in) is refered
+to as <xtsc_examples_root>.
+
+Some of these examples may be incompatible with your Xtensa processor
+configuration.  The source code for any incompatible examples is
+still provided but the Makefile in the example directory will be
+disabled and, in addition, the top-level Makefile (and Visual C++ 
+solution file on MS Windows) will not visit that directory.
+
+Please refer to the "Xtensa SystemC (XTSC) User's Guide" for more
+information about these examples.
+
+
+
+The following table shows file extensions and their purpose in the XTSC
+examples:
+
+Extension     Purpose
+------------  ------------------------------------------------------------------
+.c            C source file.
+.cpp          C++ source file.
+.h            C/C++ header file.
+.inc          --include file for use with xtsc-run.
+.log          log4xtensa logging output file (typically, xtsc.log).
+.rom          File defining address/value pairs for use with an xtsc_lookup.
+.sln          Microsoft Visual C++ 2005 solution file.
+.vc90.sln     Microsoft Visual C++ 2008 solution file.
+.tab          File containing routing information for xtsc_router.
+.txt          log4xtensa configuration file (typically, TextLogger.txt).  Also
+              an address translations file for xtsc_arbiter.
+.vcproj       Microsoft Visual 2005 C++ project file.
+.vc90.vcproj  Microsoft Visual 2008 C++ project file.
+.vec          Script file containing test vectors for use by a testbench module.
+
+
+
+Host Requirements:
+
+*) Linux: The default ISS libraries are built with GCC 3.4.3, and you
+will need GCC 3.4.3 to compile the examples so they are compatible with
+the default ISS libraries.  Alternative sets of libraries are built with
+GCC 3.2.3 (the default version of GCC on RedHat EL3) and GCC 4.1.2.  To
+use one of the alternative library sets, you will need to edit file
+Makefile.include (see below).
+
+*) Windows: Microsoft Visual C++ 2005 or 2008 is required to build these
+examples (or any other XTSC program).  If you use the Express edition of
+Microsoft Visual C++ 2005, be advised that Microsoft's Platform SDK (PSDK)
+is required but is not included with the Visual C++ 2005 Express
+installation, so you will need to install it separately and configure
+Visual C++ to use it (follow Microsoft's directions for this).
+
+
+
+Building From Solution/Project Files (Windows only):
+
+On Windows, you can build and run the examples using the provided
+Visual C++ project and solution files.  For Visual C++ 2005 there
+is an xtsc.sln file in this directory that has the projects for all the
+examples.  For Visual C++ 2008, the name of the solution file is
+xtsc.vc90.sln.  If you only want to deal with a single example, then use
+the solution file in that example's subdirectory (for example,
+"hello_world\hello_world.sln" for Visual C++ 2005 or
+"hello_world\hello_world.vc90.sln" for Visual C++ 2008).
+Note: To run an example that was built from a MS Visual C++ project file,
+      put one (and only one) of the following on your PATH depending on
+      which version of MS Visual C++ you are using:
+        For MS Visual C++ 2005:
+          <xtensa_tools_root>/lib/iss
+        For MS Visual C++ 2008:
+          <xtensa_tools_root>/lib/iss-vc90
+      Failure to do this step will typically result in the executable
+      failing to start or crashing shortly after starting.
+
+
+
+Building From Makefiles on Linux:
+
+From the command line, first set up your environment to work with both
+the host compiler (gcc) and Xtensa Tools.  To do this:
+1.  Ensure your PATH points to the correct version of gcc.
+2.  Set up the PATH environment variable to point to:
+        <xtensa_tools_root>/bin
+3.  The default libraries in Makefile.include work when using GCC 3.4.
+    If you are using the default compiler for RHEL3 (GCC 3.2.2), or
+    GCC version 4.1.X, then uncomment the LIB_VARIANT line in 
+    Makefile.include that is for your GCC version.
+4.  Although not specifically required when running these examples,
+    Tensilica recommends that you set the XTENSA_CORE (and possibly
+    XTENSA_SYSTEM) environment variable to select this Xtensa
+    configuration.  This will simplify using many of Tensilica's
+    tools such as xt-gdb and xtsc-run.
+
+Then, invoke make to build and run the examples:
+    $ make clean all run
+
+To just build one example, change to that example's subdirectory and
+run make there.  For example:
+    $ cd xtsc_memory
+    $ make clean all run
+
+
+
+Building From Makefiles on MS Windows:
+
+From the command line, first set up your environment to work with both
+the host compiler (cl) and Xtensa Tools.  To do this:
+1.  If you are using Visual C++ 2008, edit Makefile.include and uncomment
+    the LIB_VARIANT macro definition (for Visual C++ 2005, leave
+    LIB_VARIANT commented out).  That is, for Visual C++ 2008, change:
+    #LIB_VARIANT = -vc90
+    to:
+    LIB_VARIANT = -vc90
+2.  Set up the LIB, INCLUDE, and PATH environment variables to use the
+    desired version (2005 or 2008) of Microsoft Visual C++ (e.g., by
+    running Microsoft's vsvars32.bat).
+3.  If you are using the Express edition of Visual C++ 2005, set INCLUDE
+    and LIB to also point to the PSDK (e.g., by running the PSDK's
+    SetEnv.Cmd script).
+4.  Put the following XtensaTools sub-directory on your PATH:
+      <xtensa_tools_root>/bin
+5.  In addition, put one (and only one) of the following on your PATH
+    depending on which version of MS Visual C++ you are using:
+    For MS Visual C++ 2005:
+      <xtensa_tools_root>/lib/iss
+    For MS Visual C++ 2008:
+      <xtensa_tools_root>/lib/iss-vc90
+    Note: Failure to do this step will typically result in the executable
+          failing to start or crashing shortly after starting.
+6.  Although not specifically required when running these examples,
+    Tensilica recommends that you set the XTENSA_CORE (and possibly
+    XTENSA_SYSTEM) environment variable to select this Xtensa
+    configuration.  This will simplify using many of Tensilica's
+    tools such as xt-gdb and xtsc-run.
+
+Then, invoke xt-make to build and run all the examples:
+    $ xt-make clean all run
+
+This will build both Debug and Release versions for each
+example and will run the Release version.  The Makefile's also have
+"_debug" and "_release" variants of the "all" and "run" targets, that
+is "all_debug", "all_release", "run_debug", and "run_release".
+
+To just build one example, change to that example's subdirectory and
+run xt-make there.  For example:
+    $ cd xtsc_memory
+    $ xt-make clean all run
+
+
+
+Building target executables with custom flags (Linux or MS Windows):
+
+You can use the CUSTOM_TARGET_CFLAGS macro to pass additional flags to 
+xt-xcc for all target executables.  This macro can be added to the 
+Makefile in the example directory. For example:
+    CUSTOM_TARGET_CFLAGS=-O3
+
+For multi-processor examples, the custom flags can be applied on a per
+target executable basis by adding lines for target custom_target similar
+to the following to the Makefile in the example directory (you may need
+to remove "target/consumer.out" from the TARGET_OBJECTS macro definition
+to prevent it from being made two times):
+    custom_target:
+		$(MAKE) target/consumer.out CUSTOM_TARGET_CFLAGS=-O3
+
+You can use quotation marks to pass multiple flags.  For example:
+    custom_target:
+		$(MAKE) target/consumer.out CUSTOM_TARGET_CFLAGS="-O3 -keep"
+
+
+
+The hello_world.standalone example:
+
+The hello_world.standalone example is identical to the hello_world
+example except that its Makefile does not include higher-level make
+files and it has its own TextLogger.txt file.  This makes it suitable
+for copying to some other location on your file system (for example,
+as a starting point for writing your own XTSC application).  Because
+it is meant to stand alone, this example is not visited by the top-
+level Makefile or by the top-level Microsoft Visual C++ solution
+file.  If you needed to make any modifications to the top-level
+Makefile's and you want to use this stand alone example then you will
+need to make those same modifications to the Makefile in the 
+hello_world.standalone directory.  In addition, on MS Windows if you
+are using TDK's then you will need to edit the TDK_DIR preprocessor
+macro definition in the vcproj file (see the discussion below about
+editing vcproj files).
+
+
+
+The multicore.standalone example:
+
+The multicore.standalone example is similar to the hello_world.standalone
+example except it includes support for using two different core
+configurations and/or two different TDK's.  See the instructions near
+the beginning of the Makefile in the multicore.standalone example sub-
+directory.  In addition, on MS Windows you may need to edit the following
+preprocessor macro definitions in the vcproj file (see the discussion
+below about editing vcproj files):
+  CONFIG0_NAME          CONFIG1_NAME
+  XTENSA0_REGISTRY      XTENSA1_REGISTRY
+  TDK0_DIR              TDK1_DIR
+  TARGET0_PROGRAM       TARGET1_PROGRAM
+
+
+
+Creating a stand alone copy of one of the examples:
+
+Most of the examples depend upon higher-level make files (specifically, upon
+Makefile.include and Makefile.common) and the examples with TIE also depend
+on the top-level TIE directory.  The following steps can be used to copy one
+of these examples to a new location and make it stand alone so that it does
+not depend on higher level make files and so that TIE, if any, is self-
+contained in a sub-directory.
+
+1.  Copy the example sub-directory of interest (e.g. hello_world, or
+    simple_memory, or etc.) and its sub-directories to a new location.
+2.  Edit the example Makefile in the new location so that it does not
+    use the "include" keyword to include other make files but instead
+    has their actual content in line:
+    a. Replace the following line with the actual content of the
+       Makefile.include file:
+         include $(EXAMPLE_DIR)/../Makefile.include
+    b. Replace the following line with the actual content of the
+       Makefile.common file:
+          include $(EXAMPLE_DIR)/../Makefile.common
+3.  TextLogger.txt:
+    a. Copy <xtsc_examples_root>/TextLogger.txt to the new directory.
+    b. Change "../TextLogger.txt" to "TextLogger.txt" in:
+       i)   The xtsc_initialize_parms line in the new sc_main.cpp file.
+       ii)  In the <>.inc file used with xtsc-run (if the example has one).
+       iii) In the <>.vcproj file (MS Windows only).
+
+Note:  A Microsoft Visual C++ project file (<>.vcproj) can be edited
+by hand (e.g. in notepad) if you are careful.  Three things to keep in 
+mind are: (1) have a backup copy of the vcproj file, (2) do NOT have the
+project file open in Visual C++ when you are editing the vcproj file,
+and (3) be careful to preserve the XML syntax and structure of the vcproj
+file.
+
+If the example uses TIE, perform the following additional steps:
+
+4.  Create a sub-directory in the new location called TIE.
+5.  Copy <xtsc_examples_root>/TIE/example.tie to the new TIE sub-directory.
+6.  Replace the tie rule in the new example Makefile with the tie and tdk
+    rules from <xtsc_examples_root>/Makefile  You will be changing 2 lines
+    that look like this:
+        tie:
+                $(MAKE) -C .. tie
+    To 3 lines that look like this:
+        tie: TIE/example.tdk
+        TIE/example.tdk: TIE/example.tie
+                $(XTTOOLS)/bin/tc $(TCFLAGS) -c -noopt -d $@ $<
+    Important:  Be sure the first character on the last line above is a tab 
+    (not a space).
+7.  Change "../TIE/example.tdk" to "TIE/example.tdk" in:
+    a.  The TDK_DIR macro definition line in the new Makefile.
+    b.  The -xtensa_params command in the xtsc-run <>.inc file (if the
+        example has one).
+    c.  The TDK_DIR macro definition in the <>.vcproj file (MS Windows Only).
+        The macro is defined in two locations in the <>.vcproj file (one
+        for Debug and one for Release).
+

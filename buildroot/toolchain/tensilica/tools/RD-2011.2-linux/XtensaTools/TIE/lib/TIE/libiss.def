@@ -1,0 +1,6 @@
+EXPORTS
+  iss_tc_version
+  get_state_tbl
+  get_isafunc_tbl
+  TieSemanticDebug
+  get_config_table

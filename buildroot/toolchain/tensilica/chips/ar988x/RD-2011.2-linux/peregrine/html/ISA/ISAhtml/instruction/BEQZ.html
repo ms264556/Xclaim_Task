@@ -1,0 +1,290 @@
+<html>
+  <head>
+    <title>
+      BEQZ - Branch if Equal to Zero
+    </title>
+    <style type="text/css">
+      <!--
+	body {
+		background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+		margin-left: 2em;
+		margin-right: 2em;
+	}
+	#boundingbox {
+	        background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+	        position: relative;
+	        width: 865px;
+	        margin: 0 auto;
+	        padding: 20px;
+	        border-style: dashed;
+	        border-width: 1px;
+	        border-spacing: 10px;
+	        border-collapse: separate;
+	}
+	a {
+		text-decoration: none;
+	}
+	a:visited {
+		color: blue;
+	}
+	a:link {
+		color: green;
+	}
+	a:active {
+		color: green;
+	}
+	a:hover {
+		color: green;
+	}
+	a:offsite {
+		color: green;
+	}
+	h1 {
+		font-size: 14pt;
+		font-weight: bold;
+	}
+	h1.center {
+		font-size: 14pt;
+		font-weight: bold;
+	        text-align: center;
+	}
+	h2 {
+		font-size: 12pt;
+	}
+	caption {
+		padding-top: 1em;
+	}
+	table.thin {
+		border-width: thin;
+		border-spacing: 0px;
+		border-style: inset;
+		border-color: gray;
+		border-collapse: collapse;
+		background-color: rgb(250, 240, 230);
+	}
+	table th.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table th.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	pre {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	}
+	.proto {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 1em;
+	        text-indent: -1em;
+	}
+	.protohead {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 2em;
+	        text-indent: -2em;
+	}
+	.protobody {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 4em;
+	        text-indent: -2em;
+	}
+	.rotate {
+	        display: block;
+	        -webkit-transform: rotate(-90deg); 
+	        -moz-transform: rotate(-90deg);
+	        filter:
+	progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	        padding-top: 20px;                       
+	}
+	.light {
+	        font-size: 75%;
+	        color: SlateGrey;
+	}
+	
+        -->
+    </style>
+  </head>
+  <body>
+    <h1>
+      BEQZ &#8212; Branch if Equal to Zero
+    </h1>
+    <h2>
+      Instruction Word
+    </h2>
+    <table frame="void" rules="groups" cellspacing=0 cellpadding=0>
+      <caption>x24 : x24_Inst_0</caption>
+      <colgroup colspan=12>
+	<col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=4>
+	<col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=8>
+	<col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <thead>
+	<tr>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>2
+	    3</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>1
+	    2</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>1
+	    1</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>8</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>7</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>0</small>
+	  </td>
+	</tr>
+      </thead>
+      <tfoot>
+	<tr>
+	  <td colspan=12 width=396 align="center">
+	    <small>12</small>
+	  </td>
+	  <td colspan=4 width=132 align="center">
+	    <small>4</small>
+	  </td>
+	  <td colspan=8 width=264 align="center">
+	    <small>8</small>
+	  </td>
+	</tr>
+      </tfoot>
+      <tbody>
+	<tr>
+	  <td colspan=12 width=396 align="center" bgcolor="#FFE4E1">
+	    imm12
+	  </td>
+	  <td colspan=4 width=132 align="center" bgcolor="#FFE4E1">
+	    s
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <h2>
+      Assembler Syntax
+    </h2>
+    <p>
+      <code>BEQZ as, label</code><br>
+
+    </p>
+    <h2>
+      Description
+    </h2>
+    <p><small>(please consult the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for any cross references and additional information)</small></p><P><code>BEQZ</code> branches if address register <code>as</code> is equal to zero. <code>BEQZ</code> provides 12 bits of target range instead of the eight bits available in most conditional branches.</P><P>The target instruction address of the branch is given by the address of the <code>BEQZ</code> instruction, plus the sign-extended 12-bit <code>imm12</code> field of the instruction plus four. If register <code>as</code> is not equal to zero, execution continues with the next sequential instruction.</P><P>The inverse of <code>BEQZ</code> is <code>BNEZ</code>.</P>    <h2>Assembler Note</h2>      <P>The assembler may convert <code>BEQZ</code> instructions to <code>BEQZ.N</code> when the Code Density Option is enabled and the branch target is reachable with the shorter instruction. The assembler will substitute an equivalent sequence of instructions when the label is out of range. Prefixing the instruction mnemonic with an underscore (<code>_BEQZ</code>) disables these features and forces the assembler to generate the wide form of the instruction and an error when the label is out of range).</P>    <h2>Operation</h2>      <pre>
+if AR[s] = 0<SUP>32</SUP> then
+	nextPC &#8592; PC + (imm12<SUB>11</SUB><SUP>20</SUP>||imm12) + 4
+endif</pre>    <h2>Exceptions</h2>      <LI>EveryInstR Group (see the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for more information)</LI>
+    <h2>
+      Protos that use BEQZ
+    </h2>
+    <div>
+      <div class=protohead>proto <a href=../protos.html#BEQZ>BEQZ</a> { in
+      uint32 ars, in void * label12 }{}{</div><div class=protobody><a
+      href=BEQZ.html>BEQZ</a> ars, label12 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+  </body>
+</html>

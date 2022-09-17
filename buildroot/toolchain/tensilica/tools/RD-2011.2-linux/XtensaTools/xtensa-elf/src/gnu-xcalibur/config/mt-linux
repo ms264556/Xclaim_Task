@@ -1,0 +1,5 @@
+# When using glibc 2 on Linux we must always use vtable thunks.
+# TENSILICA: XCC doesn't recognize -fvtable-thunks
+# CXXFLAGS=-O2 -g -fvtable-thunks
+  CXXFLAGS += -D_GNU_SOURCE
+  CFLAGS += -D_GNU_SOURCE

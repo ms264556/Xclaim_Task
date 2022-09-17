@@ -1,0 +1,30 @@
+This is the file .../info/dir, which contains the
+topmost node of the Info hierarchy, called (dir)Top.
+The first time you invoke Info you start off looking at this node.
+
+File: dir,	Node: Top	This is the top of the INFO tree
+
+  This (the Directory node) gives a menu of major topics.
+  Typing "q" exits, "?" lists all Info commands, "d" returns here,
+  "h" gives a primer for first-timers,
+  "mgdb<Return>" visits the GDB manual, etc.
+
+  In Emacs, you can click mouse button 2 on a menu item or cross reference
+  to select it.
+
+* Menu:
+
+Tools for Developing Xtensa Programs
+* as: (as).                     Assembler (xt-as).
+* binutils: (binutils).         Binary Utilities (xt-ar, xt-objdump, etc.).
+* ld: (ld).                     Linker (xt-ld).
+* gdb: (gdb).                   Debugger (xt-gdb).
+* gprof: (gprof).               Profiler (xt-gprof).
+
+Xtensa Libraries
+* libc: (libc).                 Red Hat `newlib' C Library.
+* libm: (libm).                 Red Hat `newlib' Math Library.
+* iostream: (iostream).         C++ iostream Library (part of libstdc++).
+
+Libraries for Accessing Xtensa Binary Files
+* bfd: (bfd).                   Binary File Descriptor (BFD) Library.

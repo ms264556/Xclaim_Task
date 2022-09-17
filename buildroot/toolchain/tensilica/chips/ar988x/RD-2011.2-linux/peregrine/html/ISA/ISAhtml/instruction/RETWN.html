@@ -1,0 +1,352 @@
+<html>
+  <head>
+    <title>
+      RETW.N - Narrow Windowed Return
+    </title>
+    <style type="text/css">
+      <!--
+	body {
+		background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+		margin-left: 2em;
+		margin-right: 2em;
+	}
+	#boundingbox {
+	        background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+	        position: relative;
+	        width: 865px;
+	        margin: 0 auto;
+	        padding: 20px;
+	        border-style: dashed;
+	        border-width: 1px;
+	        border-spacing: 10px;
+	        border-collapse: separate;
+	}
+	a {
+		text-decoration: none;
+	}
+	a:visited {
+		color: blue;
+	}
+	a:link {
+		color: green;
+	}
+	a:active {
+		color: green;
+	}
+	a:hover {
+		color: green;
+	}
+	a:offsite {
+		color: green;
+	}
+	h1 {
+		font-size: 14pt;
+		font-weight: bold;
+	}
+	h1.center {
+		font-size: 14pt;
+		font-weight: bold;
+	        text-align: center;
+	}
+	h2 {
+		font-size: 12pt;
+	}
+	caption {
+		padding-top: 1em;
+	}
+	table.thin {
+		border-width: thin;
+		border-spacing: 0px;
+		border-style: inset;
+		border-color: gray;
+		border-collapse: collapse;
+		background-color: rgb(250, 240, 230);
+	}
+	table th.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table th.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	pre {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	}
+	.proto {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 1em;
+	        text-indent: -1em;
+	}
+	.protohead {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 2em;
+	        text-indent: -2em;
+	}
+	.protobody {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 4em;
+	        text-indent: -2em;
+	}
+	.rotate {
+	        display: block;
+	        -webkit-transform: rotate(-90deg); 
+	        -moz-transform: rotate(-90deg);
+	        filter:
+	progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	        padding-top: 20px;                       
+	}
+	.light {
+	        font-size: 75%;
+	        color: SlateGrey;
+	}
+	
+        -->
+    </style>
+  </head>
+  <body>
+    <h1>
+      RETW.N &#8212; Narrow Windowed Return
+    </h1>
+    <h2>
+      Instruction Word
+    </h2>
+    <table frame="void" rules="groups" cellspacing=0 cellpadding=0>
+      <caption>x16b : x16b_Inst16b_0</caption>
+      <colgroup colspan=8>
+	<col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=4>
+	<col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=4>
+	<col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=8>
+	<col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <thead>
+	<tr>
+	  <td width=33>
+	  </td>
+	  <td width=33>
+	  </td>
+	  <td width=33>
+	  </td>
+	  <td width=33>
+	  </td>
+	  <td width=33>
+	  </td>
+	  <td width=33>
+	  </td>
+	  <td width=33>
+	  </td>
+	  <td width=33>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>1
+	    5</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>1
+	    2</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>1
+	    1</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>8</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>7</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>0</small>
+	  </td>
+	</tr>
+      </thead>
+      <tfoot>
+	<tr>
+	  <td colspan=8 width=264>
+	  </td>
+	  <td colspan=4 width=132 align="center">
+	    <small>4</small>
+	  </td>
+	  <td colspan=4 width=132 align="center">
+	    <small>4</small>
+	  </td>
+	  <td colspan=8 width=264 align="center">
+	    <small>8</small>
+	  </td>
+	</tr>
+      </tfoot>
+      <tbody>
+	<tr>
+	  <td colspan=8 width=264>
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td colspan=4 width=132 align="center" bgcolor="#FFE4E1">
+	    0 0 0 0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <h2>
+      Assembler Syntax
+    </h2>
+    <p>
+      <code>RETW.N</code><br>
+
+    </p>
+    <h2>
+      Description
+    </h2>
+    <p><small>(please consult the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for any cross references and additional information)</small></p><P><code>RETW.N</code> is the same as <code>RETW</code> in a 16-bit encoding.</P>    <h2>Assembler Note</h2>      <P>The assembler may convert <code>RETW.N</code> instructions to <code>RETW</code>. Prefixing the <code>RETW.N</code> instruction with an underscore (<code>_RETW.N</code>) disables this optimization and forces the assembler to generate the narrow form of the instruction.</P>    <h2>Operation</h2>      <pre>
+n &#8592; AR[0]<SUB>31..30</SUB>
+nextPC &#8592; PC<SUB>31..30</SUB> || AR[0]<SUB>29..0</SUB>
+owb &#8592; WindowBase
+	m &#8592; if WindowStart<SUB>WindowBase-4"b0001 </SUB>then 2"b01
+ elsif WindowStart<SUB>WindowBase-4"b0010 </SUB>then 2"b10
+ elsif WindowStart<SUB>WindowBase-4"b0011 </SUB>then 2"b11
+ else 2"b00
+if n=2"b00 | (m&#8800;2"b00 &amp; m&#8800;n) | PS.WOE=0 | PS.EXCM=1 then
+	-- undefined operation
+	-- may take illegal instruction exception
+else
+	WindowBase &#8592; WindowBase &#8722; (0<SUP>2</SUP>||n)
+	if WindowStart<SUB>WindowBase</SUB> &#8800; 0 then
+		WindowStart<SUB>owb</SUB> &#8592; 0
+	else
+		-- Underflow exception
+		PS.EXCM &#8592; 1
+		EPC[1] &#8592; PC
+		PS.OWB &#8592; owb
+		nextPC &#8592; if n = 2"b01 then WindowUnderflow4
+			else if n = 2"b10 then WindowUnderflow8
+			else WindowUnderflow12
+	endif
+endif</pre>    <h2>Exceptions</h2>      <LI>EveryInst Group (see the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for more information)</LI><LI>WindowUnderExcep if Windowed Register Option</LI>
+    <h2>
+      Implementation Pipeline
+    </h2>
+    <table class="thin">
+      <thead>
+	<tr>
+	  <th align="left" class="thin">
+	    In
+	  </th>
+	  <th align="left" class="thin">
+	    Out
+	  </th>
+	</tr>
+      </thead>
+      <tbody>
+	<tr>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Rstage</code>, <code>WindowStart&nbsp;Rstage</code>,
+	    <code>PSEXCM&nbsp;Rstage</code>, <code>PSWOE&nbsp;Rstage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Estage</code>, <code>WindowStart&nbsp;Estage</code>
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <h2>
+      Protos that use RETW.N
+    </h2>
+    <div>
+      <div class=protohead>proto <a href=../protos.html#RETW.N>RETW.N</a> {
+      }{}{</div><div class=protobody><a href=RETWN.html>RETW.N</a>;</div><div
+      class=protohead>}</div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+#!/bin/sh
+#
+#  xtconfig -- return Xtensa software configuration information
+#
+#  Customer ID=8327; Build=0x3b95c; Copyright 2003-2004 Tensilica Inc.
+
+
+usage() {
+    cat <<_END_
+usage:  xtconfig option
+Valid options are:
+  binpath   path to Xtensa tools normally added to PATH
+            (../../../../../tools/RD-2011.2-linux/XtensaTools/bin)
+  config    path to Xtensa core configuration directory
+            (../../../../../chips/ar988x/RD-2011.2-linux/peregrine)
+  core      path to Xtensa core main parameter file
+            (../../../../../chips/ar988x/RD-2011.2-linux/peregrine/config/peregrine-params)
+  corename  name of core as could be assigned to XTENSA_CORE (peregrine)
+  release   Xtensa product release version (9.0.2
+)
+  system    path to core repository as could be assigned to XTENSA_SYSTEM
+            (../../../../../chips/ar988x/RD-2011.2-linux/peregrine/config)
+  tctools   path to TIE compiler directory
+            (../../../../../tools/RD-2011.2-linux/XtensaTools/TIE)
+  tools     path to standard tools directory
+            (../../../../../tools/RD-2011.2-linux/XtensaTools/Tools)
+  xttools   path to Xtensa software tools directory
+            (../../../../../tools/RD-2011.2-linux/XtensaTools)
+_END_
+    exit 1
+}
+
+
+if [ "x$1" = "x" -o "x$2" != "x" ]; then
+    echo "Error: incorrect number of parameters."
+    usage
+fi
+
+value=""
+case "x$1" in
+xcore)		value=../../../../../chips/ar988x/RD-2011.2-linux/peregrine/config/peregrine-params ;;
+xtools)		value=../../../../../tools/RD-2011.2-linux/XtensaTools/Tools ;;
+xtctools)	value=../../../../../tools/RD-2011.2-linux/XtensaTools/TIE ;;
+xxttools)	value=../../../../../tools/RD-2011.2-linux/XtensaTools ;;
+xconfig)	value=../../../../../chips/ar988x/RD-2011.2-linux/peregrine ;;
+xbinpath)	value=../../../../../tools/RD-2011.2-linux/XtensaTools/bin ;;
+xsystem)	value=../../../../../chips/ar988x/RD-2011.2-linux/peregrine/config ;;
+xcorename)	value=peregrine ;;
+xrelease)	value=9.0.2
+ ;;
+esac
+
+echo "$value"
+
+if [ "x$value" = "x" ]; then
+    echo "Error: unrecognized option '$1'"
+    usage
+fi
+
+exit 0;
+

@@ -1,0 +1,354 @@
+This is
+/home/customer/tree/RD-2011.2/p4root/Xtensa/Target-libs/newlib/newlib/libc/libc.info,
+produced by makeinfo version 4.8 from
+/home/customer/tree/RD-2011.2/p4root/Xtensa/Target-libs/newlib/newlib/libc/libc.texinfo.
+
+   This file documents the ANSI C library, version 1.19.0 for Xtensa(R)
+Tools Version 9.0.2.
+
+   Copyright (C) 1992, 1993, 1994-2010 Red Hat, Inc.  Copyright (C)
+1999-2011 Tensilica, Inc.
+
+   `libc' includes software developed by the University of California,
+Berkeley and its contributors.
+
+   libc includes software developed by Martin Jackson, Graham Haley and
+Steve Chamberlain of Tadpole Technology and released to Cygnus.
+
+   libc uses floating-point conversion software developed at AT&T, which
+includes this copyright information:
+
+   The author of this software is David M. Gay.
+
+   Copyright (c) 1991 by AT&T.
+
+   Permission to use, copy, modify, and distribute this software for any
+purpose without fee is hereby granted, provided that this entire notice
+is included in all copies of any software which is or includes a copy
+or modification of this software and in all copies of the supporting
+documentation for such software.
+
+   THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR
+IMPLIED  WARRANTY.  IN PARTICULAR, NEITHER THE AUTHOR NOR AT&T MAKES ANY
+REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, subject to the
+terms of the GNU General Public License, which includes the provision
+that the entire resulting derived work is distributed under the terms
+of a permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions.
+
+   This publication is provided "AS IS."  Tensilica, Inc. (hereafter
+"Tensilica") does not make any warranty of any kind, either expressed
+or implied, including, but not limited to, the implied warranties of
+merchantability and fitness for a particular purpose.  Information in
+this document is provided solely to enable system and software
+developers to use Tensilica(R) processors.  Unless specifically set
+forth herein, there are no express or implied patent, copyright or any
+other intellectual property rights or licenses granted hereunder to
+design or fabricate Tensilica integrated circuits or integrated
+circuits based on the information in this document.  Tensilica does not
+warrant that the contents of this publication, whether individually or
+as one or more groups, meets your requirements or that the publication
+is error-free.  This publication could include technical inaccuracies
+or typographical errors.  Changes may be made to the information
+herein, and these changes may be incorporated in new editions of this
+publication.
+
+   The following terms are trademarks or registered trademarks of
+Tensilica, Inc.: FLIX, OSKit, Sea of Processors, Tensilica, Vectra,
+Xplorer, XPRES, and Xtensa.  All other trademarks and registered
+trademarks are the property of their respective companies.
+
+
+Indirect:
+libc.info-1: 3378
+libc.info-2: 302887
+
+Tag Table:
+(Indirect)
+Node: Top3378
+Node: Revisions3723
+Node: Introduction3951
+Node: Stdlib4917
+Node: _Exit7496
+Node: a64l8407
+Node: abort10115
+Node: abs11153
+Node: assert11774
+Node: atexit13094
+Node: atof14541
+Node: atoi16363
+Node: atoll17285
+Node: bsearch18135
+Node: calloc19374
+Node: div20358
+Node: ecvt21108
+Node: gvcvt23040
+Node: ecvtbuf24073
+Node: __env_lock25791
+Node: exit26869
+Node: getenv27941
+Node: labs28749
+Node: ldiv29375
+Node: llabs30148
+Node: lldiv30794
+Node: malloc31640
+Node: mallinfo36082
+Node: __malloc_lock38085
+Node: mblen39189
+Node: mbsrtowcs40441
+Node: mbstowcs42493
+Node: mbtowc43994
+Node: on_exit45609
+Node: qsort47218
+Node: rand48426
+Node: rand4850142
+Node: strtod54187
+Node: strtol56626
+Node: strtoll59473
+Node: strtoul62371
+Node: strtoull65252
+Node: wcsrtombs68181
+Node: wcstod70204
+Node: wcstol72815
+Node: wcstoll75688
+Node: wcstoul78612
+Node: wcstoull81519
+Node: system84594
+Node: wcstombs85809
+Node: wctomb87318
+Node: Ctype88639
+Node: isalnum90636
+Node: isalpha91390
+Node: isascii92159
+Node: iscntrl92839
+Node: isdigit93633
+Node: islower94366
+Node: isprint95144
+Node: ispunct96104
+Node: isspace96909
+Node: isupper97728
+Node: isxdigit98488
+Node: toascii99270
+Node: tolower99891
+Node: toupper101049
+Node: iswalnum102207
+Node: iswalpha102718
+Node: iswcntrl103223
+Node: iswblank103741
+Node: iswdigit104240
+Node: iswgraph104757
+Node: iswlower105249
+Node: iswprint105763
+Node: iswpunct106263
+Node: iswspace106771
+Node: iswupper107290
+Node: iswxdigit107805
+Node: iswctype108345
+Node: wctype108946
+Node: towlower109758
+Node: towupper110380
+Node: towctrans111005
+Node: wctrans111813
+Node: Stdio112525
+Node: clearerr117238
+Node: diprintf118013
+Node: dprintf119027
+Node: fclose120102
+Node: fcloseall120911
+Node: fdopen121686
+Node: feof122345
+Node: ferror122856
+Node: fflush123567
+Node: fgetc124893
+Node: fgetpos126045
+Node: fgets127575
+Node: fgetwc128774
+Node: fgetws130219
+Node: fileno131192
+Node: fmemopen131780
+Node: fopen134382
+Node: fopencookie137439
+Node: fpurge140481
+Node: fputc141522
+Node: fputs142766
+Node: fputwc143685
+Node: fputws145259
+Node: fread146052
+Node: freopen147158
+Node: fseek148503
+Node: fsetpos150337
+Node: ftell151561
+Node: funopen153308
+Node: fwide156451
+Node: fwrite158029
+Node: getc159249
+Node: getc_unlocked160707
+Node: getchar161994
+Node: getchar_unlocked163186
+Node: getdelim164486
+Node: getline165424
+Node: gets166342
+Node: getw167682
+Node: getwchar168588
+Node: mktemp169627
+Node: open_memstream172925
+Node: perror175247
+Node: putc176324
+Node: putc_unlocked177867
+Node: putchar179189
+Node: putchar_unlocked180172
+Node: puts181236
+Node: putw182110
+Node: putwchar182804
+Node: remove183592
+Node: rename184761
+Node: rewind185686
+Node: setbuf186311
+Node: setbuffer187847
+Node: setlinebuf189160
+Node: setvbuf190038
+Node: siprintf192084
+Node: siscanf194061
+Node: sprintf195596
+Node: sscanf213289
+Node: swprintf224581
+Node: swscanf242125
+Node: tmpfile253381
+Node: tmpnam254539
+Node: ungetc256953
+Node: ungetwc258354
+Node: vfprintf259617
+Node: vfscanf261845
+Node: vfwprintf263479
+Node: vfwscanf265089
+Node: viprintf266781
+Node: viscanf269013
+Node: Strings270655
+Node: bcmp272894
+Node: bcopy273557
+Node: bzero274032
+Node: index274599
+Node: memccpy275221
+Node: memchr276063
+Node: memcmp276782
+Node: memcpy277456
+Node: memmem278039
+Node: memmove278784
+Node: mempcpy279419
+Node: memset280092
+Node: rindex280628
+Node: stpcpy281273
+Node: stpncpy281945
+Node: strcasecmp282950
+Node: strcasestr283818
+Node: strcat284586
+Node: strchr285206
+Node: strcmp285815
+Node: strcoll286454
+Node: strcpy287268
+Node: strcspn287770
+Node: strerror288385
+Node: strerror_r293855
+Node: strlen296012
+Node: strlwr296538
+Node: strncasecmp296997
+Node: strncat297925
+Node: strncmp298817
+Node: strncpy299522
+Node: strnlen300279
+Node: strpbrk300891
+Node: strrchr301513
+Node: strsignal302147
+Node: strspn302887
+Node: strstr303494
+Node: strtok304168
+Node: strupr306290
+Node: strxfrm306745
+Node: swab307983
+Node: wcscasecmp308449
+Node: wcsdup309313
+Node: wcsncasecmp310031
+Node: Wchar strings310920
+Node: wmemchr312949
+Node: wmemcmp313918
+Node: wmemcpy315003
+Node: wmemmove315871
+Node: wmemset317091
+Node: wcscat317948
+Node: wcschr318820
+Node: wcscmp319673
+Node: wcscoll320603
+Node: wcscpy321554
+Node: wcpcpy322276
+Node: wcscspn323067
+Node: wcsftime323846
+Node: wcslcat325843
+Node: wcslcpy327001
+Node: wcslen327806
+Node: wcsncat328464
+Node: wcsncmp329493
+Node: wcsncpy330591
+Node: wcpncpy331727
+Node: wcsnlen332829
+Node: wcspbrk333587
+Node: wcsrchr334370
+Node: wcsspn335303
+Node: wcsstr336020
+Node: wcstok336863
+Node: wcswidth338747
+Node: wcsxfrm339881
+Node: wcwidth340953
+Node: Signals341968
+Node: raise344217
+Node: signal345246
+Node: Timefns347446
+Node: asctime349643
+Node: clock350312
+Node: ctime351043
+Node: difftime351698
+Node: gmtime352245
+Node: localtime353205
+Node: mktime354147
+Node: strftime354947
+Node: time363691
+Node: __tz_lock364378
+Node: tzset365428
+Node: Locale367546
+Node: setlocale371926
+Node: Reentrancy376719
+Node: Misc381334
+Node: ffs381671
+Node: unctrl382074
+Node: Xtensa382796
+Node: setjmp383148
+Node: longjmp383883
+Node: Syscalls384736
+Node: Stubs386173
+Node: Xtensa Syscalls394232
+Node: Xtensa Libgloss396205
+Node: Xtensa ISS Syscalls398628
+Node: Xtensa gdbio400950
+Node: Arglists404089
+Node: Stdarg404615
+Node: va_start405278
+Node: va_arg406045
+Node: va_end407239
+Node: Varargs407658
+Node: va_alist408421
+Node: va_start-trad409102
+Node: va_arg-trad409736
+Node: va_end-trad410408
+Node: Library Index410913
+
+End Tag Table

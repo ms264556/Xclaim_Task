@@ -1,0 +1,2103 @@
+This is gprof.info, produced by makeinfo version 4.8 from
+/home/customer/tree/RD-2011.2/p4root/Xtensa/Software/binutils/gprof/gprof.texi.
+
+   Copyright (C) 1988, 1992, 1997, 1998, 1999, 2000, 2001, 2003, 2007,
+2008, 2009 Free Software Foundation, Inc.
+
+   Copyright (C) 1999-2009 Tensilica, Inc.
+
+   Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with no Front-Cover Texts, and with no Back-Cover
+Texts.  A copy of the license is included in the section entitled "GNU
+Free Documentation License".
+
+   This publication is provided "AS IS."  Tensilica, Inc. (hereafter
+"Tensilica") does not make any warranty of any kind, either expressed
+or implied, including, but not limited to, the implied warranties of
+merchantability and fitness for a particular purpose.  Information in
+this document is provided solely to enable system and software
+developers to use Tensilica(R) processors.  Unless specifically set
+forth herein, there are no express or implied patent, copyright or any
+other intellectual property rights or licenses granted hereunder to
+design or fabricate Tensilica integrated circuits or integrated
+circuits based on the information in this document.  Tensilica does not
+warrant that the contents of this publication, whether individually or
+as one or more groups, meets your requirements or that the publication
+is error-free.  This publication could include technical inaccuracies
+or typographical errors.  Changes may be made to the information
+herein, and these changes may be incorporated in new editions of this
+publication.
+
+   The following terms are trademarks or registered trademarks of
+Tensilica, Inc.: FLIX, OSKit, Sea of Processors, Tensilica, Vectra,
+Xplorer, XPRES, and Xtensa.  All other trademarks and registered
+trademarks are the property of their respective companies.
+
+
+File: gprof.info,  Node: Top,  Next: Revisions,  Up: (dir)
+
+GNU Profiler User's Guide
+*************************
+
+This manual describes the GNU profiler, `gprof', and how you can use it
+to determine which parts of a program are taking most of the execution
+time.  We assume that you know how to write, compile, and execute
+programs.  GNU `gprof' was written by Jay Fenlason.
+
+   This document is distributed under the terms of the GNU Free
+Documentation License version 1.3.  A copy of the license is included
+in the section entitled "GNU Free Documentation License".
+
+* Menu:
+
+
+* Revisions::           Changes from previous versions.
+
+* Introduction::        What profiling means, and why it is useful.
+
+* Compiling::           How to compile your program for profiling.
+* Executing::           Executing your program to generate profile data
+* Invoking::            How to run `gprof', and its options
+
+* Output::              Interpreting `gprof''s output
+
+* Inaccuracy::          Potential problems you should be aware of
+
+* GNU Free Documentation License::  GNU Free Documentation License
+
+* History::             History of this document
+
+
+File: gprof.info,  Node: Revisions,  Next: Introduction,  Prev: Top,  Up: Top
+
+Changes from Previous Versions
+******************************
+
+The following changes were made for version 9.0 of the Xtensa Tools:
+
+   * Upgraded from version 2.18 to version 2.20 of the GNU Binary
+     Utilities.
+
+
+File: gprof.info,  Node: Introduction,  Next: Compiling,  Prev: Revisions,  Up: Top
+
+1 Introduction to Profiling
+***************************
+
+Profiling allows you to learn where your program spent its time and
+which functions called which other functions while it was executing.
+This information can show you which pieces of your program are slower
+than you expected, and might be candidates for rewriting to make your
+program execute faster.  It can also tell you which functions are being
+called more or less often than you expected.  This may help you spot
+bugs that had otherwise been unnoticed.
+
+   Since the profiler uses information collected during the actual
+execution of your program, it can be used on programs that are too
+large or too complex to analyze by reading the source.  However, how
+your program is run will affect the information that shows up in the
+profile data.  If you don't use some feature of your program while it
+is being profiled, no profile information will be generated for that
+feature.
+
+   Tensilica supports two options for collecting profile information.
+First, the Xtensa instruction set simulator (ISS) can directly generate
+the profile data.  This is the easiest, most accurate, and most
+flexible option.  If the profile data for your program needs to reflect
+interactions with real hardware, or if the ISS profiling is too slow,
+the second option is to profile your program running on a hardware
+implementation of your system.  Hardware profiling requires certain
+Xtensa processor features, and it uses statistical sampling, which
+makes the results less accurate.  Other profiling tools may be
+available from third-party operating system vendors.
+
+   Profiling with the Xtensa ISS has several advantages over hardware
+profiling:
+   * You do not need to compile the Xtensa program with special options
+     (e.g., `-hwpg') before profiling it.
+
+   * There is no instrumentation code added to the Xtensa program, so
+     the profile results are not distorted by any extra code.
+
+   * The Xtensa ISS can easily record the execution of every
+     instruction, so there is no need to rely on statistical
+     approximations like PC-sampling.
+
+   * Instead of counting execution cycles, the Xtensa ISS can optionally
+     record profile data for other events, such as cache misses.  You
+     can then use `xt-gprof' or Xplorer to view a profile of these
+     other events.
+
+   Hardware profiling also imposes certain requirements on your Xtensa
+system.  The processor must include the Xtensa Debug Option, so that it
+can send the profile data back to a host system via the On-Chip
+Debugging (OCD) interface connected to the GNU Debugger (GDB).  A
+dedicated Xtensa timer, preferably with a dedicated interrupt level, is
+required to control the PC sampling.  For more information, please see
+the description of hardware profiling in the `Xtensa Software
+Development Toolkit User's Guide'.
+
+   Regardless of whether you use the ISS or hardware profiling,
+Tensilica's `xt-gprof' uses a custom file format for the profile data.
+This allows profiling of discontiguous text regions and avoids
+inaccuracies related to combining the execution counts for adjacent
+instructions.
+
+   Profiling has several steps:
+
+   * You must compile and link your program.  Depending on whether you
+     are using the Xtensa ISS or hardware profiling, and depending on
+     what `gprof' options you want to use, you may need to specify
+     certain options to the compiler.  *Note Compiling a Program for
+     Profiling: Compiling.
+
+   * You must execute your program to generate a profile data file.
+     *Note Executing the Program: Executing.
+
+   * You must run `xt-gprof' to analyze the profile data.  *Note
+     `gprof' Command Summary: Invoking.
+
+   The next three chapters explain these steps in greater detail.
+
+   The profile data files may contain several kinds of data.  One
+section is a histogram of the events (cycle count, cache misses, etc.)
+for each Xtensa instruction.  Another section records the execution
+count for each call-graph edge.  The histogram counts and call-graph
+edge counts are read and analyzed by `gprof'.
+
+   Several forms of output are available from the analysis.
+
+   The "flat profile" shows the total histogram counts for each
+function, and how many times that function was called.  If you simply
+want to know which functions have the highest counts (i.e., which
+functions burn most of the cycles, have the most cache misses, etc.),
+it is stated concisely here.  *Note The Flat Profile: Flat Profile.
+
+   The "call graph" shows, for each function, which functions called
+it, which other functions it called, and how many times.  There is also
+an estimate of the histogram counts for the subroutines of each
+function.  This can suggest places where you might try to eliminate
+function calls that use a lot of time.  *Note The Call Graph: Call
+Graph.
+
+   The "annotated source" listing is a copy of the program's source
+code, labeled with the number of times each line of the program was
+executed.  *Note The Annotated Source Listing: Annotated Source.
+
+
+File: gprof.info,  Node: Compiling,  Next: Executing,  Prev: Introduction,  Up: Top
+
+2 Compiling a Program for Profiling
+***********************************
+
+For profiling with the Xtensa ISS, nothing special is required when
+compiling your program.  The profile data is collected by the ISS, so
+no instrumentation code needs to be added to your program.  You may
+want to compile with `-g' to collect debugging information, which is
+used for line-by-line profiling.  *Note Line-by-line Profiling:
+Line-by-line.
+
+   For Tensilica's hardware profiling, the first step in generating
+profile information for your program is to compile and link it with
+profiling enabled.
+
+To compile a source file for profiling, specify the `-hwpg=N' option
+when you run the compiler, where N is the timer number used for
+profiling.  (This is in addition to the options you normally use.)
+
+   To link the program for profiling, use the XCC compiler to do the
+linking and simply specify `-hwpg=N' in addition to your usual options.
+The same option, `-hwpg', alters either compilation or linking to do
+what is necessary for profiling.  Here are examples:
+
+     xt-xcc -g -c myprog.c utils.c -hwpg=1
+     xt-xcc -o myprog myprog.o utils.o -hwpg=1
+
+   The `-hwpg' option also works with a command that both compiles and
+links:
+
+     xt-xcc -o myprog myprog.c utils.c -g -hwpg=1
+
+   Note: If the `-hwpg' option is not part of your compilation options,
+but only your link options, you will avoid adding instrumentation code
+to your program, but no call-graph data will be gathered and when you
+run `gprof' you will get an error message like this:
+
+     xt-gprof: gmon.out file is missing call-graph data
+
+   If you add the `-Q' switch to suppress the printing of the call
+graph data you will still be able to see the time samples:
+
+     Flat profile:
+                                              self      total
+          cumulative       self             cycles     cycles
+       %      cycles     cycles    calls     /call      /call  name
+                (K)        (K)                (K)        (K)
+     44.12      7.69       7.69                                zazLoop
+     35.29     13.84       6.15                                main
+     20.59     17.42       3.59                                bazMillion
+
+   If you compile only some of the modules of the program with `-hwpg',
+you can still profile the program, but you won't get complete
+information about the modules that were compiled without `-hwpg'.  The
+only information you get for the functions in those modules is the
+total time spent in them; there is no record of how many times they
+were called, or from where.  This will not affect the flat profile
+(except that the `calls' field for the functions will be blank), but
+will greatly reduce the usefulness of the call graph.
+
+   If you wish to perform line-by-line profiling, you will also need to
+specify the `-g' option, instructing the compiler to insert debugging
+symbols into the program that match program addresses to source code
+lines.  *Note Line-by-line Profiling: Line-by-line.
+
+
+File: gprof.info,  Node: Executing,  Next: Invoking,  Prev: Compiling,  Up: Top
+
+3 Executing the Program
+***********************
+
+Once the program is compiled, you must run it in order to generate the
+information that `gprof' needs.  The way you run the program--the
+arguments and input that you give it--may have a dramatic effect on
+what the profile information shows.  The profile data will describe the
+parts of the program that were activated for the particular input you
+use.  For example, if the first command you give to your program is to
+quit, the profile data will show the time used in initialization and in
+cleanup, but not much else.
+
+* Menu:
+
+* Xtensa ISS::          Profiling with the Xtensa ISS
+* Xtensa Hardware::     Collecting profile data from Xtensa hardware
+
+
+File: gprof.info,  Node: Xtensa ISS,  Next: Xtensa Hardware,  Up: Executing
+
+3.1 Profiling with the Xtensa ISS
+=================================
+
+If you are profiling with the Xtensa instruction set simulator (ISS),
+you can specify two kinds of options to the ISS profiling client:
+   * What events to profile: The default is to count the cycles spent
+     executing each instruction, but you can also profile other events
+     such as cache misses or pipeline interlocks.
+
+   * The output file name: This is the raw data file to be read by
+     `gprof'.  If more than one kind of event is being profiled at the
+     same time, the name you specify is used as the base name and the
+     ISS appends a different suffix for each output file.
+   For example, to profile instruction cache misses and write the
+results to a file named `misses.out', the ISS would be invoked with the
+`--client_cmds="profile --icmiss misses.out"' option.  Please see the
+description of the `profile' client in the `Xtensa Instruction Set
+Simulator (ISS) User's Guide' for more information about these options.
+
+   If you only want to profile cycle counts, you can simply invoke the
+ISS with the `--profile=OUTFILE' option.  This is equivalent to
+`--client_cmds="profile OUTFILE"'.  By default, `gprof' will expect the
+profile information to be in a file called `gmon.out'.  Therefore, it
+is simplest to just use `--profile=gmon.out'.
+
+   If your program runs for a long time and you want to use the fast
+functional simulation mode of the ISS (the `--turbo' option), you can
+still collect profile data.  Nothing special is required to profile
+instruction counts (with `--client_cmds="profile --instructions"') in
+this mode.  Other kinds of profile data require statistical sampling,
+using the `--sample' ISS option to periodically switch to the
+cycle-accurate simulation mode.  You can specify the `--sample_insns'
+and `--sample_ratio' ISS options to control the size and frequency of
+the cycle-accurate samples.  The sampled results are automatically
+extrapolated by the ISS to the fast functional portions of the
+simulation.  See the `Xtensa Instruction Set Simulator (ISS) User's
+Guide' for more information.
+
+   Depending on the kinds of events you want to profile, you may need to
+specify other ISS options.  By default, the Xtensa ISS does not
+simulate the memory system; all memory references are assumed to be in
+cache.  Use the `--mem_model' option if you want the cycle counts to
+reflect the effects of caches and local memory.  If you are profiling
+cache misses, you will also need to use the `--mem_model' option.
+
+
+File: gprof.info,  Node: Xtensa Hardware,  Prev: Xtensa ISS,  Up: Executing
+
+3.2 Xtensa Hardware Profiling
+=============================
+
+After compiling your program for hardware profiling, run it on the
+hardware as you would normally debug it, using either `xt-gdb' or
+`xplorer --debug'.  When your program calls `exit', the debugger will
+write the profile data to a file with a name composed of `gmon.out'
+followed by a unique suffix.  If your program does not call `exit', you
+can interrupt it and use the debugger to call the
+`xt_profile_save_and_reset' function, which will write out the profile
+data.  You can exit from the debugger after the profile data has been
+written out.  See the `Xtensa Software Development Toolkit User's
+Guide' for details on using hardware profiling.
+
+
+File: gprof.info,  Node: Invoking,  Next: Output,  Prev: Executing,  Up: Top
+
+4 `gprof' Command Summary
+*************************
+
+After you have a profile data file `gmon.out', you can run `gprof' to
+interpret the information in it.  The `gprof' program prints a flat
+profile and a call graph on standard output.  Typically you would
+redirect the output of `gprof' into a file with `>'.
+
+   You run `gprof' like this:
+
+     xt-gprof OPTIONS [EXECUTABLE-FILE [PROFILE-DATA-FILES...]] [> OUTFILE]
+
+Here square-brackets indicate optional arguments.
+
+   If you omit the executable file name, the file `a.out' is used.  If
+you give no profile data file name, the file `gmon.out' is used.  If
+any file is not in the proper format, or if the profile data file does
+not appear to belong to the executable file, an error message is
+printed.
+
+   You can give more than one profile data file by entering all their
+names after the executable file name; then the statistics in all the
+data files are summed together.
+
+   The order of these options does not matter.
+
+* Menu:
+
+* Output Options::      Controlling `gprof''s output style
+* Analysis Options::    Controlling how `gprof' analyzes its data
+* Miscellaneous Options::
+
+* Symspecs::            Specifying functions to include or exclude
+
+
+File: gprof.info,  Node: Output Options,  Next: Analysis Options,  Up: Invoking
+
+4.1 Output Options
+==================
+
+These options specify which of several output formats `gprof' should
+produce.
+
+   Many of these options take an optional "symspec" to specify
+functions to be included or excluded.  These options can be specified
+multiple times, with different symspecs, to include or exclude sets of
+symbols.  *Note Symspecs: Symspecs.
+
+   Specifying any of these options overrides the default (`-p -q'),
+which prints a flat profile and call graph analysis for all functions.
+
+`-A[SYMSPEC]'
+`--annotated-source[=SYMSPEC]'
+     The `-A' option causes `gprof' to print annotated source code.  If
+     SYMSPEC is specified, print output only for matching symbols.
+     *Note The Annotated Source Listing: Annotated Source.
+
+`-b'
+`--brief'
+     If the `-b' option is given, `gprof' doesn't print the verbose
+     blurbs that try to explain the meaning of all of the fields in the
+     tables.  This is useful if you intend to print out the output, or
+     are tired of seeing the blurbs.
+
+`-C[SYMSPEC]'
+`--exec-counts[=SYMSPEC]'
+     The `-C' option causes `gprof' to print a tally of functions and
+     the number of times each was called.  If SYMSPEC is specified,
+     print tally only for matching symbols.
+
+     If you profile instruction counts (not cycles) with the Xtensa
+     ISS, that is, if you run ISS with `--client_cmds="profile
+     --instructions"', invoking `gprof' with the `-l' option, along
+     with `-C', will cause basic-block execution counts to be tallied
+     and displayed.
+
+`-i'
+`--file-info'
+     The `-i' option causes `gprof' to display summary information
+     about the profile data file(s) and then exit.  The number of
+     histogram, call graph, and basic-block count records is displayed.
+
+`-I DIRS'
+`--directory-path=DIRS'
+     The `-I' option specifies a list of search directories in which to
+     find source files.  Environment variable GPROF_PATH can also be
+     used to convey this information.  Used mostly for annotated source
+     output.
+
+`-J[SYMSPEC]'
+`--no-annotated-source[=SYMSPEC]'
+     The `-J' option causes `gprof' not to print annotated source code.
+     If SYMSPEC is specified, `gprof' prints annotated source, but
+     excludes matching symbols.
+
+`-L'
+`--print-path'
+     Normally, source filenames are printed with the path component
+     suppressed.  The `-L' option causes `gprof' to print the full
+     pathname of source filenames, which is determined from symbolic
+     debugging information in the image file and is relative to the
+     directory in which the compiler was invoked.
+
+`-p[SYMSPEC]'
+`--flat-profile[=SYMSPEC]'
+     The `-p' option causes `gprof' to print a flat profile.  If
+     SYMSPEC is specified, print flat profile only for matching symbols.
+     *Note The Flat Profile: Flat Profile.
+
+`-P[SYMSPEC]'
+`--no-flat-profile[=SYMSPEC]'
+     The `-P' option causes `gprof' to suppress printing a flat profile.
+     If SYMSPEC is specified, `gprof' prints a flat profile, but
+     excludes matching symbols.
+
+`-q[SYMSPEC]'
+`--graph[=SYMSPEC]'
+     The `-q' option causes `gprof' to print the call graph analysis.
+     If SYMSPEC is specified, print call graph only for matching symbols
+     and their children.  *Note The Call Graph: Call Graph.
+
+`-Q[SYMSPEC]'
+`--no-graph[=SYMSPEC]'
+     The `-Q' option causes `gprof' to suppress printing the call graph.
+     If SYMSPEC is specified, `gprof' prints a call graph, but excludes
+     matching symbols.
+
+`-t'
+`--table-length=NUM'
+     The `-t' option causes the NUM most active source lines in each
+     source file to be listed when source annotation is enabled.  The
+     default is 10.
+
+`-y'
+`--separate-files'
+     This option affects annotated source output only.  Normally,
+     `gprof' prints annotated source files to standard-output.  If this
+     option is specified, annotated source for a file named
+     `path/FILENAME' is generated in the file `FILENAME-ann'.  If the
+     underlying file system would truncate `FILENAME-ann' so that it
+     overwrites the original `FILENAME', `gprof' generates annotated
+     source in the file `FILENAME.ann' instead (if the original file
+     name has an extension, that extension is _replaced_ with `.ann').
+
+`-Z[SYMSPEC]'
+`--no-exec-counts[=SYMSPEC]'
+     The `-Z' option causes `gprof' not to print a tally of functions
+     and the number of times each was called.  If SYMSPEC is specified,
+     print tally, but exclude matching symbols.
+
+`-r'
+`--function-ordering'
+     The `--function-ordering' option causes `gprof' to print a
+     suggested function ordering for the program based on profiling
+     data.  This option suggests an ordering which may improve paging,
+     tlb and cache behavior for the program on systems which support
+     arbitrary ordering of functions in an executable.
+
+     The exact details of how to force the linker to place functions in
+     a particular order is system dependent and out of the scope of this
+     manual.
+
+`-R MAP_FILE'
+`--file-ordering MAP_FILE'
+     The `--file-ordering' option causes `gprof' to print a suggested
+     .o link line ordering for the program based on profiling data.
+     This option suggests an ordering which may improve paging, tlb and
+     cache behavior for the program on systems which do not support
+     arbitrary ordering of functions in an executable.
+
+     Use of the `-a' argument is highly recommended with this option.
+
+     The MAP_FILE argument is a pathname to a file which provides
+     function name to object file mappings.  The format of the file is
+     similar to the output of the program `nm'.
+
+          c-parse.o:00000000 T yyparse
+          c-parse.o:00000004 C yyerrflag
+          c-lang.o:00000000 T maybe_objc_method_name
+          c-lang.o:00000000 T print_lang_statistics
+          c-lang.o:00000000 T recognize_objc_keyword
+          c-decl.o:00000000 T print_lang_identifier
+          c-decl.o:00000000 T print_lang_type
+          ...
+
+     To create a MAP_FILE with GNU `nm', type a command like `nm
+     --extern-only --defined-only -v --print-file-name program-name'.
+
+`-T'
+`--traditional'
+     The `-T' option causes `gprof' to print its output in
+     "traditional" BSD style.
+
+`-w WIDTH'
+`--width=WIDTH'
+     Sets width of output lines to WIDTH.  Currently only used when
+     printing the function index at the bottom of the call graph.
+
+`-x'
+`--all-lines'
+     This option affects annotated source output only.  By default,
+     only the lines at the beginning of a basic-block are annotated.
+     If this option is specified, every line in a basic-block is
+     annotated by repeating the annotation for the first line.  This
+     behavior is similar to `tcov''s `-a'.
+
+`--demangle[=STYLE]'
+`--no-demangle'
+     These options control whether C++ symbol names should be demangled
+     when printing output.  The default is to demangle symbols.  The
+     `--no-demangle' option may be used to turn off demangling.
+     Different compilers have different mangling styles.  The optional
+     demangling style argument can be used to choose an appropriate
+     demangling style for your compiler.
+
+
+File: gprof.info,  Node: Analysis Options,  Next: Miscellaneous Options,  Prev: Output Options,  Up: Invoking
+
+4.2 Analysis Options
+====================
+
+`-a'
+`--no-static'
+     The `-a' option causes `gprof' to suppress the printing of
+     statically declared (private) functions.  (These are functions
+     whose names are not listed as global, and which are not visible
+     outside the file/function/block where they were defined.)  Time
+     spent in these functions, calls to/from them, etc., will all be
+     attributed to the function that was loaded directly before it in
+     the executable file.  This option affects both the flat profile
+     and the call graph.
+
+`-c'
+`--static-call-graph'
+     The `-c' option causes the call graph of the program to be
+     augmented by a heuristic which examines the text space of the
+     object file and identifies function calls in the binary machine
+     code.  Since normal call graph records are only generated when
+     functions are entered, this option identifies children that could
+     have been called, but never were.  Calls to functions that were
+     not compiled with profiling enabled are also identified, but only
+     if symbol table entries are present for them.  Calls to dynamic
+     library routines are typically _not_ found by this option.
+     Parents or children identified via this heuristic are indicated in
+     the call graph with call counts of `0'.
+
+`-D'
+`--ignore-non-functions'
+     The `-D' option causes `gprof' to ignore symbols which are not
+     known to be functions.  This option will give more accurate
+     profile data on systems where it is supported (Solaris and HPUX for
+     example).
+
+`-f'
+`--function-line'
+     The `-f' option enables line-by-line profiling where all the lines
+     for a function are grouped together in the flat profile.
+     Specifically, the flat profile entries are first sorted by
+     function in decreasing order of the histogram counts for the
+     function as a whole, and then sorted by line within each function,
+     again in decreasing order of histogram counts.  Aside from the
+     order of the flat profile entries, this option is the same as the
+     `-l' option.  The program must be compiled with a `-g' option so
+     that line number information is available.
+
+`-k FROM/TO'
+     The `-k' option allows you to delete from the call graph any arcs
+     from symbols matching symspec FROM to those matching symspec TO.
+
+`-K LOWPC:HIGHPC'
+`--pc-range LOWPC:HIGHPC'
+     The `-K' option allows you to exclude profile data outside a
+     specific range of code.  Histogram hits and call graph arcs with
+     addresses lower than LOWPC or higher than HIGHPC are simply
+     ignored.  The addresses may be specified as decimal, hexadecimal or
+     octal values, with a `0' prefix for octal values or a `0x' prefix
+     for hexadecimal values.  This option may be useful when analyzing
+     the performance of a region of code that would otherwise be
+     obscured by the rest of the program.
+
+`-l'
+`--line'
+     The `-l' option enables line-by-line profiling, which causes
+     histogram counts to be charged to individual source code lines,
+     instead of functions.
+
+     If you profile instruction counts (not cycles) with the Xtensa
+     ISS, that is, if you run ISS with `--client_cmds="profile
+     --instructions"', this option will also identify how many times
+     each line of code was executed.  The program must be compiled with
+     a `-g' option so that line number information is available.  While
+     line-by-line profiling can help isolate where in a large function
+     a program is spending its time, it also significantly increases
+     the running time of `gprof', and magnifies statistical
+     inaccuracies for hardware profiling.  *Note Statistical Sampling
+     Error: Sampling Error.
+
+`-m NUM'
+`--min-count=NUM'
+     This option affects execution count output only.  Symbols that are
+     executed less than NUM times are suppressed.
+
+`-nSYMSPEC'
+`--time=SYMSPEC'
+     The `-n' option causes `gprof', in its call graph analysis, to
+     only propagate times for symbols matching SYMSPEC.
+
+`-NSYMSPEC'
+`--no-time=SYMSPEC'
+     The `-n' option causes `gprof', in its call graph analysis, not to
+     propagate times for symbols matching SYMSPEC.
+
+`-SFILENAME'
+`--external-symbol-table=FILENAME'
+     The `-S' option causes `gprof' to read an external symbol table
+     file, such as `/proc/kallsyms', rather than read the symbol table
+     from the given object file (the default is `a.out'). This is useful
+     for profiling kernel modules.
+
+`-z'
+`--display-unused-functions'
+     If you give the `-z' option, `gprof' will mention all functions in
+     the flat profile, even those that were never called, and that had
+     no time spent in them.  This is useful in conjunction with the
+     `-c' option for discovering which routines were never called.
+
+
+
+File: gprof.info,  Node: Miscellaneous Options,  Next: Symspecs,  Prev: Analysis Options,  Up: Invoking
+
+4.3 Miscellaneous Options
+=========================
+
+`-d[NUM]'
+`--debug[=NUM]'
+     The `-d NUM' option specifies debugging options.  If NUM is not
+     specified, enable all debugging.
+
+`-h'
+`--help'
+     The `-h' option prints command line usage.
+
+`-ONAME'
+`--file-format=NAME'
+     Selects the format of the profile data files.  Recognized formats
+     are `auto' (the default), `bsd', `4.4bsd', `magic', and `prof'
+     (not yet supported).
+
+`-s'
+`--sum'
+     The `-s' option causes `gprof' to summarize the information in the
+     profile data files it read in, and write out a profile data file
+     called `gmon.sum', which contains all the information from the
+     profile data files that `gprof' read in.  The file `gmon.sum' may
+     be one of the specified input files; the effect of this is to
+     merge the data in the other input files into `gmon.sum'.
+
+     Eventually you can run `gprof' again without `-s' to analyze the
+     cumulative data in the file `gmon.sum'.
+
+`-v'
+`--version'
+     The `-v' flag causes `gprof' to print the current version number,
+     and then exit.
+
+
+
+File: gprof.info,  Node: Symspecs,  Prev: Miscellaneous Options,  Up: Invoking
+
+4.4 Symspecs
+============
+
+Many of the output options allow functions to be included or excluded
+using "symspecs" (symbol specifications), which observe the following
+syntax:
+
+       filename_containing_a_dot
+     | funcname_not_containing_a_dot
+     | linenumber
+     | ( [ any_filename ] `:' ( any_funcname | linenumber ) )
+
+   Here are some sample symspecs:
+
+`main.c'
+     Selects everything in file `main.c'--the dot in the string tells
+     `gprof' to interpret the string as a filename, rather than as a
+     function name.  To select a file whose name does not contain a
+     dot, a trailing colon should be specified.  For example, `odd:' is
+     interpreted as the file named `odd'.
+
+`main'
+     Selects all functions named `main'.
+
+     Note that there may be multiple instances of the same function name
+     because some of the definitions may be local (i.e., static).
+     Unless a function name is unique in a program, you must use the
+     colon notation explained below to specify a function from a
+     specific source file.
+
+     Sometimes, function names contain dots.  In such cases, it is
+     necessary to add a leading colon to the name.  For example,
+     `:.mul' selects function `.mul'.
+
+     In some object file formats, symbols have a leading underscore.
+     `gprof' will normally not print these underscores.  When you name a
+     symbol in a symspec, you should type it exactly as `gprof' prints
+     it in its output.  For example, if the compiler produces a symbol
+     `_main' from your `main' function, `gprof' still prints it as
+     `main' in its output, so you should use `main' in symspecs.
+
+`main.c:main'
+     Selects function `main' in file `main.c'.
+
+`main.c:134'
+     Selects line 134 in file `main.c'.
+
+
+File: gprof.info,  Node: Output,  Next: Inaccuracy,  Prev: Invoking,  Up: Top
+
+5 Interpreting `gprof''s Output
+*******************************
+
+`gprof' can produce several different output styles, the most important
+of which are described below.  The simplest output styles (file
+information, execution count, and function and file ordering) are not
+described here, but are documented with the respective options that
+trigger them.  *Note Output Options: Output Options.
+
+* Menu:
+
+* Flat Profile::        The flat profile shows how much time was spent
+                            executing directly in each function.
+* Call Graph::          The call graph shows which functions called which
+                            others, and how much time each function used
+                            when its subroutine calls are included.
+* Line-by-line::        `gprof' can analyze individual source code lines
+* Annotated Source::    The annotated source listing displays source code
+                            labeled with execution counts
+
+* Other Events::        Profiling events other than cycle counts.
+
+
+File: gprof.info,  Node: Flat Profile,  Next: Call Graph,  Up: Output
+
+5.1 The Flat Profile
+====================
+
+The "flat profile" shows the total histogram counts for each function.
+Unless the `-z' option is given, functions with no apparent counts and
+no apparent calls to them, are not mentioned.  Note that for hardware
+profiling if a function was not compiled for profiling, and didn't run
+long enough to show up on the program counter histogram, it will be
+indistinguishable from a function that was never called.  Also, if the
+compiler optimizes a function call by inlining the function body, then
+the function call will not be counted and the time spent in the inlined
+function will be attributed to the caller.  Line-by-line profiling may
+be helpful in revealing the effects of inlined functions.  *Note
+Line-by-line Profiling: Line-by-line.
+
+   This is part of a flat profile for a small program:
+
+     Flat profile:
+
+     Each sample counts as 16384 cycles.
+                                              self      total
+          cumulative       self             cycles     cycles
+       %      cycles     cycles    calls     /call      /call  name
+                (K)        (K)                (K)        (K)
+     66.67     49.15      49.15     7208      0.01       0.01  open
+     16.67     65.54      16.38      244      0.07       0.20  offtime
+     16.67     81.92      16.38        8      2.05       2.05  memccpy
+     16.67     98.30      16.38        7      2.34       2.34  write
+      0.00     98.30       0.00      236      0.00       0.00  tzset
+      0.00     98.30       0.00      192      0.00       0.00  tolower
+      0.00     98.30       0.00       47      0.00       0.00  strlen
+      0.00     98.30       0.00       45      0.00       0.00  strchr
+      0.00     98.30       0.00        1      0.00      98.30  main
+      0.00     98.30       0.00        1      0.00       0.00  memcpy
+      0.00     98.30       0.00        1      0.00      16.38  print
+      0.00     98.30       0.00        1      0.00      98.30  report
+     ...
+
+The functions are sorted first by decreasing run-time spent in them,
+then by decreasing number of calls, then alphabetically by name.
+
+   `gprof' attempts to scale results so that the tables contain numbers
+of reasonable magnitude.  If the counts are scaled, the scaling factor
+is shown at the top of the scaled columns.  "T" indicates that the
+values are in units of trillions; "G" indicates billions; "M" indicates
+millions; and "K" indicates thousands.
+
+   For hardware profiling, where the profile data is sampled, you must
+be careful interpreting the `gprof' results.  Just before the column
+headers, a statement appears indicating how many units each sample
+counted as.  This "sampling period" estimates the margin of error in
+each of the figures.  A figure that is not much larger than this is not
+reliable.  In this example, each sample counted as 16,384 cycles.  The
+program's total execution time was 98.30 Kcycles, as indicated by the
+`cumulative cycles' field.  Since each sample counted for 16,384
+seconds, this means only six samples were taken during the run.  Three
+of the samples occurred while the program was in the `open' function,
+as indicated by the `self cycles' field.  Each of the other three
+samples occurred once each in `offtime', `memccpy', and `write'.  Since
+only six samples were taken, none of these values can be regarded as
+particularly reliable.  In another run, the `self cycles' field for
+`memccpy' might well be `0.00' or `32.77'.  *Note Statistical Sampling
+Error: Sampling Error, for a complete discussion.
+
+   The remaining functions in the listing (those whose `self cycles'
+field is `0.00') didn't appear in the histogram samples at all.
+However, the call graph indicated that they were called, so therefore
+they are listed, sorted in decreasing order by the `calls' field.
+Clearly some time was spent executing these functions, but the paucity
+of histogram samples prevents any determination of how much time each
+took.
+
+   Here is what the fields in each line mean (the UNITS depend on the
+events being profiled, e.g., cycles, interlocks, etc.):
+
+`%'
+     This is the percentage of the total histogram counts that are
+     attributed to this function.  These should all add up to 100%.
+
+`cumulative UNITS'
+     This is the cumulative total number of UNITS the computer spent
+     executing this function, plus the time spent in all the functions
+     above this one in this table.
+
+`self UNITS'
+     This is the number of UNITS accounted for by this function alone.
+     The flat profile listing is sorted first by this number.
+
+`calls'
+     This is the total number of times the function was called.
+
+`self UNITS/call'
+     This represents the average number of UNITS spent in this function
+     per call.
+
+`total UNITS/call'
+     This represents the average number of UNITS spent in this function
+     and its descendants per call.  This is the only field in the flat
+     profile that uses call graph analysis.
+
+`name'
+     This is the name of the function.   The flat profile is sorted by
+     this field alphabetically after the "self UNITS" and "calls"
+     fields are sorted.
+
+
+File: gprof.info,  Node: Call Graph,  Next: Line-by-line,  Prev: Flat Profile,  Up: Output
+
+5.2 The Call Graph
+==================
+
+The "call graph" shows how much time was spent in each function and its
+children.  From this information, you can find functions that, while
+they themselves may not have used much time, called other functions
+that did use unusual amounts of time.  Note that in the same way as the
+flat profile, a function call inlined by the compiler will not be
+visible in the call graph and the counts for the inlined function will
+be attributed to the caller.
+
+   Here is a sample call from a small program.  This call came from the
+same `gprof' run as the flat profile example in the previous section.
+
+     index    %      self  children    called     name
+                     (K)     (K)
+                                                      <spontaneous>
+     [1]    100.0    0.00   98.30                 _start [1]
+                     0.00   98.30       1/1           main [2]
+                     0.00    0.00       1/2           _atexit [28]
+                     0.00    0.00       1/1           exit [59]
+     -----------------------------------------------
+                     0.00   98.30       1/1           _start [1]
+     [2]    100.0    0.00   98.30       1         main [2]
+                     0.00   98.30       1/1           report [3]
+     -----------------------------------------------
+                     0.00   98.30       1/1           main [2]
+     [3]    100.0    0.00   98.30       1         report [3]
+                     0.00   49.15       8/8           timelocal [6]
+                     0.00   16.38       1/1           print [9]
+                     0.00   16.38       9/9           fgets [12]
+                     0.00    0.00      12/34          strncmp <cycle 1> [40]
+                     0.00    0.00       8/8           lookup [20]
+                     0.00    0.00       1/1           fopen [21]
+                     0.00    0.00       8/8           chewtime [24]
+                     0.00    0.00       8/16          skipspace [44]
+     -----------------------------------------------
+     [4]     60.5   16.38   49.15       8+472     <cycle 2 as a whole> [4]
+                    16.38   49.15     244+260         offtime <cycle 2> [7]
+                     0.00    0.00     236+1           tzset <cycle 2> [26]
+     -----------------------------------------------
+
+   As with the flat profile, `gprof' attempts to scale results so that
+the tables contain numbers of reasonable magnitude.  If the counts are
+scaled, the scaling factor is shown at the top of the scaled columns.
+"T" indicates that the values are in units of trillions; "G" indicates
+billions; "M" indicates millions; and "K" indicates thousands.
+
+   The lines full of dashes divide this table into "entries", one for
+each function.  Each entry has one or more lines.
+
+   In each entry, the primary line is the one that starts with an index
+number in square brackets.  The end of this line says which function
+the entry is for.  The preceding lines in the entry describe the
+callers of this function and the following lines describe its
+subroutines (also called "children" when we speak of the call graph).
+
+   The entries are sorted by time spent in the function and its
+subroutines.
+
+* Menu:
+
+* Primary::       Details of the primary line's contents.
+* Callers::       Details of caller-lines' contents.
+* Subroutines::   Details of subroutine-lines' contents.
+* Cycles::        When there are cycles of recursion,
+                   such as `a' calls `b' calls `a'...
+
+
+File: gprof.info,  Node: Primary,  Next: Callers,  Up: Call Graph
+
+5.2.1 The Primary Line
+----------------------
+
+The "primary line" in a call graph entry is the line that describes the
+function which the entry is about and gives the overall statistics for
+this function.
+
+   For reference, we repeat the primary line from the entry for function
+`report' in our main example, together with the heading line that shows
+the names of the fields:
+
+     index    %      self  children    called     name
+     ...
+     [3]    100.0    0.00   98.30       1         report [3]
+
+   Here is what the fields in the primary line mean:
+
+`index'
+     Entries are numbered with consecutive integers.  Each function
+     therefore has an index number, which appears at the beginning of
+     its primary line.
+
+     Each cross-reference to a function, as a caller or subroutine of
+     another, gives its index number as well as its name.  The index
+     number guides you if you wish to look for the entry for that
+     function.
+
+`%'
+     This is the percentage of the total histogram counts that were
+     attributed to this function and to subroutines called from this
+     function.
+
+     The histogram hits for this function are counted again for the
+     callers of this function.  Therefore, adding up these percentages
+     is meaningless.
+
+`self'
+     This is the total number of histogram hits for this function.  This
+     should be identical to the number printed in the `self' field for
+     this function in the flat profile.
+
+`children'
+     This is the total number of histogram hits for subroutine calls
+     made by this function.  This should be equal to the sum of all the
+     `self' and `children' entries of the children listed directly
+     below this function.
+
+`called'
+     This is the number of times the function was called.
+
+     If the function called itself recursively, there are two numbers,
+     separated by a `+'.  The first number counts non-recursive calls,
+     and the second counts recursive calls.
+
+     In the example above, the function `report' was called once from
+     `main'.
+
+`name'
+     This is the name of the current function.  The index number is
+     repeated after it.
+
+     If the function is part of a cycle of recursion, the cycle number
+     is printed between the function's name and the index number (*note
+     How Mutually Recursive Functions Are Described: Cycles.).  For
+     example, if function `gnurr' is part of cycle number one, and has
+     index number twelve, its primary line would be end like this:
+
+          gnurr <cycle 1> [12]
+
+
+File: gprof.info,  Node: Callers,  Next: Subroutines,  Prev: Primary,  Up: Call Graph
+
+5.2.2 Lines for a Function's Callers
+------------------------------------
+
+A function's entry has a line for each function it was called by.
+These lines' fields correspond to the fields of the primary line, but
+their meanings are different because of the difference in context.
+
+   For reference, we repeat two lines from the entry for the function
+`report', the primary line and one caller-line preceding it, together
+with the heading line that shows the names of the fields:
+
+     index    %      self  children    called     name
+     ...
+                     0.00   98.30       1/1           main [2]
+     [3]    100.0    0.00   98.30       1         report [3]
+
+   Here are the meanings of the fields in the caller-line for `report'
+called from `main':
+
+`self'
+     An estimate of the number of histogram hits for `report' itself
+     when it was called from `main'.
+
+`children'
+     An estimate of the number of histogram hits for subroutines of
+     `report' when `report' was called from `main'.
+
+     The sum of the `self' and `children' fields is an estimate of the
+     number of histogram hits within calls to `report' from `main'.
+
+`called'
+     Two numbers: the number of times `report' was called from `main',
+     followed by the total number of non-recursive calls to `report'
+     from all its callers.
+
+`name and index number'
+     The name of the caller of `report' to which this line applies,
+     followed by the caller's index number.
+
+     Not all functions have entries in the call graph; some options to
+     `gprof' request the omission of certain functions.  When a caller
+     has no entry of its own, it still has caller-lines in the entries
+     of the functions it calls.
+
+     If the caller is part of a recursion cycle, the cycle number is
+     printed between the name and the index number.
+
+   If the identity of the callers of a function cannot be determined, a
+dummy caller-line is printed which has `<spontaneous>' as the "caller's
+name" and all other fields blank.  This can happen for signal handlers.
+
+
+File: gprof.info,  Node: Subroutines,  Next: Cycles,  Prev: Callers,  Up: Call Graph
+
+5.2.3 Lines for a Function's Subroutines
+----------------------------------------
+
+A function's entry has a line for each of its subroutines--in other
+words, a line for each other function that it called.  These lines'
+fields correspond to the fields of the primary line, but their meanings
+are different because of the difference in context.
+
+   For reference, we repeat two lines from the entry for the function
+`main', the primary line and a line for a subroutine, together with the
+heading line that shows the names of the fields:
+
+     index    %      self  children    called     name
+     ...
+     [2]    100.0    0.00   98.30       1         main [2]
+                     0.00   98.30       1/1           report [3]
+
+   Here are the meanings of the fields in the subroutine-line for `main'
+calling `report':
+
+`self'
+     An estimate of the number of histogram hits directly within
+     `report' when `report' was called from `main'.
+
+`children'
+     An estimate of the number of histogram hits in subroutines of
+     `report' when `report' was called from `main'.
+
+     The sum of the `self' and `children' fields is an estimate of the
+     total histogram hits in calls to `report' from `main'.
+
+`called'
+     Two numbers, the number of calls to `report' from `main' followed
+     by the total number of non-recursive calls to `report'.  This
+     ratio is used to determine how much of `report''s `self' and
+     `children' time gets credited to `main'.  *Note Estimating
+     `children' Times: Assumptions.
+
+`name'
+     The name of the subroutine of `main' to which this line applies,
+     followed by the subroutine's index number.
+
+     If the caller is part of a recursion cycle, the cycle number is
+     printed between the name and the index number.
+
+
+File: gprof.info,  Node: Cycles,  Prev: Subroutines,  Up: Call Graph
+
+5.2.4 How Mutually Recursive Functions Are Described
+----------------------------------------------------
+
+The graph may be complicated by the presence of "cycles of recursion"
+in the call graph.  A cycle exists if a function calls another function
+that (directly or indirectly) calls (or appears to call) the original
+function.  For example: if `a' calls `b', and `b' calls `a', then `a'
+and `b' form a cycle.
+
+   Whenever there are call paths both ways between a pair of functions,
+they belong to the same cycle.  If `a' and `b' call each other and `b'
+and `c' call each other, all three make one cycle.  Note that even if
+`b' only calls `a' if it was not called from `a', `gprof' cannot
+determine this, so `a' and `b' are still considered a cycle.
+
+   The cycles are numbered with consecutive integers.  When a function
+belongs to a cycle, each time the function name appears in the call
+graph it is followed by `<cycle NUMBER>'.
+
+   The reason cycles matter is that they make the time values in the
+call graph paradoxical.  The "time spent in children" of `a' should
+include the time spent in its subroutine `b' and in `b''s
+subroutines--but one of `b''s subroutines is `a'!  How much of `a''s
+time should be included in the children of `a', when `a' is indirectly
+recursive?
+
+   The way `gprof' resolves this paradox is by creating a single entry
+for the cycle as a whole.  The primary line of this entry describes the
+total time spent directly in the functions of the cycle.  The
+"subroutines" of the cycle are the individual functions of the cycle,
+and all other functions that were called directly by them.  The
+"callers" of the cycle are the functions, outside the cycle, that
+called functions in the cycle.
+
+   Here is an example portion of a call graph which shows a cycle
+containing functions `a' and `b'.  The cycle was entered by a call to
+`a' from `main'; both `a' and `b' called `c'.
+
+     index    %      self  children    called     name
+     ----------------------------------------
+
+                     1.77    0.00       1/1           main [2]
+     [3]     91.7    1.77    0.00       1+5       <cycle 1 as a whole> [3]
+                     1.02    0.00       3             b <cycle 1> [4]
+                     0.75    0.00       2             a <cycle 1> [5]
+     ----------------------------------------
+                                        3             a <cycle 1> [5]
+     [4]     52.8    1.02    0.00       0         b <cycle 1> [4]
+                                        2             a <cycle 1> [5]
+                     0.00    0.00       3/6           c [6]
+     ----------------------------------------
+                     1.77    0.00       1/1           main [2]
+                                        2             b <cycle 1> [4]
+     [5]     38.9    0.75    0.00       1         a <cycle 1> [5]
+                                        3             b <cycle 1> [4]
+                        0    0.00       3/6           c [6]
+     ----------------------------------------
+
+(The entire call graph for this program contains in addition an entry
+for `main', which calls `a', and an entry for `c', with callers `a' and
+`b'.)
+
+     index    %      self  children    called     name
+
+                                                      <spontaneous>
+     [1]    100.0    0.00    1.93       0         start [1]
+                     0.16    1.77       1/1           main [2]
+     ----------------------------------------
+                     0.16    1.77       1/1           start [1]
+     [2]    100.0    0.16    1.77       1         main [2]
+                     1.77    0.00       1/1           a <cycle 1> [5]
+     ----------------------------------------
+                     1.77    0.00       1/1           main [2]
+     [3]     91.7    1.77    0.00       1+5       <cycle 1 as a whole> [3]
+                     1.02    0.00       3             b <cycle 1> [4]
+                     0.75    0.00       2             a <cycle 1> [5]
+                     0.00    0.00       6/6           c [6]
+     ----------------------------------------
+                                        3             a <cycle 1> [5]
+     [4]     52.8    1.02    0.00       0         b <cycle 1> [4]
+                                        2             a <cycle 1> [5]
+                     0.00    0.00       3/6           c [6]
+     ----------------------------------------
+                     1.77    0.00       1/1           main [2]
+                                        2             b <cycle 1> [4]
+     [5]     38.9    0.75    0.00       1         a <cycle 1> [5]
+                                        3             b <cycle 1> [4]
+                     0.00    0.00       3/6           c [6]
+     ----------------------------------------
+                     0.00    0.00       3/6           b <cycle 1> [4]
+                     0.00    0.00       3/6           a <cycle 1> [5]
+     [6]      0.0    0.00    0.00       6         c [6]
+     ----------------------------------------
+
+   The `self' field of the cycle's primary line is the total histogram
+count for all the functions of the cycle.  It equals the sum of the
+`self' fields for the individual functions in the cycle, found in the
+entry in the subroutine lines for these functions.
+
+   The `children' fields of the cycle's primary line and subroutine
+lines count only subroutines outside the cycle.  Even though `a' calls
+`b', the time spent in those calls to `b' is not counted in `a''s
+`children' time.  Thus, we do not encounter the problem of what to do
+when the time in those calls to `b' includes indirect recursive calls
+back to `a'.
+
+   The `children' field of a caller-line in the cycle's entry estimates
+the number of histogram hits _in the whole cycle_, and its other
+subroutines, on the times when that caller called a function in the
+cycle.
+
+   The `called' field in the primary line for the cycle has two numbers:
+first, the number of times functions in the cycle were called by
+functions outside the cycle; second, the number of times they were
+called by functions in the cycle (including times when a function in
+the cycle calls itself).  This is a generalization of the usual split
+into non-recursive and recursive calls.
+
+   The `called' field of a subroutine-line for a cycle member in the
+cycle's entry says how many time that function was called from
+functions in the cycle.  The total of all these is the second number in
+the primary line's `called' field.
+
+   In the individual entry for a function in a cycle, the other
+functions in the same cycle can appear as subroutines and as callers.
+These lines show how many times each function in the cycle called or
+was called from each other function in the cycle.  The `self' and
+`children' fields in these lines are blank because of the difficulty of
+defining meanings for them when recursion is going on.
+
+
+File: gprof.info,  Node: Line-by-line,  Next: Annotated Source,  Prev: Call Graph,  Up: Output
+
+5.3 Line-by-line Profiling
+==========================
+
+`gprof''s `-l' option causes the program to perform "line-by-line"
+profiling.  In this mode, histogram samples are assigned not to
+functions, but to individual lines of source code.  The program must be
+compiled with a `-g' option to generate debugging symbols for tracking
+source code lines.
+
+   The flat profile is the most useful output table in line-by-line
+mode.  The call graph isn't as useful as normal, since the current
+version of `gprof' does not propagate call graph arcs from source code
+lines to the enclosing function.  The call graph does, however, show
+each line of code that called each function, along with a count.
+
+   The `-f' option also enables line-by-line profiling.  The only
+difference between `-f' and `-l' is the order of the entries in the
+flat profile.  With `-f', the flat profile entries are grouped by
+function so that all the lines for a function appear together.  The
+functions are shown in decreasing order of histogram counts, and the
+lines within each function are also sorted in decreasing order of
+histogram counts.
+
+   Here is a section of `gprof''s output, without line-by-line
+profiling.  Note that `ct_init' accounted for 13327 calls to
+`init_block'.
+
+     Flat profile:
+                                              self      total
+          cumulative       self             cycles     cycles
+       %      cycles     cycles    calls     /call      /call  name
+                (K)        (K)                (K)        (K)
+     30.77      0.13       0.04     6335      6.31       6.31  ct_init
+                          Call graph (explanation follows)
+
+     index    %      self  children    called     name
+                     (K)     (K)
+                     0.00    0.00       1/13496       name_too_long
+                     0.00    0.00      40/13496       deflate
+                     0.00    0.00     128/13496       deflate_fast
+                     0.00    0.00   13327/13496       ct_init
+     [7]      0.0    0.00    0.00   13496         init_block
+
+   Now let's look at some of `gprof''s output from the same program run,
+this time with line-by-line profiling enabled.  Note that `ct_init''s
+histogram hits are broken down into four lines of source code--lines
+349, 351, 382 and 385.  In the call graph, note how `ct_init''s 13327
+calls to `init_block' are broken down into one call from line 396, 3071
+calls from line 384, 3730 calls from line 385, and 6525 calls from 387.
+
+     Flat profile:
+
+          cumulative       self
+       %      cycles     cycles    calls  name
+                (K)        (K)
+      7.69      0.10       0.01           ct_init (trees.c:349)
+      7.69      0.11       0.01           ct_init (trees.c:351)
+      7.69      0.12       0.01           ct_init (trees.c:382)
+      7.69      0.13       0.01           ct_init (trees.c:385)
+                          Call graph (explanation follows)
+
+     index    %      self  children    called     name
+                     (K)     (K)
+                     0.00    0.00       1/13496       name_too_long (gzip.c:1440)
+                     0.00    0.00       1/13496       deflate (deflate.c:763)
+                     0.00    0.00       1/13496       ct_init (trees.c:396)
+                     0.00    0.00       2/13496       deflate (deflate.c:727)
+                     0.00    0.00       4/13496       deflate (deflate.c:686)
+                     0.00    0.00       5/13496       deflate (deflate.c:675)
+                     0.00    0.00      12/13496       deflate (deflate.c:679)
+                     0.00    0.00      16/13496       deflate (deflate.c:730)
+                     0.00    0.00     128/13496       deflate_fast (deflate.c:654)
+                     0.00    0.00    3071/13496       ct_init (trees.c:384)
+                     0.00    0.00    3730/13496       ct_init (trees.c:385)
+                     0.00    0.00    6525/13496       ct_init (trees.c:387)
+     [6]      0.0    0.00    0.00   13496         init_block (trees.c:408)
+
+
+File: gprof.info,  Node: Annotated Source,  Next: Other Events,  Prev: Line-by-line,  Up: Output
+
+5.4 The Annotated Source Listing
+================================
+
+`gprof''s `-A' option triggers an annotated source listing, which lists
+the program's source code, each function labeled with the number of
+times it was called.  You may also need to specify the `-I' option, if
+`gprof' can't find the source code files.
+
+   If you use the Xtensa ISS to profile instruction counts, `gprof' can
+determine how many times each basic-block of code was executed, and the
+basic-block execution counts can be seen in the annotated source
+listing.  Run ISS with `--client_cmds="profile --instructions"' to
+profile instruction counts.  If you profile cycle counts (the default),
+the basic-block execution counts are not available.
+
+   For example, consider the following function, taken from gzip, with
+line numbers added:
+
+      1 ulg updcrc(s, n)
+      2     uch *s;
+      3     unsigned n;
+      4 {
+      5     register ulg c;
+      6
+      7     static ulg crc = (ulg)0xffffffffL;
+      8
+      9     if (s == NULL) {
+     10         c = 0xffffffffL;
+     11     } else {
+     12         c = crc;
+     13         if (n) do {
+     14             c = crc_32_tab[...];
+     15         } while (--n);
+     16     }
+     17     crc = c;
+     18     return c ^ 0xffffffffL;
+     19 }
+
+   `updcrc' has at least five basic-blocks.  One is the function
+itself.  The `if' statement on line 9 generates two more basic-blocks,
+one for each branch of the `if'.  A fourth basic-block results from the
+`if' on line 13, and the contents of the `do' loop form the fifth
+basic-block.  The compiler may also generate additional basic-blocks to
+handle various special cases.
+
+   Run `xt-gprof -l -A' for line-by-line annotated source output.  The
+`-x' option is also helpful, to ensure that each line of code is
+labeled at least once.  Here is `updcrc''s annotated source listing for
+a sample `gzip' run:
+
+                     ulg updcrc(s, n)
+                         uch *s;
+                         unsigned n;
+                 2 ->{
+                         register ulg c;
+
+                         static ulg crc = (ulg)0xffffffffL;
+
+                 2 ->    if (s == NULL) {
+                 1 ->        c = 0xffffffffL;
+                 1 ->    } else {
+                 1 ->        c = crc;
+                 1 ->        if (n) do {
+             26312 ->            c = crc_32_tab[...];
+     26312,1,26311 ->        } while (--n);
+                         }
+                 2 ->    crc = c;
+                 2 ->    return c ^ 0xffffffffL;
+                 2 ->}
+
+   In this example, the function was called twice, passing once through
+each branch of the `if' statement.  The body of the `do' loop was
+executed a total of 26312 times.  Note how the `while' statement is
+annotated.  It began execution 26312 times, once for each iteration
+through the loop.  One of those times (the last time) it exited, while
+it branched back to the beginning of the loop 26311 times.
+
+
+File: gprof.info,  Node: Other Events,  Prev: Annotated Source,  Up: Output
+
+5.5 Profiling Other Events
+==========================
+
+When analyzing a program's behavior, it may be helpful to profile events
+other than cycle counts.  The profiling client in the Xtensa ISS can
+also collect information on events such as cache misses, pipeline
+interlocks, etc.  *Note Executing the Program: Executing.  All the
+features of `gprof' can be used to analyze the profile data, regardless
+of the kind of events being profiled.  The only change is that the
+histogram counts in the profile data file represent the occurrence of
+these other events for each instruction.
+
+   For example, here is an excerpt of the flat profile output when the
+ISS was used to profile instruction cache misses in a small program:
+
+     Flat profile:
+                                              self      total
+          cumulative       self           icmisses   icmisses
+       %    icmisses   icmisses    calls     /call      /call  name
+
+     28.12    591.00     591.00      296      2.00       2.00  memcpy
+     12.32    850.00     259.00       86      3.01       3.01  check_range
+      7.66   1011.00     161.00      117      1.38       1.39  call
+      6.37   1145.00     134.00      133      1.01       6.60  exec
+      5.47   1260.00     115.00       38      3.03       3.25  _write_r
+      5.14   1368.00     108.00       38      2.84       2.84  memchr
+
+
+File: gprof.info,  Node: Inaccuracy,  Next: GNU Free Documentation License,  Prev: Output,  Up: Top
+
+6 Inaccuracy of `gprof' Output
+******************************
+
+* Menu:
+
+* Sampling Error::      Statistical margins of error
+* Assumptions::         Estimating children times
+
+
+File: gprof.info,  Node: Sampling Error,  Next: Assumptions,  Up: Inaccuracy
+
+6.1 Statistical Sampling Error
+==============================
+
+This section does not apply when profiling with the Xtensa ISS.  The
+ISS collects profile data continuously--there is no sampling involved.
+For hardware profiling, you can control the sampling errors to some
+extent by adjusting the sampling frequency with the
+`xt_profile_set_frequency' function.  See the `Xtensa Software
+Development Toolkit User's Guide' for more information on hardware
+profiling.
+
+The run-time figures that `gprof' gives you are based on a sampling
+process, so they are subject to statistical inaccuracy.  If a function
+runs only a small amount of time, so that on the average the sampling
+process ought to catch that function in the act only once, there is a
+pretty good chance it will actually find that function zero times, or
+twice.
+
+   By contrast, the number-of-calls and basic-block figures are derived
+by counting, not sampling.  They are completely accurate and will not
+vary from run to run if your program is deterministic.
+
+   The "sampling period" that is printed at the beginning of the flat
+profile says how often samples are taken.  The rule of thumb is that a
+run-time figure is accurate if it is considerably bigger than the
+sampling period.
+
+   The actual amount of error can be predicted.  For N samples, the
+_expected_ error is the square-root of N.  For example, if the sampling
+period is 0.01 seconds and `foo''s run-time is 1 second, N is 100
+samples (1 second/0.01 seconds), sqrt(N) is 10 samples, so the expected
+error in `foo''s run-time is 0.1 seconds (10*0.01 seconds), or ten
+percent of the observed value.  Again, if the sampling period is 0.01
+seconds and `bar''s run-time is 100 seconds, N is 10000 samples,
+sqrt(N) is 100 samples, so the expected error in `bar''s run-time is 1
+second, or one percent of the observed value.  It is likely to vary
+this much _on the average_ from one profiling run to the next.
+(_Sometimes_ it will vary more.)
+
+   This does not mean that a small run-time figure is devoid of
+information.  If the program's _total_ run-time is large, a small
+run-time for one function does tell you that that function used an
+insignificant fraction of the whole program's time.  Usually this means
+it is not worth optimizing.
+
+   One way to get more accuracy is to give your program more (but
+similar) input data so it will take longer.  Another way is to combine
+the data from several runs, using the `-s' option of `gprof'.  Here is
+how:
+
+  1. Run your program once.
+
+  2. Issue the command `mv gmon.out gmon.sum'.
+
+  3. Run your program again, the same as before.
+
+  4. Merge the new data in `gmon.out' into `gmon.sum' with this command:
+
+          xt-gprof -s EXECUTABLE-FILE gmon.out gmon.sum
+
+  5. Repeat the last two steps as often as you wish.
+
+  6. Analyze the cumulative data using this command:
+
+          xtgprof EXECUTABLE-FILE gmon.sum > OUTPUT-FILE
+
+
+File: gprof.info,  Node: Assumptions,  Prev: Sampling Error,  Up: Inaccuracy
+
+6.2 Estimating `children' Times
+===============================
+
+Some of the figures in the call graph are estimates--for example, the
+`children' time values and all the time figures in caller and
+subroutine lines.
+
+   There is no direct information about these measurements in the
+profile data itself.  Instead, `gprof' estimates them by making an
+assumption about your program that might or might not be true.
+
+   The assumption made is that the average time spent in each call to
+any function `foo' is not correlated with who called `foo'.  If `foo'
+used 5 seconds in all, and 2/5 of the calls to `foo' came from `a',
+then `foo' contributes 2 seconds to `a''s `children' time, by
+assumption.
+
+   This assumption is usually true enough, but for some programs it is
+far from true.  Suppose that `foo' returns very quickly when its
+argument is zero; suppose that `a' always passes zero as an argument,
+while other callers of `foo' pass other arguments.  In this program,
+all the time spent in `foo' is in the calls from callers other than `a'.
+But `gprof' has no way of knowing this; it will blindly and incorrectly
+charge 2 seconds of time in `foo' to the children of `a'.
+
+
+File: gprof.info,  Node: GNU Free Documentation License,  Next: History,  Prev: Inaccuracy,  Up: Top
+
+Appendix A GNU Free Documentation License
+*****************************************
+
+                     Version 1.3, 3 November 2008
+
+     Copyright (C) 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     `http://fsf.org/'
+
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+
+  0. PREAMBLE
+
+     The purpose of this License is to make a manual, textbook, or other
+     functional and useful document "free" in the sense of freedom: to
+     assure everyone the effective freedom to copy and redistribute it,
+     with or without modifying it, either commercially or
+     noncommercially.  Secondarily, this License preserves for the
+     author and publisher a way to get credit for their work, while not
+     being considered responsible for modifications made by others.
+
+     This License is a kind of "copyleft", which means that derivative
+     works of the document must themselves be free in the same sense.
+     It complements the GNU General Public License, which is a copyleft
+     license designed for free software.
+
+     We have designed this License in order to use it for manuals for
+     free software, because free software needs free documentation: a
+     free program should come with manuals providing the same freedoms
+     that the software does.  But this License is not limited to
+     software manuals; it can be used for any textual work, regardless
+     of subject matter or whether it is published as a printed book.
+     We recommend this License principally for works whose purpose is
+     instruction or reference.
+
+  1. APPLICABILITY AND DEFINITIONS
+
+     This License applies to any manual or other work, in any medium,
+     that contains a notice placed by the copyright holder saying it
+     can be distributed under the terms of this License.  Such a notice
+     grants a world-wide, royalty-free license, unlimited in duration,
+     to use that work under the conditions stated herein.  The
+     "Document", below, refers to any such manual or work.  Any member
+     of the public is a licensee, and is addressed as "you".  You
+     accept the license if you copy, modify or distribute the work in a
+     way requiring permission under copyright law.
+
+     A "Modified Version" of the Document means any work containing the
+     Document or a portion of it, either copied verbatim, or with
+     modifications and/or translated into another language.
+
+     A "Secondary Section" is a named appendix or a front-matter section
+     of the Document that deals exclusively with the relationship of the
+     publishers or authors of the Document to the Document's overall
+     subject (or to related matters) and contains nothing that could
+     fall directly within that overall subject.  (Thus, if the Document
+     is in part a textbook of mathematics, a Secondary Section may not
+     explain any mathematics.)  The relationship could be a matter of
+     historical connection with the subject or with related matters, or
+     of legal, commercial, philosophical, ethical or political position
+     regarding them.
+
+     The "Invariant Sections" are certain Secondary Sections whose
+     titles are designated, as being those of Invariant Sections, in
+     the notice that says that the Document is released under this
+     License.  If a section does not fit the above definition of
+     Secondary then it is not allowed to be designated as Invariant.
+     The Document may contain zero Invariant Sections.  If the Document
+     does not identify any Invariant Sections then there are none.
+
+     The "Cover Texts" are certain short passages of text that are
+     listed, as Front-Cover Texts or Back-Cover Texts, in the notice
+     that says that the Document is released under this License.  A
+     Front-Cover Text may be at most 5 words, and a Back-Cover Text may
+     be at most 25 words.
+
+     A "Transparent" copy of the Document means a machine-readable copy,
+     represented in a format whose specification is available to the
+     general public, that is suitable for revising the document
+     straightforwardly with generic text editors or (for images
+     composed of pixels) generic paint programs or (for drawings) some
+     widely available drawing editor, and that is suitable for input to
+     text formatters or for automatic translation to a variety of
+     formats suitable for input to text formatters.  A copy made in an
+     otherwise Transparent file format whose markup, or absence of
+     markup, has been arranged to thwart or discourage subsequent
+     modification by readers is not Transparent.  An image format is
+     not Transparent if used for any substantial amount of text.  A
+     copy that is not "Transparent" is called "Opaque".
+
+     Examples of suitable formats for Transparent copies include plain
+     ASCII without markup, Texinfo input format, LaTeX input format,
+     SGML or XML using a publicly available DTD, and
+     standard-conforming simple HTML, PostScript or PDF designed for
+     human modification.  Examples of transparent image formats include
+     PNG, XCF and JPG.  Opaque formats include proprietary formats that
+     can be read and edited only by proprietary word processors, SGML or
+     XML for which the DTD and/or processing tools are not generally
+     available, and the machine-generated HTML, PostScript or PDF
+     produced by some word processors for output purposes only.
+
+     The "Title Page" means, for a printed book, the title page itself,
+     plus such following pages as are needed to hold, legibly, the
+     material this License requires to appear in the title page.  For
+     works in formats which do not have any title page as such, "Title
+     Page" means the text near the most prominent appearance of the
+     work's title, preceding the beginning of the body of the text.
+
+     The "publisher" means any person or entity that distributes copies
+     of the Document to the public.
+
+     A section "Entitled XYZ" means a named subunit of the Document
+     whose title either is precisely XYZ or contains XYZ in parentheses
+     following text that translates XYZ in another language.  (Here XYZ
+     stands for a specific section name mentioned below, such as
+     "Acknowledgements", "Dedications", "Endorsements", or "History".)
+     To "Preserve the Title" of such a section when you modify the
+     Document means that it remains a section "Entitled XYZ" according
+     to this definition.
+
+     The Document may include Warranty Disclaimers next to the notice
+     which states that this License applies to the Document.  These
+     Warranty Disclaimers are considered to be included by reference in
+     this License, but only as regards disclaiming warranties: any other
+     implication that these Warranty Disclaimers may have is void and
+     has no effect on the meaning of this License.
+
+  2. VERBATIM COPYING
+
+     You may copy and distribute the Document in any medium, either
+     commercially or noncommercially, provided that this License, the
+     copyright notices, and the license notice saying this License
+     applies to the Document are reproduced in all copies, and that you
+     add no other conditions whatsoever to those of this License.  You
+     may not use technical measures to obstruct or control the reading
+     or further copying of the copies you make or distribute.  However,
+     you may accept compensation in exchange for copies.  If you
+     distribute a large enough number of copies you must also follow
+     the conditions in section 3.
+
+     You may also lend copies, under the same conditions stated above,
+     and you may publicly display copies.
+
+  3. COPYING IN QUANTITY
+
+     If you publish printed copies (or copies in media that commonly
+     have printed covers) of the Document, numbering more than 100, and
+     the Document's license notice requires Cover Texts, you must
+     enclose the copies in covers that carry, clearly and legibly, all
+     these Cover Texts: Front-Cover Texts on the front cover, and
+     Back-Cover Texts on the back cover.  Both covers must also clearly
+     and legibly identify you as the publisher of these copies.  The
+     front cover must present the full title with all words of the
+     title equally prominent and visible.  You may add other material
+     on the covers in addition.  Copying with changes limited to the
+     covers, as long as they preserve the title of the Document and
+     satisfy these conditions, can be treated as verbatim copying in
+     other respects.
+
+     If the required texts for either cover are too voluminous to fit
+     legibly, you should put the first ones listed (as many as fit
+     reasonably) on the actual cover, and continue the rest onto
+     adjacent pages.
+
+     If you publish or distribute Opaque copies of the Document
+     numbering more than 100, you must either include a
+     machine-readable Transparent copy along with each Opaque copy, or
+     state in or with each Opaque copy a computer-network location from
+     which the general network-using public has access to download
+     using public-standard network protocols a complete Transparent
+     copy of the Document, free of added material.  If you use the
+     latter option, you must take reasonably prudent steps, when you
+     begin distribution of Opaque copies in quantity, to ensure that
+     this Transparent copy will remain thus accessible at the stated
+     location until at least one year after the last time you
+     distribute an Opaque copy (directly or through your agents or
+     retailers) of that edition to the public.
+
+     It is requested, but not required, that you contact the authors of
+     the Document well before redistributing any large number of
+     copies, to give them a chance to provide you with an updated
+     version of the Document.
+
+  4. MODIFICATIONS
+
+     You may copy and distribute a Modified Version of the Document
+     under the conditions of sections 2 and 3 above, provided that you
+     release the Modified Version under precisely this License, with
+     the Modified Version filling the role of the Document, thus
+     licensing distribution and modification of the Modified Version to
+     whoever possesses a copy of it.  In addition, you must do these
+     things in the Modified Version:
+
+       A. Use in the Title Page (and on the covers, if any) a title
+          distinct from that of the Document, and from those of
+          previous versions (which should, if there were any, be listed
+          in the History section of the Document).  You may use the
+          same title as a previous version if the original publisher of
+          that version gives permission.
+
+       B. List on the Title Page, as authors, one or more persons or
+          entities responsible for authorship of the modifications in
+          the Modified Version, together with at least five of the
+          principal authors of the Document (all of its principal
+          authors, if it has fewer than five), unless they release you
+          from this requirement.
+
+       C. State on the Title page the name of the publisher of the
+          Modified Version, as the publisher.
+
+       D. Preserve all the copyright notices of the Document.
+
+       E. Add an appropriate copyright notice for your modifications
+          adjacent to the other copyright notices.
+
+       F. Include, immediately after the copyright notices, a license
+          notice giving the public permission to use the Modified
+          Version under the terms of this License, in the form shown in
+          the Addendum below.
+
+       G. Preserve in that license notice the full lists of Invariant
+          Sections and required Cover Texts given in the Document's
+          license notice.
+
+       H. Include an unaltered copy of this License.
+
+       I. Preserve the section Entitled "History", Preserve its Title,
+          and add to it an item stating at least the title, year, new
+          authors, and publisher of the Modified Version as given on
+          the Title Page.  If there is no section Entitled "History" in
+          the Document, create one stating the title, year, authors,
+          and publisher of the Document as given on its Title Page,
+          then add an item describing the Modified Version as stated in
+          the previous sentence.
+
+       J. Preserve the network location, if any, given in the Document
+          for public access to a Transparent copy of the Document, and
+          likewise the network locations given in the Document for
+          previous versions it was based on.  These may be placed in
+          the "History" section.  You may omit a network location for a
+          work that was published at least four years before the
+          Document itself, or if the original publisher of the version
+          it refers to gives permission.
+
+       K. For any section Entitled "Acknowledgements" or "Dedications",
+          Preserve the Title of the section, and preserve in the
+          section all the substance and tone of each of the contributor
+          acknowledgements and/or dedications given therein.
+
+       L. Preserve all the Invariant Sections of the Document,
+          unaltered in their text and in their titles.  Section numbers
+          or the equivalent are not considered part of the section
+          titles.
+
+       M. Delete any section Entitled "Endorsements".  Such a section
+          may not be included in the Modified Version.
+
+       N. Do not retitle any existing section to be Entitled
+          "Endorsements" or to conflict in title with any Invariant
+          Section.
+
+       O. Preserve any Warranty Disclaimers.
+
+     If the Modified Version includes new front-matter sections or
+     appendices that qualify as Secondary Sections and contain no
+     material copied from the Document, you may at your option
+     designate some or all of these sections as invariant.  To do this,
+     add their titles to the list of Invariant Sections in the Modified
+     Version's license notice.  These titles must be distinct from any
+     other section titles.
+
+     You may add a section Entitled "Endorsements", provided it contains
+     nothing but endorsements of your Modified Version by various
+     parties--for example, statements of peer review or that the text
+     has been approved by an organization as the authoritative
+     definition of a standard.
+
+     You may add a passage of up to five words as a Front-Cover Text,
+     and a passage of up to 25 words as a Back-Cover Text, to the end
+     of the list of Cover Texts in the Modified Version.  Only one
+     passage of Front-Cover Text and one of Back-Cover Text may be
+     added by (or through arrangements made by) any one entity.  If the
+     Document already includes a cover text for the same cover,
+     previously added by you or by arrangement made by the same entity
+     you are acting on behalf of, you may not add another; but you may
+     replace the old one, on explicit permission from the previous
+     publisher that added the old one.
+
+     The author(s) and publisher(s) of the Document do not by this
+     License give permission to use their names for publicity for or to
+     assert or imply endorsement of any Modified Version.
+
+  5. COMBINING DOCUMENTS
+
+     You may combine the Document with other documents released under
+     this License, under the terms defined in section 4 above for
+     modified versions, provided that you include in the combination
+     all of the Invariant Sections of all of the original documents,
+     unmodified, and list them all as Invariant Sections of your
+     combined work in its license notice, and that you preserve all
+     their Warranty Disclaimers.
+
+     The combined work need only contain one copy of this License, and
+     multiple identical Invariant Sections may be replaced with a single
+     copy.  If there are multiple Invariant Sections with the same name
+     but different contents, make the title of each such section unique
+     by adding at the end of it, in parentheses, the name of the
+     original author or publisher of that section if known, or else a
+     unique number.  Make the same adjustment to the section titles in
+     the list of Invariant Sections in the license notice of the
+     combined work.
+
+     In the combination, you must combine any sections Entitled
+     "History" in the various original documents, forming one section
+     Entitled "History"; likewise combine any sections Entitled
+     "Acknowledgements", and any sections Entitled "Dedications".  You
+     must delete all sections Entitled "Endorsements."
+
+  6. COLLECTIONS OF DOCUMENTS
+
+     You may make a collection consisting of the Document and other
+     documents released under this License, and replace the individual
+     copies of this License in the various documents with a single copy
+     that is included in the collection, provided that you follow the
+     rules of this License for verbatim copying of each of the
+     documents in all other respects.
+
+     You may extract a single document from such a collection, and
+     distribute it individually under this License, provided you insert
+     a copy of this License into the extracted document, and follow
+     this License in all other respects regarding verbatim copying of
+     that document.
+
+  7. AGGREGATION WITH INDEPENDENT WORKS
+
+     A compilation of the Document or its derivatives with other
+     separate and independent documents or works, in or on a volume of
+     a storage or distribution medium, is called an "aggregate" if the
+     copyright resulting from the compilation is not used to limit the
+     legal rights of the compilation's users beyond what the individual
+     works permit.  When the Document is included in an aggregate, this
+     License does not apply to the other works in the aggregate which
+     are not themselves derivative works of the Document.
+
+     If the Cover Text requirement of section 3 is applicable to these
+     copies of the Document, then if the Document is less than one half
+     of the entire aggregate, the Document's Cover Texts may be placed
+     on covers that bracket the Document within the aggregate, or the
+     electronic equivalent of covers if the Document is in electronic
+     form.  Otherwise they must appear on printed covers that bracket
+     the whole aggregate.
+
+  8. TRANSLATION
+
+     Translation is considered a kind of modification, so you may
+     distribute translations of the Document under the terms of section
+     4.  Replacing Invariant Sections with translations requires special
+     permission from their copyright holders, but you may include
+     translations of some or all Invariant Sections in addition to the
+     original versions of these Invariant Sections.  You may include a
+     translation of this License, and all the license notices in the
+     Document, and any Warranty Disclaimers, provided that you also
+     include the original English version of this License and the
+     original versions of those notices and disclaimers.  In case of a
+     disagreement between the translation and the original version of
+     this License or a notice or disclaimer, the original version will
+     prevail.
+
+     If a section in the Document is Entitled "Acknowledgements",
+     "Dedications", or "History", the requirement (section 4) to
+     Preserve its Title (section 1) will typically require changing the
+     actual title.
+
+  9. TERMINATION
+
+     You may not copy, modify, sublicense, or distribute the Document
+     except as expressly provided under this License.  Any attempt
+     otherwise to copy, modify, sublicense, or distribute it is void,
+     and will automatically terminate your rights under this License.
+
+     However, if you cease all violation of this License, then your
+     license from a particular copyright holder is reinstated (a)
+     provisionally, unless and until the copyright holder explicitly
+     and finally terminates your license, and (b) permanently, if the
+     copyright holder fails to notify you of the violation by some
+     reasonable means prior to 60 days after the cessation.
+
+     Moreover, your license from a particular copyright holder is
+     reinstated permanently if the copyright holder notifies you of the
+     violation by some reasonable means, this is the first time you have
+     received notice of violation of this License (for any work) from
+     that copyright holder, and you cure the violation prior to 30 days
+     after your receipt of the notice.
+
+     Termination of your rights under this section does not terminate
+     the licenses of parties who have received copies or rights from
+     you under this License.  If your rights have been terminated and
+     not permanently reinstated, receipt of a copy of some or all of
+     the same material does not give you any rights to use it.
+
+ 10. FUTURE REVISIONS OF THIS LICENSE
+
+     The Free Software Foundation may publish new, revised versions of
+     the GNU Free Documentation License from time to time.  Such new
+     versions will be similar in spirit to the present version, but may
+     differ in detail to address new problems or concerns.  See
+     `http://www.gnu.org/copyleft/'.
+
+     Each version of the License is given a distinguishing version
+     number.  If the Document specifies that a particular numbered
+     version of this License "or any later version" applies to it, you
+     have the option of following the terms and conditions either of
+     that specified version or of any later version that has been
+     published (not as a draft) by the Free Software Foundation.  If
+     the Document does not specify a version number of this License,
+     you may choose any version ever published (not as a draft) by the
+     Free Software Foundation.  If the Document specifies that a proxy
+     can decide which future versions of this License can be used, that
+     proxy's public statement of acceptance of a version permanently
+     authorizes you to choose that version for the Document.
+
+ 11. RELICENSING
+
+     "Massive Multiauthor Collaboration Site" (or "MMC Site") means any
+     World Wide Web server that publishes copyrightable works and also
+     provides prominent facilities for anybody to edit those works.  A
+     public wiki that anybody can edit is an example of such a server.
+     A "Massive Multiauthor Collaboration" (or "MMC") contained in the
+     site means any set of copyrightable works thus published on the MMC
+     site.
+
+     "CC-BY-SA" means the Creative Commons Attribution-Share Alike 3.0
+     license published by Creative Commons Corporation, a not-for-profit
+     corporation with a principal place of business in San Francisco,
+     California, as well as future copyleft versions of that license
+     published by that same organization.
+
+     "Incorporate" means to publish or republish a Document, in whole or
+     in part, as part of another Document.
+
+     An MMC is "eligible for relicensing" if it is licensed under this
+     License, and if all works that were first published under this
+     License somewhere other than this MMC, and subsequently
+     incorporated in whole or in part into the MMC, (1) had no cover
+     texts or invariant sections, and (2) were thus incorporated prior
+     to November 1, 2008.
+
+     The operator of an MMC Site may republish an MMC contained in the
+     site under CC-BY-SA on the same site at any time before August 1,
+     2009, provided the MMC is eligible for relicensing.
+
+
+ADDENDUM: How to use this License for your documents
+====================================================
+
+To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and license
+notices just after the title page:
+
+       Copyright (C)  YEAR  YOUR NAME.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+
+   If you have Invariant Sections, Front-Cover Texts and Back-Cover
+Texts, replace the "with...Texts." line with this:
+
+         with the Invariant Sections being LIST THEIR TITLES, with
+         the Front-Cover Texts being LIST, and with the Back-Cover Texts
+         being LIST.
+
+   If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License, to
+permit their use in free software.
+
+
+File: gprof.info,  Node: History,  Prev: GNU Free Documentation License,  Up: Top
+
+Appendix B History
+******************
+
+The original version of this document, entitled "GNU gprof, the GNU
+Profiler", was written by Jay Fenlason and Richard Stallman.  The
+version for `gprof' 2.18 was released in 2007 and published by the Free
+Software Foundation.
+
+   Tensilica, Inc. changed the title to "GNU Profiler User's Guide" and
+modified the document to include features specific to Xtensa processors.
+The revised document was published by Tensilica, Inc. on the date shown
+in the inside cover page.  The TeXinfo source files for this modified
+document are available from `http://www.tensilica.com/gnudocs'.
+
+
+
+Tag Table:
+Node: Top1984
+Node: Revisions3130
+Node: Introduction3427
+Node: Compiling8529
+Node: Executing11617
+Node: Xtensa ISS12401
+Node: Xtensa Hardware15006
+Node: Invoking15795
+Node: Output Options17080
+Node: Analysis Options24268
+Node: Miscellaneous Options29187
+Node: Symspecs30390
+Node: Output32219
+Node: Flat Profile33326
+Node: Call Graph38528
+Node: Primary42128
+Node: Callers44722
+Node: Subroutines46855
+Node: Cycles48710
+Node: Line-by-line55647
+Node: Annotated Source59782
+Node: Other Events62835
+Node: Inaccuracy64272
+Node: Sampling Error64551
+Node: Assumptions67528
+Node: GNU Free Documentation License68783
+Node: History93948
+
+End Tag Table

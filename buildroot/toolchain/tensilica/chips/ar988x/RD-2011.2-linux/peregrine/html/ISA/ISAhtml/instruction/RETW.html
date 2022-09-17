@@ -1,0 +1,369 @@
+<html>
+  <head>
+    <title>
+      RETW - Windowed Return
+    </title>
+    <style type="text/css">
+      <!--
+	body {
+		background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+		margin-left: 2em;
+		margin-right: 2em;
+	}
+	#boundingbox {
+	        background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+	        position: relative;
+	        width: 865px;
+	        margin: 0 auto;
+	        padding: 20px;
+	        border-style: dashed;
+	        border-width: 1px;
+	        border-spacing: 10px;
+	        border-collapse: separate;
+	}
+	a {
+		text-decoration: none;
+	}
+	a:visited {
+		color: blue;
+	}
+	a:link {
+		color: green;
+	}
+	a:active {
+		color: green;
+	}
+	a:hover {
+		color: green;
+	}
+	a:offsite {
+		color: green;
+	}
+	h1 {
+		font-size: 14pt;
+		font-weight: bold;
+	}
+	h1.center {
+		font-size: 14pt;
+		font-weight: bold;
+	        text-align: center;
+	}
+	h2 {
+		font-size: 12pt;
+	}
+	caption {
+		padding-top: 1em;
+	}
+	table.thin {
+		border-width: thin;
+		border-spacing: 0px;
+		border-style: inset;
+		border-color: gray;
+		border-collapse: collapse;
+		background-color: rgb(250, 240, 230);
+	}
+	table th.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table th.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	pre {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	}
+	.proto {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 1em;
+	        text-indent: -1em;
+	}
+	.protohead {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 2em;
+	        text-indent: -2em;
+	}
+	.protobody {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 4em;
+	        text-indent: -2em;
+	}
+	.rotate {
+	        display: block;
+	        -webkit-transform: rotate(-90deg); 
+	        -moz-transform: rotate(-90deg);
+	        filter:
+	progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	        padding-top: 20px;                       
+	}
+	.light {
+	        font-size: 75%;
+	        color: SlateGrey;
+	}
+	
+        -->
+    </style>
+  </head>
+  <body>
+    <h1>
+      RETW &#8212; Windowed Return
+    </h1>
+    <h2>
+      Instruction Word
+    </h2>
+    <table frame="void" rules="groups" cellspacing=0 cellpadding=0>
+      <caption>x24 : x24_Inst_0</caption>
+      <colgroup colspan=12>
+	<col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=4>
+	<col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=8>
+	<col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <thead>
+	<tr>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>2
+	    3</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>1
+	    2</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>1
+	    1</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>8</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>7</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>0</small>
+	  </td>
+	</tr>
+      </thead>
+      <tfoot>
+	<tr>
+	  <td colspan=12 width=396 align="center">
+	    <small>12</small>
+	  </td>
+	  <td colspan=4 width=132 align="center">
+	    <small>4</small>
+	  </td>
+	  <td colspan=8 width=264 align="center">
+	    <small>8</small>
+	  </td>
+	</tr>
+      </tfoot>
+      <tbody>
+	<tr>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td colspan=4 width=132 align="center" bgcolor="#FFE4E1">
+	    0 0 0 0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <h2>
+      Assembler Syntax
+    </h2>
+    <p>
+      <code>RETW</code><br>
+
+    </p>
+    <h2>
+      Description
+    </h2>
+    <p><small>(please consult the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for any cross references and additional information)</small></p><P><code>RETW</code> returns from a subroutine called by <code>CALL4</code>, <code>CALL8</code>, <code>CALL12</code>, <code>CALLX4</code>, <code>CALLX8</code>, or <code>CALLX12</code>, and that had <code>ENTRY</code> as its first instruction.</P><P><code>RETW</code> uses bits <code>29..0</code> of address register <code>a0</code> as the low 30 bits of the return address and bits <code>31..30</code> of the address of the <code>RETW</code> as the high two bits of the return address. Bits <code>31..30</code> of <code>a0</code> are used as the caller"s window increment.</P><P><code>RETW</code> subtracts the window increment from <code>WindowBase</code> to return to the caller"s registers. It then checks the <code>WindowStart</code> bit for this <code>WindowBase</code>. If it is set, then the caller"s registers still reside in the register file, and <code>RETW</code> completes by jumping to the return address. If the <code>WindowStart</code> bit is clear, then the caller"s registers have been stored into the stack, so <code>RETW</code> signals one of Window Underflow"s 4, 8, or 12, based on the size of the caller"s window increment. The underflow handler is invoked with <code>WindowBase </code>decremented, a minor exception to the rule that instructions aborted by an exception have no side effects to the operating state of the processor. The processor stores the previous value of <code>WindowBase</code> in <code>PS.OWB</code> so that it can be restored by <code>RFWU</code>.</P><P>The window underflow handler is expected to restore the caller"s registers, set the caller"s <code>WindowStart</code> bit, and then return<code> </code>(see <code>RFWU</code>) to re-execute the <code>RETW</code>, which will then complete.</P><P>The operation of this instruction is undefined if <code>AR[0]</code><SUB>31..30</SUB> is <code>02</code>, if <code>PS.WOE</code> is <code>0</code>, if <code>PS.EXCM</code> is <code>1</code>, or if any of <code>WindowStart</code><SUB>WindowBase</SUB><code>&#8722;</code><SUB>n</SUB><code>+</code><SUB>1..WindowBase</SUB> are set, where <code>n</code> is <code>AR[0]</code><SUB>31..30</SUB>. Some implementations take an illegal instruction exception in these cases as a debugging aid.</P>    <h2>Assembler Note</h2>      <P>The assembler may convert <code>RETW</code> instructions to <code>RETW.N</code> when the Code Density Option is enabled. Prefixing the <code>RETW</code> instruction with an underscore (<code>_RETW</code>) disables this optimization and forces the assembler to generate the wide form of the instruction.</P>    <h2>Operation</h2>      <pre>
+n &#8592; AR[0]<SUB>31..30</SUB>
+nextPC &#8592; PC<SUB>31..30</SUB> || AR[0]<SUB>29..0</SUB>
+owb &#8592; WindowBase
+m &#8592; if WindowStart<SUB>WindowBase-4"b0001 </SUB>then 2"b01
+ elsif WindowStart<SUB>WindowBase-4"b0010 </SUB>then 2"b10
+ elsif WindowStart<SUB>WindowBase-4"b0011 </SUB>then 2"b11
+ else 2"b00
+if n=2"b00 | (m&#8800;2"b00 &amp; m&#8800;n) | PS.WOE=0 | PS.EXCM=1 then
+	-- undefined operation
+	-- may take illegal instruction exception
+else
+	WindowBase &#8592; WindowBase &#8722; (0<SUP>2</SUP>||n)
+	if WindowStart<SUB>WindowBase</SUB> &#8800; 0 then
+		WindowStart<SUB>owb</SUB> &#8592; 0
+	else
+		-- Underflow exception
+		PS.EXCM &#8592; 1
+		EPC[1] &#8592; PC
+		PS.OWB &#8592; owb
+		nextPC &#8592; if n = 2"b01 then WindowUnderflow4
+			else if n = 2"b10 then WindowUnderflow8
+			else WindowUnderflow12
+	endif
+endif</pre>    <h2>Exceptions</h2>      <LI>EveryInst Group (see the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for more information)</LI><LI>WindowUnderExcep if Windowed Register Option</LI>
+    <h2>
+      Implementation Pipeline
+    </h2>
+    <table class="thin">
+      <thead>
+	<tr>
+	  <th align="left" class="thin">
+	    In
+	  </th>
+	  <th align="left" class="thin">
+	    Out
+	  </th>
+	</tr>
+      </thead>
+      <tbody>
+	<tr>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Rstage</code>, <code>WindowStart&nbsp;Rstage</code>,
+	    <code>PSEXCM&nbsp;Rstage</code>, <code>PSWOE&nbsp;Rstage</code>, <code>ars&nbsp;Estage</code>
+	  </td>
+	  <td class="thin">
+	    <code>WindowBase&nbsp;Estage</code>, <code>WindowStart&nbsp;Estage</code>
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <h2>
+      Protos that use RETW
+    </h2>
+    <div>
+      <div class=protohead>proto <a href=../protos.html#RETW>RETW</a> {
+      }{}{</div><div class=protobody><a href=RETW.html>RETW</a>;</div><div
+      class=protohead>}</div>
+    </div>
+  </body>
+</html>

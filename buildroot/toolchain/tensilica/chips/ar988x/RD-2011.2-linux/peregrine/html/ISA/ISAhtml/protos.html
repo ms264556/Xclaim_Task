@@ -1,0 +1,1967 @@
+<html>
+  <head>
+    <title>
+      Protos
+    </title>
+    <style type="text/css">
+      <!--
+	body {
+		background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+		margin-left: 2em;
+		margin-right: 2em;
+	}
+	#boundingbox {
+	        background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+	        position: relative;
+	        width: 865px;
+	        margin: 0 auto;
+	        padding: 20px;
+	        border-style: dashed;
+	        border-width: 1px;
+	        border-spacing: 10px;
+	        border-collapse: separate;
+	}
+	a {
+		text-decoration: none;
+	}
+	a:visited {
+		color: blue;
+	}
+	a:link {
+		color: green;
+	}
+	a:active {
+		color: green;
+	}
+	a:hover {
+		color: green;
+	}
+	a:offsite {
+		color: green;
+	}
+	h1 {
+		font-size: 14pt;
+		font-weight: bold;
+	}
+	h1.center {
+		font-size: 14pt;
+		font-weight: bold;
+	        text-align: center;
+	}
+	h2 {
+		font-size: 12pt;
+	}
+	caption {
+		padding-top: 1em;
+	}
+	table.thin {
+		border-width: thin;
+		border-spacing: 0px;
+		border-style: inset;
+		border-color: gray;
+		border-collapse: collapse;
+		background-color: rgb(250, 240, 230);
+	}
+	table th.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table th.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	pre {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	}
+	.proto {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 1em;
+	        text-indent: -1em;
+	}
+	.protohead {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 2em;
+	        text-indent: -2em;
+	}
+	.protobody {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 4em;
+	        text-indent: -2em;
+	}
+	.rotate {
+	        display: block;
+	        -webkit-transform: rotate(-90deg); 
+	        -moz-transform: rotate(-90deg);
+	        filter:
+	progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	        padding-top: 20px;                       
+	}
+	.light {
+	        font-size: 75%;
+	        color: SlateGrey;
+	}
+	
+        -->
+    </style>
+  </head>
+  <body>
+    <h1>
+      C-Types
+    </h1>
+    <ul>
+      <li>
+	AR Register File
+      </li>
+      <ul>
+	<li>
+	  char
+	</li>
+	<li>
+	  int
+	</li>
+	<li>
+	  int16
+	</li>
+	<li>
+	  int32
+	</li>
+	<li>
+	  int64
+	</li>
+	<li>
+	  int8
+	</li>
+	<li>
+	  short
+	</li>
+	<li>
+	  uint16
+	</li>
+	<li>
+	  uint32
+	</li>
+	<li>
+	  uint64
+	</li>
+	<li>
+	  uint8
+	</li>
+	<li>
+	  unsigned
+	</li>
+	<li>
+	  void
+	</li>
+      </ul>
+    </ul>
+    <h1>
+      All Protos
+    </h1>
+    <a name="ABS"></a>
+    <div>
+      <div class=protohead>proto ABS { out int32 r, in int32 t }{}{</div><div
+      class=protobody><a href=instruction/ABS.html>ABS</a> r, t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="ADD"></a>
+    <div>
+      <div class=protohead>proto ADD { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/ADD.html>ADD</a> r,
+      s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="ADD.N"></a>
+    <div>
+      <div class=protohead>proto ADD.N { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/ADDN.html>ADD.N</a>
+      r, s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="ADDI"></a>
+    <div>
+      <div class=protohead>proto ADDI { out int32 r, in int32 s, in immediate
+      i }{}{</div><div class=protobody><a href=instruction/ADDI.html>ADDI</a>
+      r, s, i + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="ADDI.N"></a>
+    <div>
+      <div class=protohead>proto ADDI.N { out int32 r, in int32 s, in
+      immediate i }{}{</div><div class=protobody><a
+      href=instruction/ADDIN.html>ADDI.N</a> r, s, i + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="ADDMI"></a>
+    <div>
+      <div class=protohead>proto ADDMI { out int32 r, in int32 s, in immediate
+      i }{}{</div><div class=protobody><a
+      href=instruction/ADDMI.html>ADDMI</a> r, s, i + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="ADDX2"></a>
+    <div>
+      <div class=protohead>proto ADDX2 { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/ADDX2.html>ADDX2</a>
+      r, s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="ADDX4"></a>
+    <div>
+      <div class=protohead>proto ADDX4 { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/ADDX4.html>ADDX4</a>
+      r, s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="ADDX8"></a>
+    <div>
+      <div class=protohead>proto ADDX8 { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/ADDX8.html>ADDX8</a>
+      r, s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="AND"></a>
+    <div>
+      <div class=protohead>proto AND { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/AND.html>AND</a> r,
+      s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="BALL"></a>
+    <div>
+      <div class=protohead>proto BALL { in uint32 ars, in uint32 art, in void
+      * label8 }{}{</div><div class=protobody><a
+      href=instruction/BALL.html>BALL</a> ars, art, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BANY"></a>
+    <div>
+      <div class=protohead>proto BANY { in uint32 ars, in uint32 art, in void
+      * label8 }{}{</div><div class=protobody><a
+      href=instruction/BANY.html>BANY</a> ars, art, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BBC"></a>
+    <div>
+      <div class=protohead>proto BBC { in uint32 ars, in uint32 art, in void *
+      label8 }{}{</div><div class=protobody><a
+      href=instruction/BBC.html>BBC</a> ars, art, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BBCI"></a>
+    <div>
+      <div class=protohead>proto BBCI { in uint32 ars, in immediate bbi, in
+      void * label8 }{}{</div><div class=protobody><a
+      href=instruction/BBCI.html>BBCI</a> ars, bbi + 0, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BBS"></a>
+    <div>
+      <div class=protohead>proto BBS { in uint32 ars, in uint32 art, in void *
+      label8 }{}{</div><div class=protobody><a
+      href=instruction/BBS.html>BBS</a> ars, art, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BBSI"></a>
+    <div>
+      <div class=protohead>proto BBSI { in uint32 ars, in immediate bbi, in
+      void * label8 }{}{</div><div class=protobody><a
+      href=instruction/BBSI.html>BBSI</a> ars, bbi + 0, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BEQ"></a>
+    <div>
+      <div class=protohead>proto BEQ { in uint32 ars, in uint32 art, in void *
+      label8 }{}{</div><div class=protobody><a
+      href=instruction/BEQ.html>BEQ</a> ars, art, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BEQI"></a>
+    <div>
+      <div class=protohead>proto BEQI { in uint32 ars, in immediate b4const,
+      in void * label8 }{}{</div><div class=protobody><a
+      href=instruction/BEQI.html>BEQI</a> ars, b4const + 0, label8 +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BEQZ"></a>
+    <div>
+      <div class=protohead>proto BEQZ { in uint32 ars, in void * label12
+      }{}{</div><div class=protobody><a href=instruction/BEQZ.html>BEQZ</a>
+      ars, label12 + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BEQZ.N"></a>
+    <div>
+      <div class=protohead>proto BEQZ.N { in uint32 ars, in void * uimm6
+      }{}{</div><div class=protobody><a href=instruction/BEQZN.html>BEQZ.N</a>
+      ars, uimm6 + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BGE"></a>
+    <div>
+      <div class=protohead>proto BGE { in uint32 ars, in uint32 art, in void *
+      label8 }{}{</div><div class=protobody><a
+      href=instruction/BGE.html>BGE</a> ars, art, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BGEI"></a>
+    <div>
+      <div class=protohead>proto BGEI { in uint32 ars, in immediate b4const,
+      in void * label8 }{}{</div><div class=protobody><a
+      href=instruction/BGEI.html>BGEI</a> ars, b4const + 0, label8 +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BGEU"></a>
+    <div>
+      <div class=protohead>proto BGEU { in uint32 ars, in uint32 art, in void
+      * label8 }{}{</div><div class=protobody><a
+      href=instruction/BGEU.html>BGEU</a> ars, art, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BGEUI"></a>
+    <div>
+      <div class=protohead>proto BGEUI { in uint32 ars, in immediate b4constu,
+      in void * label8 }{}{</div><div class=protobody><a
+      href=instruction/BGEUI.html>BGEUI</a> ars, b4constu + 0, label8 +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BGEZ"></a>
+    <div>
+      <div class=protohead>proto BGEZ { in uint32 ars, in void * label12
+      }{}{</div><div class=protobody><a href=instruction/BGEZ.html>BGEZ</a>
+      ars, label12 + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BLT"></a>
+    <div>
+      <div class=protohead>proto BLT { in uint32 ars, in uint32 art, in void *
+      label8 }{}{</div><div class=protobody><a
+      href=instruction/BLT.html>BLT</a> ars, art, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BLTI"></a>
+    <div>
+      <div class=protohead>proto BLTI { in uint32 ars, in immediate b4const,
+      in void * label8 }{}{</div><div class=protobody><a
+      href=instruction/BLTI.html>BLTI</a> ars, b4const + 0, label8 +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BLTU"></a>
+    <div>
+      <div class=protohead>proto BLTU { in uint32 ars, in uint32 art, in void
+      * label8 }{}{</div><div class=protobody><a
+      href=instruction/BLTU.html>BLTU</a> ars, art, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BLTUI"></a>
+    <div>
+      <div class=protohead>proto BLTUI { in uint32 ars, in immediate b4constu,
+      in void * label8 }{}{</div><div class=protobody><a
+      href=instruction/BLTUI.html>BLTUI</a> ars, b4constu + 0, label8 +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BLTZ"></a>
+    <div>
+      <div class=protohead>proto BLTZ { in uint32 ars, in void * label12
+      }{}{</div><div class=protobody><a href=instruction/BLTZ.html>BLTZ</a>
+      ars, label12 + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BNALL"></a>
+    <div>
+      <div class=protohead>proto BNALL { in uint32 ars, in uint32 art, in void
+      * label8 }{}{</div><div class=protobody><a
+      href=instruction/BNALL.html>BNALL</a> ars, art, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BNE"></a>
+    <div>
+      <div class=protohead>proto BNE { in uint32 ars, in uint32 art, in void *
+      label8 }{}{</div><div class=protobody><a
+      href=instruction/BNE.html>BNE</a> ars, art, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BNEI"></a>
+    <div>
+      <div class=protohead>proto BNEI { in uint32 ars, in immediate b4const,
+      in void * label8 }{}{</div><div class=protobody><a
+      href=instruction/BNEI.html>BNEI</a> ars, b4const + 0, label8 +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BNEZ"></a>
+    <div>
+      <div class=protohead>proto BNEZ { in uint32 ars, in void * label12
+      }{}{</div><div class=protobody><a href=instruction/BNEZ.html>BNEZ</a>
+      ars, label12 + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BNEZ.N"></a>
+    <div>
+      <div class=protohead>proto BNEZ.N { in uint32 ars, in void * uimm6
+      }{}{</div><div class=protobody><a href=instruction/BNEZN.html>BNEZ.N</a>
+      ars, uimm6 + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BNONE"></a>
+    <div>
+      <div class=protohead>proto BNONE { in uint32 ars, in uint32 art, in void
+      * label8 }{}{</div><div class=protobody><a
+      href=instruction/BNONE.html>BNONE</a> ars, art, label8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="BREAK"></a>
+    <div>
+      <div class=protohead>proto BREAK { in immediate imms, in immediate immt
+      }{}{</div><div class=protobody><a href=instruction/BREAK.html>BREAK</a>
+      imms + 0, immt + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="BREAK.N"></a>
+    <div>
+      <div class=protohead>proto BREAK.N { in immediate imms }{}{</div><div
+      class=protobody><a href=instruction/BREAKN.html>BREAK.N</a> imms +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="CALL0"></a>
+    <div>
+      <div class=protohead>proto CALL0 { in void * soffsetx4 }{}{</div><div
+      class=protobody><a href=instruction/CALL0.html>CALL0</a> soffsetx4 +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="CALL12"></a>
+    <div>
+      <div class=protohead>proto CALL12 { in void * soffsetx4 }{}{</div><div
+      class=protobody><a href=instruction/CALL12.html>CALL12</a> soffsetx4 +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="CALL4"></a>
+    <div>
+      <div class=protohead>proto CALL4 { in void * soffsetx4 }{}{</div><div
+      class=protobody><a href=instruction/CALL4.html>CALL4</a> soffsetx4 +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="CALL8"></a>
+    <div>
+      <div class=protohead>proto CALL8 { in void * soffsetx4 }{}{</div><div
+      class=protobody><a href=instruction/CALL8.html>CALL8</a> soffsetx4 +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="CALLX0"></a>
+    <div>
+      <div class=protohead>proto CALLX0 { in uint32 ars }{}{</div><div
+      class=protobody><a href=instruction/CALLX0.html>CALLX0</a>
+      ars;</div><div class=protohead>}</div>
+    </div>
+    <a name="CALLX12"></a>
+    <div>
+      <div class=protohead>proto CALLX12 { in uint32 ars }{}{</div><div
+      class=protobody><a href=instruction/CALLX12.html>CALLX12</a>
+      ars;</div><div class=protohead>}</div>
+    </div>
+    <a name="CALLX4"></a>
+    <div>
+      <div class=protohead>proto CALLX4 { in uint32 ars }{}{</div><div
+      class=protobody><a href=instruction/CALLX4.html>CALLX4</a>
+      ars;</div><div class=protohead>}</div>
+    </div>
+    <a name="CALLX8"></a>
+    <div>
+      <div class=protohead>proto CALLX8 { in uint32 ars }{}{</div><div
+      class=protobody><a href=instruction/CALLX8.html>CALLX8</a>
+      ars;</div><div class=protohead>}</div>
+    </div>
+    <a name="CLAMPS"></a>
+    <div>
+      <div class=protohead>proto CLAMPS { out int32 r, in int32 s, in
+      immediate i }{}{</div><div class=protobody><a
+      href=instruction/CLAMPS.html>CLAMPS</a> r, s, i + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="DSYNC"></a>
+    <div>
+      <div class=protohead>proto DSYNC { }{}{</div><div class=protobody><a
+      href=instruction/DSYNC.html>DSYNC</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="ENTRY"></a>
+    <div>
+      <div class=protohead>proto ENTRY { inout uint32 ars, in immediate
+      uimm12x8 }{}{</div><div class=protobody><a
+      href=instruction/ENTRY.html>ENTRY</a> ars, uimm12x8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="ESYNC"></a>
+    <div>
+      <div class=protohead>proto ESYNC { }{}{</div><div class=protobody><a
+      href=instruction/ESYNC.html>ESYNC</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="EXCW"></a>
+    <div>
+      <div class=protohead>proto EXCW { }{}{</div><div class=protobody><a
+      href=instruction/EXCW.html>EXCW</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="EXTUI"></a>
+    <div>
+      <div class=protohead>proto EXTUI { out uint32 r, in uint32 t, in
+      immediate i, in immediate o }{}{</div><div class=protobody><a
+      href=instruction/EXTUI.html>EXTUI</a> r, t, i + 0, o + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="EXTW"></a>
+    <div>
+      <div class=protohead>proto EXTW { }{}{</div><div class=protobody><a
+      href=instruction/EXTW.html>EXTW</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="IDTLB"></a>
+    <div>
+      <div class=protohead>proto IDTLB { in uint32 ars }{}{</div><div
+      class=protobody><a href=instruction/IDTLB.html>IDTLB</a> ars;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="IITLB"></a>
+    <div>
+      <div class=protohead>proto IITLB { in uint32 ars }{}{</div><div
+      class=protobody><a href=instruction/IITLB.html>IITLB</a> ars;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="ILL"></a>
+    <div>
+      <div class=protohead>proto ILL { }{}{</div><div class=protobody><a
+      href=instruction/ILL.html>ILL</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="ILL.N"></a>
+    <div>
+      <div class=protohead>proto ILL.N { }{}{</div><div class=protobody><a
+      href=instruction/ILLN.html>ILL.N</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="ISYNC"></a>
+    <div>
+      <div class=protohead>proto ISYNC { }{}{</div><div class=protobody><a
+      href=instruction/ISYNC.html>ISYNC</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="J"></a>
+    <div>
+      <div class=protohead>proto J { in void * soffset }{}{</div><div
+      class=protobody><a href=instruction/J.html>J</a> soffset + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="JX"></a>
+    <div>
+      <div class=protohead>proto JX { in uint32 ars }{}{</div><div
+      class=protobody><a href=instruction/JX.html>JX</a> ars;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="L16SI"></a>
+    <div>
+      <div class=protohead>proto L16SI { out int16 r, in const int16 * p, in
+      immediate i }{}{</div><div class=protobody><a
+      href=instruction/L16SI.html>L16SI</a> r, p, i + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="L16UI"></a>
+    <div>
+      <div class=protohead>proto L16UI { out uint16 r, in const uint16 * p, in
+      immediate i }{}{</div><div class=protobody><a
+      href=instruction/L16UI.html>L16UI</a> r, p, i + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="L32E"></a>
+    <div>
+      <div class=protohead>proto L32E { out int32 t, in const int32 * s, in
+      immediate o }{}{</div><div class=protobody><a
+      href=instruction/L32E.html>L32E</a> t, s, o + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="L32I"></a>
+    <div>
+      <div class=protohead>proto L32I { out int32 r, in const int32 * p, in
+      immediate i }{}{</div><div class=protobody><a
+      href=instruction/L32I.html>L32I</a> r, p, i + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="L32I.N"></a>
+    <div>
+      <div class=protohead>proto L32I.N { out int32 t, in const int32 * p, in
+      immediate i }{}{</div><div class=protobody><a
+      href=instruction/L32IN.html>L32I.N</a> t, p, i + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="L32R"></a>
+    <div>
+      <div class=protohead>proto L32R { out int32 r, in immediate i
+      }{}{</div><div class=protobody><a href=instruction/L32R.html>L32R</a> r,
+      i + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="L8UI"></a>
+    <div>
+      <div class=protohead>proto L8UI { out uint8 r, in const uint8 * p, in
+      immediate i }{}{</div><div class=protobody><a
+      href=instruction/L8UI.html>L8UI</a> r, p, i + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="LOOP"></a>
+    <div>
+      <div class=protohead>proto LOOP { in uint32 ars, in void * ulabel8
+      }{}{</div><div class=protobody><a href=instruction/LOOP.html>LOOP</a>
+      ars, ulabel8 + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="LOOPGTZ"></a>
+    <div>
+      <div class=protohead>proto LOOPGTZ { in uint32 ars, in void * ulabel8
+      }{}{</div><div class=protobody><a
+      href=instruction/LOOPGTZ.html>LOOPGTZ</a> ars, ulabel8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="LOOPNEZ"></a>
+    <div>
+      <div class=protohead>proto LOOPNEZ { in uint32 ars, in void * ulabel8
+      }{}{</div><div class=protobody><a
+      href=instruction/LOOPNEZ.html>LOOPNEZ</a> ars, ulabel8 + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="MAX"></a>
+    <div>
+      <div class=protohead>proto MAX { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/MAX.html>MAX</a> r,
+      s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="MAXU"></a>
+    <div>
+      <div class=protohead>proto MAXU { out uint32 r, in uint32 s, in uint32 t
+      }{}{</div><div class=protobody><a href=instruction/MAXU.html>MAXU</a> r,
+      s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="MEMW"></a>
+    <div>
+      <div class=protohead>proto MEMW { }{}{</div><div class=protobody><a
+      href=instruction/MEMW.html>MEMW</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="MIN"></a>
+    <div>
+      <div class=protohead>proto MIN { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/MIN.html>MIN</a> r,
+      s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="MINU"></a>
+    <div>
+      <div class=protohead>proto MINU { out uint32 r, in uint32 s, in uint32 t
+      }{}{</div><div class=protobody><a href=instruction/MINU.html>MINU</a> r,
+      s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="MOV.N"></a>
+    <div>
+      <div class=protohead>proto MOV.N { out int32 t, in int32 s
+      }{}{</div><div class=protobody><a href=instruction/MOVN.html>MOV.N</a>
+      t, s;</div><div class=protohead>}</div>
+    </div>
+    <a name="MOVEQZ"></a>
+    <div>
+      <div class=protohead>proto MOVEQZ { inout int32 r, in int32 s, in int32
+      t }{}{</div><div class=protobody><a
+      href=instruction/MOVEQZ.html>MOVEQZ</a> r, s, t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="MOVGEZ"></a>
+    <div>
+      <div class=protohead>proto MOVGEZ { inout int32 r, in int32 s, in int32
+      t }{}{</div><div class=protobody><a
+      href=instruction/MOVGEZ.html>MOVGEZ</a> r, s, t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="MOVI"></a>
+    <div>
+      <div class=protohead>proto MOVI { out int32 t, in immediate i
+      }{}{</div><div class=protobody><a href=instruction/MOVI.html>MOVI</a> t,
+      i + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="MOVI.N"></a>
+    <div>
+      <div class=protohead>proto MOVI.N { out int32 s, in immediate i
+      }{}{</div><div class=protobody><a href=instruction/MOVIN.html>MOVI.N</a>
+      s, i + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="MOVLTZ"></a>
+    <div>
+      <div class=protohead>proto MOVLTZ { inout int32 r, in int32 s, in int32
+      t }{}{</div><div class=protobody><a
+      href=instruction/MOVLTZ.html>MOVLTZ</a> r, s, t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="MOVNEZ"></a>
+    <div>
+      <div class=protohead>proto MOVNEZ { inout int32 r, in int32 s, in int32
+      t }{}{</div><div class=protobody><a
+      href=instruction/MOVNEZ.html>MOVNEZ</a> r, s, t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="MOVSP"></a>
+    <div>
+      <div class=protohead>proto MOVSP { out int32 t, in int32 s
+      }{}{</div><div class=protobody><a href=instruction/MOVSP.html>MOVSP</a>
+      t, s;</div><div class=protohead>}</div>
+    </div>
+    <a name="MUL16S"></a>
+    <div>
+      <div class=protohead>proto MUL16S { out int32 r, in int16 s, in int16 t
+      }{}{</div><div class=protobody><a
+      href=instruction/MUL16S.html>MUL16S</a> r, s, t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="MUL16U"></a>
+    <div>
+      <div class=protohead>proto MUL16U { out uint32 r, in uint16 s, in uint16
+      t }{}{</div><div class=protobody><a
+      href=instruction/MUL16U.html>MUL16U</a> r, s, t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="MULL"></a>
+    <div>
+      <div class=protohead>proto MULL { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/MULL.html>MULL</a> r,
+      s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="MULSH"></a>
+    <div>
+      <div class=protohead>proto MULSH { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/MULSH.html>MULSH</a>
+      r, s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="MULUH"></a>
+    <div>
+      <div class=protohead>proto MULUH { out uint32 r, in uint32 s, in uint32
+      t }{}{</div><div class=protobody><a
+      href=instruction/MULUH.html>MULUH</a> r, s, t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="NEG"></a>
+    <div>
+      <div class=protohead>proto NEG { out int32 r, in int32 t }{}{</div><div
+      class=protobody><a href=instruction/NEG.html>NEG</a> r, t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="NOP"></a>
+    <div>
+      <div class=protohead>proto NOP { }{}{</div><div class=protobody><a
+      href=instruction/NOP.html>NOP</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="NOP.N"></a>
+    <div>
+      <div class=protohead>proto NOP.N { }{}{</div><div class=protobody><a
+      href=instruction/NOPN.html>NOP.N</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="NSA"></a>
+    <div>
+      <div class=protohead>proto NSA { out int32 t, in int32 s }{}{</div><div
+      class=protobody><a href=instruction/NSA.html>NSA</a> t, s;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="NSAU"></a>
+    <div>
+      <div class=protohead>proto NSAU { out uint32 t, in uint32 s
+      }{}{</div><div class=protobody><a href=instruction/NSAU.html>NSAU</a> t,
+      s;</div><div class=protohead>}</div>
+    </div>
+    <a name="OR"></a>
+    <div>
+      <div class=protohead>proto OR { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/OR.html>OR</a> r, s,
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="PDTLB"></a>
+    <div>
+      <div class=protohead>proto PDTLB { out uint32 art, in uint32 ars
+      }{}{</div><div class=protobody><a href=instruction/PDTLB.html>PDTLB</a>
+      art, ars;</div><div class=protohead>}</div>
+    </div>
+    <a name="PITLB"></a>
+    <div>
+      <div class=protohead>proto PITLB { out uint32 art, in uint32 ars
+      }{}{</div><div class=protobody><a href=instruction/PITLB.html>PITLB</a>
+      art, ars;</div><div class=protohead>}</div>
+    </div>
+    <a name="RDTLB0"></a>
+    <div>
+      <div class=protohead>proto RDTLB0 { out uint32 art, in uint32 ars
+      }{}{</div><div class=protobody><a
+      href=instruction/RDTLB0.html>RDTLB0</a> art, ars;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="RDTLB1"></a>
+    <div>
+      <div class=protohead>proto RDTLB1 { out uint32 art, in uint32 ars
+      }{}{</div><div class=protobody><a
+      href=instruction/RDTLB1.html>RDTLB1</a> art, ars;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="RET"></a>
+    <div>
+      <div class=protohead>proto RET { }{}{</div><div class=protobody><a
+      href=instruction/RET.html>RET</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="RET.N"></a>
+    <div>
+      <div class=protohead>proto RET.N { }{}{</div><div class=protobody><a
+      href=instruction/RETN.html>RET.N</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="RETW"></a>
+    <div>
+      <div class=protohead>proto RETW { }{}{</div><div class=protobody><a
+      href=instruction/RETW.html>RETW</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="RETW.N"></a>
+    <div>
+      <div class=protohead>proto RETW.N { }{}{</div><div class=protobody><a
+      href=instruction/RETWN.html>RETW.N</a>;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="RFDD"></a>
+    <div>
+      <div class=protohead>proto RFDD { }{}{</div><div class=protobody><a
+      href=instruction/RFDD.html>RFDD</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="RFDE"></a>
+    <div>
+      <div class=protohead>proto RFDE { }{}{</div><div class=protobody><a
+      href=instruction/RFDE.html>RFDE</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="RFDO"></a>
+    <div>
+      <div class=protohead>proto RFDO { in immediate imms }{}{</div><div
+      class=protobody><a href=instruction/RFDO.html>RFDO</a> imms +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="RFE"></a>
+    <div>
+      <div class=protohead>proto RFE { }{}{</div><div class=protobody><a
+      href=instruction/RFE.html>RFE</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="RFI"></a>
+    <div>
+      <div class=protohead>proto RFI { in immediate s }{}{</div><div
+      class=protobody><a href=instruction/RFI.html>RFI</a> s + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="RFWO"></a>
+    <div>
+      <div class=protohead>proto RFWO { }{}{</div><div class=protobody><a
+      href=instruction/RFWO.html>RFWO</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="RFWU"></a>
+    <div>
+      <div class=protohead>proto RFWU { }{}{</div><div class=protobody><a
+      href=instruction/RFWU.html>RFWU</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="RITLB0"></a>
+    <div>
+      <div class=protohead>proto RITLB0 { out uint32 art, in uint32 ars
+      }{}{</div><div class=protobody><a
+      href=instruction/RITLB0.html>RITLB0</a> art, ars;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="RITLB1"></a>
+    <div>
+      <div class=protohead>proto RITLB1 { out uint32 art, in uint32 ars
+      }{}{</div><div class=protobody><a
+      href=instruction/RITLB1.html>RITLB1</a> art, ars;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="ROTW"></a>
+    <div>
+      <div class=protohead>proto ROTW { in immediate simm4 }{}{</div><div
+      class=protobody><a href=instruction/ROTW.html>ROTW</a> simm4 +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSIL"></a>
+    <div>
+      <div class=protohead>proto RSIL { out int32 s, in immediate t
+      }{}{</div><div class=protobody><a href=instruction/RSIL.html>RSIL</a> s,
+      t + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.CCOMPARE0"></a>
+    <div>
+      <div class=protohead>proto RSR.CCOMPARE0 { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRCCOMPARE0.html>RSR.CCOMPARE0</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.CCOUNT"></a>
+    <div>
+      <div class=protohead>proto RSR.CCOUNT { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRCCOUNT.html>RSR.CCOUNT</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.CONFIGID0"></a>
+    <div>
+      <div class=protohead>proto RSR.CONFIGID0 { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRCONFIGID0.html>RSR.CONFIGID0</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.CONFIGID1"></a>
+    <div>
+      <div class=protohead>proto RSR.CONFIGID1 { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRCONFIGID1.html>RSR.CONFIGID1</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.DBREAKA0"></a>
+    <div>
+      <div class=protohead>proto RSR.DBREAKA0 { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRDBREAKA0.html>RSR.DBREAKA0</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.DBREAKA1"></a>
+    <div>
+      <div class=protohead>proto RSR.DBREAKA1 { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRDBREAKA1.html>RSR.DBREAKA1</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.DBREAKC0"></a>
+    <div>
+      <div class=protohead>proto RSR.DBREAKC0 { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRDBREAKC0.html>RSR.DBREAKC0</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.DBREAKC1"></a>
+    <div>
+      <div class=protohead>proto RSR.DBREAKC1 { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRDBREAKC1.html>RSR.DBREAKC1</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.DDR"></a>
+    <div>
+      <div class=protohead>proto RSR.DDR { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRDDR.html>RSR.DDR</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.DEBUGCAUSE"></a>
+    <div>
+      <div class=protohead>proto RSR.DEBUGCAUSE { out uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/RSRDEBUGCAUSE.html>RSR.DEBUGCAUSE</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="RSR.DEPC"></a>
+    <div>
+      <div class=protohead>proto RSR.DEPC { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSRDEPC.html>RSR.DEPC</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EPC1"></a>
+    <div>
+      <div class=protohead>proto RSR.EPC1 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREPC1.html>RSR.EPC1</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EPC2"></a>
+    <div>
+      <div class=protohead>proto RSR.EPC2 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREPC2.html>RSR.EPC2</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EPC3"></a>
+    <div>
+      <div class=protohead>proto RSR.EPC3 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREPC3.html>RSR.EPC3</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EPC4"></a>
+    <div>
+      <div class=protohead>proto RSR.EPC4 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREPC4.html>RSR.EPC4</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EPC5"></a>
+    <div>
+      <div class=protohead>proto RSR.EPC5 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREPC5.html>RSR.EPC5</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EPS2"></a>
+    <div>
+      <div class=protohead>proto RSR.EPS2 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREPS2.html>RSR.EPS2</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EPS3"></a>
+    <div>
+      <div class=protohead>proto RSR.EPS3 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREPS3.html>RSR.EPS3</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EPS4"></a>
+    <div>
+      <div class=protohead>proto RSR.EPS4 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREPS4.html>RSR.EPS4</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EPS5"></a>
+    <div>
+      <div class=protohead>proto RSR.EPS5 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREPS5.html>RSR.EPS5</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EXCCAUSE"></a>
+    <div>
+      <div class=protohead>proto RSR.EXCCAUSE { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREXCCAUSE.html>RSR.EXCCAUSE</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EXCSAVE1"></a>
+    <div>
+      <div class=protohead>proto RSR.EXCSAVE1 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREXCSAVE1.html>RSR.EXCSAVE1</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EXCSAVE2"></a>
+    <div>
+      <div class=protohead>proto RSR.EXCSAVE2 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREXCSAVE2.html>RSR.EXCSAVE2</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EXCSAVE3"></a>
+    <div>
+      <div class=protohead>proto RSR.EXCSAVE3 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREXCSAVE3.html>RSR.EXCSAVE3</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EXCSAVE4"></a>
+    <div>
+      <div class=protohead>proto RSR.EXCSAVE4 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREXCSAVE4.html>RSR.EXCSAVE4</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EXCSAVE5"></a>
+    <div>
+      <div class=protohead>proto RSR.EXCSAVE5 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREXCSAVE5.html>RSR.EXCSAVE5</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.EXCVADDR"></a>
+    <div>
+      <div class=protohead>proto RSR.EXCVADDR { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSREXCVADDR.html>RSR.EXCVADDR</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.IBREAKA0"></a>
+    <div>
+      <div class=protohead>proto RSR.IBREAKA0 { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRIBREAKA0.html>RSR.IBREAKA0</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.IBREAKA1"></a>
+    <div>
+      <div class=protohead>proto RSR.IBREAKA1 { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRIBREAKA1.html>RSR.IBREAKA1</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.IBREAKENABLE"></a>
+    <div>
+      <div class=protohead>proto RSR.IBREAKENABLE { out uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/RSRIBREAKENABLE.html>RSR.IBREAKENABLE</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.ICOUNT"></a>
+    <div>
+      <div class=protohead>proto RSR.ICOUNT { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRICOUNT.html>RSR.ICOUNT</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.ICOUNTLEVEL"></a>
+    <div>
+      <div class=protohead>proto RSR.ICOUNTLEVEL { out uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/RSRICOUNTLEVEL.html>RSR.ICOUNTLEVEL</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="RSR.INTENABLE"></a>
+    <div>
+      <div class=protohead>proto RSR.INTENABLE { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRINTENABLE.html>RSR.INTENABLE</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.INTERRUPT"></a>
+    <div>
+      <div class=protohead>proto RSR.INTERRUPT { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRINTERRUPT.html>RSR.INTERRUPT</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.LBEG"></a>
+    <div>
+      <div class=protohead>proto RSR.LBEG { out uint32 art }{}{</div><div
+      class=protobody><a href=instruction/RSRLBEG.html>RSR.LBEG</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.LCOUNT"></a>
+    <div>
+      <div class=protohead>proto RSR.LCOUNT { out int32 t }{}{</div><div
+      class=protobody><a href=instruction/RSRLCOUNT.html>RSR.LCOUNT</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.LEND"></a>
+    <div>
+      <div class=protohead>proto RSR.LEND { out int32 t }{}{</div><div
+      class=protobody><a href=instruction/RSRLEND.html>RSR.LEND</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.LITBASE"></a>
+    <div>
+      <div class=protohead>proto RSR.LITBASE { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSRLITBASE.html>RSR.LITBASE</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.MISC0"></a>
+    <div>
+      <div class=protohead>proto RSR.MISC0 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSRMISC0.html>RSR.MISC0</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.MISC1"></a>
+    <div>
+      <div class=protohead>proto RSR.MISC1 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSRMISC1.html>RSR.MISC1</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.MISC2"></a>
+    <div>
+      <div class=protohead>proto RSR.MISC2 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSRMISC2.html>RSR.MISC2</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.MISC3"></a>
+    <div>
+      <div class=protohead>proto RSR.MISC3 { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSRMISC3.html>RSR.MISC3</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="RSR.PS"></a>
+    <div>
+      <div class=protohead>proto RSR.PS { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSRPS.html>RSR.PS</a> t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="RSR.SAR"></a>
+    <div>
+      <div class=protohead>proto RSR.SAR { out uint32 t }{}{</div><div
+      class=protobody><a href=instruction/RSRSAR.html>RSR.SAR</a> t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="RSR.WINDOWBASE"></a>
+    <div>
+      <div class=protohead>proto RSR.WINDOWBASE { out uint32 t }{}{</div><div
+      class=protobody><a
+      href=instruction/RSRWINDOWBASE.html>RSR.WINDOWBASE</a> t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="RSR.WINDOWSTART"></a>
+    <div>
+      <div class=protohead>proto RSR.WINDOWSTART { out uint32 t }{}{</div><div
+      class=protobody><a
+      href=instruction/RSRWINDOWSTART.html>RSR.WINDOWSTART</a> t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="RSYNC"></a>
+    <div>
+      <div class=protohead>proto RSYNC { }{}{</div><div class=protobody><a
+      href=instruction/RSYNC.html>RSYNC</a>;</div><div class=protohead>}</div>
+    </div>
+    <a name="S16I"></a>
+    <div>
+      <div class=protohead>proto S16I { in int16 r, in int16 * p, in immediate
+      i }{}{</div><div class=protobody><a href=instruction/S16I.html>S16I</a>
+      r, p, i + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="S32E"></a>
+    <div>
+      <div class=protohead>proto S32E { in int32 t, in int32 * s, in immediate
+      o }{}{</div><div class=protobody><a href=instruction/S32E.html>S32E</a>
+      t, s, o + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="S32I"></a>
+    <div>
+      <div class=protohead>proto S32I { in int32 r, in int32 * p, in immediate
+      i }{}{</div><div class=protobody><a href=instruction/S32I.html>S32I</a>
+      r, p, i + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="S32I.N"></a>
+    <div>
+      <div class=protohead>proto S32I.N { in int32 t, in int32 * p, in
+      immediate i }{}{</div><div class=protobody><a
+      href=instruction/S32IN.html>S32I.N</a> t, p, i + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="S8I"></a>
+    <div>
+      <div class=protohead>proto S8I { in int8 r, in int8 * p, in immediate i
+      }{}{</div><div class=protobody><a href=instruction/S8I.html>S8I</a> r,
+      p, i + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="SEXT"></a>
+    <div>
+      <div class=protohead>proto SEXT { out int32 r, in int32 s, in immediate
+      i }{}{</div><div class=protobody><a href=instruction/SEXT.html>SEXT</a>
+      r, s, i + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="SIMCALL"></a>
+    <div>
+      <div class=protohead>proto SIMCALL { }{}{</div><div class=protobody><a
+      href=instruction/SIMCALL.html>SIMCALL</a>;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SLL"></a>
+    <div>
+      <div class=protohead>proto SLL { out int32 r, in int32 s }{}{</div><div
+      class=protobody><a href=instruction/SLL.html>SLL</a> r, s;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SLLI"></a>
+    <div>
+      <div class=protohead>proto SLLI { out int32 r, in int32 s, in immediate
+      i }{}{</div><div class=protobody><a href=instruction/SLLI.html>SLLI</a>
+      r, s, i + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="SRA"></a>
+    <div>
+      <div class=protohead>proto SRA { out int32 r, in int32 t }{}{</div><div
+      class=protobody><a href=instruction/SRA.html>SRA</a> r, t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SRAI"></a>
+    <div>
+      <div class=protohead>proto SRAI { out int32 r, in int32 t, in immediate
+      i }{}{</div><div class=protobody><a href=instruction/SRAI.html>SRAI</a>
+      r, t, i + 0;</div><div class=protohead>}</div>
+    </div>
+    <a name="SRC"></a>
+    <div>
+      <div class=protohead>proto SRC { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/SRC.html>SRC</a> r,
+      s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="SRL"></a>
+    <div>
+      <div class=protohead>proto SRL { out uint32 r, in uint32 t
+      }{}{</div><div class=protobody><a href=instruction/SRL.html>SRL</a> r,
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="SRLI"></a>
+    <div>
+      <div class=protohead>proto SRLI { out uint32 r, in uint32 t, in
+      immediate i }{}{</div><div class=protobody><a
+      href=instruction/SRLI.html>SRLI</a> r, t, i + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SSA8B"></a>
+    <div>
+      <div class=protohead>proto SSA8B { in int32 s }{}{</div><div
+      class=protobody><a href=instruction/SSA8B.html>SSA8B</a> s;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SSA8L"></a>
+    <div>
+      <div class=protohead>proto SSA8L { in int32 s }{}{</div><div
+      class=protobody><a href=instruction/SSA8L.html>SSA8L</a> s;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SSAI"></a>
+    <div>
+      <div class=protohead>proto SSAI { in immediate i }{}{</div><div
+      class=protobody><a href=instruction/SSAI.html>SSAI</a> i + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SSAI_SRC"></a>
+    <div>
+      <div class=protohead>proto SSAI_SRC { out int32 dst, in int32 src1, in
+      int32 src2, in immediate amount }{}{</div><div class=protobody><a
+      href=instruction/SSAI.html>SSAI</a> amount + 0;</div><div
+      class=protobody><a href=instruction/SRC.html>SRC</a> dst, src1,
+      src2;</div><div class=protohead>}</div>
+    </div>
+    <a name="SSL"></a>
+    <div>
+      <div class=protohead>proto SSL { in int32 s }{}{</div><div
+      class=protobody><a href=instruction/SSL.html>SSL</a> s;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SSL_SLL"></a>
+    <div>
+      <div class=protohead>proto SSL_SLL { out int32 dst, in int32 src, in
+      int32 amount }{}{</div><div class=protobody><a
+      href=instruction/SSL.html>SSL</a> amount;</div><div class=protobody><a
+      href=instruction/SLL.html>SLL</a> dst, src;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SSR"></a>
+    <div>
+      <div class=protohead>proto SSR { in int32 s }{}{</div><div
+      class=protobody><a href=instruction/SSR.html>SSR</a> s;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SSR_SRA"></a>
+    <div>
+      <div class=protohead>proto SSR_SRA { out int32 dst, in int32 src, in
+      int32 amount }{}{</div><div class=protobody><a
+      href=instruction/SSR.html>SSR</a> amount;</div><div class=protobody><a
+      href=instruction/SRA.html>SRA</a> dst, src;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SSR_SRC"></a>
+    <div>
+      <div class=protohead>proto SSR_SRC { out int32 dst, in int32 src1, in
+      int32 src2, in int32 amount }{}{</div><div class=protobody><a
+      href=instruction/SSR.html>SSR</a> amount;</div><div class=protobody><a
+      href=instruction/SRC.html>SRC</a> dst, src1, src2;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SSR_SRL"></a>
+    <div>
+      <div class=protohead>proto SSR_SRL { out uint32 dst, in uint32 src, in
+      int32 amount }{}{</div><div class=protobody><a
+      href=instruction/SSR.html>SSR</a> amount;</div><div class=protobody><a
+      href=instruction/SRL.html>SRL</a> dst, src;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="SUB"></a>
+    <div>
+      <div class=protohead>proto SUB { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/SUB.html>SUB</a> r,
+      s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="SUBX2"></a>
+    <div>
+      <div class=protohead>proto SUBX2 { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/SUBX2.html>SUBX2</a>
+      r, s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="SUBX4"></a>
+    <div>
+      <div class=protohead>proto SUBX4 { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/SUBX4.html>SUBX4</a>
+      r, s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="SUBX8"></a>
+    <div>
+      <div class=protohead>proto SUBX8 { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/SUBX8.html>SUBX8</a>
+      r, s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="SYSCALL"></a>
+    <div>
+      <div class=protohead>proto SYSCALL { }{}{</div><div class=protobody><a
+      href=instruction/SYSCALL.html>SYSCALL</a>;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="WAITI"></a>
+    <div>
+      <div class=protohead>proto WAITI { in immediate s }{}{</div><div
+      class=protobody><a href=instruction/WAITI.html>WAITI</a> s +
+      0;</div><div class=protohead>}</div>
+    </div>
+    <a name="WDTLB"></a>
+    <div>
+      <div class=protohead>proto WDTLB { in uint32 art, in uint32 ars
+      }{}{</div><div class=protobody><a href=instruction/WDTLB.html>WDTLB</a>
+      art, ars;</div><div class=protohead>}</div>
+    </div>
+    <a name="WITLB"></a>
+    <div>
+      <div class=protohead>proto WITLB { in uint32 art, in uint32 ars
+      }{}{</div><div class=protobody><a href=instruction/WITLB.html>WITLB</a>
+      art, ars;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.CCOMPARE0"></a>
+    <div>
+      <div class=protohead>proto WSR.CCOMPARE0 { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRCCOMPARE0.html>WSR.CCOMPARE0</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.CCOUNT"></a>
+    <div>
+      <div class=protohead>proto WSR.CCOUNT { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRCCOUNT.html>WSR.CCOUNT</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.DBREAKA0"></a>
+    <div>
+      <div class=protohead>proto WSR.DBREAKA0 { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRDBREAKA0.html>WSR.DBREAKA0</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.DBREAKA1"></a>
+    <div>
+      <div class=protohead>proto WSR.DBREAKA1 { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRDBREAKA1.html>WSR.DBREAKA1</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.DBREAKC0"></a>
+    <div>
+      <div class=protohead>proto WSR.DBREAKC0 { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRDBREAKC0.html>WSR.DBREAKC0</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.DBREAKC1"></a>
+    <div>
+      <div class=protohead>proto WSR.DBREAKC1 { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRDBREAKC1.html>WSR.DBREAKC1</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.DDR"></a>
+    <div>
+      <div class=protohead>proto WSR.DDR { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRDDR.html>WSR.DDR</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.DEBUGCAUSE"></a>
+    <div>
+      <div class=protohead>proto WSR.DEBUGCAUSE { in uint32 art }{}{</div><div
+      class=protobody><a
+      href=instruction/WSRDEBUGCAUSE.html>WSR.DEBUGCAUSE</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="WSR.DEPC"></a>
+    <div>
+      <div class=protohead>proto WSR.DEPC { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSRDEPC.html>WSR.DEPC</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EPC1"></a>
+    <div>
+      <div class=protohead>proto WSR.EPC1 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREPC1.html>WSR.EPC1</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EPC2"></a>
+    <div>
+      <div class=protohead>proto WSR.EPC2 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREPC2.html>WSR.EPC2</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EPC3"></a>
+    <div>
+      <div class=protohead>proto WSR.EPC3 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREPC3.html>WSR.EPC3</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EPC4"></a>
+    <div>
+      <div class=protohead>proto WSR.EPC4 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREPC4.html>WSR.EPC4</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EPC5"></a>
+    <div>
+      <div class=protohead>proto WSR.EPC5 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREPC5.html>WSR.EPC5</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EPS2"></a>
+    <div>
+      <div class=protohead>proto WSR.EPS2 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREPS2.html>WSR.EPS2</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EPS3"></a>
+    <div>
+      <div class=protohead>proto WSR.EPS3 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREPS3.html>WSR.EPS3</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EPS4"></a>
+    <div>
+      <div class=protohead>proto WSR.EPS4 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREPS4.html>WSR.EPS4</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EPS5"></a>
+    <div>
+      <div class=protohead>proto WSR.EPS5 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREPS5.html>WSR.EPS5</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EXCCAUSE"></a>
+    <div>
+      <div class=protohead>proto WSR.EXCCAUSE { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREXCCAUSE.html>WSR.EXCCAUSE</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EXCSAVE1"></a>
+    <div>
+      <div class=protohead>proto WSR.EXCSAVE1 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREXCSAVE1.html>WSR.EXCSAVE1</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EXCSAVE2"></a>
+    <div>
+      <div class=protohead>proto WSR.EXCSAVE2 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREXCSAVE2.html>WSR.EXCSAVE2</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EXCSAVE3"></a>
+    <div>
+      <div class=protohead>proto WSR.EXCSAVE3 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREXCSAVE3.html>WSR.EXCSAVE3</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EXCSAVE4"></a>
+    <div>
+      <div class=protohead>proto WSR.EXCSAVE4 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREXCSAVE4.html>WSR.EXCSAVE4</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EXCSAVE5"></a>
+    <div>
+      <div class=protohead>proto WSR.EXCSAVE5 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREXCSAVE5.html>WSR.EXCSAVE5</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.EXCVADDR"></a>
+    <div>
+      <div class=protohead>proto WSR.EXCVADDR { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSREXCVADDR.html>WSR.EXCVADDR</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.IBREAKA0"></a>
+    <div>
+      <div class=protohead>proto WSR.IBREAKA0 { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRIBREAKA0.html>WSR.IBREAKA0</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.IBREAKA1"></a>
+    <div>
+      <div class=protohead>proto WSR.IBREAKA1 { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRIBREAKA1.html>WSR.IBREAKA1</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.IBREAKENABLE"></a>
+    <div>
+      <div class=protohead>proto WSR.IBREAKENABLE { in uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/WSRIBREAKENABLE.html>WSR.IBREAKENABLE</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.ICOUNT"></a>
+    <div>
+      <div class=protohead>proto WSR.ICOUNT { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRICOUNT.html>WSR.ICOUNT</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.ICOUNTLEVEL"></a>
+    <div>
+      <div class=protohead>proto WSR.ICOUNTLEVEL { in uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/WSRICOUNTLEVEL.html>WSR.ICOUNTLEVEL</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="WSR.INTCLEAR"></a>
+    <div>
+      <div class=protohead>proto WSR.INTCLEAR { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRINTCLEAR.html>WSR.INTCLEAR</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.INTENABLE"></a>
+    <div>
+      <div class=protohead>proto WSR.INTENABLE { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRINTENABLE.html>WSR.INTENABLE</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.INTSET"></a>
+    <div>
+      <div class=protohead>proto WSR.INTSET { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRINTSET.html>WSR.INTSET</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.LBEG"></a>
+    <div>
+      <div class=protohead>proto WSR.LBEG { in uint32 art }{}{</div><div
+      class=protobody><a href=instruction/WSRLBEG.html>WSR.LBEG</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.LCOUNT"></a>
+    <div>
+      <div class=protohead>proto WSR.LCOUNT { in int32 t }{}{</div><div
+      class=protobody><a href=instruction/WSRLCOUNT.html>WSR.LCOUNT</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.LEND"></a>
+    <div>
+      <div class=protohead>proto WSR.LEND { in int32 t }{}{</div><div
+      class=protobody><a href=instruction/WSRLEND.html>WSR.LEND</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.LITBASE"></a>
+    <div>
+      <div class=protohead>proto WSR.LITBASE { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSRLITBASE.html>WSR.LITBASE</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.MISC0"></a>
+    <div>
+      <div class=protohead>proto WSR.MISC0 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSRMISC0.html>WSR.MISC0</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.MISC1"></a>
+    <div>
+      <div class=protohead>proto WSR.MISC1 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSRMISC1.html>WSR.MISC1</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.MISC2"></a>
+    <div>
+      <div class=protohead>proto WSR.MISC2 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSRMISC2.html>WSR.MISC2</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.MISC3"></a>
+    <div>
+      <div class=protohead>proto WSR.MISC3 { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSRMISC3.html>WSR.MISC3</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="WSR.PS"></a>
+    <div>
+      <div class=protohead>proto WSR.PS { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSRPS.html>WSR.PS</a> t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="WSR.SAR"></a>
+    <div>
+      <div class=protohead>proto WSR.SAR { in uint32 t }{}{</div><div
+      class=protobody><a href=instruction/WSRSAR.html>WSR.SAR</a> t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="WSR.WINDOWBASE"></a>
+    <div>
+      <div class=protohead>proto WSR.WINDOWBASE { in uint32 t }{}{</div><div
+      class=protobody><a
+      href=instruction/WSRWINDOWBASE.html>WSR.WINDOWBASE</a> t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="WSR.WINDOWSTART"></a>
+    <div>
+      <div class=protohead>proto WSR.WINDOWSTART { in uint32 t }{}{</div><div
+      class=protobody><a
+      href=instruction/WSRWINDOWSTART.html>WSR.WINDOWSTART</a> t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="WSR_SAR_SRC"></a>
+    <div>
+      <div class=protohead>proto WSR_SAR_SRC { out int32 dst, in int32 src1,
+      in int32 src2, in int32 amount }{}{</div><div class=protobody><a
+      href=instruction/WSRSAR.html>WSR.SAR</a> amount;</div><div
+      class=protobody><a href=instruction/SRC.html>SRC</a> dst, src1,
+      src2;</div><div class=protohead>}</div>
+    </div>
+    <a name="XOR"></a>
+    <div>
+      <div class=protohead>proto XOR { out int32 r, in int32 s, in int32 t
+      }{}{</div><div class=protobody><a href=instruction/XOR.html>XOR</a> r,
+      s, t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.CCOMPARE0"></a>
+    <div>
+      <div class=protohead>proto XSR.CCOMPARE0 { inout uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRCCOMPARE0.html>XSR.CCOMPARE0</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.CCOUNT"></a>
+    <div>
+      <div class=protohead>proto XSR.CCOUNT { inout uint32 art }{}{</div><div
+      class=protobody><a href=instruction/XSRCCOUNT.html>XSR.CCOUNT</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.DBREAKA0"></a>
+    <div>
+      <div class=protohead>proto XSR.DBREAKA0 { inout uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRDBREAKA0.html>XSR.DBREAKA0</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.DBREAKA1"></a>
+    <div>
+      <div class=protohead>proto XSR.DBREAKA1 { inout uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRDBREAKA1.html>XSR.DBREAKA1</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.DBREAKC0"></a>
+    <div>
+      <div class=protohead>proto XSR.DBREAKC0 { inout uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRDBREAKC0.html>XSR.DBREAKC0</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.DBREAKC1"></a>
+    <div>
+      <div class=protohead>proto XSR.DBREAKC1 { inout uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRDBREAKC1.html>XSR.DBREAKC1</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.DDR"></a>
+    <div>
+      <div class=protohead>proto XSR.DDR { inout uint32 art }{}{</div><div
+      class=protobody><a href=instruction/XSRDDR.html>XSR.DDR</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.DEBUGCAUSE"></a>
+    <div>
+      <div class=protohead>proto XSR.DEBUGCAUSE { inout uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRDEBUGCAUSE.html>XSR.DEBUGCAUSE</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.DEPC"></a>
+    <div>
+      <div class=protohead>proto XSR.DEPC { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSRDEPC.html>XSR.DEPC</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EPC1"></a>
+    <div>
+      <div class=protohead>proto XSR.EPC1 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREPC1.html>XSR.EPC1</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EPC2"></a>
+    <div>
+      <div class=protohead>proto XSR.EPC2 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREPC2.html>XSR.EPC2</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EPC3"></a>
+    <div>
+      <div class=protohead>proto XSR.EPC3 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREPC3.html>XSR.EPC3</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EPC4"></a>
+    <div>
+      <div class=protohead>proto XSR.EPC4 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREPC4.html>XSR.EPC4</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EPC5"></a>
+    <div>
+      <div class=protohead>proto XSR.EPC5 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREPC5.html>XSR.EPC5</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EPS2"></a>
+    <div>
+      <div class=protohead>proto XSR.EPS2 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREPS2.html>XSR.EPS2</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EPS3"></a>
+    <div>
+      <div class=protohead>proto XSR.EPS3 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREPS3.html>XSR.EPS3</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EPS4"></a>
+    <div>
+      <div class=protohead>proto XSR.EPS4 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREPS4.html>XSR.EPS4</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EPS5"></a>
+    <div>
+      <div class=protohead>proto XSR.EPS5 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREPS5.html>XSR.EPS5</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EXCCAUSE"></a>
+    <div>
+      <div class=protohead>proto XSR.EXCCAUSE { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREXCCAUSE.html>XSR.EXCCAUSE</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EXCSAVE1"></a>
+    <div>
+      <div class=protohead>proto XSR.EXCSAVE1 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREXCSAVE1.html>XSR.EXCSAVE1</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EXCSAVE2"></a>
+    <div>
+      <div class=protohead>proto XSR.EXCSAVE2 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREXCSAVE2.html>XSR.EXCSAVE2</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EXCSAVE3"></a>
+    <div>
+      <div class=protohead>proto XSR.EXCSAVE3 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREXCSAVE3.html>XSR.EXCSAVE3</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EXCSAVE4"></a>
+    <div>
+      <div class=protohead>proto XSR.EXCSAVE4 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREXCSAVE4.html>XSR.EXCSAVE4</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EXCSAVE5"></a>
+    <div>
+      <div class=protohead>proto XSR.EXCSAVE5 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREXCSAVE5.html>XSR.EXCSAVE5</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.EXCVADDR"></a>
+    <div>
+      <div class=protohead>proto XSR.EXCVADDR { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSREXCVADDR.html>XSR.EXCVADDR</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.IBREAKA0"></a>
+    <div>
+      <div class=protohead>proto XSR.IBREAKA0 { inout uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRIBREAKA0.html>XSR.IBREAKA0</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.IBREAKA1"></a>
+    <div>
+      <div class=protohead>proto XSR.IBREAKA1 { inout uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRIBREAKA1.html>XSR.IBREAKA1</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.IBREAKENABLE"></a>
+    <div>
+      <div class=protohead>proto XSR.IBREAKENABLE { inout uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRIBREAKENABLE.html>XSR.IBREAKENABLE</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.ICOUNT"></a>
+    <div>
+      <div class=protohead>proto XSR.ICOUNT { inout uint32 art }{}{</div><div
+      class=protobody><a href=instruction/XSRICOUNT.html>XSR.ICOUNT</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.ICOUNTLEVEL"></a>
+    <div>
+      <div class=protohead>proto XSR.ICOUNTLEVEL { inout uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRICOUNTLEVEL.html>XSR.ICOUNTLEVEL</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.INTENABLE"></a>
+    <div>
+      <div class=protohead>proto XSR.INTENABLE { inout uint32 art
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRINTENABLE.html>XSR.INTENABLE</a> art;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.LBEG"></a>
+    <div>
+      <div class=protohead>proto XSR.LBEG { inout uint32 art }{}{</div><div
+      class=protobody><a href=instruction/XSRLBEG.html>XSR.LBEG</a>
+      art;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.LCOUNT"></a>
+    <div>
+      <div class=protohead>proto XSR.LCOUNT { inout int32 t }{}{</div><div
+      class=protobody><a href=instruction/XSRLCOUNT.html>XSR.LCOUNT</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.LEND"></a>
+    <div>
+      <div class=protohead>proto XSR.LEND { inout int32 t }{}{</div><div
+      class=protobody><a href=instruction/XSRLEND.html>XSR.LEND</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.LITBASE"></a>
+    <div>
+      <div class=protohead>proto XSR.LITBASE { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSRLITBASE.html>XSR.LITBASE</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.MISC0"></a>
+    <div>
+      <div class=protohead>proto XSR.MISC0 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSRMISC0.html>XSR.MISC0</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.MISC1"></a>
+    <div>
+      <div class=protohead>proto XSR.MISC1 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSRMISC1.html>XSR.MISC1</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.MISC2"></a>
+    <div>
+      <div class=protohead>proto XSR.MISC2 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSRMISC2.html>XSR.MISC2</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.MISC3"></a>
+    <div>
+      <div class=protohead>proto XSR.MISC3 { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSRMISC3.html>XSR.MISC3</a>
+      t;</div><div class=protohead>}</div>
+    </div>
+    <a name="XSR.PS"></a>
+    <div>
+      <div class=protohead>proto XSR.PS { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSRPS.html>XSR.PS</a> t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.SAR"></a>
+    <div>
+      <div class=protohead>proto XSR.SAR { inout uint32 t }{}{</div><div
+      class=protobody><a href=instruction/XSRSAR.html>XSR.SAR</a> t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.WINDOWBASE"></a>
+    <div>
+      <div class=protohead>proto XSR.WINDOWBASE { inout uint32 t
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRWINDOWBASE.html>XSR.WINDOWBASE</a> t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="XSR.WINDOWSTART"></a>
+    <div>
+      <div class=protohead>proto XSR.WINDOWSTART { inout uint32 t
+      }{}{</div><div class=protobody><a
+      href=instruction/XSRWINDOWSTART.html>XSR.WINDOWSTART</a> t;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="uint32_loadi"></a>
+    <div>
+      <div class=protohead>proto uint32_loadi { out uint32 c, in const uint32
+      * p, in immediate o }{}{</div><div class=protobody><a
+      href=instruction/L32I.html>L32I</a> c, p, o + 0;</div><div
+      class=protohead>}</div>
+    </div>
+    <a name="uint32_move"></a>
+    <div>
+      <div class=protohead>proto uint32_move { out uint32 a, in uint32 b
+      }{}{</div><div class=protobody><a href=instruction/OR.html>OR</a> a, b,
+      b;</div><div class=protohead>}</div>
+    </div>
+    <a name="uint32_storei"></a>
+    <div>
+      <div class=protohead>proto uint32_storei { in uint32 c, in uint32 * p,
+      in immediate o }{}{</div><div class=protobody><a
+      href=instruction/S32I.html>S32I</a> c, p, o + 0;</div><div
+      class=protohead>}</div>
+    </div>
+  </body>
+</html>

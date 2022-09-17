@@ -1,0 +1,49 @@
+// Customer ID=8327; Build=0x3b95c; Copyright (c) 2007-2010 by Tensilica Inc.  ALL RIGHTS RESERVED.
+// These coded instructions, statements, and computer programs are the
+// copyrighted works and confidential proprietary information of
+// Tensilica Inc.  They may be adapted and modified by bona fide
+// purchasers for internal use, but neither the original nor any adapted
+// or modified version may be disclosed or distributed to third parties
+// in any manner, medium, or form, in whole or in part, without the prior
+// written consent of Tensilica Inc.
+
+/*
+register  <RegisterName>  <BitWidth>  <Address>   {<InitialValue>} 
+--------  --------------  ----------  ----------   --------------  */
+register  interrupt           32      0xC0000000      0x0
+
+
+/*
+output  <PortName>      <RegisterName>  {<HighBit>  {<LowBit>}}
+------  ------------    --------------   ---------   --------  */
+output  BInterrupt00    interrupt            2           2
+output  BInterrupt01    interrupt            3           3
+output  BInterrupt02    interrupt            4           4
+output  BInterrupt03    interrupt            5           5
+output  BInterrupt04    interrupt            6           6
+output  BInterrupt05    interrupt            7           7
+output  BInterrupt06    interrupt            8           8
+output  BInterrupt07    interrupt            9           9
+output  BInterrupt08    interrupt           10          10
+output  BInterrupt09    interrupt           11          11
+output  BInterrupt10    interrupt           12          12
+output  BInterrupt11    interrupt           13          13
+output  BInterrupt12    interrupt           14          14
+output  BInterrupt13    interrupt           15          15
+output  BInterrupt14    interrupt           16          16
+output  BInterrupt15    interrupt           17          17
+output  BInterrupt16    interrupt           18          18
+output  BInterrupt17    interrupt           19          19
+output  BInterrupt18    interrupt           20          20
+output  BInterrupt19    interrupt           21          21
+output  BInterrupt20    interrupt           22          22
+output  BInterrupt21    interrupt           23          23
+output  BInterrupt22    interrupt           24          24
+output  BInterrupt23    interrupt           25          25
+output  BInterrupt24    interrupt           26          26
+output  BInterrupt25    interrupt           27          27
+output  BInterrupt26    interrupt           28          28
+output  BInterrupt27    interrupt           29          29
+output  BInterrupt28    interrupt           30          30
+output  BInterrupt29    interrupt           31          31
+

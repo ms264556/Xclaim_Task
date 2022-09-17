@@ -1,0 +1,9 @@
+OUTPUT_ARCH(powerpc:common)
+SECTIONS
+{
+  .initrd :
+  {
+       *(.data)
+  }
+}
+

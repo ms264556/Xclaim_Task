@@ -1,0 +1,6 @@
+EXPORTS
+cstub_loadi_function
+cstub_storei_function
+cstub_rtor_function
+cstub_ctype_size_function
+cstub_ctypes_init

@@ -1,0 +1,33 @@
+#
+# Placeholder for Xtensa Tools license file
+# =========================================
+#
+# If you use a FLEXlm network license server, or you manage
+# your licenses in common directories using environment
+# variables to locate them (e.g. LM_LICENSE_FILE), then
+# you can ignore this file and paste the Xtensa licenses
+# into an appropriate common license file.
+#
+# ---------------------------------------------------------
+#
+# If you are working on a standalone system and do not
+# have any other form of FLEXlm licensing setup, then
+# the easiest way to license the Xtensa Tools is to
+# copy valid node-locked keys into this file.
+# No further setup should be necessary.
+#
+# To cut keys, login to the Tensilica Processor Generator
+# and select Options->Licenses from the Configuration 
+# Manager menu.
+#
+#
+# A simple node-locked key looks something like this
+# (without the prefix #, of course)
+#
+# FEATURE XTENSA_EVAL xtensad 4.0 30-Apr-2000 0 454780A5EF33 HOSTID=0070047a977a
+#
+#
+# Blank lines and lines prefixed with # are ignored, so you
+# can leave this verbiage intact and append your keys at the 
+# end
+#

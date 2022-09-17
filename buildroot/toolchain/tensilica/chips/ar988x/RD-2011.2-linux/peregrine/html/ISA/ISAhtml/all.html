@@ -1,0 +1,2369 @@
+<html>
+  <head>
+    <title>
+      All Instructions
+    </title>
+    <style type="text/css">
+      <!--
+	body {
+		background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+		margin-left: 2em;
+		margin-right: 2em;
+	}
+	#boundingbox {
+	        background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+	        position: relative;
+	        width: 865px;
+	        margin: 0 auto;
+	        padding: 20px;
+	        border-style: dashed;
+	        border-width: 1px;
+	        border-spacing: 10px;
+	        border-collapse: separate;
+	}
+	a {
+		text-decoration: none;
+	}
+	a:visited {
+		color: blue;
+	}
+	a:link {
+		color: green;
+	}
+	a:active {
+		color: green;
+	}
+	a:hover {
+		color: green;
+	}
+	a:offsite {
+		color: green;
+	}
+	h1 {
+		font-size: 14pt;
+		font-weight: bold;
+	}
+	h1.center {
+		font-size: 14pt;
+		font-weight: bold;
+	        text-align: center;
+	}
+	h2 {
+		font-size: 12pt;
+	}
+	caption {
+		padding-top: 1em;
+	}
+	table.thin {
+		border-width: thin;
+		border-spacing: 0px;
+		border-style: inset;
+		border-color: gray;
+		border-collapse: collapse;
+		background-color: rgb(250, 240, 230);
+	}
+	table th.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table th.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	pre {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	}
+	.proto {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 1em;
+	        text-indent: -1em;
+	}
+	.protohead {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 2em;
+	        text-indent: -2em;
+	}
+	.protobody {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 4em;
+	        text-indent: -2em;
+	}
+	.rotate {
+	        display: block;
+	        -webkit-transform: rotate(-90deg); 
+	        -moz-transform: rotate(-90deg);
+	        filter:
+	progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	        padding-top: 20px;                       
+	}
+	.light {
+	        font-size: 75%;
+	        color: SlateGrey;
+	}
+	
+        -->
+    </style>
+  </head>
+  <body>
+    <h1>
+      All Instructions
+    </h1>
+    <h2>
+      Alphabetic by mnemonic
+    </h2>
+    <table>
+      <thead>
+	<tr>
+	  <th align="left">
+	    Mnemonic
+	  </th>
+	  <th align="left">
+	    Synopsis
+	  </th>
+	</tr>
+      </thead>
+      <tbody>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ABS.html">ABS</a>
+	  </th>
+	  <td align="left">
+	    Absolute Value
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ADD.html">ADD</a>
+	  </th>
+	  <td align="left">
+	    Add
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ADDN.html">ADD.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow Add
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ADDI.html">ADDI</a>
+	  </th>
+	  <td align="left">
+	    Add Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ADDIN.html">ADDI.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow Add Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ADDMI.html">ADDMI</a>
+	  </th>
+	  <td align="left">
+	    Add Immediate with Shift by 8
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ADDX2.html">ADDX2</a>
+	  </th>
+	  <td align="left">
+	    Add with Shift by 1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ADDX4.html">ADDX4</a>
+	  </th>
+	  <td align="left">
+	    Add with Shift by 2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ADDX8.html">ADDX8</a>
+	  </th>
+	  <td align="left">
+	    Add with Shift by 3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/AND.html">AND</a>
+	  </th>
+	  <td align="left">
+	    Bitwise Logical And
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BALL.html">BALL</a>
+	  </th>
+	  <td align="left">
+	    Branch if All Bits Set
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BANY.html">BANY</a>
+	  </th>
+	  <td align="left">
+	    Branch if Any Bit Set
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BBC.html">BBC</a>
+	  </th>
+	  <td align="left">
+	    Branch if Bit Clear
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BBCI.html">BBCI</a>
+	  </th>
+	  <td align="left">
+	    Branch if Bit Clear Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BBS.html">BBS</a>
+	  </th>
+	  <td align="left">
+	    Branch if Bit Set
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BBSI.html">BBSI</a>
+	  </th>
+	  <td align="left">
+	    Branch if Bit Set Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BEQ.html">BEQ</a>
+	  </th>
+	  <td align="left">
+	    Branch if Equal
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BEQI.html">BEQI</a>
+	  </th>
+	  <td align="left">
+	    Branch if Equal Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BEQZ.html">BEQZ</a>
+	  </th>
+	  <td align="left">
+	    Branch if Equal to Zero
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BEQZN.html">BEQZ.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow Branch if Equal Zero
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BGE.html">BGE</a>
+	  </th>
+	  <td align="left">
+	    Branch if Greater Than or Equal
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BGEI.html">BGEI</a>
+	  </th>
+	  <td align="left">
+	    Branch if Greater Than or Equal Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BGEU.html">BGEU</a>
+	  </th>
+	  <td align="left">
+	    Branch if Greater Than or Equal Unsigned
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BGEUI.html">BGEUI</a>
+	  </th>
+	  <td align="left">
+	    Branch if Greater Than or Equal Unsigned Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BGEZ.html">BGEZ</a>
+	  </th>
+	  <td align="left">
+	    Branch if Greater Than or Equal to Zero
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BLT.html">BLT</a>
+	  </th>
+	  <td align="left">
+	    Branch if Less Than
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BLTI.html">BLTI</a>
+	  </th>
+	  <td align="left">
+	    Branch if Less Than Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BLTU.html">BLTU</a>
+	  </th>
+	  <td align="left">
+	    Branch if Less Than Unsigned
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BLTUI.html">BLTUI</a>
+	  </th>
+	  <td align="left">
+	    Branch if Less Than Unsigned Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BLTZ.html">BLTZ</a>
+	  </th>
+	  <td align="left">
+	    Branch if Less Than Zero
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BNALL.html">BNALL</a>
+	  </th>
+	  <td align="left">
+	    Branch if Not-All Bits Set
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BNE.html">BNE</a>
+	  </th>
+	  <td align="left">
+	    Branch if Not Equal
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BNEI.html">BNEI</a>
+	  </th>
+	  <td align="left">
+	    Branch if Not Equal Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BNEZ.html">BNEZ</a>
+	  </th>
+	  <td align="left">
+	    Branch if Not-Equal to Zero
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BNEZN.html">BNEZ.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow Branch if Not Equal Zero
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BNONE.html">BNONE</a>
+	  </th>
+	  <td align="left">
+	    Branch if No Bit Set
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BREAK.html">BREAK</a>
+	  </th>
+	  <td align="left">
+	    Breakpoint
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/BREAKN.html">BREAK.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow Breakpoint
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/CALL0.html">CALL0</a>
+	  </th>
+	  <td align="left">
+	    Non-windowed Call
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/CALL4.html">CALL4</a>
+	  </th>
+	  <td align="left">
+	    Call PC-relative, Rotate Window by 4
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/CALL8.html">CALL8</a>
+	  </th>
+	  <td align="left">
+	    Call PC-relative, Rotate Window by 8
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/CALL12.html">CALL12</a>
+	  </th>
+	  <td align="left">
+	    Call PC-relative, Rotate Window by 12
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/CALLX0.html">CALLX0</a>
+	  </th>
+	  <td align="left">
+	    Non-windowed Call Register
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/CALLX4.html">CALLX4</a>
+	  </th>
+	  <td align="left">
+	    Call Register, Rotate Window by 4
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/CALLX8.html">CALLX8</a>
+	  </th>
+	  <td align="left">
+	    Call Register, Rotate Window by 8
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/CALLX12.html">CALLX12</a>
+	  </th>
+	  <td align="left">
+	    Call Register, Rotate Window by 12
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/CLAMPS.html">CLAMPS</a>
+	  </th>
+	  <td align="left">
+	    Signed Clamp
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/DSYNC.html">DSYNC</a>
+	  </th>
+	  <td align="left">
+	    Load/Store Synchronize
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ENTRY.html">ENTRY</a>
+	  </th>
+	  <td align="left">
+	    Subroutine Entry
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ESYNC.html">ESYNC</a>
+	  </th>
+	  <td align="left">
+	    Execute Synchronize
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/EXCW.html">EXCW</a>
+	  </th>
+	  <td align="left">
+	    Exception Wait
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/EXTUI.html">EXTUI</a>
+	  </th>
+	  <td align="left">
+	    Extract Unsigned Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/EXTW.html">EXTW</a>
+	  </th>
+	  <td align="left">
+	    External Wait
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/IDTLB.html">IDTLB</a>
+	  </th>
+	  <td align="left">
+	    Invalidate Data TLB Entry
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/IITLB.html">IITLB</a>
+	  </th>
+	  <td align="left">
+	    Invalidate Instruction TLB Entry
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ILL.html">ILL</a>
+	  </th>
+	  <td align="left">
+	    Illegal Instruction
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ILLN.html">ILL.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow Illegal Instruction
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ISYNC.html">ISYNC</a>
+	  </th>
+	  <td align="left">
+	    Instruction Fetch Synchronize
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/J.html">J</a>
+	  </th>
+	  <td align="left">
+	    Unconditional Jump
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/JX.html">JX</a>
+	  </th>
+	  <td align="left">
+	    Unconditional Jump Register
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/L8UI.html">L8UI</a>
+	  </th>
+	  <td align="left">
+	    Load 8-bit Unsigned
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/L16SI.html">L16SI</a>
+	  </th>
+	  <td align="left">
+	    Load 16-bit Signed
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/L16UI.html">L16UI</a>
+	  </th>
+	  <td align="left">
+	    Load 16-bit Unsigned
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/L32E.html">L32E</a>
+	  </th>
+	  <td align="left">
+	    Load 32-bit for Window Exceptions
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/L32I.html">L32I</a>
+	  </th>
+	  <td align="left">
+	    Load 32-bit
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/L32IN.html">L32I.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow Load 32-bit
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/L32R.html">L32R</a>
+	  </th>
+	  <td align="left">
+	    Load 32-bit PC-Relative
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/LOOP.html">LOOP</a>
+	  </th>
+	  <td align="left">
+	    Loop
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/LOOPGTZ.html">LOOPGTZ</a>
+	  </th>
+	  <td align="left">
+	    Loop if Greater Than Zero
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/LOOPNEZ.html">LOOPNEZ</a>
+	  </th>
+	  <td align="left">
+	    Loop if Not-Equal Zero
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MAX.html">MAX</a>
+	  </th>
+	  <td align="left">
+	    Maximum Value
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MAXU.html">MAXU</a>
+	  </th>
+	  <td align="left">
+	    Maximum Value Unsigned
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MEMW.html">MEMW</a>
+	  </th>
+	  <td align="left">
+	    Memory Wait
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MIN.html">MIN</a>
+	  </th>
+	  <td align="left">
+	    Minimum Value
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MINU.html">MINU</a>
+	  </th>
+	  <td align="left">
+	    Minimum Value Unsigned
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MOVN.html">MOV.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow Move
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MOVEQZ.html">MOVEQZ</a>
+	  </th>
+	  <td align="left">
+	    Move if Equal to Zero
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MOVGEZ.html">MOVGEZ</a>
+	  </th>
+	  <td align="left">
+	    Move if Greater Than or Equal to Zero
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MOVI.html">MOVI</a>
+	  </th>
+	  <td align="left">
+	    Move Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MOVIN.html">MOVI.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow Move Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MOVLTZ.html">MOVLTZ</a>
+	  </th>
+	  <td align="left">
+	    Move if Less Than Zero
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MOVNEZ.html">MOVNEZ</a>
+	  </th>
+	  <td align="left">
+	    Move if Not-Equal to Zero
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MOVSP.html">MOVSP</a>
+	  </th>
+	  <td align="left">
+	    Move to Stack Pointer
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MUL16S.html">MUL16S</a>
+	  </th>
+	  <td align="left">
+	    Multiply 16-bit Signed
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MUL16U.html">MUL16U</a>
+	  </th>
+	  <td align="left">
+	    Multiply 16-bit Unsigned
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MULL.html">MULL</a>
+	  </th>
+	  <td align="left">
+	    Multiply Low
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MULSH.html">MULSH</a>
+	  </th>
+	  <td align="left">
+	    Multiply Signed High
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/MULUH.html">MULUH</a>
+	  </th>
+	  <td align="left">
+	    Multiply Unsigned High
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/NEG.html">NEG</a>
+	  </th>
+	  <td align="left">
+	    Negate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/NOP.html">NOP</a>
+	  </th>
+	  <td align="left">
+	    No-operation
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/NOPN.html">NOP.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow No-operation
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/NSA.html">NSA</a>
+	  </th>
+	  <td align="left">
+	    Normalization Shift Amount
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/NSAU.html">NSAU</a>
+	  </th>
+	  <td align="left">
+	    Normalization Shift Amount Unsigned
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/OR.html">OR</a>
+	  </th>
+	  <td align="left">
+	    Bitwise Logical Or
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/PDTLB.html">PDTLB</a>
+	  </th>
+	  <td align="left">
+	    Probe Data TLB
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/PITLB.html">PITLB</a>
+	  </th>
+	  <td align="left">
+	    Probe Instruction TLB
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RDTLB0.html">RDTLB0</a>
+	  </th>
+	  <td align="left">
+	    Read Data TLB Entry Virtual
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RDTLB1.html">RDTLB1</a>
+	  </th>
+	  <td align="left">
+	    Read Data TLB Entry Translation
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RET.html">RET</a>
+	  </th>
+	  <td align="left">
+	    Non-Windowed Return
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RETN.html">RET.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow Non-Windowed Return
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RETW.html">RETW</a>
+	  </th>
+	  <td align="left">
+	    Windowed Return
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RETWN.html">RETW.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow Windowed Return
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RFDD.html">RFDD</a>
+	  </th>
+	  <td align="left">
+	    Return from Debug and Dispatch
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RFDE.html">RFDE</a>
+	  </th>
+	  <td align="left">
+	    Return from Double Exception
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RFDO.html">RFDO</a>
+	  </th>
+	  <td align="left">
+	    Return from Debug Operation
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RFE.html">RFE</a>
+	  </th>
+	  <td align="left">
+	    Return from Exception
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RFI.html">RFI</a>
+	  </th>
+	  <td align="left">
+	    Return from High-Priority Interrupt
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RFWO.html">RFWO</a>
+	  </th>
+	  <td align="left">
+	    Return from Window Overflow
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RFWU.html">RFWU</a>
+	  </th>
+	  <td align="left">
+	    Return From Window Underflow
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RITLB0.html">RITLB0</a>
+	  </th>
+	  <td align="left">
+	    Read Instruction TLB Entry Virtual
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RITLB1.html">RITLB1</a>
+	  </th>
+	  <td align="left">
+	    Read Instruction TLB Entry Translation
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/ROTW.html">ROTW</a>
+	  </th>
+	  <td align="left">
+	    Rotate Window
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSIL.html">RSIL</a>
+	  </th>
+	  <td align="left">
+	    Read and Set Interrupt Level
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRCCOMPARE0.html">RSR.CCOMPARE0</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register CCOMPARE0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRCCOUNT.html">RSR.CCOUNT</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register CCOUNT
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRCONFIGID0.html">RSR.CONFIGID0</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register CONFIGID0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRCONFIGID1.html">RSR.CONFIGID1</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register CONFIGID1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRDBREAKA0.html">RSR.DBREAKA0</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register DBREAKA0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRDBREAKA1.html">RSR.DBREAKA1</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register DBREAKA1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRDBREAKC0.html">RSR.DBREAKC0</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register DBREAKC0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRDBREAKC1.html">RSR.DBREAKC1</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register DBREAKC1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRDDR.html">RSR.DDR</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register DDR
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRDEBUGCAUSE.html">RSR.DEBUGCAUSE</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register DEBUGCAUSE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRDEPC.html">RSR.DEPC</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register DEPC
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREPC1.html">RSR.EPC1</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EPC1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREPC2.html">RSR.EPC2</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EPC2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREPC3.html">RSR.EPC3</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EPC3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREPC4.html">RSR.EPC4</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EPC4
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREPC5.html">RSR.EPC5</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EPC5
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREPS2.html">RSR.EPS2</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EPS2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREPS3.html">RSR.EPS3</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EPS3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREPS4.html">RSR.EPS4</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EPS4
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREPS5.html">RSR.EPS5</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EPS5
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREXCCAUSE.html">RSR.EXCCAUSE</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EXCCAUSE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREXCSAVE1.html">RSR.EXCSAVE1</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EXCSAVE1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREXCSAVE2.html">RSR.EXCSAVE2</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EXCSAVE2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREXCSAVE3.html">RSR.EXCSAVE3</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EXCSAVE3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREXCSAVE4.html">RSR.EXCSAVE4</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EXCSAVE4
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREXCSAVE5.html">RSR.EXCSAVE5</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EXCSAVE5
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSREXCVADDR.html">RSR.EXCVADDR</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register EXCVADDR
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRIBREAKA0.html">RSR.IBREAKA0</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register IBREAKA0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRIBREAKA1.html">RSR.IBREAKA1</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register IBREAKA1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRIBREAKENABLE.html">RSR.IBREAKENABLE</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register IBREAKENABLE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRICOUNT.html">RSR.ICOUNT</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register ICOUNT
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRICOUNTLEVEL.html">RSR.ICOUNTLEVEL</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register ICOUNTLEVEL
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRINTENABLE.html">RSR.INTENABLE</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register INTENABLE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRINTERRUPT.html">RSR.INTERRUPT</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register INTERRUPT
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRLBEG.html">RSR.LBEG</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register LBEG
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRLCOUNT.html">RSR.LCOUNT</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register LCOUNT
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRLEND.html">RSR.LEND</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register LEND
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRLITBASE.html">RSR.LITBASE</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register LITBASE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRMISC0.html">RSR.MISC0</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register MISC0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRMISC1.html">RSR.MISC1</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register MISC1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRMISC2.html">RSR.MISC2</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register MISC2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRMISC3.html">RSR.MISC3</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register MISC3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRPS.html">RSR.PS</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register PS
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRSAR.html">RSR.SAR</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register SAR
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRWINDOWBASE.html">RSR.WINDOWBASE</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register WINDOWBASE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSRWINDOWSTART.html">RSR.WINDOWSTART</a>
+	  </th>
+	  <td align="left">
+	    Read Special Register WINDOWSTART
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/RSYNC.html">RSYNC</a>
+	  </th>
+	  <td align="left">
+	    Register Read Synchronize
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/S8I.html">S8I</a>
+	  </th>
+	  <td align="left">
+	    Store 8-bit
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/S16I.html">S16I</a>
+	  </th>
+	  <td align="left">
+	    Store 16-bit
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/S32E.html">S32E</a>
+	  </th>
+	  <td align="left">
+	    Store 32-bit for Window Exceptions
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/S32I.html">S32I</a>
+	  </th>
+	  <td align="left">
+	    Store 32-bit
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/S32IN.html">S32I.N</a>
+	  </th>
+	  <td align="left">
+	    Narrow Store 32-bit
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SEXT.html">SEXT</a>
+	  </th>
+	  <td align="left">
+	    Sign Extend
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SIMCALL.html">SIMCALL</a>
+	  </th>
+	  <td align="left">
+	    Simulator Call
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SLL.html">SLL</a>
+	  </th>
+	  <td align="left">
+	    Shift Left Logical
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SLLI.html">SLLI</a>
+	  </th>
+	  <td align="left">
+	    Shift Left Logical Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SRA.html">SRA</a>
+	  </th>
+	  <td align="left">
+	    Shift Right Arithmetic
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SRAI.html">SRAI</a>
+	  </th>
+	  <td align="left">
+	    Shift Right Arithmetic Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SRC.html">SRC</a>
+	  </th>
+	  <td align="left">
+	    Shift Right Combined
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SRL.html">SRL</a>
+	  </th>
+	  <td align="left">
+	    Shift Right Logical
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SRLI.html">SRLI</a>
+	  </th>
+	  <td align="left">
+	    Shift Right Logical Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SSA8B.html">SSA8B</a>
+	  </th>
+	  <td align="left">
+	    Set Shift Amount for BE Byte Shift
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SSA8L.html">SSA8L</a>
+	  </th>
+	  <td align="left">
+	    Set Shift Amount for LE Byte Shift
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SSAI.html">SSAI</a>
+	  </th>
+	  <td align="left">
+	    Set Shift Amount Immediate
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SSL.html">SSL</a>
+	  </th>
+	  <td align="left">
+	    Set Shift Amount for Left Shift
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SSR.html">SSR</a>
+	  </th>
+	  <td align="left">
+	    Set Shift Amount for Right Shift
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SUB.html">SUB</a>
+	  </th>
+	  <td align="left">
+	    Subtract
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SUBX2.html">SUBX2</a>
+	  </th>
+	  <td align="left">
+	    Subtract with Shift by 1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SUBX4.html">SUBX4</a>
+	  </th>
+	  <td align="left">
+	    Subtract with Shift by 2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SUBX8.html">SUBX8</a>
+	  </th>
+	  <td align="left">
+	    Subtract with Shift by 3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/SYSCALL.html">SYSCALL</a>
+	  </th>
+	  <td align="left">
+	    System Call
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WAITI.html">WAITI</a>
+	  </th>
+	  <td align="left">
+	    Wait for Interrupt
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WDTLB.html">WDTLB</a>
+	  </th>
+	  <td align="left">
+	    Write Data TLB Entry
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WITLB.html">WITLB</a>
+	  </th>
+	  <td align="left">
+	    Write Instruction TLB Entry
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRCCOMPARE0.html">WSR.CCOMPARE0</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register CCOMPARE0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRCCOUNT.html">WSR.CCOUNT</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register CCOUNT
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRDBREAKA0.html">WSR.DBREAKA0</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register DBREAKA0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRDBREAKA1.html">WSR.DBREAKA1</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register DBREAKA1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRDBREAKC0.html">WSR.DBREAKC0</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register DBREAKC0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRDBREAKC1.html">WSR.DBREAKC1</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register DBREAKC1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRDDR.html">WSR.DDR</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register DDR
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRDEBUGCAUSE.html">WSR.DEBUGCAUSE</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register DEBUGCAUSE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRDEPC.html">WSR.DEPC</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register DEPC
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREPC1.html">WSR.EPC1</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EPC1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREPC2.html">WSR.EPC2</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EPC2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREPC3.html">WSR.EPC3</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EPC3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREPC4.html">WSR.EPC4</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EPC4
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREPC5.html">WSR.EPC5</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EPC5
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREPS2.html">WSR.EPS2</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EPS2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREPS3.html">WSR.EPS3</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EPS3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREPS4.html">WSR.EPS4</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EPS4
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREPS5.html">WSR.EPS5</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EPS5
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREXCCAUSE.html">WSR.EXCCAUSE</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EXCCAUSE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREXCSAVE1.html">WSR.EXCSAVE1</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EXCSAVE1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREXCSAVE2.html">WSR.EXCSAVE2</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EXCSAVE2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREXCSAVE3.html">WSR.EXCSAVE3</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EXCSAVE3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREXCSAVE4.html">WSR.EXCSAVE4</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EXCSAVE4
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREXCSAVE5.html">WSR.EXCSAVE5</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EXCSAVE5
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSREXCVADDR.html">WSR.EXCVADDR</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register EXCVADDR
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRIBREAKA0.html">WSR.IBREAKA0</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register IBREAKA0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRIBREAKA1.html">WSR.IBREAKA1</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register IBREAKA1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRIBREAKENABLE.html">WSR.IBREAKENABLE</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register IBREAKENABLE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRICOUNT.html">WSR.ICOUNT</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register ICOUNT
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRICOUNTLEVEL.html">WSR.ICOUNTLEVEL</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register ICOUNTLEVEL
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRINTCLEAR.html">WSR.INTCLEAR</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register INTCLEAR
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRINTENABLE.html">WSR.INTENABLE</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register INTENABLE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRINTSET.html">WSR.INTSET</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register INTSET
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRLBEG.html">WSR.LBEG</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register LBEG
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRLCOUNT.html">WSR.LCOUNT</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register LCOUNT
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRLEND.html">WSR.LEND</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register LEND
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRLITBASE.html">WSR.LITBASE</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register LITBASE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRMISC0.html">WSR.MISC0</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register MISC0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRMISC1.html">WSR.MISC1</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register MISC1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRMISC2.html">WSR.MISC2</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register MISC2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRMISC3.html">WSR.MISC3</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register MISC3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRPS.html">WSR.PS</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register PS
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRSAR.html">WSR.SAR</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register SAR
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRWINDOWBASE.html">WSR.WINDOWBASE</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register WINDOWBASE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/WSRWINDOWSTART.html">WSR.WINDOWSTART</a>
+	  </th>
+	  <td align="left">
+	    Write Special Register WINDOWSTART
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XOR.html">XOR</a>
+	  </th>
+	  <td align="left">
+	    Bitwise Logical Exclusive Or
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRCCOMPARE0.html">XSR.CCOMPARE0</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register CCOMPARE0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRCCOUNT.html">XSR.CCOUNT</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register CCOUNT
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRDBREAKA0.html">XSR.DBREAKA0</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register DBREAKA0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRDBREAKA1.html">XSR.DBREAKA1</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register DBREAKA1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRDBREAKC0.html">XSR.DBREAKC0</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register DBREAKC0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRDBREAKC1.html">XSR.DBREAKC1</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register DBREAKC1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRDDR.html">XSR.DDR</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register DDR
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRDEBUGCAUSE.html">XSR.DEBUGCAUSE</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register DEBUGCAUSE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRDEPC.html">XSR.DEPC</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register DEPC
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREPC1.html">XSR.EPC1</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EPC1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREPC2.html">XSR.EPC2</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EPC2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREPC3.html">XSR.EPC3</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EPC3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREPC4.html">XSR.EPC4</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EPC4
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREPC5.html">XSR.EPC5</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EPC5
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREPS2.html">XSR.EPS2</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EPS2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREPS3.html">XSR.EPS3</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EPS3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREPS4.html">XSR.EPS4</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EPS4
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREPS5.html">XSR.EPS5</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EPS5
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREXCCAUSE.html">XSR.EXCCAUSE</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EXCCAUSE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREXCSAVE1.html">XSR.EXCSAVE1</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EXCSAVE1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREXCSAVE2.html">XSR.EXCSAVE2</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EXCSAVE2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREXCSAVE3.html">XSR.EXCSAVE3</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EXCSAVE3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREXCSAVE4.html">XSR.EXCSAVE4</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EXCSAVE4
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREXCSAVE5.html">XSR.EXCSAVE5</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EXCSAVE5
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSREXCVADDR.html">XSR.EXCVADDR</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register EXCVADDR
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRIBREAKA0.html">XSR.IBREAKA0</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register IBREAKA0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRIBREAKA1.html">XSR.IBREAKA1</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register IBREAKA1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRIBREAKENABLE.html">XSR.IBREAKENABLE</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register IBREAKENABLE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRICOUNT.html">XSR.ICOUNT</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register ICOUNT
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRICOUNTLEVEL.html">XSR.ICOUNTLEVEL</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register ICOUNTLEVEL
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRINTENABLE.html">XSR.INTENABLE</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register INTENABLE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRLBEG.html">XSR.LBEG</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register LBEG
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRLCOUNT.html">XSR.LCOUNT</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register LCOUNT
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRLEND.html">XSR.LEND</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register LEND
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRLITBASE.html">XSR.LITBASE</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register LITBASE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRMISC0.html">XSR.MISC0</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register MISC0
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRMISC1.html">XSR.MISC1</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register MISC1
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRMISC2.html">XSR.MISC2</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register MISC2
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRMISC3.html">XSR.MISC3</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register MISC3
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRPS.html">XSR.PS</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register PS
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRSAR.html">XSR.SAR</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register SAR
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRWINDOWBASE.html">XSR.WINDOWBASE</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register WINDOWBASE
+	  </td>
+	</tr>
+	<tr>
+	  <th align="left">
+	    <a href="instruction/XSRWINDOWSTART.html">XSR.WINDOWSTART</a>
+	  </th>
+	  <td align="left">
+	    Exchange Special Register WINDOWSTART
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+  </body>
+</html>

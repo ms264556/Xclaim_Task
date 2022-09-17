@@ -1,0 +1,2979 @@
+#! /usr/xtensa/tools-6.1/bin/perl -w
+# $Id: //depot/rel/Cottonwood/Xtensa/TIE/tc/tc/tc#6 $
+# Copyright (c) 2004-2010 Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and conFidential Proprietary Information Of Tensilica Inc.
+# They May Not Be Modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+use Getopt::Long;
+$Getopt::Long::ignorecase = 0;
+use FindBin;
+use FileHandle;
+use File::Basename;
+use File::Path;
+use File::Copy;
+use File::Temp qw(tempfile tempdir);
+use File::Spec qw(tmpdir);
+use Cwd qw/cwd/;
+use Text::Wrap;
+use Digest::MD5;
+use Switch;
+
+$Text::Wrap::columns = 100;
+$Text::Wrap::huge = 'overflow';
+
+my $tdb_internal_prefix = "__XT_TDBFILE_PRIVATE";
+
+#########################################################
+#
+# All deaths in the family go here for final mourning.
+#
+#
+#  Note:
+#     Use die trap instead of die,
+#
+#########################################################
+sub die_trap
+{
+    my($msg) = @_;
+    if($tdk_flow){ tdk_phase_marker(1, "end"); }
+    print STDERR "Error: (TIE_PREPROCESS_ERROR),\n      $msg\n";
+
+    #
+    # On a fatal error try and clean up all unwanted files before exiting.
+    #
+
+    if(defined($outdir) && defined($base)){
+
+	unlink "$outdir\/$tdb_internal_prefix\_$base\.full" if( -e "$outdir\/$tdb_internal_prefix\_$base\.full");
+	unlink "$outdir\/$tdb_internal_prefix\_$base\.tie" if( -e  "$outdir\/$tdb_internal_prefix\_$base\.tie");
+	unlink "$outdir\/$tdb_internal_prefix\_$base\.tdbfull" if( -e "$outdir/$tdb_internal_prefix\_$base\.tdbfull");
+	unlink "$outdir\/$base.full" if( -e  "$outdir\/$base\.full");
+	unlink "$outdir/$base.tl" if( -e "$outdir/$base\.tl");
+	unlink "$outdir/index.xml" if( -e "$outdir/index\.xml");
+	unlink "$outdir/libtie-$base-post-parse\.data" if( -e  "$outdir/libtie-$base-post-parse\.data");
+	unlink "$outdir/libtie-$base-post-rewrite\.data" if( -e "$outdir/libtie-$base-post-rewrite\.data");
+	unlink "$outdir/libtie-$base-compiler\.data" if( -e  "$outdir/libtie-$base-compiler\.data");
+    }
+
+    if(defined($tmp_file)){ unlink "$tmp_file" if(-e "$tmp_file"); }
+    if(defined($tmp_tie_file)){ unlink "$tmp_tie_file" if(-e "$tmp_tie_file"); }
+
+    exit 1;
+}
+##############################################################################
+# put configuration values into config_table
+##############################################################################
+my %config_table = ();
+sub read_config {
+    my ($file) = @_;
+    my $fh = new FileHandle $file, '<';
+    die_trap("Cannot read $file\n") unless $fh;
+    while (<$fh>) {
+	chomp;
+	s/\#.*$//;
+	if (/^\s*include\s+(.*)\s*$/) {
+	    my $name = $1;
+	    my ($b, $p, $s) = File::Basename::fileparse($file);
+	    my $fname = $p . "/" . $name;
+	    read_config($fname);
+	} elsif (/^(\S+)\s*(\S+)\s*$/) {
+	    $config_table{$1} = $2;
+	}
+    }
+    close $fh;
+}
+
+##############################################################################
+# Wrapper for system which echoes what it is doing
+##############################################################################
+sub do_system {
+    my $cleanup = shift;
+    # Keep the command as an array of arguments.  Invoking system()
+    # in this way guarantees that Perl will not attempt to invoke a shell
+    # to run the command.  (We need to avoid shells for portability,
+    # especially on Windows.)
+
+    # For Windows, add double quotes around all the arguments.
+    my $prog = shift;
+    my @args;
+    if ($sname eq 'MSWin32') {
+	@args = map("\"$_\"", @_);
+    } else {
+	@args = @_;
+    }
+
+    print "$prog " . join(' ', @args) . "\n" if $trace;
+    my $status = 0xffff & system($prog, @args);
+    # Find out if there is a core file or not
+    my $logfile = "$outdir/tc_errorlog.txt";
+
+    if ( !( $sname eq "MSWin32" ) ) {
+	my $pid = 0;
+	my $core = 1;
+	my @tmpfiles;
+
+	if ( -e $logfile && !( -z $logfile ) ) {
+	    open(FILE, $logfile) || die_trap("Cannot open $logfile: $!\n");
+	    # Get the PID of TC from the log file
+	    while (<FILE>) {
+		chop;
+		if ( /\s*Process ID of failing process is\s*/ ) {
+		    $_ = $'; #'
+		    /\./;
+		    $pid = $`;
+		}
+	    }
+	    # Find out if there is a core file
+	    if ( !(-e "core.$pid") && ( $sname eq "Linux" ) ) {
+		$core = 0;
+	    } elsif ( !(-e "core") && ( $sname eq "SunOS" )) {
+		$core = 0;
+	    }
+
+	    my $ten_internal = $ENV{ 'TEN4_INTERNAL' };
+
+	    if ( !$ten_internal ) {
+		if ( $core && ( $sname eq "Linux" ) ) {
+		    unlink("core.$pid");
+		} elsif ( $core && ( $sname eq "SunOS" ) ) {
+		    unlink("core");
+		}
+	    }
+	}
+    }
+
+    if (($status != 0) && !($prog =~ /.*tdbextract/)) {
+
+	if ($prog =~ /.*tcgen/) {
+	} else {
+	    print "NONZERO return status for: $prog\n" if ($status & 0xff) == 0;
+	}
+	print "Received signal ", $status & 0x7f, "; quitting.\n"
+	    if ($status & 0xff) != 0;
+	if(defined($cleanup)){ &$cleanup(); }
+	tdk_phase_marker(1, "end");
+	exit 1;
+    }
+
+    return $status;
+}
+
+##############################################################################
+# Version of do_system that appends output to a file.
+##############################################################################
+sub do_system_append {
+    my $outfile = shift;
+    my $cleanup = shift;
+
+    # For Windows, add double quotes around all the arguments.
+    my $prog = shift;
+    my @args;
+    if ($sname eq 'MSWin32') {
+	@args = map("\"$_\"", @_);
+    } else {
+	@args = @_;
+    }
+
+    print "$prog " . join(' ', @args) . " >> $outfile\n" if $trace;
+
+    open SAVEOUT, ">&STDOUT" || die_trap("Cannot open STDOUT: $!\n");
+    if (! open STDOUT, ">>$outfile") {
+	print "Cannot redirect stdout to $outfile; quitting.\n";
+	if(defined($cleanup)){ &$cleanup(); }
+	tdk_phase_marker(1, "end");
+	exit 1;
+    }
+
+    my $status = 0xffff & system($prog, @args);
+
+    close STDOUT;
+    open STDOUT, ">&SAVEOUT" || die_trap("Cannot open SAVEOUT: $!\n");
+    close SAVEOUT;
+
+    if ($status != 0 && !($prog =~ /.*tdbextract/)) {
+	if($_[0] =~ /.*tcgen/) {
+	} else {
+	    print "NONZERO return status for: $_[0]\n" if ($status & 0xff) == 0;
+	}
+
+	print "Received signal $status & 0x7f quitting.\n" if ($status & 0xff) != 0;
+
+	if(defined($cleanup)){ &$cleanup(); }
+	tdk_phase_marker(1, "end");
+	exit 1;
+    }
+
+    return $status;
+}
+
+##############################################################################
+# Cat a file.
+##############################################################################
+sub cat {
+    my ($input, $handle) = @_;
+
+    open FILE, $input or return;
+    binmode(FILE);
+    while (<FILE>) {
+	print $handle $_;
+    }
+    close FILE;
+
+    return (1);
+}
+
+##############################################################################
+# Generate a secure temporary file for use
+##############################################################################
+sub generate_tempfile_name {
+
+    my($perl_file, $fh);
+
+    $dir = tempdir(CLEANUP => 1);
+    ($fh, $perl_file) = tempfile("tmpwork__XXXXXXXX", DIR => $dir);
+
+    # Close the file handle opened by the tempfile call, so the file
+    # can be unlinked later.
+    close($fh);
+
+    return($perl_file);
+}
+
+##############################################################################
+# Run tcgen just to get the version number
+##############################################################################
+sub do_tieversion {
+  my @tieopt;
+  push @tieopt, "-r", "$root";
+  push @tieopt, "-s", "$xtensa_tools";
+  push @tieopt, "-X", "9.0.2";
+  #push @tieopt, "-C", "$config_file";
+  push @tieopt, "-V";
+  do_system(undef, "$tcgen", @tieopt);
+}
+
+##############################################################################
+# Run tpp and simple preprocessors
+##############################################################################
+sub do_pre {
+  # On Windows, arguments need to be enclosed in double quotes (e.g., because
+  # of whitespace and special characters), but when setting up the arguments
+  # for a debugger on Unix, single quotes are needed because of dollar signs
+  # in Perl expressions.  Any quotes nested inside these outer quotes must use
+  # the other kind of quote.
+  my $shellquote = ($sname eq 'MSWin32') ? "\"" : "'";
+  my $perlquote = ($sname eq 'MSWin32') ? "'" : "\"";
+  my $version =  '9.0.2';
+  my $xtversion = '$::xtversion=' . $perlquote .
+    (($version) ? $version : 'unknown') . $perlquote . ';';
+  $perl_execute =~ s/$shellquote/$perlquote/g;
+
+  # Showall flag automatically sets warnall and msgall flag
+  if ( $opt_showall ) {
+      $opt_warnall = 1;
+      $opt_msgall = 1;
+  }
+
+  my @tieopt;
+  push @tieopt, "-r", "$root";
+  push @tieopt, "-s", "$xtensa_tools";
+  push @tieopt, "-n", "$base";
+  push @tieopt, "-o", "$outdir";
+  push @tieopt, "-X", "9.0.2";
+  push @tieopt, "-C", "$config_file";
+  push @tieopt, "-H", "-S", "-R";
+  push @tieopt, "-I" if $cpt_time;
+  push @tieopt, "-t" if $trace;
+  push @tieopt, $trace_opt if ($trace && $trace_opt);
+  push @tieopt, "-e", "$xtversion$perl_execute";
+  push @tieopt, "-C", "$area_file" if ($area_file ne "");
+  foreach $_ (@config_variables) {
+    push @tieopt, "-C", $_;
+  }
+  push @tieopt, "-V" if $opt_tie_v;
+  push @tieopt, "$tie_v" if $tie_v && $opt_tie_v;
+  push @tieopt, "-x" if $vhdl;
+  push @tieopt, "-h" if $tpp_only;
+  push @tieopt, "-f" if $full_only;
+  push @tieopt, "-F" if $semantic_gen;
+  push @tieopt, "-l" if $lint_only;
+  push @tieopt, "-J" if $opt_warnall;
+  push @tieopt, "-j", "$reportwarn" if $reportwarn && !$opt_showall;
+  push @tieopt, "-Q" if $opt_msgall;
+  push @tieopt, "-U", "$reportmsg" if $reportmsg && !$opt_showall;
+  push @tieopt, "-W" if $opt_nowarn;
+  push @tieopt, "-w", "$ignorewarn" if $ignorewarn && !$opt_showall;
+  push @tieopt, "-M" if $opt_nomsg;
+  push @tieopt, "-N" if $no_errformat;
+  push @tieopt, "-m", "$ignoremsg" if $ignoremsg && !$opt_showall;
+  push @tieopt, "-E", "$ignoreerr" if $ignoreerr && !$opt_showall;
+  push @tieopt, "-A" if $opt_showall;
+  push @tieopt, "-P" if $no_preprocess;
+  push @tieopt, "-c" if $chk_tiegen;
+  push @tieopt, "-y" if $xml_only;
+  push @tieopt, "-Y" if $write_xml;
+  if ($area_only && ($estimate_area >= 0)) {
+    push @tieopt, "-k";
+    push @tieopt, "-a", "$estimate_area";
+    push @tieopt, "-u", "$prim_lib" if ($prim_lib ne "");
+  }
+  if ($estimate_power >= 0) {
+    push @tieopt, "-q", "$estimate_power";
+    push @tieopt, "-v", "$power_lib" if ($power_lib ne "");
+  }
+  foreach $_ (@Libs) {
+    push @tieopt, "-L", $_;
+  }
+  foreach $_ (@libs) {
+    push @tieopt, "-L", "$lib/config/" . $_ . ".tie";
+  }
+  push @tieopt, "-L", "$lib/config/$cf_name.tie" if $cf_name;
+  push @tieopt, "$tie_input";
+
+# If emacspre is used, need to set (setq gud-chdir-before-run nil) in emacs
+  if ($debugpre || $xdebugpre || $ddd_debugpre || $emacspre) {
+
+    if($debugpre){
+      open(OUT, ">$outdir/args") || die_trap("Cannot open $outdir/args: $!\n");
+    }else{
+       open(OUT, ">.gdbinit") || die_trap("Cannot open .gdbinit: $!\n");
+    }
+
+    print OUT "set args " . join(' ', map($shellquote . $_ . $shellquote, @tieopt)) . "\n";
+    print OUT "break main\n";
+    print OUT "run\n";
+
+    if ($purify) {
+      print OUT "break purify_stop_here\n";
+    }
+
+    close OUT;
+
+    if ($debugpre) {
+      do_system(undef, "gdb", "$tiepre", "-x", "$outdir/args");
+    } elsif ($xdebugpre) {
+      do_system(undef, "xxgdb", "$tiepre");
+    } elsif ($ddd_debugpre) {
+      do_system(undef, "ddd", "$tiepre");
+    } elsif ($emacspre) {
+      open(OUT, ">$outdir/emacs-gdb") || die_trap("Cannot open $outdir/emacs-gdb: $!\n");
+      print OUT "(setq gud-chdir-before-run nil)\n(gdb \"gdb --annotate=3 $tiepre\")\n";
+      close(OUT);
+      do_system(undef, "emacs", "-l", "$outdir/emacs-gdb");
+    }
+  } elsif ($valgrind) {
+    do_system(undef, "valgrind","--show-reachable=yes", "--log-file=valgrind_log", "--num-callers=16", "-v", "--tool=memcheck", "--error-limit=no", "--leak-check=yes", "--leak-resolution=high", "$tiepre", @tieopt);
+  } else {
+    do_system(\&do_cleanup_pre, "$tiepre", @tieopt);
+    if ($gprof) {
+        move("gmon.out", "gmon.tiepre") || die_trap("Rename failed ( gmon.out -> gmon.tiepre ) : $!\n");
+    }
+  }
+
+  $tcgen_input = "$outdir\/$tdb_internal_prefix\_$base.full";
+}
+
+#
+#  On failure cleanup any temp files we dont want around....
+#
+sub do_cleanup_pre
+{
+    unlink($tmp_file)      if(-e $tmp_file);
+    unlink($tmp_tie_file)  if(-e $tmp_tie_file);
+}
+##############################################################################
+# Run tcgen
+##############################################################################
+sub do_tcgen {
+  # See comments about quoting in do_pre.
+  my $shellquote = ($sname eq 'MSWin32') ? "\"" : "'";
+
+  # Warnall flag automatically sets showall flag
+  if ( $opt_showall ) {
+      $opt_warnall = 1;
+      $opt_msgall = 1;
+  }
+
+  my @tieopt;
+  push @tieopt, "-r", "$root";
+  push @tieopt, "-s", "$xtensa_tools";
+  push @tieopt, "-n", "$base";
+  push @tieopt, "-X", "9.0.2";
+  push @tieopt, "-o", "$outdir";
+  push @tieopt, "-C", "$config_file";
+  push @tieopt, "-P", "-c";
+  push @tieopt, "-C", "$area_file" if ($area_file ne "");
+  foreach $_ (@config_variables) {
+    push @tieopt, "-C", $_;
+  }
+  push @tieopt, "-V" if $opt_tie_v;
+  push @tieopt, "$tie_v" if $tie_v && $opt_tie_v;
+  push @tieopt, "-A" if $opt_showall;
+  push @tieopt, "-t" if $trace;
+  push @tieopt, $trace_opt if ($trace && $trace_opt);
+  push @tieopt, "-x" if $vhdl;
+  push @tieopt, "-H" if $no_hardware;
+  push @tieopt, "-S" if $no_software;
+  push @tieopt, "-R" if $no_report;
+  push @tieopt, "-J" if $opt_warnall;
+  push @tieopt, "-j", "$reportwarn" if $reportwarn && !$opt_showall;
+  push @tieopt, "-Q" if $opt_msgall;
+  push @tieopt, "-U", "$reportmsg" if $reportmsg && !$opt_showall;
+  push @tieopt, "-W" if $opt_nowarn;
+  push @tieopt, "-w", "$ignorewarn" if $ignorewarn && !$opt_showall;
+  push @tieopt, "-M" if $opt_nomsg;
+  push @tieopt, "-m", "$ignoremsg" if $ignoremsg && !$opt_showall;
+  push @tieopt, "-E", "$ignoreerr" if $ignoreerr && !$opt_showall;
+  push @tieopt, "-N", if $no_errformat;
+  push @tieopt, "-A" if $opt_showall;
+  push @tieopt, "-T" if $avp;
+  push @tieopt, "-a", "$estimate_area" if ($estimate_area >= 0);
+  push @tieopt, "-d" if $debuglib;
+  push @tieopt, "-g" if $reflib;
+  push @tieopt, "-i" if $libisa_src;
+  push @tieopt, "-G" if $genesys;
+  push @tieopt, "-B", "$bias_definitions" if ($bias_definitions ne "");
+  push @tieopt, "-u", "$prim_lib" if ($prim_lib ne "");
+  push @tieopt, "-I" if $cpt_time;
+  foreach $_ (@Libs) {
+    push @tieopt, "-L", $_;
+  }
+  foreach $_ (@libs) {
+    push @tieopt, "-L", "$lib/config/" . $_ . ".tie";
+  }
+
+  push @tieopt, "-L", "$lib/config/$cf_name.tie" if $cf_name;
+  push @tieopt, "$tcgen_input";
+
+  if ($debug || $xdebug || $ddd_debug || $emacs_debug) {
+    if ($debug) {
+      open(OUT, ">$outdir/args") || die_trap("Cannot open $outdir/args: $!\n");
+    } else {
+      open(OUT, ">.gdbinit") || die_trap("Cannot open .gdbinit: $!\n");
+    }
+
+    print OUT "set args " . join(' ', map($shellquote . $_ . $shellquote, @tieopt)) . "\n";
+    print OUT "break main\n";
+    print OUT "run\n";
+
+    if ($purify) {
+      print OUT "break purify_stop_here\n";
+    }
+    close OUT;
+
+    if ($debug) {
+      do_system(undef, "gdb", "$tcgen", "-x", "$outdir/args");
+    } elsif ($xdebug) {
+      do_system(undef, "xxgdb", "$tcgen");
+    } elsif ($ddd_debug) {
+      do_system(undef, "ddd", "$tcgen");
+    } elsif ($emacs_debug) {
+      open(OUT, ">$outdir/emacs-gdb") || die_trap("Cannot open $outdir/emacs-gdb: $!\n");
+      print OUT "(gdb \"gdb $tcgen\")\n";
+      close(OUT);
+      do_system(undef, "emacs", "-l", "$outdir/emacs-gdb");
+    }
+
+  }
+  elsif ($valgrind) {
+    do_system(undef, "valgrind", "--show-reachable=yes", "--num-callers=16", "-v", "--tool=memcheck", "--error-limit=no", "--leak-check=yes", "--leak-resolution=med", "$tcgen", @tieopt);
+
+  } else {
+
+    do_system(undef, "$tcgen", @tieopt);
+    if ($gprof) {
+        move("gmon.out", "gmon.tcgen") || die_trap("Rename failed (gmon.out => gmon.tcgen) : $!\n");
+    }
+  }
+
+}
+
+##############################################################################
+# Run tdbextract
+#
+# Call tdbextract to extract the full or simple TIE file from the generated
+# TDB file.
+#
+#  Check the TDB header version:
+#
+#    TDB Version 1.0 have no index structure and only contain a .full and .tie
+#    with same derivative name as tdb file.
+#
+#    TDB Version 2.0 have an index structure and internal names of .full and .tie
+#    are prefixed with __XT_INTERNAL_TDB.
+#
+#    full            Get the Full tie file
+#    tdb2tie         Get the Simple tie file
+#    name            Get the specified filename from the TDB
+#    params          Get the default-params file from the TDB
+#    index_xml       Get the index file of the tdb
+#
+##############################################################################
+sub do_tdbextract{
+
+  my($type, $tdbfile, $outdir) = @_;
+  my $tdbfilename;
+
+  if (! -e $tdbfile) {
+      die_trap("Cannot find TDB file $tdbfile\n");
+  }
+
+  $_ = basename($tdbfile);
+  s/.tdb$//;
+  my $realfile = $_;
+
+  $tdbfilename = tdb_getfilename($tdbfile, "simple") if($type eq "tdb2tie");
+  $tdbfilename = tdb_getfilename($tdbfile, "full") if($type eq "full");
+
+  if((my $version = tdb_getversion($tdbfile)) >= 2.0){
+
+      if (!defined($outdir)) {
+	  if($type eq "full" || $type eq "tdb2tie"){
+#	      print("COMMAND : $tdbextract name $tdbfilename $tdbfile\n");
+	      tdbextract_status(do_system(undef, "$tdbextract", "name", "$tdbfile", "$tdbfilename"), $tdbfile, "$realfile\.tie" );
+	  }elsif($type eq "params" || $type eq "index_xml"){
+	      tdbextract_status(do_system(undef, "$tdbextract", "$type", "$tdbfile"), $tdbfile, $tdbfile);
+	  }else{
+	      die_trap("Illegal Extraction type ( $type ) specified for TDB ( $tdbfile )\n");
+	  }
+      } else {
+	  my($tdbtype, $filetype) = split(/ /,$type);
+	  unlink("$outdir\/$tdbtype\_$filetype");
+#	  print "TDBEXTRACT : $outdir\/$tdbtype\_$filetype : undef : $tdbextract $filetype $tdbfile :  $tdbfile : $realfile\.tie\n";
+	  tdbextract_status(do_system_append("$outdir\/$tdbtype\_$filetype", undef, "$tdbextract", "$filetype", "$tdbfile"), $tdbfile, "$realfile\.tie" );
+      }
+  }else{
+      # old style TDB with no internal structure...
+
+      if (!defined($outdir)) {
+	  if($type eq "full" || $type eq "tdb2tie"){
+	      print("COMMAND : $tdbextract name $tdbfilename $tdbfile\n");
+	      tdbextract_status(do_system(undef, "$tdbextract", "name", "$tdbfile", "$tdbfilename"), $tdbfile, "$realfile\.tie" );
+	  }elsif($type eq "params" || $type eq "index_xml"){
+	      die_trap("Extraction method ( $type )  not supported for Version $version\.0 of TDB ( $tdbfile )\n")
+	  }else{
+	      die_trap("Illegal Extraction type ( $type ) specified for TDB ( $tdbfile )\n");
+	  }
+      } else {
+	  my($tdbtype, $filetype) = split(/ /,$type);
+	  die_trap("Extraction method ( $tdbtype $filetype )  not supported for Version $version\.0 of TDB ( $tdbfile )\n")
+      }
+  }
+}
+########################################################
+#
+#  Open up a given tdb and return the simple or
+#  full tie name from that file.
+#
+#  If the tdb type is greater than 2.0 get the
+#  name from the index.
+#
+#  If the tdb type is less than 2.0 than it is
+#  an old style tdb and the simple and full type
+#  is the same as the tdb base file name.
+#
+#########################################################
+sub tdb_getfilename
+  {
+      my($tdbfile, $type) = @_;
+
+      #
+      # Default full and simple tie names...
+      #
+
+      $_ = basename($tdbfile);
+      s/.tdb$//;
+      my $fulltie = "$_\.full";
+      my $simpletie = "$_\.tie";
+
+      my $version = tdb_getversion($tdbfile);
+
+      # Get the file name from the index.xml inside the
+      # tdb file. Older version do not have an index.xml
+      # so ignore them.
+
+      if ($version >= 2) {
+	  open CMD, "$tdbextract index_xml $tdbfile |";
+	  while (<CMD>) {
+	      chop();
+	      if (/<file/) {
+		  if (/type=\"simple\"/) {
+		      /name=/;
+		      $_ = $';
+		      /\"/;
+		      $_ = $';
+		      /\"/;
+		      $simpletie = $`;
+		  }
+		  if (/type=\"full\"/) {
+		      /name=/;
+		      $_ = $';
+		      /\"/;
+		      $_ = $';
+		      /\"/;
+		      $fulltie = $`;
+		  }
+	      }
+	  }
+	  close(CMD);
+      }
+
+      return $simpletie if($type eq "simple");
+      return $fulltie if($type eq "full");
+}
+
+#############################################
+#
+# Return the TDB Version Scheme this tdb
+# was built with.
+#
+#   1.0    BearValley
+#   2.0    BadgerPass and Beyond
+#   3.0    Capitola?
+#
+##############################################
+sub tdb_getversion
+{
+    my($tdbfile) = @_;
+    my $buf2;
+
+    my $fh = new IO::File;
+    open($fh, "$tdbfile") or die_trap("Error cannot open $tdbfile\n");
+    binmode($fh);
+
+    read($fh, $buf2, 6);
+    close($fh);
+
+    die_trap("Bad TDB Header - not complete\n") if ($buf2 =~ /^TDB$/) ;
+    my($header, $version) = split(/\./, $buf2);
+
+    return $version;
+}
+##################################################################3
+#
+# Extraction return codes
+#
+#     PK_OK              0   /* no error */
+#     PK_COOL            0   /* no error */
+#     PK_GNARLY          0   /* no error */
+#     PK_WARN            1   /* warning error */
+#     PK_ERR             2   /* error in zipfile */
+#     PK_BADERR          3   /* severe error in zipfile */
+#     PK_MEM             4   /* insufficient memory (during initialization) */
+#     PK_MEM2            5   /* insufficient memory (password failure) */
+#     PK_MEM3            6   /* insufficient memory (file decompression) */
+#     PK_MEM4            7   /* insufficient memory (memory decompression) */
+#     PK_MEM5            8   /* insufficient memory (not yet used) */
+#     PK_NOZIP           9   /* zipfile not found */
+#     PK_PARAM          10   /* bad or illegal parameters specified */
+#     PK_FIND           11   /* no files found */
+#     PK_DISK           50   /* disk full */
+#     PK_EOF            51   /* unexpected EOF */
+#
+#########################################################################
+sub tdbextract_status{
+
+    my ($status,$basetdb, $file) = @_;
+
+    switch($status >> 8)
+    {
+	case "0"
+	{
+	    return;
+	}
+	case "1"
+	{
+	    return;
+	}
+
+	case "2"
+	{
+	    die_trap("Error in $basetdb file format");
+	}
+	case "3"
+	{
+	    die_trap("Severe Error in $basetdb file format");
+	}
+	case ( "4" | "5" | "6" | "7" | "8")
+	{
+	    die_trap("Insufficient memory (during initialization) while processing $basetdb");
+	}
+	case "9"
+	{
+	    die_trap("$basetdb file could not be found");
+	}
+	case "10"
+	{
+	    die_trap("Bad or illegal parameters specified in $basetdb creation");
+	}
+	case "11"
+	{
+	    die_trap("Could not extract $file from $basetdb. One cause may be that the $basetdb file has been renamed and auto extraction cannot find $file anymore." .
+		     " Auto extraction requires that the TDB file have the same name as it was originally constructed with using the TDB naming option.");
+	}
+	case "50"
+	{
+	    die_trap("Disk full error");
+	}
+	case "51"
+	{
+	    die_trap("Unexpected EOF reached in $basetdb file");
+	}
+	else
+	{
+	    die_trap("Unexpected error encountered while processing $basetdb file");
+	}
+    }
+
+}
+##############################################################################
+#
+# Run tdbinsert
+#
+# Call tc to insert the config and binary isa files inside of the TDB
+#
+##############################################################################
+sub do_tdbinsert {
+
+  my($tdb, $full, $tie, $xmlindex, $isa, $isa_core, $isa_core_hw, $param) = @_;
+
+  my @tieopt;
+  my $prefix = "$tdb_internal_prefix\_";
+
+  push @tieopt, "-r", "$root";
+  push @tieopt, "-s", "$xtensa_tools";
+  push @tieopt, "-n", "$base";
+  push @tieopt, "-X", "9.0.2";
+  push @tieopt, "-o", "$outdir";
+  push @tieopt, "-C", "$config_file";
+
+  foreach $_ (@config_variables) {
+    push @tieopt, "-C", $_;
+  }
+
+  push @tieopt, "-Z", "$prefix", "$xmlindex", "$isa", "$isa_core", "$isa_core_hw", "$param";
+  do_system(undef, "$tcgen", @tieopt);
+
+}
+
+##############################################################################
+#
+# Run Xchange flow
+#
+# Call tc to run a binary translation on the executable and
+# produce a newly reencoded binary.
+###############################################################################
+sub do_xchange {
+    my($ref_tdb, $new_tdb,  $binary) = @_;
+
+    my $fullpath = File::Spec->rel2abs ($outdir);
+
+    my @tieopt;
+    push @tieopt, "-r", "$root";
+    push @tieopt, "-s", "$xtensa_tools";
+    push @tieopt, "-n", "$base";
+    push @tieopt, "-X", "9.0.2";
+    push @tieopt, "-o", "$fullpath";
+    push @tieopt, "-C", "$config_file";
+    push @tieopt, "-D", "$ref_tdb", "$new_tdb", "$binary";
+
+
+    do_tdbextract("libisa_ref isa", $ref_tdb, $outdir);
+    do_tdbextract("libisa_ref isa_core", $ref_tdb, $outdir);
+    do_tdbextract("libisa_ref isa_core_hw", $ref_tdb, $outdir);
+
+    do_tdbextract("libisa_new isa", $new_tdb, $outdir);
+    do_tdbextract("libisa_new isa_core", $new_tdb, $outdir);
+    do_tdbextract("libisa_new isa_core_hw", $new_tdb, $outdir);
+
+    do_tdbextract("ref index_xml", $ref_tdb, $outdir);
+    do_tdbextract("new index_xml", $new_tdb, $outdir);
+
+    mkpath("$outdir/core");
+    mkpath("$outdir/core/to");
+    mkpath("$outdir/core/from");
+    mkpath("$outdir/sys");
+
+    open FROM, ">$outdir/sys/from-params" || die_trap("Cannot open $outdir/sys/from-params: $!\n");
+        print FROM "isa-base-dlls = [\n";
+        print FROM "    $fullpath/libisa_ref_isa_core\n";
+        print FROM "    $fullpath/libisa_ref_isa_core_hw\n";
+        print FROM "]\n";
+    close FROM;
+
+    open TO, ">$outdir/sys/to-params" || die_trap("Cannot open $outdir/sys/to-params: $!\n");
+        print TO "isa-base-dlls = [\n";
+        print TO "    $fullpath/libisa_new_isa_core\n";
+        print TO "    $fullpath/libisa_new_isa_core_hw\n";
+        print TO "]\n";
+    close TO;
+
+    open FROM, ">$outdir/core/from/default-params" || die_trap("Cannot open $outdir/core/from/default-params: $!\n");
+        printf FROM "isa-tie-dll = $fullpath/libisa_ref_isa\n";
+    close FROM;
+
+    open TO, ">$outdir/core/to/default-params" || die_trap("Cannot open $outdir/core/to/default-params: $!\n");
+        printf TO "isa-tie-dll = $fullpath/libisa_new_isa\n";
+    close TO;
+
+    open SYS, ">$outdir/system.xch" || die_trap("Cannot open $outdir/system.xch: $!\n");
+        printf SYS "from-system($fullpath/sys)\n";
+        printf SYS "to-system($fullpath/sys)\n";
+        printf SYS "from-params($fullpath/core/from)\n";
+        printf SYS "to-params($fullpath/core/to)\n";
+    close SYS;
+
+
+    do_system(undef, "$tcgen", @tieopt);
+
+}
+
+##############################################################################
+# Filename utilities
+##############################################################################
+sub change_copy {
+    my($src, $dst) = @_;
+    my $prefix;
+
+    if (defined $config_table{"ProcessorCoreName"}) {
+        $prefix = $config_table{"ProcessorCoreName"};
+    } else {
+        $prefix = "Xm_s37";
+    }
+
+    open(IFILE, "<$src") || die_trap("Cannot read $src\n");
+    open(OFILE, ">$dst") || die_trap("Cannot write $dst\n");
+    while (<IFILE>) {
+	s/\@tools\@/$xtensa_tools/g;
+	s/\@DESIGN_PREFIX\@/${prefix}/g;
+	s/\@ROOT\@/$base/g;
+	s/\@INSTALL_DIR\@/$full_dir/g;
+	s/\@SWCONFIG\@/$full_swconfig/g;
+	s/\@RETIME\@/$retime/g;
+	print OFILE;
+    }
+    close(IFILE);
+    close(OFILE);
+}
+
+##############################################################################
+# Formatting utilities
+##############################################################################
+sub do_format {
+    my($file) = @_;
+    my $tmp = "$file.tmp";
+    my $line;
+
+    open(OFILE, ">$tmp") || die_trap("Cannot open $tmp: $!\n");
+    open(IFILE, "<$file") || die_trap("Cannot open $file: $!\n");
+    while ($line = <IFILE>) {
+        chop $line;
+        #don't wrap comment lines or lines that print
+	if ( $line =~ /^\/\// || $line =~ /\$display/ ) { 
+	   print OFILE $line, "\n";
+	   next;
+	}
+        print OFILE wrap('', "\t", $line), "\n";
+    }
+    close(OFILE);
+    close(IFILE);
+    move($tmp, $file) || die_trap("Rename do_format failed ($tmp => $file) : $!\n");
+}
+
+##############################################################################
+# messages
+##############################################################################
+sub usage {
+    my ($ret_val) = @_;
+
+
+=head2 d 
+    
+This is the name of the directory in which the TIE compiler will generate 
+the output.
+
+=cut
+
+=head2 E
+
+TIE compiler runs a Perl preprocessor on the tie input file (see TIE manual
+for Perl preprocessor directives allowed). With this option, the output of
+the preprocessor is printed to standard output.
+
+=cut
+
+=head2 help
+
+Generate help message
+
+=cut
+
+=head2 lint
+
+TIE compiler will check the input tie description for correctness and report errors
+and warnings. No other output will be generated.
+
+=cut
+
+=head2 name
+
+The basename of all output files generated by the TIE compiler is by default set
+to the basename of the tie file. However, the user can change the basename with this
+option. When running with multiple tie files, the user must provide this option, since
+there is no default basename. The two important files that are affected by this option
+are the header file which contains the tie intrinsics and had to be included in C code,
+and the tdb file. 
+
+=cut
+
+=head2 unique_headers
+
+When compiling multiple tie files, the user must provide a basename with the -name
+option. This name is used to generate a single header file for the composite tie
+from all the files. If the user wants to generate header files for each tie file
+separately, then this flag should be used. For exmaple,
+
+=begin text
+
+tc -name myapp a.tie b.tie
+
+will generate a single header file myapp.h, and myapp.tdb
+
+tc -name myapp a.tie b.tie -unique_headers
+
+will generate headers a.h and b.h, and myapp.tdb
+
+=over
+
+=cut
+
+=head2 trace
+
+This option shows an execution trace of the TIE compiler, including the files that are being
+written. An optional parameter "tpp", if added to the argument, will show the invocations
+of the Perl preprocessor tietpp during the execution, which can be used to debug errors in
+the preprocessing phase if the tie has embedded Perl.
+
+=cut
+
+=head2 version
+
+Show the tie compiler version
+
+=cut
+
+=head2 tdb2tie
+
+Extract the input tie file from a tdb file. 
+
+=cut
+
+=head2 reassign_tdb_encodings
+
+When runnning TIE compiler on a tdb file, the opcode encodings assigned to tie
+operations in the tdb file are preserved. If the user wants to reassign the
+encodings, then this flag should be used. This can be useful when combining
+several tie packages, to ensure optimal endcodins. However, if encodings are i
+reassigned, then any binaries
+compiled with the original tdb has to be recompiled to run through the 
+xchange tool to make it compatible with the new encodings.
+
+=cut
+
+=head2 nowarn
+
+This flag turns off all warnings generated by the tie compiler. This flag is mutually
+exclusive with -warnall, having both of these flags will cause an error.
+
+=cut
+
+=head2 ignorewarn 
+
+Provides a list of error codes to TIE compiler to ignore when generated as warnings. 
+If any of these error codes are encountered as warnings, they will not be reported.
+Each error code in the list must be seperated by a comma. If all warnings are
+being ignored with the flag -nowarn, then this flag does not have any effect.
+If all warnings are being reported with the flag -warnall, then this flag does
+not have any effect.
+
+=cut
+
+=head2 nomsg
+
+This flag turns off all messges generated by the tie compiler. This flag is mutually
+exclusive with -msgall, having both of these flags will cause an error.
+
+=cut
+
+=head2 ignoremsg 
+
+Provides a list of error codes to TIE compiler to ignore when generated as messages. 
+If any of these error codes are encountered as messages, they will not be reported.
+Each error code in the list must be seperated by a comma. If all messages are
+being ignored with the flag -nomsg, then this flag does not have any effect.
+If all messages are being reported with the flag -msgall, then this flag does
+not have any effect.
+
+=cut
+
+=head2 warnall
+
+Report all warnings. By default, some pedantic warnings are not reported by the
+TIE compiler. If the flag -ignorewarn is also present, then it takes precedence
+and the warnings listed in ignorewarn are not reported. This flag is mutually
+exclusive with -nowarn, having both of these flags will cause an error.
+
+=cut
+
+=head2 reportwarn
+
+Provides a list of error codes to TIE compiler to report when generated as  warnings.
+If any of these error codes are encountered as warnings, they will be reported.
+This is useful to turn on a single warning that is not reported by default,
+without turning on all warnings with the -warnall flag.
+Each error code in the list must be seperated by a comma. If all warnings are
+being ignored with the flag -nowarn, then this flag will take precedence.
+
+=cut
+
+=head2 msgall
+
+Report all messages. By default, messages are not reported by the
+TIE compiler. If the flag -ignoremsg is also present, then it takes precedence
+and the messages listed in ignoremsg are not reported. This flag is mutually
+exclusive with -nomsg, having both of these flags will cause an error.
+
+=cut
+
+=head2 reportmsg
+
+Provides a list of error codes to TIE compiler to report when generated as messages. 
+If any of these error codes are encountered as messages, they will be reported.
+This is useful to turn on a single message, without turning on all messages with the -msgall flag.
+Each error code in the list must be seperated by a comma. If all messages are
+being ignored with the flag -nomsg, then this flag will take precedence.
+
+=cut
+
+=head2 showall
+
+Show all warnings and messages, including all instances of a particular error code reported.
+By default, once an error code has been reported 10 times, the subsequent ones are just
+reported in the final count of error/warnings, but the full error/warning is skipped.
+-ignorewarn or -ignoremsg flags are not effective with this flag.
+
+=cut
+
+=head2 a
+
+Generate estimation of area for TIE instructions. 
+An optional parameter specifies the verbosity of the area report.
+This option is on by default.
+
+=cut
+
+=head2 libdebug
+
+Compile the simulation libraries for debugging the tie in a debugger. This means all
+input/output operation arguments and wires in operations will be visible in the debugger.
+This slows down simulation speed and increases the simulation code size considerably.
+
+=cut
+
+=head2 reflib
+
+If the tie description has both a reference and semantic for an operation, the default
+simulation library is generated using the semantic implementation. If the user wants
+to simulate the reference, this flag should be used to generate the simulaton libraries
+using the reference implementation. A flag (--reference) can be passed to xt-run to use
+the appropriate library during simualation.
+
+=cut
+
+    print STDERR <<EOF;
+usage: tc [options] file.tie
+    -d <outdir>		output directory (must be writable)
+    -E                  only write tpped TIE to the standard output
+    -help       	print out this message
+    -lint		run lint checks only
+    -name <base>	set the basename for the output files, required 
+                        when compiling multiple TIE files
+    -unique_headers     only relevant when compiling multiple TIE files
+                        creates a unique header file corresponding to 
+                        each TIE file, instead of creating a single header
+                        file with base name specified with the -name flag
+    -trace [tpp]	trace execution,
+			optional string parameter "tpp" will trace tpp
+    -version		show version information
+    -tdb2tie            extract TIE file from TDB package
+    -reassign_tdb_encodings
+                        Discard the existing field and opcode encodings in 
+                        the TDB, and reassign new ones.  Applies only to the
+                        encodings automatically generated by the TIE compiler,
+                        and not to those explicitly specified in your TIE file.
+    -nomsg		don't show any messages
+    -nowarn		don't show any warnings
+    -ignorewarn <error code>[,<error code>]
+    			ignore the warnings for the codes listed in the
+			comma seperated list, has no effect if -nowarn is set.
+    -nomsg		don't show any messages
+    -ignoremsg  <error code>[,<error code>]
+    			ignore the messages for the codes listed in the
+			comma seperated list, has no effect if -nomsg is set.
+    -warnall            show all warnings
+    -reportwarn <error code>[,<error code>]
+    			show the warnings for the codes listed in the
+			comma seperated list, has no effect if -warnall is set.
+    -msgall             show all messages
+    -reportmsg  <error code>[,<error code>]
+    			show the messages for the codes listed in the
+			comma seperated list, has no effect if -msgall is set.
+    -showall		show all errors, warnings and messages.
+    -a [level]          estimate HW area; optional 'level' specifies verbosity, on by default.
+    -libdebug           generate simulation libraries for debugging
+    -reflib             generate simulation libraries from references
+                        in addition to semantics
+    -chk_encodings      Check to see that the TIE description is fully specified
+                        with respect to instruction encodings. Compile fails if 
+                        any opcode, field, format, slot etc. definition needs to
+                        be generated by the TIE compiler.
+    -cstub              Generate c-stub files
+
+EOF
+    exit $ret_val;
+}
+
+
+sub problem {
+    my($a) = @_;
+    print STDERR "Error: missing $a\n";
+    print STDERR <<'EOF';
+The TIE compiler is missing some of its required components.  Please follow the
+installation procedure and do not copy this program from its installation
+directory.  If the problem persists, contact Tensilica support at
+support@tensilica.com.
+EOF
+    exit 1;
+}
+
+#---------------------------------------------
+#  Generate libisa-<base>.so
+#---------------------------------------------
+sub compile_libisa {
+
+$libisa_c  = "$outdir/libisa-$base.c";
+$libisa_o  = "$outlibdir/libisa-$base.o";
+$libisa_so = "$outlibdir/libisa-$base.$dllext";
+if ($gendll) {
+    my $picflag = "";  # init the variable so tc does not complain on windows.
+    do_system(undef, split(/\s+/, "$gcc $warn_dll $cflags $picflag -o $libisa_o $libisa_c"));
+    do_system(undef, split(/\s+/, "$gcc $makedllflags $isadef -o $libisa_so $libisa_o"));
+    if ($x86_64) {
+      $libisa_c = File::Spec->rel2abs($libisa_c); 
+      my $abs_outlibdir = File::Spec->rel2abs($outlibdir);
+      my $libisa_64_o  = "$abs_outlibdir/libisa-$base-x86_64.o";
+      my $libisa_64_so = "$abs_outlibdir/libisa-$base-x86_64.$dllext";
+      $picflag = "-fPIC";
+      if (defined($x86_64_host)) {
+        do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $gcc_64 $warn_dll $cflags $picflag -o $libisa_64_o $libisa_c"));
+        do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $gcc_64 $makedllflags $isadef -o $libisa_64_so $libisa_64_o"));
+      } else {
+        do_system(undef, split(/\s+/, "$gcc_64 $warn_dll $cflags $picflag -o $libisa_64_o $libisa_c"));
+        do_system(undef, split(/\s+/, "$gcc_64 $makedllflags $isadef -o $libisa_64_so $libisa_64_o"));
+      }
+    }
+}
+unlink "$libisa_c", "$libisa_o" if $clean;
+
+}
+
+#---------------------------------------------
+#  Generate libctype.so
+#---------------------------------------------
+sub compile_libctype {
+
+$libctype_c  = "$outdir/ctypes-$base.c";
+$libctype_o  = "$outlibdir/ctypes-$base.o";
+$libctype_so = "$outlibdir/libctype-$base.$dllext";
+if ($gendll) {
+    my $picflag = "";  # init the variable so tc does not complain on windows.
+    do_system(undef, split(/\s+/, "$gcc $warn_dll $cflags $picflag -o $libctype_o $libctype_c"));
+    do_system(undef, split(/\s+/, "$gcc $makedllflags $ctypedef -o $libctype_so $libctype_o"));
+}
+unlink "$libctype_c", "$libctype_o" if $clean;
+
+}
+
+#---------------------------------------------
+#  Generate libtie-<base>.so
+#---------------------------------------------
+sub compile_libtie {
+
+$libtie_c                 = "$outdir/libtie-$base.c";
+$libtie_data_post_parse   = "$outdir/libtie-$base-post-parse.data";
+$libtie_data_post_rewrite = "$outdir/libtie-$base-post-rewrite.data";
+$libtie_data_compiler     = "$outdir/libtie-$base-compiler.data";
+$libtie_o      = "$outlibdir/libtie-$base.o";
+$libtie_tmp    = "$outlibdir/libtie-$base-tmp.o";
+$libtie_script = "$outlibdir/libtie-$base.ldscript";
+$libtie_so     = "$outlibdir/libtie-$base.$dllext";
+if ($gendll) {
+    my $picflag = "";  # init the variable so tc does not complain on windows.
+    do_system(undef, split(/\s+/, "$gcc $warn_dll $cflags $picflag -o $libtie_o $libtie_c"));
+    do_system(undef, split(/\s+/, "$objcopy --add-section=.data.post_parse=$libtie_data_post_parse --set-section-flags=.data.post_parse=contents,alloc,load,data --add-section=.data.post_rewrite=$libtie_data_post_rewrite --set-section-flags=.data.post_rewrite=contents,alloc,load,data --add-section=.data.compiler=$libtie_data_compiler --set-section-flags=.data.compiler=contents,alloc,load,data $libtie_o $libtie_tmp"));
+    # Use a simple linker script to merge the new .data.* sections into .data
+    # and define the "xml_data_post_parse" and "xml_data_post_rewrite" symbols.
+    open(FILE, ">$libtie_script") || die_trap("Cannot open $libtie_script: $!\n");
+    print FILE "OUTPUT_FORMAT(pe-i386)\n" if ($sname eq 'MSWin32');
+    print FILE "SECTIONS {\n";
+    if ($sname eq 'MSWin32') {
+	# On Windows, all the sections must be listed, and the "xml_data"
+	# symbol needs an underscore post_parsefix.
+	print FILE ".text 0 : { *(.text) }\n";
+	print FILE ".data 0 : { *(.data) _xml_data_post_parse = .; *(.data.post_parse) _xml_data_post_rewrite = .; *(.data.post_rewrite) _xml_data_compiler = .; *(.data.compiler)}\n";
+	print FILE ".bss 0 : { *(.bss) }\n";
+	print FILE ".rdata 0 : { *(.rdata) }\n";
+	print FILE ".stab 0 : { *(.stab) }\n";
+	print FILE ".stabstr 0 : { *(.stabstr) }\n";
+    } else {
+	print FILE ".data 0 : { *(.data) xml_data_post_parse = .; *(.data.post_parse) xml_data_post_rewrite = .; *(.data.post_rewrite) xml_data_compiler = .; *(.data.compiler)}\n";
+    }
+    print FILE "}\n";
+    close(FILE);
+    do_system(undef, split(/\s+/, "$ld -r -T $libtie_script $libtie_tmp -o $libtie_o"));
+    unlink "$libtie_tmp";
+    do_system(undef, split(/\s+/, "$gcc $makedllflags $tiedef -o $libtie_so $libtie_o"));
+
+    if ($x86_64) {
+      $libtie_c = File::Spec->rel2abs($libtie_c); 
+      my $abs_outdir    = File::Spec->rel2abs($outdir);
+      my $abs_outlibdir = File::Spec->rel2abs($outlibdir);
+      my $libtie_64_o           = "$abs_outlibdir/libtie-$base-x86_64.o";
+      my $libtie_64_so          = "$abs_outlibdir/libtie-$base-x86_64.$dllext";
+      $libtie_tmp               = "$abs_outlibdir/libtie-$base-tmp.o";
+      $libtie_script            = "$abs_outlibdir/libtie-$base.ldscript";
+      $libtie_data_post_parse   = "$abs_outdir/libtie-$base-post-parse.data";
+      $libtie_data_post_rewrite = "$abs_outdir/libtie-$base-post-rewrite.data";
+      $libtie_data_compiler     = "$abs_outdir/libtie-$base-compiler.data";
+      $picflag = "-fPIC";
+      if (defined($x86_64_host)) {
+        do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $gcc_64 $warn_dll $cflags $picflag -o $libtie_64_o $libtie_c"));
+        do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $objcopy_64 --add-section=.data.post_parse=$libtie_data_post_parse --set-section-flags=.data.post_parse=contents,alloc,load,data --add-section=.data.post_rewrite=$libtie_data_post_rewrite --set-section-flags=.data.post_rewrite=contents,alloc,load,data --add-section=.data.compiler=$libtie_data_compiler --set-section-flags=.data.compiler=contents,alloc,load,data $libtie_64_o $libtie_tmp"));
+        do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $ld_64 -r -T $libtie_script $libtie_tmp -o $libtie_64_o"));
+        do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $gcc_64 $makedllflags $tiedef -o $libtie_64_so $libtie_64_o"));
+      } else {
+        do_system(undef, split(/\s+/, "$gcc_64 $warn_dll $cflags $picflag -o $libtie_64_o $libtie_c"));
+        do_system(undef, split(/\s+/, "$objcopy_64 --add-section=.data.post_parse=$libtie_data_post_parse --set-section-flags=.data.post_parse=contents,alloc,load,data --add-section=.data.post_rewrite=$libtie_data_post_rewrite --set-section-flags=.data.post_rewrite=contents,alloc,load,data --add-section=.data.compiler=$libtie_data_compiler --set-section-flags=.data.compiler=contents,alloc,load,data $libtie_64_o $libtie_tmp"));
+        do_system(undef, split(/\s+/, "$ld_64 -r -T $libtie_script $libtie_tmp -o $libtie_64_o"));
+        do_system(undef, split(/\s+/, "$gcc_64 $makedllflags $tiedef -o $libtie_64_so $libtie_64_o"));
+      }
+      unlink "$libtie_tmp";
+    }
+}
+unlink "$libtie_o", "$libtie_script" if $clean;
+
+}
+#---------------------------------------------
+# phase marker for TDK creation. Xplorer needs
+# these markers so it can validate the TDK
+# builds and know when they are done.
+#---------------------------------------------
+sub tdk_phase_marker
+{
+    my($status,$phase) = @_;
+    my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)=localtime(time);
+
+    if($tdk_flow)
+    {
+	open     PHASE_MARKER, ">$outdir/tdk_$phase\_marker";
+            print    PHASE_MARKER "$status\n";
+            printf   PHASE_MARKER "%4d%02d%02d%02d%02d%02d\n", $year+1900,$mon+1,$mday,$hour,$min,$sec;
+	close(PHASE_MARKER);
+    }
+
+}
+##############################################################################
+# Main
+##############################################################################
+STDOUT->autoflush(1);
+$cf_name = 0;
+$outdir = ".";
+$swconfig = "";
+$full_swconfig = "";
+$config_file = $area_file = $perl_execute = "";
+@config_options = ();
+@config_variables = ();
+$tmp_file = $tmp_tie_file = "";
+$extract_simple  = $full_only = $lint_only = $tpp_only = $xml_only = $write_xml = $area_only = 0;
+$pure_tdbs = 1;
+$warn_dll = $vhdl = $avp = $debugpre = $ddd_debugpre = $xdebugpre = $debug = $xdebug = $ddd_debug = $nogdb = $trace = 0;
+$emacspre = 0;
+$emacs_debug = 0;
+$opt_tdb2tie = $tdbextract = $extract_type = undef;
+$valgrind = $purify = $quantify = $purecov = $gprof = 0;
+$opt_s = $opt_h = $opt_D = $opt_v = $opt_tie_v = $tie_v = 0;
+$opt_c = 0;
+$opt_i = 0;
+$opt_warn_dll = $opt_nowarn = $opt_nomsg = $opt_showall = 0;
+$no_hardware = 0;
+$no_software = 0;
+$no_report = 0;
+$no_preprocess = 0;
+$no_optimization = 0;
+$no_errformat = 0;
+$chk_tiegen = 0;
+$tdb_process = 0;
+$tdk_flow = 0;
+$opt_n = $prefix_dir = $opt_R = "";
+$xttools_dir = $ENV{"XTTOOLS"};
+$isslibdir = "iss";
+@Libs = ();
+@libs = ();
+@user_tie_files = ();
+@sav_user_tie_files = ();
+@user_tdb_files = ();
+@sav_user_tdb_files = ();
+@user_tc_files = ();
+$cp_source_dir = 0;
+$nomodgen = 0;
+$debuglib = 0;
+$reflib = 0;
+$genesys = 0;
+$xchange = undef;
+$fissbuilder = undef;
+$estimate_area = 1;
+$prim_lib = "";
+$wide_state = 0;
+$estimate_power = 1;
+$prim_lib = "";
+$power_lib = "";
+$xch_ref_tdb = undef;
+$xch_new_tdb = undef;
+$xch_binary = undef;
+$bias_definitions = "";
+$libisa_src = 0;
+$ignoreerr = undef;
+$ignoremsg = undef;
+$ignorewarn = undef;
+$opt_warnall = undef;
+$opt_msgall = undef;
+$reportwarn = undef;
+$reportmsg = undef;
+$semantic_gen = undef;
+$semantic_gen_share = undef;
+$semantic_gen_flags = "";
+$cpt_time = 0;
+$trace_opt = undef;
+$unique_headers = undef;
+$fasttc = undef;
+$cstub = undef;
+$cstub_flags = "";
+$config_build = undef;
+$x86_64 = 0;
+$x86_64_host = undef;
+
+$ret = GetOptions(
+    "-a:i" => \$estimate_area,
+    "-A=s" => \$area_file,
+    "-avp" => \$avp,
+    "-allow_wide_state" => \$wide_state,
+
+    "-chk_tiegen"     => \$chk_tiegen,          # "HIDDEN", fail if simple preprocessor required
+    "-chk_encodings"     => \$chk_tiegen,       # fail if simple preprocessor required
+    "-c" => \$opt_c,
+    "-C=s@" => \@config_options,
+    "-cstub" => \$cstub,
+    "-cstub_flags=s" => \$cstub_flags,          # "HIDDEN" for now
+    "-config_build" => \$config_build,          # "HIDDEN" option
+
+    "-ddd"            => \$ddd_debug,           # "HIDDEN" option to invoke ddd
+    "-dddpre"         => \$ddd_debugpre,        # "HIDDEN" option
+    "-debug"          => \$debug,               # "HIDDEN" option
+    "-debugpre"       => \$debugpre,            # "HIDDEN" option
+    "-emacspre"       => \$emacspre,            # "HIDDEN" option
+    "-emacs_debug"    => \$emacs_debug,         # "HIDDEN" option
+    "-D"              => \$opt_D,
+    "-d"              => sub
+		         {
+			     $outdir = shift(@ARGV);
+			     $tdk_flow = 1;
+			     mkpath("$outdir/") if (!(-e "$outdir/"));
+			     tdk_phase_marker(0, "begin"); 
+			 }, 
+
+    "-e=s" => \$perl_execute,
+    "-E" => \$tpp_only,
+    "-extract=s" => \$extract_type,     # option to extract file from TDB
+
+    "-fast" => \$opt_D,                 # another name for -D
+    "-fasttc" => \$fasttc,                 # whether to generate turbosim library
+    "-f" => \$full_only,
+
+    "-genesys" => \$genesys,                  # generate Genesys jrl files
+    "-genesys_bias=s" => \$bias_definitions,  # generate Genesys jrl files
+    "-xchange"        => \$xchange,            # xchange flow control file
+    "-fissbuilder"        => \$fissbuilder,            # xchange flow control file
+    "-help" => \$opt_h,
+
+    "-i" => \$opt_i,                    # obsolete
+    "-ignoreerr=s"   => \$ignoreerr,
+    "-ignoremsg=s"   => \$ignoremsg,
+    "-ignorewarn=s"   => \$ignorewarn,
+    "-msgall"   => \$opt_msgall,
+    "-warnall"   => \$opt_warnall,
+    "-reportmsg=s"    => \$reportmsg,
+    "-reportwarn=s"   => \$reportwarn,
+
+    "-k"              => \$area_only,           # "HIDDEN" option
+
+    "-libdebug" => \$debuglib,          # generate simulation library for debugging
+    "-libisa_src"     => \$libisa_src,          # "HIDDEN", generate static libisa source
+    "-lint" => \$lint_only,
+    "-L:s@"           => \@Libs,                # "HIDDEN" option to specify libraries
+    "-l:s@"           => \@libs,                # "HIDDEN", to specify libraries
+
+    "-x86_64" => \$x86_64,
+    "-x86_64_host=s" => \$x86_64_host,
+    "-name=s" => \$opt_n,
+    "-nogdb"          => \$nogdb,               # "HIDDEN" option invoke local copy of tc
+    "-no_hardware"    => \$no_hardware,         # "HIDDEN", no hardware generation
+    "-nomsg" => \$opt_nomsg,
+    "-nomodgen" => \$nomodgen,
+    "-no_preprocess"  => \$no_preprocess,       # "HIDDEN", don't run tpp or simple preprocessor
+    "-no_report"      => \$no_report,           # "HIDDEN", no report generation
+    "-no_software"    => \$no_software,         # "HIDDEN", no software generation
+    "-nowarn" => \$opt_nowarn,
+    "-noopt" => \$no_optimization,
+    "-noerrformat" => \$no_errformat,           # "HIDDEN", not formating for error messages.
+    "-package:s" => \$package,
+    "-p=s"            => \$cf_name,             # "HIDDEN", to specify config name
+    "-power:i" => \$estimate_power,               # "HIDDEN" option to generate power report
+    "-power_lib:s" => \$power_lib,              # "HIDDEN" option, userlib for power est
+    "-purecov"        => \$purecov,             # "HIDDEN" option
+    "-purify"         => \$purify,              # "HIDDEN" option
+    "-unique_headers" => \$unique_headers,	# Generate unique header file for each input TIE file
+    "-valgrind"       => \$valgrind,            # "HIDDEN" option
+    "-gprof"       => \$gprof,            # "HIDDEN" option
+
+    "-quantify"       => \$quantify,            # "HIDDEN" option
+
+    "-reassign_tdb_encodings" => \$extract_simple, # extract simple TIE file from TDB 
+    "-reflib" => \$reflib,              # generate simulation library from reference
+    "-semantic_gen" => \$semantic_gen,         # "HIDDEN" for now, reference to semantic conversion
+    "-semantic_gen_share" => \$semantic_gen_share,  #HIDDEN" option
+    "-semantic_gen_flags=s" => \$semantic_gen_flags,         # "HIDDEN" for now, reference to semantic conversion
+    "-R=s"            => \$opt_R,               # "HIDDEN" option (root build dir)
+    "-r=s" => \$prefix_dir,
+
+    "-showall" => \$opt_showall,
+    "-s"              => \$opt_s,               # "HIDDEN" option (only build DLLs)
+    "-swconfig=s" => \$swconfig,
+    "-time"	=> \$cpt_time,			# "HIDDEN" option
+    "-tdb2tie" => \$opt_tdb2tie,
+    "-tieversion" => 
+	sub {$opt_tie_v = 1; $tie_v = shift(@ARGV) if ( $ARGV[0] && $ARGV[0] =~ /^[1-9]+[\.][0-9]+$/ );},
+						# Get or set the tieversion. If a version is specified 
+					        # set to that option otherwise we return the current one
+    "-trace" =>
+	sub {$trace=1; $trace_opt = shift(@ARGV) if ($ARGV[0] && ($ARGV[0] eq 'tpp' || $ARGV[0] eq 'dump' ));},
+
+    "-u:s"            => \$prim_lib,            # "HIDDEN" option, userlib for area est
+
+    "-version" => \$opt_v,
+    "-vhdl" => \$vhdl,
+    "-v" => \$opt_v,
+
+    "-warn_dll"       => \$opt_warn_dll,        # "HIDDEN" option  supress warnings from dll compile.
+
+    "-xdebugpre"      => \$xdebugpre,           # "HIDDEN" option
+    "-xdebug"         => \$xdebug,              # "HIDDEN" option
+    "-xttools=s" => \$xttools_dir,
+
+    "-Y"              => \$write_xml,           # "HIDDEN" option
+    "-y"              => \$xml_only,            # "HIDDEN" option
+);
+
+die_trap("The options \"-nowarn\" and \"-warnall\" are mutually exclusive\n") if $opt_warnall && $opt_nowarn;
+die_trap("The options \"-nomsg\" and \"-msgall\" are mutually exclusive\n") if $opt_msgall && $opt_nomsg;
+
+my $start_time;
+my $end_time;
+my $begin_time;
+
+if ($cpt_time) {
+    $start_time = time;
+    $begin_time = $start_time;
+}
+
+my $tie_v_only = $opt_tie_v && !$tie_v;
+
+if (defined($x86_64_host) && !$x86_64) {
+    $x86_64 = 1;
+}
+
+#========================================================-================
+#
+#  Push all files after options into user array. Can be any combination
+#  of .tie and .tdb files.
+#
+#  Additionally a .tdb file can have another extension of either ".full" or
+#  or ".tie" however the default is assumed to be .tie. This extension will
+#  get passed on to the extraction code to tell it whether it should either
+#  use the .tie file or the .full file from the .tdb. This can be used
+#  for customers wishing to enforce binary comaptability by using the .full
+#  file with fixed encodings in it.
+#
+#=========================================================================
+if(!defined($xchange)){
+
+    foreach($i = 0;  $i <= $#ARGV; $i++){
+
+	#
+	# Add files must be labeled as TDB or TC will assume they are
+	# tiefiles and deal with them as such
+	#
+	#  Either file is a TDB or a TIE file.
+	#  A TDB must be explicitly marked as such with the ".tdb" ending...
+	#
+	if ($ARGV[$i] =~ /\.tdb(\.full|\.tie)?$/) {
+
+	    my $basepath = $ARGV[$i];
+	    $basepath =~ s/(.*)(\.full|\.tie)$/$1/;
+	    if(! -e $basepath) {
+		die_trap("Cannot find TDB file ($basepath)\n");
+	    }else{
+		push(@user_tdb_files, $ARGV[$i]);
+		push(@sav_user_tdb_files, $ARGV[$i]);
+		push(@user_tc_files, $ARGV[$i]);
+	    }
+
+	#
+	# All other files are assumed to be .tie files....
+	#
+	}else{
+
+	    if(! -e $ARGV[$i]) {
+		die_trap("Cannot find TIE/TDB file $ARGV[$i]\n");
+	    }else{
+		push(@user_tie_files, $ARGV[$i]);
+		push(@user_tc_files, $ARGV[$i]);
+		push(@sav_user_tie_files, $ARGV[$i]);
+	    }
+	}
+    }
+}else{
+    foreach($i = 0;  $i <= $#ARGV; $i++){
+
+	#
+	# Look for binary files
+	#
+	if ($ARGV[$i] =~ /\.xt$/) {
+	    if(! -e $ARGV[$i]) {
+		die_trap("Cannot find Xtensa binary file $ARGV[$i]\n");
+	    }else{
+		$xch_binary = $ARGV[$i];
+	    }
+	}
+
+	#
+	# Look for archive libraries
+	#
+	if ($ARGV[$i] =~ /\.a$/) {
+	    if(! -e $ARGV[$i]) {
+		die_trap("Cannot find Xtensa archive library $ARGV[$i]\n");
+	    }else{
+		$xch_binary = $ARGV[$i];
+	    }
+	}
+
+	#
+	# Look for shared object libraries
+	#
+	if ($ARGV[$i] =~ /\.so$/) {
+	    if(! -e $ARGV[$i]) {
+		die_trap("Cannot convert shared object $ARGV[$i]\n");
+	    }else{
+		$xch_binary = $ARGV[$i];
+	    }
+	}
+	#
+	# Else must be some kind of TDB file
+	# Suffix is ignored when running xchange because at this point
+	# we dont care about the extensions...
+	#
+	if ($ARGV[$i] =~ /\.tdb(\.full|\.tie)?$/) {
+
+	    my $tdb = $ARGV[$i];
+	    $tdb =~ s/(.*)(\.full|\.tie)$/$1/;
+
+	    if(! -e $tdb) {
+		die_trap("Cannot find TDB file $tdb\n");
+	    }else{
+		if(!defined($xch_ref_tdb)){
+		    $xch_ref_tdb = $tdb;
+		}elsif(!defined($xch_new_tdb)){
+		    $xch_new_tdb = $tdb;
+		}
+	    }
+	}
+    }
+
+    if(!defined($xch_ref_tdb) || !defined($xch_new_tdb) || !defined($xch_binary)){
+	die_trap("Must have both TDB files and binary to do a translation\n");
+    }
+}
+
+@config_variables = grep(/=/, @config_options);
+@config_options  = grep(!/=/, @config_options);
+
+($config_file) = $config_options[$#config_options];
+
+if ($opt_v) {
+    print "Xtensa 9.0.2 TIE Compiler\n";
+    print "Copyright 1998-2011 Tensilica, Inc.\n";
+    exit;
+}
+
+if($genesys || ($bias_definitions ne ""))
+  {
+    $no_hardware = 1;
+    $no_software = 1;
+    $no_report  = 1;
+    $tdb_process = 1;
+    $clean = 1;
+
+    mkpath("$outdir/");
+  }
+#---------------------------------------------
+#  Setup
+#---------------------------------------------
+if ($^O eq 'MSWin32') {
+    $exeext = '.exe';
+    $mname = 'i686';
+    $sname = $^O;
+} else {
+    $exeext = '';
+    chomp($mname = `uname -m`);
+    chomp($sname = `uname -s`);
+    $mname = 'i686' if $mname eq "i586" || $mname eq "x86_64";
+}
+($base, $root, $suffix) = fileparse($FindBin::RealBin);
+$lib       = $root . "lib/TIE";
+$bin       = $root . "bin";
+$binhost   = $root . "bin-$mname-$sname";
+
+$tdbextract  = "$binhost/tdbextract$exeext";
+
+if($valgrind || $gprof || $purify || $quantify || $purecov){
+
+    if ($purify) {
+
+      $tcgen = "$ENV{MMAKEDIR}/bin/tcgen-p$exeext";
+      $tiepre = "$ENV{MMAKEDIR}/bin/tcgen-p$exeext";
+
+    } elsif ($quantify) {
+
+      $tcgen = "$ENV{MMAKEDIR}/bin/tcgen-q$exeext";
+      $tiepre = "$ENV{MMAKEDIR}/bin/tcgen-q$exeext";
+
+    } elsif ($purecov) {
+
+      $tcgen = "$ENV{MMAKEDIR}/bin/tcgen-c$exeext";
+      $tiepre = "$ENV{MMAKEDIR}/bin/tcgen-c$exeext";
+    } elsif ($valgrind) {
+      $tcgen = "$ENV{MMAKEDIR}/bin/tcgen-g$exeext";
+      $tiepre = "$ENV{MMAKEDIR}/bin/tcgen-g$exeext";
+    } elsif ($gprof) {
+      $tcgen = "$ENV{MMAKEDIR}/bin/tcgen-pg$exeext";
+      $tiepre = "$ENV{MMAKEDIR}/bin/tcgen-pg$exeext";
+    }
+
+}elsif ($debug || $xdebug || $ddd_debug || $emacs_debug) {
+
+  $tcgen = "$ENV{MMAKEDIR}/bin/tcgen-g$exeext";
+  $tiepre = "$ENV{MMAKEDIR}/bin/tcgen$exeext";
+
+}elsif ($ddd_debugpre || $xdebugpre || $debugpre || $emacspre) {
+
+  $tiepre = "$ENV{MMAKEDIR}/bin/tcgen-g$exeext";
+  $tcgen = "$ENV{MMAKEDIR}/bin/tcgen$exeext";
+
+}elsif ($nogdb){
+
+  $tiepre = "$ENV{MMAKEDIR}/bin/tcgen$exeext";
+  $tcgen = "$ENV{MMAKEDIR}/bin/tcgen$exeext";
+
+}else{
+
+  $tcgen       = "$binhost/tcgen$exeext";
+  $tiepre      = $tcgen;
+}
+
+$modgen    = "$bin/modgen";
+$config    = $cf_name ? "$lib/config/$cf_name.cf" : "$lib/Config.default";
+
+if (defined $ENV{XTENSA_TOOLS}) {
+    $xtensa_tools = $ENV{XTENSA_TOOLS};
+} else {
+    $xtensa_tools = "/usr/xtensa/tools-6.1";
+    $ENV{XTENSA_TOOLS} = $xtensa_tools;
+}
+
+if ($sname ne 'MSWin32') {
+    my @libpath;
+    if (defined $ENV{LD_LIBRARY_PATH}) {
+      @libpath = split(':', $ENV{LD_LIBRARY_PATH});
+    }
+    unshift @libpath, "$xtensa_tools/lib";
+    $ENV{LD_LIBRARY_PATH} = join(':', @libpath);
+}
+
+if ($sname eq 'MSWin32') {
+    $perlbin = $xtensa_tools . "/perl/bin/MSWin32-x86/perl.exe";
+} else {
+    $perlbin = $xtensa_tools . "/bin/perl";
+}
+
+if ($prim_lib eq "" && defined $xttools_dir) {
+    $prim_lib = $xttools_dir . "/lib/libest/prim_area.lib";
+}
+
+#---------------------------------------------
+#  package helps
+#---------------------------------------------
+if (defined $package) {
+    print "Generator summary:\n";
+    open CMD, "| $perlbin -w $bin/tietpp"
+	or die_trap("Could not execute $bin/tietpp: $!\n");
+    print CMD ";use generator;\n;generator_help('" . $package . "');";
+    close CMD or die_trap("pipe to $bin/tietpp failed: $!\n");
+    print "\n";
+    print "For help on individual generators, use\n";
+    print "    tc -package <generator-name> <file>\n";
+    exit;
+}
+
+if (! $ret || $opt_h || !$tie_v_only && $#ARGV == -1) {
+    my $ret = ($opt_h)?0:1;
+    usage($ret);
+}
+
+#---------------------------------------------
+#  check installation
+#---------------------------------------------
+problem($tcgen) unless -x $tcgen;
+problem($tiepre) unless -x $tiepre;
+problem($tdbextract) unless -x $tdbextract;
+problem($modgen) unless -r $modgen;
+problem($config) unless -r $config;
+
+#---------------------
+# Check version and exit 
+#----------------------
+if ($tie_v_only ) {
+    print "Copyright 1998-2011 Tensilica, Inc.\n";
+    do_tieversion();
+    exit;
+}
+
+#---------------------------------------------
+#  Set env checked by TC
+#---------------------------------------------
+$ENV{'TIE_ALLOW_WIDE_STATE'} = 1 if $wide_state;
+#----------------------------------------------
+# Extract files from TDB and exit
+#----------------------------------------------
+if(defined($extract_type)){
+    if(! -f $ARGV[0]){
+	die_trap("Cannot find TIE/TDB file $ARGV[0]");
+    }else{
+	do_tdbextract($extract_type, $ARGV[0]);
+    }
+    exit 0
+}
+
+if(defined($opt_tdb2tie)){
+    if(! -f $ARGV[0] ){
+	die_trap("Cannot find TIE/TDB file $ARGV[0]");
+    }else{
+	do_tdbextract("tdb2tie", $ARGV[0]);
+    }
+    exit 0
+}
+
+#---------------------------------------------
+#  checking inputs
+#---------------------------------------------
+$trace = 1 if ($debugpre ||$xdebugpre || $ddd_debugpre || $debug || $xdebug || $ddd_debug || $emacspre || $emacs_debug);
+$config_file = $config if ! $config_file;
+read_config($config_file);
+$so_only = $opt_s;
+$clean   = ! $opt_c;
+$gendll  = ! $opt_D;
+$libhost = ($so_only || $tpp_only) ? "" : "lib-$mname-$sname";
+$outlibdir = ($libhost eq "") ? $outdir : "$outdir/lib-$mname-$sname";
+$tie_input = $tcgen_input = $ARGV[0];
+
+if ($opt_n) {
+    $base = $opt_n;
+} else {
+    ($base, , $suffix) = fileparse($tie_input, '\..*');
+}
+
+my $check = $base;
+
+if ( ($check =~ tr/a-zA-Z0-9_/_/c) ) {
+    die_trap("Illegal TDB name \"$base\". A TDB name can only contain alphanumeric characters\n");
+}
+if ( ($base =~ /^xt_/ ) ) {
+    die_trap("Illegal TDB name \"$base\". A TDB name cannot begin with \"xt_\"\n");
+}
+
+if ( ($base =~ /^__XT_/ ) ) {
+    die_trap("Illegal TDB name \"$base\". A TDB  name cannot start with \"__XT_\"\n");
+}
+
+die_trap("Automatic semantic generation must have -no_software flag disabled\n") if ((($no_software == 1) || ($gendll == 0)) && ($semantic_gen));
+
+die_trap("- semantic_gen_share can only be specified when -semantic_gen is specified\n") if ((!$semantic_gen) && ($semantic_gen_share));
+
+#----------------------------------------------
+# Run the xchange flow
+#----------------------------------------------
+
+if(defined($xchange)){
+
+    $no_hardware = 1;
+    $no_software = 1;
+    $no_report  = 1;
+    $clean = 1;
+
+    mkpath("$outdir/");
+
+    do_xchange($xch_ref_tdb, $xch_new_tdb, $xch_binary);
+    exit 0;
+}
+
+die_trap("Output directory \"$outdir\" cannot start with '-'\n") unless ($outdir !~/^-.*/);
+
+$full_dir = File::Spec->rel2abs ($outdir);
+if ($debugpre || $ddd_debugpre || $xdebugpre || $debug || $xdebug || $ddd_debug || $emacspre || $emacs_debug) {
+    mkpath("$outdir/");
+    die_trap("$outdir is not a directory\n") unless -d $outdir;
+    die_trap("$outdir is not writable\n") unless -w $outdir;
+}
+if (! ($genesys || ($bias_definitions ne "") || $lint_only || $avp || $tpp_only || $full_only || $xml_only || $area_only)) {
+
+    $tppout = "$outdir/$base.tppout";
+    mkpath(["$outlibdir", "$outdir/include/xtensa/tie"]);
+
+    die_trap("$outdir is not a directory\n") unless -d $outdir;
+    die_trap("$outdir is not writable\n") unless -w $outdir;
+    die_trap("refuse to overwrite input file: $tie_input") if $tie_input eq $tppout;
+}
+
+$GenerateDCscripts = 0;
+if ($swconfig ne "") {
+  $full_swconfig = File::Spec->rel2abs ($swconfig);
+  $GenerateDCscripts = 1;
+}
+
+my $md5sum;
+
+#
+# Either multiple TIE files or multiple TDB's or any combination
+# thereof requires we use the "-name" switch to rename the base to
+# avoid name conflicts.
+#
+if( (($#user_tdb_files + 1)+($#user_tie_files + 1)) > 1 ){
+    #
+    # $opt_n is the holding variable for $base which is passed in by the
+    # -name argument.
+    #
+    if( ($opt_n eq "")  && (!$lint_only)){
+	die_trap("Multiple TIE and/or TDB files require use of \"-name <base>\" option\n");
+    }
+}
+
+#
+# Set up a temporary holding file to aggregate the TIE source in
+#
+
+$tmp_file      = generate_tempfile_name();
+$tmp_tie_file  = generate_tempfile_name();
+
+if (! open(TMP, ">$tmp_file")) {
+    die_trap("Cannot open temporary file $tmp_file: $!\n");
+}
+binmode(TMP);
+
+if($tpp_only  || $lint_only || $full_only || $xml_only || $area_only){
+    $cp_source_dir = 0;
+}else{
+    $cp_source_dir = 1;
+    mkpath("$outdir/source_dir");
+    open DIR, ">$outdir/source_dir/dir.index" || die_trap("cannot open $outdir/source_dir/dir.index: $!\n");
+    chmod(0666, "$outdir/source_dir/dir.index");
+}
+
+#
+# Aggregate all the simple files for processing
+# Before aggregating add a package declaration with $base (-n option)
+# unless $unique_headers is set, in which case each file gets its header
+# name from the file.
+
+foreach my $user_tie_tdb_file (@user_tc_files)
+{
+    #
+    # Aggregate all the TDB files and either extract the full or
+    # simple TIE files from the TDB archive depending if the
+    # "-reassign_tdb_encodings" flag is set. The default is to extract 
+    # the full TIE files.
+    #
+    if ($user_tie_tdb_file =~ /\.tdb(\.full|\.tie)?$/) {
+
+	my $fulltdb = $user_tie_tdb_file;
+	my $tdbname = basename($user_tie_tdb_file);
+
+	# Mask off any extra extension when searching....
+	my $basetdb = $user_tie_tdb_file;
+	$basetdb =~ s/(.*)(\.full|\.tie)$/$1/;
+
+	$_ = basename($basetdb);
+	s/.tdb$//;
+	my $realfile = $_;
+	my $pkg = $realfile;
+
+	if(! -e  $basetdb) {
+	    die_trap("cannot find TDB file $basetdb\n");
+	}
+
+	if(tdb_getversion($basetdb) >= 2){
+	    $_ = tdb_getfilename($basetdb, "full");
+	    s/.full//;
+	    $extractionbase = $_;
+	}else{
+	    $extractionbase =  "$realfile";
+	}
+
+	if ($extract_simple || $fulltdb =~ /\.tie$/ ) {
+
+	    $pure_tdbs = 0;
+
+	    print TMP "# tietpp file $basetdb\n";
+	    print TMP "//Appending Simple TIE from $basetdb\n";
+
+	    tdbextract_status( do_system_append("&TMP", undef, 
+						"$tdbextract", "name", $basetdb, "$extractionbase\.tie"),
+			       $basetdb, 
+			       "$realfile\.tie");
+
+	    if ($cp_source_dir) {
+		tdbextract_status(do_system_append("$outdir/source_dir/$realfile\.tie", undef, 
+						   "$tdbextract", "name", $basetdb, "$extractionbase\.tie"),
+				  $basetdb, 
+				  "$realfile\.tie");
+
+		chmod(0666,"$outdir/source_dir/$realfile\.tie");
+		print DIR "$realfile\.tie\n";
+	    }
+	    print TMP "//End of $basetdb\n";
+
+	} else {
+	    print TMP "# tietpp file $basetdb\n";
+	    tdbextract_status(do_system_append("&TMP", undef,
+					       "$tdbextract", "name", $basetdb, "$extractionbase\.full"), 
+			      $basetdb, 
+			      "$realfile\.full");
+
+	    tdbextract_status(do_system_append($tmp_tie_file, undef, 
+					       "$tdbextract", "name", $basetdb, "$extractionbase\.tie"), 
+			      $basetdb, 
+			      "$realfile\.tie");
+
+	    if ($cp_source_dir) {
+
+		tdbextract_status(do_system_append("$outdir/source_dir/$realfile\.full", undef, 
+						   "$tdbextract", "name", $basetdb, "$extractionbase\.full"), 
+				  $basetdb, 
+				  "$realfile\.full");
+		chmod(0666,"$outdir/source_dir/$realfile\.full");
+		print DIR "$realfile\.full\n";
+	    }
+	}
+
+    }else{
+    
+ 	#
+	# This is not a TDB file just a tie file
+	# so just cat it on and be done.
+	#
+
+	my $basename = basename($user_tie_tdb_file);
+	my $file = $user_tie_tdb_file;
+
+	if(! -e $file) {
+	    die_trap("Cannot find TIE/TDB file $user_tie_tdb_file\n");
+	}
+
+	my $pkg = $basename;
+	$pkg =~ s/\.tie$//;
+	printf TMP "\npackage \"%s\" \"\"\n",
+	  (defined $unique_headers ? $pkg : $base) if ! $tpp_only;
+	print TMP "# tietpp file $basename\n";
+	cat($user_tie_tdb_file, \*TMP);
+	printf TMP "\nendpackage \"%s\"\n",
+	  (defined $unique_headers ? $pkg : $base) if ! $tpp_only;
+	if ($cp_source_dir) {
+	    copy("$file", "$outdir/source_dir/$basename");
+	    chmod(0666,"$outdir/source_dir/$basename");
+	    print DIR "$basename\n";
+	}
+    }
+}
+
+close(TMP);
+close(DIR) if $cp_source_dir;
+
+# If the input is the full TIE from a single TDB, then compute the
+# checksum directly from the input, instead of from the full TIE
+# output from tcgen.  This should prevent the checksum from changing
+# for software upgrades due to changes in TC.
+if ($cp_source_dir &&
+    $#user_tc_files == 0 &&
+    ($user_tc_files[0] =~ /\.tdb\.full$/ ||
+     ($user_tc_files[0] =~ /\.tdb$/ && !$extract_simple)))
+{
+
+    $basetdb = $user_tc_files[0];
+    $basetdb =~ s/(.*)\.tdb(\.full)?$/$1/;
+    $realfile = basename($basetdb);
+
+    my $file = "$outdir/source_dir/$realfile\.full";
+    open(FULLTIE, "$file") or die_trap("Cannot open $file: $!");
+    binmode(FULLTIE);
+    $md5sum = Digest::MD5->new->addfile(*FULLTIE)->hexdigest;
+    close(FULLTIE);
+}
+
+#
+# If one or more TDB are present and extract full is on then make sure
+# we skip the first pass of TC. This assumes no TIE file are present
+# because they might contain simple TIE which needs to be elaborated.
+#
+
+if( ( ($#user_tdb_files >= 0 && $pure_tdbs)  && ($#user_tie_files == -1)) && !$extract_simple && !$lint_only) {
+
+    copy($tmp_tie_file, "$outdir\/$tdb_internal_prefix\_$base.tie");
+    unlink($tmp_tie_file);
+
+    copy($tmp_file, "$outdir\/$tdb_internal_prefix\_$base.tdbfull");
+    unlink($tmp_file);
+
+    $tie_input = "$outdir\/$tdb_internal_prefix\_$base.tdbfull";
+    $tcgen_input = $tie_input;
+
+    $tdb_process = 1;
+}else{
+
+    if(!$lint_only && !$full_only && !$tpp_only && !$area_only && !$xml_only) {
+	copy($tmp_file, "$outdir\/$tdb_internal_prefix\_$base.tie");
+	unlink($tmp_file);
+	unlink($tmp_tie_file);
+	$tie_input = "$outdir\/$tdb_internal_prefix\_$base.tie";
+    }else{
+ 	$tie_input = $tmp_file;
+    }
+}
+
+if ($cpt_time) {
+    $end_time = time;
+    printf STDERR "Time before first pass:\t%d seconds\n", $end_time - $start_time;
+    $start_time = time;
+}
+
+#---------------------------------------------
+#  run tpp and simple preprocessors
+#---------------------------------------------
+do_pre();
+
+if ($cpt_time) {
+    $end_time = time;
+    printf STDERR "Time for first pass:\t%d seconds\n", $end_time - $start_time;
+    $start_time = time;
+}
+
+#
+# Cleanup after do 1st phase any temp files we dont need...
+#
+
+if($lint_only || $tpp_only || $full_only)
+{
+    unlink($tmp_file) if(-e $tmp_file);
+    unlink($tmp_tie_file) if(-e $tmp_tie_file);
+    if ( $gprof ) {
+        do_system_append("tiepre.prof", undef, split(/\s+/, "gprof $tiepre gmon.tiepre"));
+    }
+}
+
+exit 0 if ($tpp_only || $lint_only || $full_only || $xml_only || $area_only);
+
+# Move full file to unique name full for inclusion into TDB later.
+move("$outdir\/$base.full", "$outdir\/$tdb_internal_prefix\_$base.full") or die_trap("TC failed to move $base.full\n");
+
+#---------------------------------------------
+# make avp and verify directories
+#---------------------------------------------
+my $avp_dir = $outdir . '/' . $base . '_avp';
+my $formality = defined $ENV{ 'TEN4_INTERNAL' } || defined $ENV{ 'XTENSA_ENABLE_FORMALITY' };
+if (!$no_hardware) {
+    mkpath("$avp_dir");
+    die_trap("Could not create $avp_dir\n") unless -d "$avp_dir";
+
+    if (!$avp) {
+      mkpath("$outdir/verify/src");
+      rmtree("$outdir/verify/verplex");   # Remove stale do files
+      mkpath("$outdir/verify/verplex");
+      if ( $formality ) {
+          rmtree("$outdir/verify/formality");   # Remove stale do files
+          mkpath("$outdir/verify/formality");
+      }
+    }
+}
+
+if ( !$no_software ) {
+    #---------------------------------------------
+    #  gcc
+    #---------------------------------------------
+    $xttools_dir = 'foo' if (!defined $xttools_dir && $opt_D);
+    if (! $xttools_dir) {
+        die_trap("Xtensa Tools directory must be specified with the -xttools option\n");
+    }
+    if (! -d $xttools_dir && !$opt_D) {
+        die_trap("Xtensa Tools directory $xttools_dir does not exist\n");
+    }
+
+    $optflag = ($no_optimization) ? "-O0" : "-O3 -fomit-frame-pointer";
+    $cflags = "-c -I$lib -I$xttools_dir/include/iss -I$xttools_dir/include $optflag";
+
+    $gcc = "$xtensa_tools/bin/gcc$exeext";
+    die_trap("Cannot find executable $gcc\n") if not -x $gcc;
+
+    $objcopy = "$xtensa_tools/bin/objcopy$exeext";
+    die_trap("Cannot find executable $objcopy\n") if not -x $objcopy;
+
+    $ld = "$xtensa_tools/bin/ld$exeext";
+    die_trap("Cannot find executable $ld\n") if not -x $ld;
+
+    if ($x86_64) {
+        # FIXME: Allow override from environment?
+        $gcc_64 =     "/usr/bin/gcc";
+        $objcopy_64 = "/usr/bin/objcopy";
+        $ld_64 =      "/usr/bin/ld";
+    }
+
+    #---------------------------------------------
+    #  makedll
+    #---------------------------------------------
+    if ($sname eq 'MSWin32') {
+        if ($opt_R) {
+            $prefix_dir = $opt_R;
+        } elsif (! $prefix_dir) {
+	    die_trap("Root directory must be specified with the -r option\n");
+        }
+        if (! -d $prefix_dir) {
+            die_trap("Root directory $prefix_dir does not exist\n");
+        }
+        $dllext = "dll";
+        $exportext = "def";
+        $makedllflags = "-shared";
+        $tiedef = "$lib/libtie.def";
+        $isadef = "$lib/libisa.def";
+        $ctypedef = "$lib/libctype.def";
+        $casdef = "$outdir/libcas-$base.def";
+        $casrefdef = "$outdir/libcas-ref-$base.def";
+        $simxtcoreimport = "$xttools_dir/lib/$isslibdir/simxtcore.lib";
+        $simxtcoredimport = "$xttools_dir/lib/$isslibdir/simxtcored.lib";
+	if ((!$fasttc) && $gendll) {
+            $fissdef = "$outdir/libfiss-$base.def";
+            $fissrefdef = "$outdir/libfiss-ref-$base.def";
+            $fissbuild_def = "--def $outdir/libfiss-$base.def";
+            $fissbuildref_def = "--def $outdir/libfiss-ref-$base.def";
+	}
+    } else {
+        $dllext = "so";
+        $exportext = "map";
+        $makedllflags = "-shared -nostartfiles -nodefaultlibs";
+        $tiedef = "-Wl,--version-script=$lib/libtie.map";
+        $isadef = "-Wl,--version-script=$lib/libisa.map";
+        $ctypedef = "-Wl,--version-script=$lib/libctype.map";
+        $casdef = "-Wl,--version-script=$outdir/libcas-$base.map";
+        $casrefdef = "-Wl,--version-script=$outdir/libcas-ref-$base.map";
+        $simxtcoreimport = "";
+        $simxtcoredimport = "";
+	if ((!$fasttc) && $gendll) {
+            $fissdef = "-Wl,--version-script=$outdir/libfiss-$base.map";
+            $fissrefdef = "-Wl,--version-script=$outdir/libfiss-ref-$base.map";
+            $fissbuild_def = "--map $outdir/libfiss-$base.map";
+            $fissbuildref_def = "--map $outdir/libfiss-ref-$base.map";
+	}
+    }
+
+    #---------------------------------------------
+    #  Generate default-params
+    #---------------------------------------------
+    $dparam = "$outdir/default-params";
+    $header = "include/xtensa/tie/$base.h";
+
+    my ($sec) = localtime(time);
+    if(!$sec){ $sec++; }
+
+
+    open(FILE, ">$dparam") || die_trap("Cannot open $dparam: $!\n");
+    print FILE "iss-tie-dll=$libhost/libcas-$base.$dllext\n";
+    print FILE "iss-ref-tie-dll=$libhost/libcas-ref-$base.$dllext\n" if $reflib;
+    # Specify the debug DLLs for Windows.
+    print FILE "iss-tie-debug-dll=$libhost/libcas-${base}d.$dllext\n" if ($sname eq 'MSWin32');
+    print FILE "iss-ref-tie-debug-dll=$libhost/libcas-ref-${base}d.$dllext\n" if $reflib && ($sname eq 'MSWin32');
+    if ($fasttc) {
+        print FILE "fiss-base-dll=\n";
+    } else {
+        print FILE "fiss-base-dll=$libhost/libfiss-$base.$dllext\n";
+    }
+    if ($fasttc || (! $reflib)) {
+	print FILE "fiss-ref-base-dll=\n";
+    } else {
+	print FILE "fiss-ref-base-dll=$libhost/libfiss-ref-$base.$dllext\n";
+    }
+
+    print FILE "isa-tie-dll=$libhost/libisa-$base.$dllext\n";
+    if (!$config_build && $gendll) {
+	print FILE "ctype-tie-dll=$libhost/libctype-$base.$dllext\n";
+    }
+    print FILE "xml-tie-dll=$libhost/libtie-$base.$dllext\n";
+    print FILE "xtensa-tie-header=$header\n";
+    print FILE "tie-includedir=include\n";
+    print FILE "tie-ident=$sec$$\n";
+    print FILE "tdk-dir=.\n";
+    close(FILE);
+
+    #
+    # If TEN4_INTERNAL set always have gcc warnings enabled. This
+    # should only be for internal use.  Else by default show no
+    # warnings unless user sets "-warn_dll" on command line.
+    #
+
+    if (0 || $opt_warn_dll) {
+      $warn_dll = "-Wall -Wno-unused-function -Wno-unused-variable";
+    } else {
+      $warn_dll = "-w";
+    }
+
+    if ($semantic_gen) {
+    #---------------------------------------------
+    #  Generate libisa-<base>.so
+    #---------------------------------------------
+      compile_libisa();
+    #---------------------------------------------
+    #  Generate libtie-<base>.so
+    #---------------------------------------------
+      compile_libtie();
+
+      my $auto_tools = "$xttools_dir/lib/xcc-lib/auto";
+      my $auto_libisa = "-isa_dlls=$full_swconfig/config/libisa-core.$dllext,$full_swconfig/config/libisa-core-hw.$dllext,$outlibdir/libisa-$base.$dllext";
+      my $auto_libtie = "-xtie_dlls=$full_swconfig/config/libtie-core.$dllext,$outlibdir/libtie-$base.$dllext";
+      my $auto_progress = "";
+      if ($trace) {
+        $auto_progress = "-progress";
+      }
+      my $user_semantics = "create";
+      if ($semantic_gen_share) {
+	  $user_semantics = "share";
+      }
+      $tmp = "$outdir/tmp";
+      $file = "$outdir\/$tdb_internal_prefix\_$base.full";
+      my $sem_file = "$outdir/$base-sem.tie";
+      my $auto_report_file = "$outdir/$base.autoreport";
+      do_system(undef, split(/\s+/, "$auto_tools $auto_libtie $auto_libisa -tc_semantic_generation -user_semantics=$user_semantics $auto_progress -tie=$sem_file -tie_report=$auto_report_file $semantic_gen_flags"));
+      if (! open(FULL_TIE, ">>$file")) {
+	  die_trap("Cannot open tie file $file: $!\n");
+      }
+      binmode(FULL_TIE);
+      cat($sem_file, \*FULL_TIE);
+      close(FULL_TIE);
+      unlink($sem_file);
+    }
+
+}#endif !no_software
+
+if ($cpt_time) {
+    $end_time = time;
+    printf STDERR "Time between first and second passes:\t%d seconds\n", $end_time - $start_time;
+    $start_time = time;
+}
+
+#---------------------------------------------
+#  run tcgen
+#---------------------------------------------
+do_tcgen();
+
+if ( $gprof ) {
+    if ( -e "tcgen.prof" ) {
+	unlink( "tcgen.prof" );
+    }
+
+    do_system_append("tcgen.prof", undef, split(/\s+/, "gprof $tcgen gmon.tiepre gmon.tcgen"));
+}
+
+if ($cpt_time) {
+    $end_time = time;
+    printf STDERR "Time for second pass:\t%d seconds\n", $end_time - $start_time;
+    $start_time = time;
+}
+
+#---------------------------------------------
+#  write test makefile
+#---------------------------------------------
+if (!$no_hardware ) {
+    opendir AVPDIR, $avp_dir || die_trap("Could not open $avp_dir for reading\n");
+    my @avpfiles = grep ($_ ne '.' && $_ ne '..', readdir AVPDIR);
+    if ( @avpfiles ) {
+        my $testMakefile = $avp_dir . '/Makefile' ;
+#        if ( ! -f $testMakefile ) {
+            open(OUT, ">$testMakefile") || die_trap("Cannot open $testMakefile: $!\n");
+            print OUT "AVP_SWTOOLS := $xttools_dir\n";
+            print OUT "AVP_CONFIG := $prefix_dir/config\n";
+            print OUT "\ninclude Makefile.common\n";
+            close(OUT);
+#        }
+    } elsif ( $clean ) {
+	rmdir($avp_dir);
+	unlink("$outdir/init_code.c");
+    }
+}
+
+exit 0 if $avp;
+
+#---------------------------------------------
+#  Remove # line directives from <base>.tppout
+#---------------------------------------------
+
+if(! $tdb_process){
+
+  $tmp = "$outdir/tmp";
+  $file = "$outdir/$base.tppout";
+  open(OFILE, ">$tmp") || die_trap("Cannot open $tmp: $!\n");
+  open(IFILE, "<$file") || die_trap("Cannot open $file: $!\n");
+  while (<IFILE>) {
+    if (! /^#\s+tietpp line/) {
+	print OFILE;
+      }
+  }
+  close(OFILE);
+  close(IFILE);
+  move($tmp, $file) || die_trap("Rename failed ($tmp => $file) : $!\n");
+
+  #---------------------------------------------
+  #  Remove # line directives from <base>.full
+  #---------------------------------------------
+  $tmp = "$outdir/tmp";
+  $file = "$outdir\/$tdb_internal_prefix\_$base.full";
+  open(OFILE, ">$tmp") || die_trap("Cannot open $tmp: $!\n");
+  open(IFILE, "<$file") || die_trap("Cannot foo open $file: $!\n");
+  binmode(OFILE);
+  binmode(IFILE);
+  while (<IFILE>) {
+    if ((! /^# tiegen line/) &&
+	(! /^# tiegen ewm/) &&
+	    (! /^# tiegen operation_map/))
+	     {
+	  print OFILE;
+	 }
+  }
+
+  close(OFILE);
+  close(IFILE);
+  move($tmp, $file) || die_trap("Rename failed ($tmp => $file) : $!\n");
+
+}
+
+# fork two processes to compile libcas and libfiss. 
+# it saves time on multi-core processors. 
+my $libcas_pid = undef;
+my $libfiss_pid = undef;	 
+
+if ( !$no_software ) {
+
+    #---------------------------------------------
+    #  Generate libfiss-<base>.so
+    #---------------------------------------------
+
+    $libfiss_c   = "$outdir/libfiss-$base.c";
+    $libfiss_h   = "$outdir/libfiss-$base.h";
+    $libfiss_exp = "$outdir/libfiss-$base.$exportext";
+    $libfiss_o   = "$outlibdir/libfiss-$base.o";
+    $libfiss_so  = "$outlibdir/libfiss-$base.$dllext";
+
+    $libfissref_c   = "$outdir/libfiss-ref-$base.c";
+    $libfissref_h   = "$outdir/libfiss-ref-$base.h";
+    $libfissref_exp = "$outdir/libfiss-ref-$base.$exportext";
+    $libfissref_o   = "$outlibdir/libfiss-ref-$base.o";
+    $libfissref_so  = "$outlibdir/libfiss-ref-$base.$dllext";
+
+    # generating libfiss requires the params
+
+    #---------------------------------------------
+    #  Add checksum of full TIE source to default-params.
+    #---------------------------------------------
+    if (! defined $md5sum) {
+	$file = "$outdir\/$tdb_internal_prefix\_$base.full";
+	open(FULLTIE, "$file") or die_trap("Cannot open $file: $!");
+	binmode(FULLTIE);
+	$md5sum = Digest::MD5->new->addfile(*FULLTIE)->hexdigest;
+	close(FULLTIE);
+    }
+
+    $dparam = "$outdir/default-params";
+    open(FILE, ">>$dparam") || die_trap("Cannot append to $dparam: $!\n");
+    print FILE "tie-checksum-0 = 0x" . substr($md5sum, 0, 8) . "\n";
+    print FILE "tie-checksum-1 = 0x" . substr($md5sum, 8, 8) . "\n";
+    print FILE "tie-checksum-2 = 0x" . substr($md5sum, 16, 8) . "\n";
+    print FILE "tie-checksum-3 = 0x" . substr($md5sum, 24, 8) . "\n";
+    close(FILE);
+
+    #---------------------------------------------
+    #  Generate libisa-<base>.so
+    #---------------------------------------------
+    $libisa_so = "$outlibdir/libisa-$base.$dllext";
+    compile_libisa();
+
+    #---------------------------------------------
+    #  Generate libtie-<base>.so
+    #---------------------------------------------
+    compile_libtie();
+
+    # only fork on linux 
+    if ($sname eq 'MSWin32') {
+	$libfiss_pid = 0;
+    } else {
+	$libfiss_pid = fork();
+    }
+    if (defined $libfiss_pid) {
+	if ($libfiss_pid == 0) {
+	    if ( !$so_only) {
+		
+		#---------------------------------------------
+		#  Generate <base>-params
+		#---------------------------------------------
+		copy("$outdir/default-params", "$outdir/$base-params");
+		
+		#---------------------------------------------
+		# Generate fast iss library
+		#---------------------------------------------
+		
+		if ((!$fasttc) && $gendll) {
+		    #---------------------------------------------
+		    #  fissbuilder
+		    #---------------------------------------------
+		    if (!$fasttc) {
+			if (!defined($fissbuilder)) {
+			    $fissbuilder = "$xttools_dir/lib/$isslibdir/turbobuilder";
+			}
+			die_trap("Cannot find executable $fissbuilder\n") if not -x $gcc;
+		    }
+		    
+		    do_system(undef, split(/\s+/, "$fissbuilder --xtensa-params=$outdir $fissbuild_def -o $libfiss_c"));
+		    if ($reflib) {
+			do_system(undef, split(/\s+/, "$fissbuilder --reference --xtensa-params=$outdir $fissbuildref_def -o $libfissref_c"));
+		    }
+		    do_system(undef, split(/\s+/, "$gcc $warn_dll $cflags -o $libfiss_o $libfiss_c"));
+		    do_system(undef, split(/\s+/, "$gcc $makedllflags $fissdef -o $libfiss_so $libfiss_o $simxtcoreimport"));
+		    if ($reflib) {
+			do_system(undef, split(/\s+/, "$gcc $warn_dll $cflags -o $libfissref_o $libfissref_c"));
+			do_system(undef, split(/\s+/, "$gcc $makedllflags $fissrefdef -o $libfissref_so $libfissref_o $simxtcoreimport"));
+		    }
+                    if ($x86_64) {
+                      $libfiss_c = File::Spec->rel2abs($libfiss_c); 
+                      if ($reflib) {
+                        $libfissref_c = File::Spec->rel2abs($libfissref_c); 
+                      }
+                      my $abs_outdir    = File::Spec->rel2abs($outdir);
+                      my $abs_outlibdir = File::Spec->rel2abs($outlibdir);
+                      $fissdef    = "-Wl,--version-script=$abs_outdir/libfiss-$base.map";
+                      $fissrefdef = "-Wl,--version-script=$abs_outdir/libfiss-ref-$base.map";
+                      my $libfiss_64_o     = "$abs_outlibdir/libfiss-$base-x86_64.o";
+                      my $libfiss_64_so    = "$abs_outlibdir/libfiss-$base-x86_64.$dllext";
+                      my $libfissref_64_o  = "$abs_outlibdir/libfiss-ref-$base-x86_64.o";
+                      my $libfissref_64_so = "$abs_outlibdir/libfiss-ref-$base-x86_64.$dllext";
+                      my $picflag = "-fPIC";
+                      if (defined($x86_64_host)) {
+                        do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $gcc_64 $picflag $warn_dll $cflags -o $libfiss_64_o $libfiss_c"));
+                        do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $gcc_64 $makedllflags $fissdef -o $libfiss_64_so $libfiss_64_o $simxtcoreimport"));
+                        if ( $reflib ) {
+                          do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $gcc_64 $picflag $warn_dll $cflags -o $libfissref_64_o $libfissref_c"));
+                          do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $gcc_64 $makedllflags $fissrefdef -o $libfissref_64_so $libfissref_64_o $simxtcoreimport"));
+                        }
+                      } else {
+                        do_system(undef, split(/\s+/, "$gcc_64 $picflag $warn_dll $cflags -o $libfiss_64_o $libfiss_c"));
+                        do_system(undef, split(/\s+/, "$gcc_64 $makedllflags $fissdef -o $libfiss_64_so $libfiss_64_o $simxtcoreimport"));
+                        if ( $reflib ) {
+                          do_system(undef, split(/\s+/, "$gcc_64 $picflag $warn_dll $cflags -o $libfissref_64_o $libfissref_c"));
+                          do_system(undef, split(/\s+/, "$gcc_64 $makedllflags $fissrefdef -o $libfissref_64_so $libfissref_64_o $simxtcoreimport"));
+                        }
+                      }
+                    }
+
+		}
+		unlink "$libfiss_c", "$libfiss_o", "$libfiss_h", "$libfiss_exp" if $clean;
+		unlink "$libfissref_c", "$libfissref_o", "$libfissref_h", "$libfissref_exp" if $reflib && $clean;
+		
+		unlink "$outdir/libtie-$base.c" if $clean;
+	    } #endif !so_only
+            if ($sname ne 'MSWin32') { 
+	        exit(0);
+            }
+	}
+    }
+
+    #---------------------------------------------
+    #  Generate libcas-<base>.so
+    #---------------------------------------------
+
+    $libcas_c   = "$outdir/libcas-$base.c";
+    $libcas_h   = "$outdir/libcas-$base.h";
+    $libcas_exp = "$outdir/libcas-$base.$exportext";
+    $libcas_o   = "$outlibdir/libcas-$base.o";
+    $libcas_so  = "$outlibdir/libcas-$base.$dllext";
+    $libcasd_so = "$outlibdir/libcas-${base}d.$dllext";
+
+    $libcasref_c   = "$outdir/libcas-ref-$base.c";
+    $libcasref_h   = "$outdir/libcas-ref-$base.h";
+    $libcasref_exp = "$outdir/libcas-ref-$base.$exportext";
+    $libcasref_o   = "$outlibdir/libcas-ref-$base.o";
+    $libcasref_so  = "$outlibdir/libcas-ref-$base.$dllext";
+    $libcasrefd_so = "$outlibdir/libcas-ref-${base}d.$dllext";
+
+#only fork on linux
+    if ($sname eq 'MSWin32') {
+	$libcas_pid = 0;
+    } else {
+	$libcas_pid = fork();
+    }
+    if (defined $libcas_pid) {
+	if ($libcas_pid == 0) {
+	    if ($gendll) {
+		do_system(undef, split(/\s+/, "$gcc $warn_dll $cflags -o $libcas_o $libcas_c"));
+		do_system(undef, split(/\s+/, "$gcc $makedllflags $casdef -o $libcas_so $libcas_o $simxtcoreimport"));
+		# On Windows, make a version to work with the debug runtime.
+		do_system(undef, split(/\s+/, "$gcc $makedllflags $casdef -o $libcasd_so $libcas_o $simxtcoredimport")) if ($sname eq 'MSWin32');
+		if ( $reflib ) {
+		    do_system(undef, split(/\s+/, "$gcc $warn_dll $cflags -o $libcasref_o $libcasref_c"));
+		    do_system(undef, split(/\s+/, "$gcc $makedllflags $casrefdef -o $libcasref_so $libcasref_o $simxtcoreimport"));
+		    # On Windows, make a version to work with the debug runtime.
+		    do_system(undef, split(/\s+/, "$gcc $makedllflags $casrefdef -o $libcasrefd_so $libcasref_o $simxtcoredimport")) if ($sname eq 'MSWin32');
+		}
+                if ($x86_64) {
+                  $libcas_c = File::Spec->rel2abs($libcas_c); 
+                  if ($reflib) {
+                    $libcasref_c = File::Spec->rel2abs($libcasref_c); 
+                  }
+                  my $abs_outdir    = File::Spec->rel2abs($outdir);
+                  my $abs_outlibdir = File::Spec->rel2abs($outlibdir);
+                  $casdef    = "-Wl,--version-script=$abs_outdir/libcas-$base.map";
+                  $casrefdef = "-Wl,--version-script=$abs_outdir/libcas-ref-$base.map";
+                  my $libcas_64_o     = "$abs_outlibdir/libcas-$base-x86_64.o";
+                  my $libcas_64_so    = "$abs_outlibdir/libcas-$base-x86_64.$dllext";
+                  my $libcasref_64_o  = "$abs_outlibdir/libcas-ref-$base-x86_64.o";
+                  my $libcasref_64_so = "$abs_outlibdir/libcas-ref-$base-x86_64.$dllext";
+                  my $picflag = "-fPIC";
+                  if (defined($x86_64_host)) {
+                    do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $gcc_64 $picflag $warn_dll $cflags -o $libcas_64_o $libcas_c"));
+                    do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $gcc_64 $makedllflags $casdef -o $libcas_64_so $libcas_64_o $simxtcoreimport"));
+                    if ( $reflib ) {
+                      do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $gcc_64 $picflag $warn_dll $cflags -o $libcasref_64_o $libcasref_c"));
+                      do_system(undef, split(/\s+/, "/usr/bin/ssh $x86_64_host $gcc_64 $makedllflags $casrefdef -o $libcasref_64_so $libcasref_64_o $simxtcoreimport"));
+                    }
+                  } else {
+                    do_system(undef, split(/\s+/, "$gcc_64 $picflag $warn_dll $cflags -o $libcas_64_o $libcas_c"));
+                    do_system(undef, split(/\s+/, "$gcc_64 $makedllflags $casdef -o $libcas_64_so $libcas_64_o $simxtcoreimport"));
+                    if ( $reflib ) {
+                      do_system(undef, split(/\s+/, "$gcc_64 $picflag $warn_dll $cflags -o $libcasref_64_o $libcasref_c"));
+                      do_system(undef, split(/\s+/, "$gcc_64 $makedllflags $casrefdef -o $libcasref_64_so $libcasref_64_o $simxtcoreimport"));
+                    }
+                  }
+                }
+	    }
+	    unlink "$libcas_c", "$libcas_o", "$libcas_h", "$libcas_exp" if $clean;
+	    unlink "$libcasref_c", "$libcasref_o", "$libcasref_h", "$libcasref_exp" if $reflib && $clean;
+            if ($sname ne 'MSWin32') {
+                exit(0);
+            }
+	}
+    }
+
+    if ($semantic_gen) {
+	my $tie_report_file = "$outdir/$base.report";
+	my $auto_report_file = "$outdir/$base.autoreport";
+	if (! open(REPORT_FILE, ">>$tie_report_file")) {
+	    die_trap("Cannot open tie file $tie_report_file: $!\n");
+	}
+	binmode(REPORT_FILE);
+	cat($auto_report_file, \*REPORT_FILE);
+	close(REPORT_FILE);
+	unlink "$auto_report_file";
+    }
+    #---------------------------------------------
+    # Generate c-stub files
+    #---------------------------------------------
+    if ($cstub && $gendll) {
+          $nativesim = "$xttools_dir/lib/tc/nativesim";
+	  $mulpp_file = "$xttools_dir/src/cstub/mulpp.c";
+	  do_system(undef, split(/\s+/, "$nativesim --xtensa-params=$outdir -outdir $outdir -name $base --mulpp-file $mulpp_file $cstub_flags"));
+
+    }
+    #-----------------------------------------------
+    # Generate c-type files, then libctype-<base>.so
+    #-----------------------------------------------
+    if (!$config_build && $gendll) {
+          $nativesim = "$xttools_dir/lib/tc/nativesim";
+	  $mulpp_file = "$xttools_dir/src/cstub/mulpp.c";
+	  do_system(undef, split(/\s+/, "$nativesim --ctypes-only --xtensa-params=$outdir -outdir $outdir -name $base --mulpp-file $mulpp_file $cstub_flags"));
+	  compile_libctype();
+    }
+
+}#endif !no_software
+
+if ( !$no_hardware) {
+
+    #---------------------------------------------
+    #  Format the verilog file
+    #---------------------------------------------
+    do_format("$outdir/$base.v");
+    do_format("$outdir/verify/src/verify_ref.v");
+    do_format("$outdir/verify/src/verify_sem.v");
+
+    #---------------------------------------------
+    #  Add modgen to the verilog files
+    #---------------------------------------------
+    $tmp = "$outdir/tmp";
+    $file = "$outdir/$base.v";
+    $modgen_arg = "-echo -all -UseGatedClocks";
+    if (defined $config_table{"TestFullScan"}) {
+        if ($config_table{"TestFullScan"} == 1) {
+	    $modgen_arg .= " -TestFullScan";
+        }
+    }
+    if (defined $config_table{"TestLatchesTransparent"}) {
+        if ($config_table{"TestLatchesTransparent"} == 1) {
+	    $modgen_arg .= " -TestLatchesTransparent";
+        }
+    }
+    if (defined $config_table{"ClkGateFuncUnit"}) {
+        if ($config_table{"ClkGateFuncUnit"} == 1) {
+	    $modgen_arg .= " -ClkGateFuncUnit";
+        }
+    }
+    if (defined $config_table{"ImplRegFileBuildingBlock"}) {
+        if ($config_table{"ImplRegFileBuildingBlock"} eq "FlipFlop") {
+	    $modgen_arg .= " -UseFlipFlop";
+        }
+    }
+    if (defined $config_table{"ImplResetFlops"} &&
+        $config_table{"ImplResetFlops"} == 1 ) {
+	    $modgen_arg .= " -ResetFlops";
+    }
+    if (defined $config_table{"ImplAsyncReset"} &&
+	$config_table{"ImplAsyncReset"} == 1) {
+  	    $modgen_arg .= " -AsyncReset";
+    }
+    if (!$nomodgen) {
+        unlink($tmp);
+        do_system_append($tmp, undef, split(/\s+/, "$perlbin -w $modgen $modgen_arg $file"));
+        move($tmp, $file) || die_trap("Rename failed ($tmp => $file) : $!\n");
+    }
+
+    $modgen_arg .= " -verify ";
+    $file = "$outdir/verify/src/verify_ref.v";
+    unlink($tmp);
+    do_system_append($tmp, undef, split(/\s+/, "$perlbin -w $modgen $modgen_arg $file"));
+    move($tmp, $file) || die_trap("Rename failed ($tmp => $file) : $!\n");
+
+    $file = "$outdir/verify/src/verify_sem.v";
+    unlink($tmp);
+    do_system_append($tmp, undef, split(/\s+/, "$perlbin -w $modgen $modgen_arg $file"));
+    move($tmp, $file) || die_trap("Rename failed ($tmp => $file) : $!\n");
+
+    #---------------------------------------------
+    #  Copy README tie_verplex
+    #---------------------------------------------
+    change_copy("$lib/README", "$outdir/README.$base", $base);
+    copy("$lib/tie_verplex", "$outdir/verify/verplex/tie_verplex");
+    chmod(0555, "$outdir/verify/verplex/tie_verplex");
+
+    #---------------------------------------------
+    #  Synthesis scripts
+    #---------------------------------------------
+  if ($sname eq 'MSWin32') {
+    unlink "$outdir/tie_dc_script";
+  } else {
+    open(IN, "$outdir/tie_dc_script") || warn "Can't open $outdir/tie_dc_script: $!\n";
+    $retime = join('', <IN>);
+    chomp($retime);
+    close IN;
+    if ($GenerateDCscripts == 1) {
+      change_copy("$lib/TIE_syn_setup.tcl", "$outdir/TIE_syn_setup.tcl");
+      change_copy("$lib/run_syn.pl", "$outdir/run_syn.pl");
+      chmod(0755, "$outdir/run_syn.pl");
+    }
+    unlink "$outdir/tie_dc_script" if $clean;
+  }
+
+    #---------------------------------------------
+    #  Generic cleanup
+    #---------------------------------------------
+    unlink "$tmp", "$outdir/args" if $clean;
+
+} #endif !$no_hardware
+
+#------------------------------------------------
+#
+# Add the dlls and default-param file to TDB
+# for xchange flow
+#
+#------------------------------------------------
+
+if ($swconfig ne "") {
+  $full_swconfig = File::Spec->rel2abs ($swconfig);
+}
+
+#
+# Build an XML verison of the params file for
+# insertion into the TDB. This will be used
+# later for cross compatability checks when running
+# xchange
+#
+my @parts;
+my ($vol, $dir, $name) = File::Basename::fileparse($config_file);
+
+open PARAMS, ">$outdir/default-params.xml" || die_trap("Cannot open $outdir/default-params.xml: $!\n");
+print PARAMS "<config_params>\n";
+print PARAMS "    <options>\n";
+
+if(open DEFAULT_PARAMS, "$dir/\.\./config/default-params")
+{
+    while(<DEFAULT_PARAMS>){
+	if(/\#/)   { next; }
+	if(/\= \[/){ next; }
+	if(!/=/)   { next; }
+	if(/\//)   { next; }
+	@parts = split();
+	if($#parts <= 1) { next };
+	print PARAMS "        <param name=\"$parts[0]\" value=\"$parts[2]\"><\/param>\n";
+    }
+}else{
+    print "Warning : Cannot find default-params file : $!\n";
+}
+
+print PARAMS  "    <\/options>\n";
+print PARAMS "<\/config_params>\n";
+close(PARAMS);
+close(DEFAULT_PARAMS);
+
+#
+# Build an xml index of the contents of the TDB.
+# This will get inserted inside the TDB and used
+# later on.
+#
+my $filebase;
+my $children = $#sav_user_tie_files + $#sav_user_tdb_files;
+
+#
+# Make sure we strip out all the file markers from the tie file
+# before we write it to the disk or these will propagate through
+# the tdb's into the next file i.e..
+#
+#   # tietpp file < name > or
+#   # tiegen file < name >
+#
+# These markers are used by the lexer to tell when a tie source
+# is changing so the error logger can report the right information.
+#
+#
+
+$tmp_basetie  = generate_tempfile_name();
+
+open BASETIE, "$outdir\/$tdb_internal_prefix\_$base.tie" || die_trap("Cannot open $outdir\/$tdb_internal_prefix\_$base.tie for input : $!\n");
+open NEWTIE, ">$tmp_basetie";
+while(<BASETIE>)
+{
+    if(/tiegen/ | /tietpp/){ next; }
+    print NEWTIE "$_";
+}
+close(NEWTIE);
+close(BASETIE);
+
+copy($tmp_basetie, "$outdir\/$tdb_internal_prefix\_$base.tie");
+copy($tmp_basetie, "$outdir\/$base.tie");
+unlink($tmp_basetie);
+
+#
+# The generated full file also has the same problem as the tie file. 
+# Markers may be inserted in this file depending on the kind of iteration 
+# that was done. This will prevent reporting problems down the line.
+#
+$tmp_basefull = generate_tempfile_name();
+
+open BASETIE, "$outdir\/$tdb_internal_prefix\_$base.full" || die_trap("Cannot open $outdir\/$tdb_internal_prefix\_$base.full for input : $!\n");
+open NEWTIE, ">$tmp_basefull";
+binmode(BASETIE);
+binmode(NEWTIE);
+while(<BASETIE>)
+{
+    if(/tiegen/ | /tietpp/){ next; }
+    print NEWTIE "$_";
+}
+close(NEWTIE);
+close(BASETIE);
+
+copy($tmp_basefull, "$outdir\/$tdb_internal_prefix\_$base.full");
+unlink($tmp_basefull);
+
+#
+# Build up an index of the files inside of the tdb.
+# We can use this to extract the right sources later on.
+#
+
+open XML, ">$outdir/index.xml" || die_trap("Cannot open $outdir/index.xml: $!\n");
+print XML  "<tdb>\n";
+print XML  "   <index>\n";
+print XML  "     <file children=\"$children\" type=\"simple\" name=\"$tdb_internal_prefix\_$base.tie\">\n";
+foreach(@sav_user_tie_files)     { $filebase = basename($_); print XML  "          <child type=\"tie\" name=\"$filebase\"><\/child>\n"; }
+foreach(@sav_user_tdb_files)     { $filebase = basename($_); print XML  "          <child type=\"tdb\" name=\"$filebase\"><\/child>\n"; }
+print XML  "     <\/file>\n";
+print XML  "     <file type=\"full\" name=\"$tdb_internal_prefix\_$base.full\"><\/file>\n";
+
+if(!$no_software && !$so_only){
+
+    print XML  "     <file type=\"isatie\" name=\"libisa-$base.so\"><\/file>\n";
+    print XML  "     <file type=\"isacore\" name=\"libisa-core.so\"><\/file>\n";
+    print XML  "     <file type=\"isacorehw\" name=\"libisa-core-hw.so\"><\/file>\n";
+    print XML  "     <file type=\"param\" name=\"$base-params\"><\/file>\n";
+    print XML  "   <\/index>\n";
+    print XML  "<\/tdb>\n";
+    close(XML);
+
+    do_tdbinsert("$outdir/$base.tdb",
+		 "$outdir\/$tdb_internal_prefix\_$base.full",
+		 "$outdir\/$tdb_internal_prefix\_$base.tie",
+                 "$outdir/index.xml",
+		 "$libisa_so",
+		 "$full_swconfig/config/libisa-core.$dllext",
+		 "$full_swconfig/config/libisa-core-hw.$dllext",
+		 "$outdir/default-params.xml"
+		);
+
+}elsif($so_only && !$no_software) {
+
+    print XML  "     <file type=\"isatie\" name=\"libisa-$base.so\"><\/file>\n";
+    print XML  "     <file type=\"isacpre\" name=\"libisa-core.so\"><\/file>\n";
+    print XML  "     <file type=\"isacorehw\" name=\"libisa-core-hw.so\"><\/file>\n";
+    print XML  "   <\/index>\n";
+    print XML  "<\/tdb>\n";
+    close(XML);
+
+    do_tdbinsert("$outdir/$base.tdb",
+		 "$outdir\/$tdb_internal_prefix\_$base.full",
+ 		 "$outdir\/$tdb_internal_prefix\_$base.tie",
+                 "$outdir/index.xml",
+		 "$libisa_so",
+		 "$full_swconfig/config/libisa-core.$dllext",
+		 "$full_swconfig/config/libisa-core-hw.$dllext",
+		 "xt_undef"
+		);
+
+}elsif($no_software){
+    print XML  "   <\/index>\n";
+    print XML  "<\/tdb>\n";
+    close(XML);
+
+    do_tdbinsert("$outdir/$base.tdb",
+		 "$outdir\/$tdb_internal_prefix\_$base.full",
+		 "$outdir\/$tdb_internal_prefix\_$base.tie",
+                 "$outdir/index.xml",
+		 "xt_undef",
+		 "xt_undef",
+		 "xt_undef",
+		 "xt_undef"
+		);
+}
+
+#---------------------------------------------
+#  Last thing is to copy the input file
+#  and erase the .full TIE file since it is part
+#  of the binary generated TDB file.
+#---------------------------------------------
+if($genesys || ($bias_definitions ne "") ){
+  unlink "$outdir\/$tdb_internal_prefix\_$base.tdb";
+  unlink "$outdir\/$tdb_internal_prefix\_$base.tppout";
+  unlink "$outdir/libtie-$base.c";
+}
+
+unlink "$outdir\/$tdb_internal_prefix\_$base.full";
+unlink "$outdir\/$base.full";
+unlink "$outdir\/$tdb_internal_prefix\_$base.tie";
+unlink "$outdir\/$tdb_internal_prefix\_$base.tdbfull" if( -e "$outdir/$tdb_internal_prefix\_$base.tdbfull");
+unlink "$outdir/$base.tl" if $clean;
+unlink "$outdir/index.xml";
+unlink "$outdir/libtie-$base-post-parse.data";
+unlink "$outdir/libtie-$base-post-rewrite.data";
+unlink "$outdir/libtie-$base-compiler.data";
+
+if(!$tdb_process){
+  copy($tie_input, $outdir) if $outdir ne dirname($tie_input);
+}
+
+#sync child processes
+if (!$no_software) {
+
+    if ($sname eq 'MSWin32') {
+#windows, no empty, fill up later
+    } else {
+	if (!(defined $libcas_pid ) || !(defined $libfiss_pid)) {
+	    exit (1);
+	}
+	my $error = 0;
+	my $libcas_pid_ret = waitpid($libcas_pid, 0);
+	if (($libcas_pid_ret == -1) || ($? != 0)) {
+	    $error = 1;
+	}
+
+	my $libfiss_pid_ret = waitpid($libfiss_pid, 0);
+	if (($libfiss_pid_ret == -1) || ($? != 0)) {
+	    $error = 1;
+	}
+	if ($error) {
+	    exit(1);
+	}
+    }
+}
+
+# Remove source directory
+if ($cp_source_dir) {
+    rmtree("$outdir/source_dir");
+}
+
+if ($cpt_time) {
+    $end_time = time;
+    printf STDERR "Time after second pass:\t%d seconds\n", $end_time - $start_time;
+    printf STDERR "Total time: %d seconds\n", $end_time - $begin_time;
+}
+
+tdk_phase_marker(0, "end");
+
+# Local Variables: ***
+# mode:perl ***
+# perl-indent-level:4 ***
+# cperl-indent-level:4 ***
+# End: ***

@@ -1,0 +1,70 @@
+Tensilica's software development toolkit and the associated
+Xtensa-configuration-specific libraries are a combination of
+proprietary software and various open source and free software
+packages.  This file lists the various packages along with the license
+under which each is used.
+
+
+The licenses referenced below are:
+
+License	     Description			File
+-------------------------------------------------------
+GPL          GNU Public License, version 2	COPYING
+GPL3         GNU Public License, version 3	COPYING3
+LGPL	     Lesser/Library GNU Public License	COPYING.LIB
+newlib	     Various Licenses for Newlib	COPYING.NEWLIB
+libgloss     Various Licenses for Libgloss	COPYING.LIBGLOSS
+ecos	     Red Hat eCos Public License	COPYING.ECOS
+GPL+exc	     GPL with Runtime Exception		COPYING.XCC-LIBS
+APL	     Apache Software License		license.apl
+systemc	     SystemC Open Source License	license.systemc.pdf
+EPL          Eclipse Public License		license.epl-v10.html
+
+
+Package Description				License
+-------------------------------------------------------
+Eclipse Platform (used by Xtensa Xplorer)	EPL
+GNU Assembler					GPL3
+GNU Binary Utilities				GPL3
+GNU Host C/C++ Compiler toolchain (for TC and ISS) 	GPL and GPL+exc
+GNU Debugger					GPL3
+GNU Profiler					GPL3
+GNU Linker					GPL3
+GNU Make					GPL
+log4xtensa (used in ISS & XTSC)			APL
+Perl						GPL
+Redboot ROM Monitor				ecos
+RedHat newlib C and Math Libraries		newlib
+RedHat libgloss Low-Level Support Library	libgloss
+SystemC						systemc
+Tiny C Compiler (used by ISS)			LGPL
+uClibc C and Math Libraries			LGPL
+XCC Compiler					GPL
+Runtime Libraries for XCC			GPL+exc
+Xtensa C library				proprietary
+TIE Compiler (TC)				proprietary
+XMON Debug Agent				proprietary
+XOCD JTAG Debug Agent				proprietary
+Xtensa Energy Xplorer				proprietary
+Xtensa Instruction Set Simulator (ISS)		proprietary
+xt-trace Trace Disassembly Tool			proprietary
+
+This product includes software from Info-ZIP.  See the
+LICENSE.INFOZIP file for more information.
+
+As required by Section 3(b) of the GPLv2, Section 6(d) of the GPLv3,
+Section 4 of the LGPL, and Section 3.2 of the eCos Public License, if
+you receive a binary copy of software licensed under the GPL, LGPL or
+eCos Public License, you are entitled to a copy of the source code.  The
+source code for some of these packages is included with the Xtensa
+Tools, but for others the source is available separately.  To request a
+copy of the source code for one of these packages, please contact your
+Tensilica support engineer or send a request via email to
+"support@tensilica.com" or in writing to:
+
+	Tensilica, Inc.
+	3255-6 Scott Blvd.
+	Santa Clara, CA 95054-3013
+
+Please specify the exact version string (from the
+"<xtensa_tools_root>/misc/version" file) along with your request.

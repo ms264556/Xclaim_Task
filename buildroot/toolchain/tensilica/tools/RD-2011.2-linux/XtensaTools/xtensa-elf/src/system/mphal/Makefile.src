@@ -1,0 +1,103 @@
+#  Source Makefile for MP HAL
+#
+#  This makefile is never invoked directly (which is why it's named
+#  Makefile.src rather than Makefile).  It is always included by a
+#  small generated Makefile in the corresponding build subdirectory.
+#  This generated Makefile includes a generated Makefile.info
+#  and sets SRC_SUBDIR before including this Makefile.src.
+#
+# Copyright (c) 2001-2010 by Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+include $(XTENSA_TOOLS_ROOT)/misc/defs.mk
+include $(XTENSA_TOOLS_ROOT)/src/system/mbuild-defs.mk
+include $(XTENSA_SYSTEM_ROOT)/sys-defs.mk
+
+#INST_LIB_DIR = $(XTENSA_SYSTEM_ROOT)/xtensa-elf/lib
+INST_INC_DIR = $(XTENSA_SYSTEM_ROOT)/xtensa-elf/include/xtensa
+CORE_INC_DIR = $(XTENSA_SYSTEM_ROOT)/cores/$(core)/xtensa-elf/include/xtensa
+CORE_LIB_DIR = $(XTENSA_SYSTEM_ROOT)/cores/$(core)/xtensa-elf/lib
+CONFIG_DIR   = $(shell xt-run --xtensa-core=$(core) --show-config=config)
+CFG_LIB_DIR  = $(CONFIG_DIR)/xtensa-elf/arch/lib
+
+#SUBDIRS = $(CONFIGS)
+#SUBMAKEFILE_SRC = $(SRCDIR)/Makefile.src.perconfig
+
+MPCORE_HEADERS := $(foreach core,$(CORES),$(CORE_INC_DIR)/mpcore.h)
+MPCORE_LSPS    := $(foreach core,$(CORES),$(CORE_LIB_DIR)/.lspdone)
+SHARED_LSP_DIR = $(XTENSA_SYSTEM_ROOT)/cores/shared/xtensa-elf/lib
+SHARED_LSP     = $(SHARED_LSP_DIR)/shared
+SHARED_ROM_LSP = $(SHARED_LSP_DIR)/shared-rom
+
+#######  Rules start here  #######
+
+#  Default target:
+all: mpsystem.h install-headers $(MPCORE_HEADERS) lsps
+
+subdirs-all: install-headers
+
+.PHONY: install-headers lsps
+
+mpsystem.h: $(SOCFILE) $(XTENSA_TOOLS_ROOT)/xtensa-elf/src/system/mphal/mpsystem.h.tpp
+	$(SYSTPP) -x $(SOCFILE) \
+			-I $(XTENSA_TOOLS_ROOT)/lib/perl \
+			-o $@ $(XTENSA_TOOLS_ROOT)/xtensa-elf/src/system/mphal/mpsystem.h.tpp
+
+$(MPCORE_HEADERS): $(XTENSA_SYSTEM_ROOT)/cores/%/xtensa-elf/include/xtensa/mpcore.h: $(SRCDIR)/mpcore.h.tpp
+	-$(call mkpath, $(@D))
+	$(SYSTPP) -x $(SOCFILE) \
+			-I $(XTENSA_TOOLS_ROOT)/lib/perl \
+			-e 'our $$corename = "$*";' \
+			-o $@ $<
+
+lsps: $(MPCORE_LSPS) $(SHARED_LSP) $(SHARED_ROM_LSP)
+	$(foreach core,$(SHARED_RESET_CORES), \
+	  $(foreach lspdir,$(wildcard $(CORE_LIB_DIR)/*/.), \
+	    $(call cp, $(CFG_LIB_DIR)/_sharedvectors-for-reset.o, $(lspdir)/_sharedvectors.o)$N))
+
+$(MPCORE_LSPS): $(XTENSA_SYSTEM_ROOT)/cores/%/xtensa-elf/lib/.lspdone:
+	-$(call mkpath, $(@D))
+	$C  -----  LSP generation for CORE $*  -----
+	xt-regenlsps --xtensa-system=$(XTENSA_SYSTEM) --xtensa-core=$* \
+		-dstbase $(@D) -u -f -mref -diags \
+		$(MBUILD_LSPS_OPTIONS) \
+		-syscore $* \
+		$(patsubst %,-reset-table-vaddr %,$(CORE_$*_RESET_TABLE_VADDR)) \
+		$(patsubst %,-mvecbase %,$(CORE_$*_VECBASE)) \
+		$(patsubst %,-mvecselect %,$(CORE_$*_VECSELECT))
+#	$C  FIXME - Unfortunately, the following only works in Unix:
+#	-for name in `find $(@D) -name specs`; do \
+#	  sed s/"-lhandlers"/"-lxmp -lhandlers"/ --in-place $$name; \
+#	done
+	echo done > $(subst /,$S,$@)
+
+
+
+$(SHARED_LSP):
+	-$(call mkpath, $(@D))
+	xt-genldscripts -defer -syscore shared --xtensa-system=$(XTENSA_SYSTEM) \
+	   --xtensa-core=$(SHARED_CONFIG) -shared \
+	   -u -mref --sym-prefix="_shared" -b $@
+	$(call cp, $(XTENSA_TOOLS_ROOT)/xtensa-elf/src/system/mphal/shared-lsp.specs, $@/specs)
+
+$(SHARED_ROM_LSP):
+	-$(call mkpath, $(@D))
+	xt-genldscripts -mrompack -defer -syscore shared --xtensa-system=$(XTENSA_SYSTEM) \
+	   --xtensa-core=$(SHARED_CONFIG) -shared \
+	   -u -mref --sym-prefix="_shared" -b $@
+	$(call cp, $(XTENSA_TOOLS_ROOT)/xtensa-elf/src/system/mphal/shared-lsp.specs, $@/specs)
+
+install-headers: mpsystem.h
+	-$(call mkpath, $(INST_INC_DIR)/system)
+	$(call cp, mpsystem.h, $(INST_INC_DIR)/system)
+
+clean:
+	-$(call rm, mpsystem.h)
+
+
+include $(XTENSA_TOOLS_ROOT)/misc/rules.mk
+

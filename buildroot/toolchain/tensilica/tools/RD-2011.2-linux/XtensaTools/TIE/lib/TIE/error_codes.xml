@@ -1,0 +1,4193 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<pod xmlns="http://axkit.org/ns/2000/pod2xml">
+<head>
+	<title>TIE Compiler Error Manual</title>
+</head>
+<sect1>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ALREADY_DECL</title>
+<para>
+Duplicate variable declaration. For example, multiple declarations of
+the same argument in a list (such as iclass operands) will generate
+this error.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ALREADY_DEFINED</title>
+<para>
+Duplicate definition of a TIE variable. All variables in the same scope
+must have unique names. For example, two states cannot be defined with
+the same name.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ASSERT_FAILURE</title>
+<para>
+This error means that an assertion has failed in TC. We ask that you contact Tensilica support
+and send us the resulting archive result.tgz which can be found in your TDK directory. This
+will enable us to debug the problem, and hopefully resolve it in a timely manner.
+</para>
+<para>
+Please try to rewrite the TIE that caused this internal error in TC. Most times a line number
+and a filename of the TIE that caused the error was printed along with the error message.Try first
+to rewrite this TIE.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_ASSIGNMENT_WIDTH_MISMATCH</title>
+<para>
+The bit width of RHS and LHS in an assignment are not the same. This indicates that
+there may be some truncation in the result, or in some cases undesirable zero extension
+in the result.
+This warning is not reported by default. To see it, you have to turn on the option
+-warnall, or activate this specific warning with the flag -warn TIE_ASSIGNMENT_WIDTH_MISMATCH
+</para>
+<para>
+Example of warning:
+</para>
+<verbatim><![CDATA[
+wire [31:0] a, b;
+wire [7:0] c = a | b;
+]]></verbatim>
+<para>
+This will generate a warning that the RHS of the assignment is 32 bits and the LHS is 8 bits.
+The correct way to write the code is
+</para>
+<verbatim><![CDATA[
+wire [31:0] tmp = a|b;
+wire [7:0] c = tmp[7:0];
+]]></verbatim>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_BUFFER_OVERFLOW</title>
+<para>
+TIE compiler will not accept a single line of more than 6K characters. If a single
+line that is longer than 6K characters is found, it generates this error.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_COMPMOD_ARG_ID</title>
+<para>
+When using TIEcomp, inputs of the TIEcomp module should be assigned
+directly from variables in the current scope, and outputs of the TIEcomp 
+module should be assigned directly to variables in the current scope. 
+Any error is reported with this error code.
+</para>
+<para>
+For example, when using the operation BAR as a TIEcomp, an error 
+is generated as shown
+</para>
+<verbatim><![CDATA[
+operation BAR { inout AR ars, in AR simm8 }
+]]></verbatim>
+<verbatim><![CDATA[
+TIEcomp(BAR, { ars = a, simm8 = b }, { a = ars + 2, c = ars } );
+]]></verbatim>
+<para>
+Error: (TIE_COMPMOD_ARG_ID),
+        Each entry of the computation module's output argument
+        list must specify an identifier on the right-hand
+        side of the assignment. The identifier must specify
+        an argument from the &quot;BAR&quot; operation.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_COMPMOD_ILLEGAL_ARG</title>
+<para>
+When using TIEcomp, assignments to and from variables that are not
+inputs or outputs of the TIEcomp module are reported with this error.
+For example, when using the operation BAR as a TIEcomp,
+the following code will generate an error as shown
+</para>
+<verbatim><![CDATA[
+operation BAR { inout AR ars, in AR simm8 }
+]]></verbatim>
+<verbatim><![CDATA[
+TIEcomp(BAR, { ars = a, simm8 = b }, { a = ars, c = arr } );
+]]></verbatim>
+<para>
+Error: (TIE_COMPMOD_ILLEGAL_ARG),
+        The computation module's output argument list specifies
+        an argument, &quot;arr&quot;, that is not an argument to the
+        &quot;BAR&quot; operation.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_COMPMOD_ILLEGAL_INS</title>
+<para>
+Some Xtensa opcodes are not allowed to be used as TIEcomp, and when
+used as TIEcomp generates this error. For example, the following code
+will generate an error as shown
+</para>
+<para>
+TIEcomp(CALLX, {ars = a}, {t = arr});
+</para>
+<para>
+Error: (TIE_COMPMOD_ILLEGAL_INS),
+        Instruction &quot;CALLX&quot; is not allowed in computation module.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_COMPMOD_MISSING_ARG</title>
+<para>
+When using TIEcomp, if any input of the TIEcomp module is not assigned,
+or if an output of the TIEcomp module is not used, you will get this error.
+For example, when using the operation BAR as a TIEcomp,
+the following code will generate an error as shown
+</para>
+<verbatim><![CDATA[
+operation BAR { inout AR ars, in AR simm8 }
+]]></verbatim>
+<verbatim><![CDATA[
+TIEcomp(BAR, { ars = a }, { a = ars } );
+]]></verbatim>
+<para>
+Error: (TIE_COMPMOD_MISSING_ARG),
+        The computation module's input argument list is
+        missing an assignment to argument &quot;simm8&quot; of operation &quot;BAR&quot;.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_COMPMOD_RECURSION</title>
+<para>
+The  TIEcomp invocation in an operation
+directly or indirectly calls the same operation recursively.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_COMPMOD_INVOKE</title>
+<para>
+TIEcomp modules can be instantiated only in operation or reference. Instantiating
+a TIEcomp module in a semantic or function will generate this error.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CONFIG_COPROCESSOR_COUNT</title>
+<para>
+The tie description requires a coprocessor count
+that is not specified in the Xtensa Config description. If you get this error,
+you will have to rebuild your Xtensa configuration with the correct number
+of coprocessors.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CONFIG_PIF_WIDTH</title>
+<para>
+The memory width required by the tie description
+cannot be accommodated by the Xtensa processor configuration selected. For example,
+if you have a 128 bit register file, the load and store operations for the register
+file will require a 128 bit memory interface in the base processor and if the
+Xtensa config has a memory interface of 32 or 64 bits, you will get this error.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_CONSTANT_DECIMAL_OVERFLOW</title>
+<para>
+The integer constant value cannot be represented in 32 bits, causing overflow.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CONSTANT_FORMAT</title>
+<para>
+An illegal format is used for a sized constant, e.g.
+32'bff, since the binary format b can only have 0 and 1.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON|WARN_DEFAULT_ON">TIE_CONSTANT_ILLEGAL_SIZE</title>
+<para>
+The number of bits specified in a sized constant is illegal, e.g. 0'd3.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CONSTANT_ILLEGAL_VALUE</title>
+<para>
+The value of a sized constant contains illegal characters, e.g 32'hYZ.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_CONSTANT_VALUE_OVERFLOW</title>
+<para>
+The constant number cannot be represented in the number of bits specified, eg. 4'd25.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_CONTEXT_SWITCH_EXPENSIVE</title>
+<para>
+In configurations supporting real time operation systems. It is recommended that 
+all states and register files are put in a coprocessor in order to reduce the 
+context switch overhead. This warning message is generated when the estimated
+context switch overhead is too large.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_COPROC_MULTI_DEF</title>
+<para>
+Coprocessors with the same name are defined multiple times in the TIE file. 
+However, they are not assgined to the same coprocessor number.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_COPROC_MAX_NUMBER</title>
+<para>
+The coprocessor number used  exceeds the maximum of 8 coprocessors allowed.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_COPROC_NUM_ILLEGAL</title>
+<para>
+The coprocessor number must be between 0 and 7. It is not necessary
+to define a coprocessor with a number. If no number is assigned, the tie compiler
+will automatically assign a number to the coprocessor.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_COPROC_NUM_USED</title>
+<para>
+The coprocessor number is already used by another coprocessor. It is not necessary
+to define a coprocessor with a number. If no number is assigned, the tie compiler
+will automatically assign a number to the coprocessor.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_COPROC_UNMAPPED_STATE</title>
+<para>
+The coprocessor includes a TIE state that is not mapped to programmer visible
+user registers, which indicates that these states cannot be saved and restored
+when Xtensa processor switches context to using a different coprocessor.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CORE_INSTRUCTION</title>
+<para>
+Warning Level = 0 (Not suppressed by default)
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CORE_NAME_DUP</title>
+<para>
+The variable is trying to redefine a previously declared variable in the
+Xtensa core description. Note that this checking is done in a case sensitive way.
+For example, the following tie will generate an error
+</para>
+<para>
+field   S           slot0[19:16]
+</para>
+<para>
+Error: (TIE_CORE_NAME_DUP),
+        User tie type FIELD &quot;S&quot; is trying to redefine Xtensa
+        core type FIELD &quot;s&quot; which is illegal. Names of the
+        same type must be unique and cannot differ only in
+        case.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CSTUB_SWAP_CONCAT_INTF</title>
+<para>
+In cstub_swap construct, the concatenation must be a memory interface. That is,
+it must be one of the following interfaces:
+MemDataIn8, MemDataIn16, MemDataIn32, MemDataIn64, MemDataIn128, 
+MemDataOut8, MemDataOut16, MemDataOut32, MemDataOut64, MemDataOut128
+</para>
+<para>
+The interface must also be in the iclass of the corresponding instructions.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CSTUB_SWAP_CONCAT_INTEGER</title>
+<para>
+In cstub_swap construct, the concatenation must span the entire interface.
+It is not allowed to overlap any bit in the interface, nor is allowed
+to neglect any bit.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_CTYPE_ALIGNMENT_LT_SIZE</title>
+<para>
+The alignment for the  ctype is less than the size of the ctype. Load/store
+operations to read and write these ctypes from memory to register cannot be
+automatically generated by the tie compiler.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_ALREADY_DEFINED</title>
+<para>
+The ctype is already defined. Note that a ctype can be automatically generated
+by the tie compiler from a register file.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_FIELD_COUNT</title>
+<para>
+A structural ctype must contain more than one field.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_FIELD_CTYPE_CASE</title>
+<para>
+For a structural ctype that contains more than one register, the types of
+each of its fields must be a valid ctype.  The TIE compiler did not find
+a valid ctype, but did find a similar one.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_FIELD_DUP_NAME</title>
+<para>
+Two fields in a ctype must not have conflicting field names.  Two
+field names conflict if they are the same under a case-insensitive
+comparison.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_FIELD_INVALID_CTYPE</title>
+<para>
+For a structural ctype that contains more than one register, the types of
+each of its fields must be a valid ctype.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_FIELD_INVALID_NAME</title>
+<para>
+The name of ctype fields must not contain a '.' or be a C/C++ keyword.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_FIELD_NESTED</title>
+<para>
+Structural ctypes must only contain ctypes that reference non-structural
+ctypes.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_CTYPE_GENERATED_DEFAULT</title>
+<para>
+When a register file has two or more ctypes associated with it, one of them is 
+selected to be the default ctype for that register file. You can explicitly 
+select this by using the keyword default on the line that declares the ctype.
+If a default ctype is not specified in the TIE description, the TIE compiler 
+automatically chooses one as the default. It is recommended that you always 
+explicitly specify the default ctype for register files with more than one 
+ctype.
+</para>
+<para>
+When a register file has more than one ctype associated with it, every 
+instruction with one or more operands from the register file needs an 
+instruction prototype. The instruction prototype specifies the ctype(s) 
+associated with that instruction. If the instruction prototype is not 
+specified in the TIE description, it is automatically generated by the 
+TIE compiler using the default ctype as the ctype for every operand
+of the register file.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_ILLEGAL_ALIGNMENT</title>
+<para>
+The alignment specification of a ctype must be a multiple of 8 bits (a byte),
+not greater than 128 and must be a power of 2.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_ILLEGAL_DEFAULT</title>
+<para>
+The size of a default ctype must be greater than or equal to the regfile
+entry size.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_ILLEGAL_DEFAULT_FIELD</title>
+<para>
+The default ctype for a register file must map to a single register or view.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_ILLEGAL_SIZE</title>
+<para>
+The size of the ctype must be less than or equal to the width of the register file
+in which the ctype belongs. For example, the following tie will generate a warning
+</para>
+<para>
+regfile XR 18 4 xr
+ctype xrtype 24 32 XR
+</para>
+<para>
+Warning: (TIE_CTYPE_ILLEGAL_SIZE),
+        Ctype xrtype has size 24 which is greater then the
+        size of the containing regfile. It is recommended
+        that the ctype's size be made &lt;= to the regfile size.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_ILLEGAL_NAME</title>
+<para>
+Ctype names cannot have the character dot in them, since this will cause
+illegal C code.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_NO_FIELD_PROTOS</title>
+<para>
+The TIE compiler does not automatically generate protos for ctypes with fields.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_NO_PREDEFINED</title>
+<para>
+Xtensa core register files such as AR cannot have user defined ctypes.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_NO_REGFILE</title>
+<para>
+The register file used by the ctype is not found in the tie description.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_CTYPE_REGFILE_CONFLICT</title>
+<para>
+The ctype name has a conflict with another register file name which the ctype
+does not belong to. A ctype can have the same name as the register file which
+it occupies.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_CTYPE_SIZE_GT_PIF</title>
+<para>
+The size of the ctype is greater than the memory access width of the Xtensa 
+configuration selected. This means that reading or writing the ctype from
+memory will involve multiple load or store instructions. Tie compiler cannot
+automatically generate such instructions.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_CTYPE_SIZE_GT_STORE</title>
+<para>
+Store instructions cannot be automatically generated by tie compiler for
+this ctype. This could be because the size of the ctype being greater than
+memory access width of the Xtensa configuration selected, or the Xtensa
+configuration not allowing stores of this size due to hardware restrictions.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_CTYPE_SIZE_LT_REGFILE</title>
+<para>
+The size of the ctype is smaller than the width of the register file it
+occupies. This means that when reading or writing the ctype from
+memory, the unoccupied bits will have to be set, either by zero extension
+or sign extension, or any other algorithm. Load/Store instructions cannot 
+be automatically generated by tie compiler for this ctype.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_DECODING_DUP_BIT</title>
+<para>
+The same bits in the instruction word is used more than once
+for decoding a format or instruction. For example, the following tie description
+will generate an error
+</para>
+<para>
+format  xl64   64 { slot0, slot1 }  { InstBuf[2] == 1'b1 &amp;&amp; InstBuf[2:0]== 3'd7 }
+</para>
+<para>
+Error: (TIE_DECODING_DUP_BIT),
+        Bit InstBuf[2] is used multiple times in the decoding
+        expression
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_DUP_VAR</title>
+<para>
+Duplicate variable name within a scope. For example, in the following code,
+the operation TESTDUP reads a state called TESTDUP and generates an error
+because in the body of the operation &quot;TESTDUP&quot; can be the state name or the
+opcode name.
+</para>
+<para>
+state TESTDUP  32 add_read_write
+operation TESTDUP { out AR a } { in TESTDUP } { assign a = TESTDUP;}
+</para>
+<para>
+Error: (TIE_DUP_VAR),
+        In reference TESTDUP, the variable TESTDUP can be
+        either STATE or OPCODE.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_EMPTY</title>
+<para>
+Empty tie description.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_ENCODING_FLIX_USED</title>
+<para>
+If the automatic instruction encoding uses bits in the instruction
+word that are designated to FLIX length and format encoding, then
+this warning is generated to make the user aware that the output
+of this tie cannot be extended to add FLIX in future. The relevant
+bits are the &quot;op0&quot; bits, which occupy InstBuf[3:0] and InstBuf[63:60] 
+in a LittleEndian and BigEndian configuration respectively.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_ENCODING_FP_USED</title>
+<para>
+If the automatic instruction encoding uses bits in the instruction
+word that are designated to the Floating point unit of Xtensa,
+this warning is generated to make the user aware that the output
+of this tie cannot be added to a Xtensa processor with the FPU.
+</para>
+</sect2>
+<sect2>
+<title default="">TIE_ENCODING_MAC</title>
+<para>
+If the automatic instruction encoding uses bits in the instruction
+word that are designated to the MAC16 unit of Xtensa,
+this warning is generated to make the user aware that the output
+of this tie cannot be added to a Xtensa processor with the MAC16 unit.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ENCODING_RECURSIVE</title>
+<para>
+The encoding of an opcode references an opcode whose encoding reference
+the first opcode, causing a recursive encoding.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_ENCODING_USED</title>
+<para>
+If the automatic instruction encoding uses bits in the instruction
+word that are designated to a specific architectural option in the
+Xtensa processor, this warning is generated to make the user aware 
+that the output of this tie cannot be added to a Xtensa processor 
+with that architectural option. For example, tie compiler may use
+the Density instruction space Xtensa for encoding the operations
+if the Xtensa configuration used does not have the Density instructions.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_EXPRESSION_WIDTH_MISMATCH</title>
+<para>
+This warning is seen only when TIE compiler is run with the option -warnall.
+It is suppressed by default.
+</para>
+<para>
+According to TIE bit-width rules, which follow Verilog, a context-determined
+expression is one where the bit-width of the expression depends on its
+parent expression. In this case, the expression has a &quot;required-width&quot; that
+is determined by the parent expression, as well as the &quot;computed-width&quot;. If
+the required-width is different from the computed width, the expression and
+its operands will be truncated or zero-extended as appropriate. If this is
+undesirable, the user can run TIE compiler with the -warnall flag to see 
+the mismatches.  The warning indicates that the computed width of an 
+expression or the width of a variable in an expression is not the same 
+as the required width of that expression or variable.  Please refer to
+the Computation Section of the TIE Language Reference Manual for further
+details of bit-width rules.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_EXPRESSION_OPERAND_MISMATCH</title>
+<para>
+This warning is seen only when TIE compiler is run with the option -warnall.
+It is suppressed by default.
+</para>
+<para>
+According to TIE bit-width rules, which follow Verilog, if the operands of an 
+operation have a &quot;required-width&quot;, then the operands are zero-extended or 
+truncated as appropriate. If this is not desirable, then the user can run
+the TIE compiler with the -warnall flag to see where the operands of an
+operation are mismatched. Please refer to the Computation Section of the TIE 
+Language Reference Manual for further details of bit-width rules.
+</para>
+<para>
+This warning indicates that the two operands of an operation have different
+bit width, and one of them will be zero extended. For example, the following
+code will generate a warning as shown.
+</para>
+<para>
+wire [3:0] a;
+wire [4:0] b, c;
+assign c = a + b;
+</para>
+<para>
+Warning: (TIE_EXPRESSION_OPERAND_MISMATCH),
+        Operands of arithmetic operation must have the same
+        size, however the operand &quot;a&quot; is 4 bits and operand
+        &quot;b&quot; is 5 bits
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FEATURE_NOT_SUPPORTED</title>
+<para>
+If the Xtensa configuration or release of TIE compiler does not support the 
+feature in the tie description, this error is generated.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FIELD_CORE_DIFF_WIDTH</title>
+<para>
+A predefined field in Xtensa core is redefined with a different width. 
+Xtensa core fields (such as &quot;s&quot;, &quot;r&quot;, &quot;t&quot;) can be redefined in user slots
+in FLIX, but they have to be the same length.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FIELD_DIFF_WIDTH</title>
+<para>
+A field can be defined more than once. In fact a field has to be defined
+in every slot of a FLIX format where it is used for an opcode encoding.
+However, the width of the field must be the same in all definitions. 
+The following is illegal because the bit width of the field &quot;fldx&quot; is
+7 bits in slot0 and 8 bits in slot1.
+</para>
+<para>
+field fldx slot0[10:4] 
+field fldx slot1[7:0]
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FIELD_INDEX_ORDER</title>
+<para>
+Incorrect indexing of a field. The  only indexing allowed is
+field[ from:to ], where from is &gt;= to.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FIELD_INDEX_RANGE</title>
+<para>
+Incorrect indexing of a field[from:to], either one of the indices
+is beyond the width of the field.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FIELD_MULTI_DEF</title>
+<para>
+A field can be defined more than once. In fact a field has to be defined
+in every slot of a FLIX format where it is used for an opcode encoding.
+However, it cannot be defined more than once in the same slot.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FIELD_NO_SLOT</title>
+<para>
+Field is not defined in any slot.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FIELD_OVERLAP_BITS</title>
+<para>
+Definition of a field uses specific bits of a slot more than once.
+For example, in the following code, the field definition of &quot;rts&quot;
+uses the bit s[2] more than once.
+</para>
+<para>
+field   rts  {r,s[2:0], t, s[3:2]}
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FIELD_SLOT_CONFLICT</title>
+<para>
+Field names and slot names must be unique in a case-sensitive way.
+This is to avoid duplicate variable names generated by TIE compiler
+in software libraries. For example, a field name &quot;SLOTa&quot; and a slot
+name &quot;slota&quot; will be illegal.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FIELD_TOO_LARGE</title>
+<para>
+The field width is bigger than the slot it occupies.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FILE_READ_FAIL</title>
+<para>
+TIE compiler could not read the tie file.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FILE_WRITE_FAIL</title>
+<para>
+TIE compiler could not write a file to generate the tdk.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_ALREADY_DEFINED</title>
+<para>
+A format with the same name as already been defined.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_COUNT</title>
+<para>
+The maximum number of formats allowed is 7.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_FORMAT_OVERLAP</title>
+<para>
+The decoding logic of two formats overlap. For example, in the
+following code (assuming a 64 bit instruction word in a little
+Endian configuration), the decoding logic for &quot;xl64&quot; and &quot;m64&quot;
+are overlapping because they are both the default decoding
+logic for length len64.
+</para>
+<para>
+length  len64      64    { InstBuf[3:0] == 15 }
+</para>
+<para>
+format  x64        len64   { slot0, slot1 }   
+format  m64        len64   { slot2 }
+</para>
+<para>
+slot    slot0       x64 [29:4]     
+slot    slot1       x64 [63:30]   
+slot    slot2       m64 [27:4]
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_INSTR_CONNECT_LIMIT</title>
+<para>
+The total number of connected groups of operations in a format exceeds the limit 15. 
+A group of operations is all operations that share the same slots in the format. For example:
+</para>
+<para>
+operation FOO and BAR are in the same group, because they are only defined in slot0. 
+operation TEE is not in the same group as operation FOO and BAR, because it is also defined in slot3.
+</para>
+<para>
+Two groups of operations are considered connected if they have at least one slot in common. In
+the above example, operations FOO and BAR are connected to operation TEE, because they are all defined in slot0. 
+However, operation KII is not connected to either operations FOO/BAR and operation TEE, because they do not
+have one slot in common.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_LENGTH_DISJOINT</title>
+<para>
+A format and the length of the format have conflicting decoding logic. For
+example, in the following code, the format &quot;x64&quot; defines a decoding logic
+of &quot;InstBuf[3] == 1'b0&quot;, but the length &quot;len64&quot; which it uses has the
+decoding logic of &quot;InstBuf[3:0] == 4'b1111&quot; which means InstBuf[3] has a conflict.
+</para>
+<para>
+length  len64      64      {InstBuf[3:0] == 4'b1111}
+format  x64        len64   { slot0, slot1 }    {InstBuf[3] == 1'b0&quot;}
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_SLOT_DISJOINT</title>
+<para>
+The bits used by the decoding logic of a format are also being used by a slot
+in the format. For example, in the following code, InstBuf[4] is being used
+for decoding the format x64. The slot &quot;slot1&quot; as defined here also occupies bit
+InstBuf[4].
+</para>
+<para>
+length  len64      64    {InstBuf[3:0] == 4'b1110 }
+format  x64        len64 {slot1} {InstBuf[4] == 1'b1 }
+slot slot1 x64[55:0]
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_OVERLAP_SLOTS</title>
+<para>
+Slots in a format overlap. For example, in the following code, both
+the slots &quot;slot0&quot; and &quot;slot1&quot; occupy InstBuf[29].
+</para>
+<para>
+length  len64      64      {InstBuf[3:0] == 4'b1111}
+</para>
+<para>
+format  x64        len64   { slot0, slot1 }
+</para>
+<para>
+slot    slot0      x64 [29:4] 
+slot    slot1      x64 [63:29]
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_SLOT_COUNT</title>
+<para>
+TC restricts the number of slots in one format to 8.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_MAX_SLOT_COUNT</title>
+<para>
+XCC compiler restricts the total number of slots to 64.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_SLOT_NOT_DEFINED</title>
+<para>
+Slot referred in the format statement has not been defined.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_SLOT_NOT_SPECIFIED</title>
+<para>
+All slots in a format must be specified in the format definition to specify the
+ordering of slots in the assembly code.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_SLOT_OPCODE_ENCODING</title>
+<para>
+The encoding of an opcode in a slot uses a field that overlaps with 
+the decoding bits for the format to which the slot belongs to. This
+is legal as long as the encoding specified assigns the overlapping
+bits to the same value, in which case the same bits will be used
+for decoding the format as well as an opcode in the format. However,
+it is illegal to assign the bits to different values, or to use
+the bits used for decoding for an operand.
+</para>
+<para>
+For example, in the following code, the slot &quot;slot0&quot; occupies &quot;InstBuf[31:0]&quot;, 
+and field &quot;op0A&quot; which is defined as &quot;slot0[7:4]&quot; occupies &quot;InstBuf[7:4]&quot;. 
+The encoding of opcode &quot;MYOP&quot; assigns bits &quot;InstBuf[7:4] = 4'b0000&quot;, 
+which conflicts with the decoding of the format, which assigns 
+&quot;InstBuf[4] = 1'b1&quot;. Note that encoding of &quot;MYOP&quot; as &quot;op0A=4'0001&quot; 
+would be legal.
+</para>
+<para>
+length  len64      64      		    {InstBuf[3:0] == 4'b1111}
+</para>
+<para>
+format  x64        len64   { slot0, slot1 } { InstBuf[4] == 1'b1 }
+</para>
+<para>
+slot    slot0      x64[31:0]
+slot    slot1      x64[63:32]
+</para>
+<para>
+field   op0A 	   slot0[7:4]
+opcode  MYOP	   op0A=4'b0000
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_SLOT_ILLEGAL</title>
+<para>
+A FLIX format cannot use Xtensa core slot &quot;Inst&quot; directly. User is
+required to create his/her own slots and add Xtensa Core opcodes
+that are allowed to be in FLIX to the slots.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_WRONG_DECODER</title>
+<para>
+Legal decoding expressions for decoding formats are restricted to the form
+</para>
+<para>
+InstBuf[from:to] == &lt;constant&gt; [ &amp;&amp; InstBuf[from:to] == &lt;constant&gt; ]
+</para>
+<para>
+This is to ensure that the decoding logic can meet the timing constraints
+for decoding the instruction. Decoding logic should not have arbitrary 
+amount of logic.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_NO_DECODER</title>
+<para>
+If there are multiple formats in FLIX, each format needs to have a decoding
+expression using some of the bits in the instruction word. TIE compiler can 
+generate the encoding automatically if there are bits available. However, if the
+slots in a format leave no bits for encoding a format, it is an error.
+For example, in the following code, there are no bits to encode format
+&quot;x64&quot;, because the slots &quot;slot0&quot; and &quot;slot1&quot; occupy all the bits.
+</para>
+<para>
+length  len64      64      {InstBuf[3:0] == 4'b1111}
+format  x64        len64   { slot0, slot1 } 
+format  y64        len64   { slot0, slot2, slot3 }
+</para>
+<para>
+slot    slot0      x64 [31:4] 
+slot    slot1      x64 [63:32]
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_NO_LENGTH</title>
+<para>
+Each length has to be decoded in FLIX. The only bits allowed to be
+used for decoding length are InstBuf[3:0] in LittleEndian or
+InstBuf[63:60] in BigEndian Xtensa configurations respectively.
+Furthermore, the only encoding space available for length
+are the values &quot;4'd14&quot; and &quot;4'd15&quot; for these bits. Therefore,
+a maximum of two length specifications can be encoded. Also,
+these encoding values should not conflict with opcode encodings
+if the same bits are used for a slot.
+</para>
+<para>
+If TIE compiler is unable to generate a decoding for the length
+specified in the format within these bits due to lack of encoding
+space, then this error is generated.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FORMAT_LENGTH_OVERLAP</title>
+<para>
+Each length has to be decoded in FLIX. The only bits allowed to be
+used for decoding length are InstBuf[3:0] in LittleEndian or
+InstBuf[63:60] in BigEndian Xtensa configurations respectively.
+Furthermore, the only encoding space available for length
+are the values &quot;4'd14&quot; and &quot;4'd15&quot; for these bits. Therefore,
+a maximum of two length specifications can be encoded. Also,
+these encoding values should not conflict with opcode encodings
+if the same bits are used for a slot.
+</para>
+<para>
+If TIE compiler is unable to generate a decoding for the length
+specified in the format within these bits due to slots in the format
+overlapping these bits, then this error is generated.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FUNCTION_ALREADY_DECLARED</title>
+<para>
+A function with the same name has been already declared.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FUNCTION_INPUT_ARG</title>
+<para>
+Number of arguments in a TIE function call does not match the number
+of function inputs.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FUNCTION_INTERNAL_NAME</title>
+<para>
+A TIE function cannot have the same name as a TIE module.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FUNCTION_IO_NAME</title>
+<para>
+Duplicate input/output name found in a function declaration. All inputs and
+outputs must be unique. The function name is also the output name.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FUNCTION_RECURSIVE</title>
+<para>
+A TIE function recursively calls the same function, either directly
+or by instantiating another function.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FUNCTION_SHARED</title>
+<para>
+A TIE function cannot instantiate a shared function. Shared functions
+can only be called from an instruction.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_FUNCTION_UNUSED</title>
+<para>
+A TIE function is defined but not used. No hardware is generated for this.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_FUNCTION_IO_DECL</title>
+<para>
+Illegal function input/output declaration. 
+Legal syntax for function declaration is
+</para>
+<para>
+function bit-range function-name ( bit-range input-name [, bit-range input-name])
+where bit-range must be specified as [from:to] where from &gt; to. 
+For 1 bit inputs/outputs, [0:0] should be omitted.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_FUTURE_VERSION</title>
+<para>
+The variable name is a keyword in a future version of TIE language. It is
+preferable to use a different name so that when upgrading to the next
+version of TIE language, the tie description will work without modification.
+For example, the name &quot;queue&quot; is a keyword in LX version and should be
+avoided as a variable name even if not using LX at this time.
+</para>
+</sect2>
+<sect2>
+<title default="">TIE_GENERATE</title>
+<para>
+TIE compiler automatically generates opcode encodings and operands from
+operation and register file descriptions. Any error in this process is
+reported as TIE_GENERATE with a unique message that explains the problem
+encountered. Common errors are:
+</para>
+<list>
+<item><itemtext>no encoding space found for encoding the opcodes</itemtext>
+</item>
+<item><itemtext>operations to load/store register file could not be generated</itemtext>
+</item>
+<item><itemtext>operation arguments could not be coalesced to operands as 
+   specified due to constraints such as a combined semantic.</itemtext>
+</item>
+</list>
+</sect2>
+<sect2>
+<title default="MSG_DEFAULT_ON">TIE_GENERATED_OPERATION</title>
+<para>
+TIE compiler will report all the operations it automatically generated.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_ARG_MULTIPLE_DECL</title>
+<para>
+Same argument is declared more than once in an iclass.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_COND_KILL</title>
+<para>
+If an instruction has a conditional kill on an output operand/state,
+all instructions that share the iclass must also have conditional kill.
+This is to avoid the compiler incorrectly inferring the instruction 
+without the conditional kill as read-modify-write.
+</para>
+<para>
+For example, the following is illegal. You have to put MYMOVE and
+MYCONDMOVE in different iclasses.
+</para>
+<para>
+opcode MYMOVE     op2=5 CUST0
+opcode MYCONDMOVE op2=6 CUST0
+iclass test_kill { MYMOVE, MYCONDMOVE } { out arr, in ars } 
+reference MYMOVE     { assign arr = ars; }
+reference MYCONDMOVE { assign arr = ars; assign arr_kill = ~(ars[0]); }
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_CORE_ICLASS</title>
+<para>
+The iclass name conflicts with a predefined iclass in the Xtensa core.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_CORE_OPERAND</title>
+<para>
+The operand is an Xtensa core operand that cannot be used by user TIE.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_CORE_STATE</title>
+<para>
+The state is an Xtensa core state that cannot be used by user TIE.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_ICLASS_DIFF_SLOT</title>
+<para>
+For an opcode to belong to a slot, all fields required for encoding
+the opcode and operands must be declared in the slot.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_DUPLICATE_OPCODE</title>
+<para>
+Opcode name is declared more than once in a iclass.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_IMM_OPERAND_DIR</title>
+<para>
+Immediate ranges/operands, fields and tables can only be declared as inputs.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_INTERFACE_DIR</title>
+<para>
+The direction of the interface in the iclass/operation does not match the
+direction in the definition of the interface. For example, the memory
+address interface &quot;VAddr&quot; can only be declared as an &quot;out&quot;.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_LOADBYTEDISABLE</title>
+<para>
+The interface LoadByteDisable is used for arbitrary byte enables for loads
+and can be used only for load operations (using MemDatIn).
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_MEMDATA</title>
+<para>
+An operation can only do a load (using MemDataIn*) or a store (using MemDataOut*)
+The same operation cannot do a load and a store. This is illegal in the current
+Xtensa architecture.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_MEMDATAIN</title>
+<para>
+An operation can use only one size of load data (MemDataIn). Legal values
+of MemDataIn are 8,16,32,64 and 128. The legal values also depend on the
+data memory width of the Xtensa processor core.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_MEMDATAOUT</title>
+<para>
+An operation can use only one size of store data (MemDataOut). Legal values
+of MemDataOutIn are 8,16,32,64 and 128. The legal values also depend on the
+data memory width of the Xtensa processor core.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_NO_MEMDATA</title>
+<para>
+Load/Store operations must use the interfaces VAddr and MemDataIn/Out
+interfaces together. These interfaces cannot be used independently.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_NO_VADDR</title>
+<para>
+Load/Store operations must use the interfaces VAddr and MemDataIn/Out
+interfaces together. These interfaces cannot be used independently.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_OPERAND_NUM</title>
+<para>
+XCC compiler restricts the number of operands in an operation to 512.
+Operands include all input/output arguments, states and interfaces
+(including tie ports).
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_OPERAND_REGFILE_NUM</title>
+<para>
+The total number of inputs/output read and written from an instruction
+to a register file must not exceed the number of entries in the register
+file. For example, if a register file has 4 entries, an operation cannot
+declare more than 4 operands (inputs + output) from the register file,
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ICLASS_STOREBYTEDISABLE</title>
+<para>
+The interface StoreByteDisable is used for arbitrary byte enables for stores
+and can be used only for store operations (using MemDataOut).
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_ILLEGAL_CONST</title>
+<para>
+If a constant definition has &quot;X&quot; in it, these will be converted to &quot;0&quot;.
+This warning is suppressed by default. Run TIE compiler with flag
+-warnall to see it.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ILLEGAL_COPROC</title>
+<para>
+Coprocessor includes undefined states or register files.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ILLEGAL_ID</title>
+<para>
+Valid names in TIE language must contain valid alphanumeric characters.
+Names cannot start or end with &quot;_&quot; or &quot;.&quot;. Names cannot also start with
+&quot;TIE_&quot;.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ILLEGAL_IMM_OPERAND</title>
+<para>
+Illegal immediate operand description. Immediate operands must have the description
+</para>
+<para>
+operand name field_name decoding_expression encoding_expression
+</para>
+<para>
+decoding expression must only use the operand name and table name
+encoding expression must only use the field name and table name
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ILLEGAL_INTEGER</title>
+<para>
+The integer value specified is incorrect. For example, in an immediate range
+specification, the integer value for the step size must be a power-of-2, and the
+lower and upper values must be a multiple of the step size. 
+Following are some examples of illegal code
+</para>
+<para>
+immediate_range ir1 0 255 3 
+immediate_range ir3 0 255 2
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ILLEGAL_LHS_ASSIGNMENT</title>
+<para>
+The left hand side of an assignment can only be a variable name or a
+concatenation of two variables.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ILLEGAL_RANGE</title>
+<para>
+Immediate range low value must be less than high value
+</para>
+</sect2>
+<sect2>
+<title default="">TIE_ILLGAL_RANGE_VALUE</title>
+<para>
+Immediate range low and high value must be valid integers
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_ILLEGAL_REG_OPERAND</title>
+<para>
+Error in specifying register operands. The valid syntax is
+operand name field-name {register-file[field-name]}
+The common problems are:
+</para>
+<list>
+<item><itemtext>using 0 or more than one register file name in decoding</itemtext>
+</item>
+<item><itemtext>using 0 or more than one field name in decoding</itemtext>
+</item>
+<item><itemtext>field used in decoding is not the same as the field used in declaration</itemtext>
+</item>
+<item><itemtext>field used to index the register file has more bits than needed (warning)</itemtext>
+</item>
+<item><itemtext>using an encoding expression, which is illegal for register operand</itemtext>
+</item>
+<item><itemtext>using an illegal variable name in decoding</itemtext>
+</item>
+</list>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ILLEGAL_REPLICATION</title>
+<para>
+Replication must have an integer amount that is &gt; 0.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ILLEGAL_SYNTAX</title>
+<para>
+Syntax Error.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_ILLEGAL_COMPMOD</title>
+<para>
+A TIEcomp module must be a valid operation or an instruction with a reference.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_ARG_DIR</title>
+<para>
+The direction of the first appearance of an IMAP argument must match the direction
+that is declared in the argument list. If the argument is declared as direction in,
+the first appearance of the argument needs to be an in or inout operand of an 
+instruction. If the argument is declared as out, its first appearance needs to be
+an out operand of an instruction. If the argument is declared as inout, its
+first appearance needs to be an in or inout operand of an instruction. Please note
+the first appearance of a temporary needs to be of an out operand type.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_ARG_DUP</title>
+<para>
+The same name appear multiple times in IMAP argument or temporary list.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_ARG_NO_POINTER</title>
+<para>
+No pointer type is allowed in IMAP argument list, please use AR type instead.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_ARG_UNKNOWN</title>
+<para>
+An argument or temporary has an unknown type.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_CODEARG_NUM</title>
+<para>
+The number of argument listed in IMAP code is different from the number
+of argument of the iclass of the corresponding instruction.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_CODEARG_REGFILE</title>
+<para>
+IMAP code argument accesses a different register file from the one
+specified in the corresponding iclass.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_CODEARG_TYPE</title>
+<para>
+IMAP code argument has a different type from the one specified in
+the corresponding iclass.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_CODEARG_UNKNOWN</title>
+<para>
+An implementation or pattern code argument cannot be found in the
+argument or temporary list.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_COPY_DEST_TYPE</title>
+<para>
+The destination of a pseudo-copy instruction needs to be of register type.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_CYCLIC_MAP</title>
+<para>
+If the input pattern of the imap only contains one instruction, the number of
+operands of the instruction in the input pattern must be greater than the 
+number of operands in the instruction in the output pattern. The method to
+calculate the number of operands is as follows: input and output operands are
+counted as one; inout operands are counted as two.
+</para>
+</sect2>
+<sect2>
+<title default="">TIE_IMAP_IMMD</title>
+<para>
+Immediate operands can only be used once in the implementation/pattern.
+It is a restriction of the current release.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_INVALID_OPCODE</title>
+<para>
+The opcode is not a defined Xtensa ISA instruction, nor a user TIE instruction.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_NO_CODE</title>
+<para>
+The body of implementation or pattern needs to have at least one non-pseudo-copy
+instruction.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_MULTI_ASSIGN</title>
+<para>
+One argument or temporary is assigned multiple times in a single instruction.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMAP_MULTI_INSTR</title>
+<para>
+Only one instruction can appear in implementation.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMM_OPERAND_DECODE</title>
+<para>
+Decoding expression of immediate operands cannot be more than 32 bits.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_IMM_OPERAND_NO_ENCODING</title>
+<para>
+Missing encoding expression for immediate operand.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INCORRECT_NUMBER_OF_ARGUMENTS</title>
+<para>
+The number of arguments expected by the construct was not matched.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INSTR_GROUP_ALL</title>
+<para>
+If an instruction group (such as &quot;xt_logical&quot;) is used in slot_opcodes, 
+no instruction from that group can be added individually. Some groups
+such as xt_widebranch* can only be used as a group.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INSTR_GROUP_MULTIPLE</title>
+<para>
+Only one instruction group of this class can be instantiated. This is
+applicable to wide branch instructions. Only one class of wide
+branch instructions can be added in FLIX. For example, adding
+xt_widebranch18 and xt_widebranch16 is illegal.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INST_NO_SLOT</title>
+<para>
+Instruction does not appear in any slot. If the user TIE has no
+FLIX format, the tie instruction goes into the default 24 bit
+&quot;Inst&quot; slot. If the user TIE has FLIX, user should put the
+opcodes in slot(s) by adding a slot_opcode statement. If an
+opcode is not in any slot_opcode statement, then it is put into
+the Inst slot by default.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INST_MISSING_XFLIX_PROPERTY</title>
+<para>
+Every core instruction should have either enFLIX property or
+nonFLIX property set. User instruction, however, may not have
+such properties.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INST_NAME_RESERVED</title>
+<para>
+Instruction names starting with &quot;ld.&quot;, &quot;st.&quot;, or &quot;mv.&quot; and 
+finishing with a regfile or ctype name are reserved by TC. 
+Instructions with those names must appear in at one of the
+&quot;loadi&quot;, &quot;storei&quot;, and &quot;move&quot; protos. The instructions must
+be the only instruction in those protos.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_CONN</title>
+<para>
+Predefined interfaces such as &quot;VAddr&quot; or &quot;MemDataIn/Out&quot; should not
+be declared by the user. These are automatically declared. If the
+user does declare them, the interface specification must be the
+predefined specification.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_DIR</title>
+<para>
+Predefined interfaces such as &quot;VAddr&quot; or &quot;MemDataIn/Out&quot; should not
+be declared by the user. These are automatically declared. If the
+user does declare them, the interface specification must be the
+predefined specification.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_ILLEGAL</title>
+<para>
+Illegal interface description. Note that
+Predefined interfaces such as &quot;VAddr&quot; or &quot;MemDataIn/Out&quot; should not
+be declared by the user. These are automatically declared. If the
+user does declare them, the interface specification must be the
+predefined specification.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_ILLEGAL_DEFAULT</title>
+<para>
+Internal use only. Please report to Tensilica.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_ILLEGAL_DEPENDENCY</title>
+<para>
+Internal use only. Please report to Tensilica.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_INTERNAL</title>
+<para>
+Using an unsupported interface.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_KILL_USE</title>
+<para>
+The KILL signal for a TIE queue can only be assigned from an operation
+if the operation reads or writes the queue. If the operation argument
+list does not include the queue name, then it is illegal to add the
+Q_KILL interface of the queue to the operation.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_INTERFACE_LSSIZE_IGNORED</title>
+<para>
+LSSize is an obsolete interface in the TIE language that was used to
+describe the size of the load/store memory data. This is no longer
+used. TIE compiler automatically derives the size. An old version
+of tie run with a new version of TIE compiler wil generate this 
+warning. Please remove LSSize from your tie description.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_MAX_WIDTH</title>
+<para>
+Maximum width of a tie port interface is 1024 bits.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_NAME_CONFLICT</title>
+<para>
+The tie port interface will generate either a top level port 
+signal whose name will conflict with an another port. For example,
+the following tie will generate a top level input port called &quot;TIE_IQ_Empty&quot;
+from the queue &quot;IQ&quot;, and another top level port called &quot;TIE_IQ_Empty&quot;
+from the import wire &quot;IQ_Empty&quot;.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_READ_STAGE</title>
+<para>
+Illegal read/use stage for a tieport interface. This is an internal error
+and if reported indicates that the TIE compiler did not elaborate
+a tie port correctly to its internal format. It should be reported
+to Tensilica.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_STALL_ILLEGAL</title>
+<para>
+Illegal stall specification for a tie port interface.  This is an internal error
+and if reported indicates that the TIE compiler did not elaborate
+a tie port correctly to its internal format. It should be reported
+to Tensilica.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_INTERFACE_STALL_USE</title>
+<para>
+The tie port interface is internally used for generating a stall and should
+not be directly used in a operation. For example, the Empty/Full interface of 
+a queue, if read directly into an operation will generate this warning,
+because it is used to generate a stall automatically. The signal NOTRDY 
+should be used to check the status of the queue.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_TYPE</title>
+<para>
+Illegal type in interface description. Note that
+Predefined interfaces such as &quot;VAddr&quot; or &quot;MemDataIn/Out&quot; should not
+be declared by the user. These are automatically declared. If the
+user does declare them, the interface specification must be the
+predefined specification.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_WIDTH</title>
+<para>
+Illegal width in interface description. Note that
+Predefined interfaces such as &quot;VAddr&quot; or &quot;MemDataIn/Out&quot; should not
+be declared by the user. These are automatically declared. If the
+user does declare them, the interface specification must be the
+predefined specification.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERFACE_WRITE_STAGE</title>
+<para>
+Illegal write/def stage for a tieport interface. This is an internal error
+and if reported indicates that the TIE compiler did not elaborate
+a tie port correctly to its internal format. It should be reported
+to Tensilica.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_INTERNAL</title>
+<para>
+Internal error in TIE compiler due to a bug. When this happens, the file
+tc_errlog.txt in the tdk directory may have more information.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_KEYWORD</title>
+<para>
+A TIE/C/Verilog language keyword cannot be used as the name of a tie variable.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LENGTH_ALREADY_DEFINED</title>
+<para>
+A lwngth with the same name as already been defined.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LENGTH_OVERLAP</title>
+<para>
+The decoding logic of two lengths overlap. For example, in the
+following code (assuming a 64 bit instruction word in a little
+Endian configuration), the decoding logic for &quot;len64&quot; and &quot;len32&quot;
+are overlapping.
+</para>
+<para>
+length  len64     64    { InstBuf[3:0] == 15 }
+length  len32     32    { InstBuf[3:0] == 15 }
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LENGTH_WRONG_DECODER</title>
+<para>
+Legal decoding expressions for decoding length are restricted to the form
+</para>
+<para>
+InstBuf[from:to] == &lt;constant&gt; [ &amp;&amp; InstBuf[from:to] == &lt;constant&gt; ]
+</para>
+<para>
+This is to ensure that the decoding logic can meet the timing constraints
+for decoding the instruction. Decoding logic should not have arbitrary 
+amount of logic. Also, the length decoding can only use bits InstBuf[3:0]
+or InstBuf[63:60] in LittleEndian and BigEndian configurations respectively.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LENGTH_WRONG_SIZE</title>
+<para>
+Incorrect length size. Legal lengths are 32 or 64 as the configuration permits.
+For example, a configuration with a instruction word length of 32 cannot have
+a length declaration of size 64.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LENGTH_SLOT_DISJOINT</title>
+<para>
+The bits used by the decoding logic of a length are also being used by a slot
+in the format. For example, in the following code, InstBuf[3:0] is being used
+for decoding the format x64. The slot &quot;slot1&quot; as defined here occupies bits
+InstBuf[60:0]. Therefore the bits InstBuf[3:0] has a conflict.
+</para>
+<para>
+length  len64      64    {InstBuf[3:0] == 4'b1110 }
+format  x64        len64 {slot1} 
+slot slot1 x64[60:0]
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LICENSE</title>
+<para>
+Could not get a license for a specific feature. The TIE compiler needs a license
+to run, and specific licenses for H/W generation and are LX are also needed.
+TIE compiler uses FLEXLM license mechanism. Please check license availability
+using &quot;lmstat&quot; command.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LIST_OVERLAP</title>
+<para>
+Some TIE variables can appear in only one list. The same opcode cannot appear
+in the instruction list of more than one iclass, schedule, or semantic.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_LOADSTORE_NO_PROTO</title>
+<para>
+If a load or store instruction is explicitly written by the user, then
+a proto should also be written for the instruction with the appropriate
+argument for data and address. Otherwise, the TIE compiler will generate
+a proto for the load and store which may be incorrect.
+</para>
+<para>
+If the TIE compiler generates the load or store instruction, then the
+proto will also be generated correctly.
+</para>
+<para>
+This warning is not seen by default, unless the TIE compiler is run with
+the flag -warnall.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LOOKUP_WRITE_STAGE</title>
+<para>
+A lookup request can be written in the stages E to W only.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LOOKUP_LATENCY</title>
+<para>
+The latency of the lookup operation is (read stage - write stage) of the
+lookup. Since the latency must be &gt;= 1, therefore the read stage of the 
+lookup must be at least one cycle after the write stage.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LOOKUP_RDY</title>
+<para>
+A &quot;Rdy&quot; input in a lookup is used to indicate if the external device
+is accepting the lookup request sent by Xtensa processor. If &quot;Rdy&quot; is
+low, the processor stalls. To make this stall be interruptible by 
+external interrupts or internal exceptions, the stall must be effective
+before the instruction commit stage (W). Therefore, Rdy is allowed only
+</para>
+<list>
+<item><itemtext>in stage E in a 5-stage configuration</itemtext>
+</item>
+<item><itemtext>in stage L in a 7-stage configuration.</itemtext>
+</item>
+</list>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LOOKUP_USAGE</title>
+<para>
+Lookup consists of an output and an input port that must be used atomically within
+an instruction. This means that an operation or instruction must use both interface
+or port. It is illegal to use the interfaces individually.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LOOKUP_INVALID_WIDTH</title>
+<para>
+Lookup input and output width must be a positive number.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LS_UNIT_ALLOCATION_ERROR</title>
+<para>
+Xtensa processor supports upto 2 load/store units for FLIX configurations. With
+two load/store units, a FLIX format can have load/store instructions in two slots.
+However, with one load/store unit, load/store instructions can appear in one slot
+only, and furthermore that slot has to be the slot index 0 or the first slot in a format.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LS_UNIT_MULTIPLE_SLOT</title>
+<para>
+A load/store unit cannot be used in multiple slots. This error can only be generated
+when the TIE compiler has assigned load/store units incorrectly. Hence this is an
+internal error and should be reported to Tensilica.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_LS_UNIT_SLOTS</title>
+<para>
+Number of load/store units cannot accomodate load/store operations in these slots.
+Xtensa processor supports upto 2 load/store units for FLIX configurations. With
+two load/store units, a FLIX format can have load/store instructions in two slots.
+However, with one load/store unit, load/store instructions can appear in one slot
+only, and furthermore that slot has to be the slot index 0 or the first slot in a format.
+</para>
+</sect2>
+<sect2>
+<title default="">TIE_MAC</title>
+<para>
+MR register file in MAC16 package is special. It cannot be used by user. 
+This error is generated if the user tries to use the MR register file.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_MACRO</title>
+<para>
+Error in using a TIE module. For a list of TIE modules and their usage, see the
+TIE language Reference Manual. Some of the specific errors are listed below:
+</para>
+<list>
+<item><itemtext>TIEmul : must have three arguments, 
+	last argument that specifies signed multiply must be 1 bit.</itemtext>
+</item>
+<item><itemtext>TIEmulpp, TIEmac : the arguments specifying negate and sign must be 1 bit.</itemtext>
+</item>
+<item><itemtext>TIEcsa : must have 4 arguments.</itemtext>
+</item>
+<item><itemtext>TIEadd : must have 3 arguments, the argument specifying carry in must be 1 bit.</itemtext>
+</item>
+<item><itemtext>TIEcmp : the first two arguments must be the same width.</itemtext>
+</item>
+<item><itemtext>TIEmux : number of arguments must be power of 2.</itemtext>
+</item>
+</list>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_MACRO_SIGNAL_WIDTH</title>
+<para>
+Incorrect width of argument to a tie module. Restrictions are:
+</para>
+<list>
+<item><itemtext>Select signal of TIEmux must be log2 of the number of data arguments</itemtext>
+</item>
+<item><itemtext>Each select signal of TIEsel must be width 1.</itemtext>
+</item>
+</list>
+<para>
+Note that all immediate operands created using immediate_range, tables, and
+the operand construct are defined to be 32 bits wide. If an immediate operand
+is being used in the TIE module, please ensure that appropriate bits of the
+operand are selected.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_MULPP_ASSIGNMENT</title>
+<para>
+This warning is not seen by default. Please run TIE compiler with -warnall flag.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_MULPP_PARTIAL_PRODUCT_SUM</title>
+<para>
+This warning is not seen by default. Please run TIE compiler with -warnall flag.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_MULPP_PARTIAL_PRODUCT_USE</title>
+<para>
+This warning is not seen by default. Please run TIE compiler with -warnall flag.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_MULTIPLE_ASSIGNMENT</title>
+<para>
+There are more than one assignments to a wire or output.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_MULT_COPROC</title>
+<para>
+An instruction can only access states or register files that belong to a single
+coprocessor. This restriction exists to ensure that an instruction can generate
+a single coprocessor exception.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_NAME_DUP</title>
+<para>
+Duplicate name found in the same scope. Note that although TIE language is case
+sensitive, duplicate name check in a scope is performed in a case-insensitive
+way to avoid naming conflicts in tools that read the output of TIE compiler 
+generated RTL. For example, the following code will generate an error.
+</para>
+<para>
+state TEST_DUP  32
+state Test_Dup  40
+</para>
+</sect2>
+<sect2>
+<title default="">TIE_NO_TCTOOLS</title>
+<para>
+The installation directory for TIE compiler could not be found.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_NOT_DECL</title>
+<para>
+The variable used in the statements has not been declared as an input or output to
+this block. For example, to use a variable inside an operation, the variable
+must be declared in the argument list of the operation.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_NOT_DEFINED</title>
+<para>
+Some variables must be defined before they are used. For example, a state or register
+file must be defined before it can be used in an operation.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_NOT_DEFINED_CASE</title>
+<para>
+Some variables must be defined before they are used. This warning is
+issued when a variable only differs by case from another one.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_NOT_FOUND</title>
+<para>
+A variable used has not been defined.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_NOT_SUPPORTED</title>
+<para>
+The feature is not supported in this version of TIE language.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_NOT_CONFIGURED</title>
+<para>
+Certain Xtensa configuration options are required to use some  features of TIE language
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON|WARN_DEFAULT_ON">TIE_NO_ASSIGNMENT</title>
+<para>
+All outputs of an operation must be assigned to in the body of the operation or semantic.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_NO_READ</title>
+<para>
+A variable name can appear on the right hand side of an assignment only if it is declared
+as an input in the current scope. Outputs of an operation or function can only appear in the
+left hand side of an assignment.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON|WARN_DEFAULT_ON">TIE_NO_USE</title>
+<para>
+The input to an operation or a function has not been used in the body of the operation or function.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_NO_VALID_INSTR</title>
+<para>
+There must be a valid instruction with this name. For example, writing a schedule for an instruction
+for which there is no implementation (reference, operation, or semantic) is illegal. Note that 
+an opcode is not an instruction until it has an implementation in any of these forms.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_NO_WRITE</title>
+<para>
+A variable name can appear on the left hand side of an assignment only if it is declared
+as an output in the current scope. Inputs of an operation or function can only appear in the
+right hand side of an assignment.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_DENSITY</title>
+<para>
+A user TIE instruction can be the default instruction size of 24 bits, or part of a FLIX instruction.
+It cannot be defined as a density (16 bit) instruction. If the encoding of an instruction sets the
+bits in the instruction word that decodes it as a 16bit instruction, an error is generated.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_ENCODING</title>
+<para>
+Incorrect encoding for an opcode. For example, the following code will generate an error
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_FIELD_SIZE_ONLY</title>
+<para>
+Opcode encoding is defined as &lt;field&gt;=&lt;value&gt;, where the field must be defined
+precisely in every slot that the opcode belongs to. Using a field that is not 
+mapped to specific bits of a slot generates an error. Note that the TIE compiler 
+automatically generates encodings for operations. For example, the following
+opcode encoding is illegal because the field &quot;fldx&quot; is not fully specified
+in the slot &quot;slot1&quot;.
+</para>
+<para>
+field fldx slot1[*]
+opcode check fldx=4'd15
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_FIELD_UNDEFINED</title>
+<para>
+Opcode encoding is defined as &lt;field&gt;=&lt;value&gt;, where the field must be defined
+in every slot that the opcode belongs to. Using a field that is not defined
+in encoding generates an error. Note that the TIE compiler automatically
+generates encodings for operations.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_MULTI_DEF</title>
+<para>
+An opcode can have only one encoding in a slot. It can have multiple encodings
+that apply to different slots. For example, in the following code, since the
+fields &quot;x&quot; and &quot;y&quot; are both defined both in slot1, the opcode &quot;check&quot; has multiple
+definitions in slot1.
+</para>
+<para>
+field x slot1[21:18]
+field y slot1[15:12]
+opcode multi x=4'd15
+opcode multi y=4'd15
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_NON_INST_SLOT_ONLY</title>
+<para>
+An instruction can be added to a slot with the &quot;slot_opcodes&quot; statement only if
+it is a valid instruction, i.e. it has a valid implementation.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_NO_ICLASS</title>
+<para>
+An opcode must have an iclass to be implemented in a reference or semantic. An
+iclass defines the input and output operands of the instruction. Note that an instruction written
+as an operation combines the iclass and reference.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_NO_IMPL</title>
+<para>
+An instruction that is defined with an opcode and a iclass must have an implementation
+in the form of a reference or a semantic, or both. Note that an instruction written
+as an operation combines the iclass and reference.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_NO_SLOT</title>
+<para>
+All instructions must belong to at least one slot. By default, all user TIE instructions
+appear in the 24 bit &quot;Inst&quot; slot. If the user has a FLIX format, an instruction must be
+added to a FLIX format with a slot_opcodes statement.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_OPERAND_OVERLAP</title>
+<para>
+The field used for encoding an instruction is the same as that used for encoding an operand 
+of an instruction. In the following example, the &quot;r&quot; field is used for encoding the opcode
+as well the operand arr.
+</para>
+<para>
+opcode MYOP r=4'b0000 CUST0
+iclass MYOP { MYOP } { out arr , in ars }
+</para>
+<para>
+Error: (TIE_OPCODE_OPERAND_OVERLAP),
+        For instruction MYOP in slot Inst, opcode MYOP overlaps
+        with field r used in operand arr
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_OVERLAP</title>
+<para>
+The encodings of all opcodes in a slot must be disjoint. For example, in the following
+code, the encoding of MYOP1 and MYOP2 overlap.
+</para>
+<para>
+field op2b op2[1:0]
+opcode MYOP1 op2=4'b1111 CUST0
+opcode MYOP2 op2b=2'b11  CUST0
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_PARENT_AMBIGUOUS</title>
+<para>
+Encoding of an opcode in a slot is not fully specified.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_PARENT_UNDEFINED</title>
+<para>
+Parent opcode in an opcode encoding is not defined.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_REQ_SLOT</title>
+<para>
+An opcode that is requested in a slot with a slot_opcodes statement is not be
+defined in that slot. For an opcode to be defined in a slot, all fields 
+needed to encode the opcode and its operands must be defined in that slot.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPCODE_UNIQUE_SLOT</title>
+<para>
+A opcode can be defined in a slot by using a simple definition, or full
+encoding as shown below
+</para>
+<para>
+opcode MYOP slot1 // simple definition, encoding not specified
+</para>
+<para>
+OR
+</para>
+<para>
+field fldx slot1[21:18]
+opcode MYOP fldx=4'd15  // encoding specified
+</para>
+<para>
+However mixing the two formats is illegal as shown below.
+</para>
+<para>
+opcode MYOP slot1 fldy=2'b11 //illegal
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERAND_AR_ILL</title>
+<para>
+User cannot define operands on AR register file. 
+The only allowed operands on AR regfile are: ars, art, arr.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERAND_CORE_OPERAND</title>
+<para>
+Xtensa core operands such as &quot;ars&quot; cannot be redefined by user TIE.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERAND_OPERAND_OVERLAP</title>
+<para>
+An instruction has two operands whose encoding fields overlap.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERAND_RHS</title>
+<para>
+Operand appears on the left hand side of assignment.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERAND_MAP_ARG_ERR</title>
+<para>
+The argument of operand_map construct contains error. 
+The error is that the operand, operation, or operation argument is missing in the TIE file.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_AMBIGUOUS_NAME</title>
+<para>
+Conflicting variable name in an operation. For example, in the following code,
+the operation TESTDUP has an input VAddr, which could be the interface or the
+state.
+</para>
+<para>
+state VAddr  32 
+operation TESTDUP { out AR a } { in VAddr }
+</para>
+<para>
+Error: (TIE_OPERATION_AMBIGUOUS_NAME),
+        &quot;VAddr&quot; is ambiguous in operation's body, could
+        be state or interface
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_ARG_AMBIGUOUS</title>
+<para>
+Conflicting argument name in an operation. An argument cannot have the same
+name as the operation because the name of the operation is an implicit input
+to the operation with a constant value of 1.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_ARG_DIR</title>
+<para>
+The direction of the operation argument is wrong. Immediate operands, 
+immediate ranges, tables must be input operands.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_AMBIGUOUS_TYPE</title>
+<para>
+Conflicting argument type in an operation. Valid argument types are register 
+files, operands, tables. For example, in the following code,
+</para>
+<para>
+regfile XR 8 8 xr
+table XR 1 1 { 0 }
+operation BAR { out XR a }
+</para>
+<para>
+Error: (TIE_OPERATION_AMBIGUOUS_TYPE),
+        Argument &quot;a&quot; has ambiguous type XR, could be regfile or table
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_ARG_WIRE_CONFLICT</title>
+<para>
+Wire names in the operation body cannot be the same as the operation
+argument.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_CASE_CONFLICT</title>
+<para>
+Operation name and opcode names must match exactly if both opcode and 
+operation is provided. If an operation name matches an opcode name
+but varies only in case, this is an error.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_CONFLICT</title>
+<para>
+An instruction can be defined as an operation, or as an opcode/iclass/reference, 
+but not both.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_CORE_STATE</title>
+<para>
+User defined operations cannot read Xtensa core states. The only exception is
+the state SAR, which holds the shift amount for some shift operations.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_DUPLICATE_ARG</title>
+<para>
+Same operation argument name declared twice. Operation argument names must be 
+unique in a case insensitive manner.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_DUP_OPERAND</title>
+<para>
+An operation argument type can be a register file name, or an operand name.
+If the argument is written as a register file, then an operand will be
+generated for it. If it is written as an operand, then it will be used
+directly. In this latter case, each operand used as an argument must
+be unique.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_IMPLICIT_OPERAND</title>
+<para>
+There are some implicit operands in the Xtensa core which read a register
+file but the index is fixed or not encoded in the instruction. These 
+operands cannot be used in user TIE operations.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_INTERFACE_DIR</title>
+<para>
+Interface declared in the operation state-interface list does not match the
+direction in the interface definition. For example, in the following code,
+the interface MemDataIn32 is declared as an output of the operation MYOP,
+which is incorrect since MemDataIn32 is an input interface.
+</para>
+<para>
+operation MYOP { out AR d, in AR p } { out VAddr, out MemDataIn32 }
+</para>
+<para>
+Error: (TIE_OPERATION_INTERFACE_DIR),
+        Operation MYOP, interface MemDataIn32 declared
+        as out but it should be in
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_INVALID_KILL</title>
+<para>
+Output operands of operations can have be updated conditionally. An implicit output named
+&lt;output_name&gt;_kill can be assigned in the operation body. If this output is true, the 
+update of the register operand is killed. To assign a kill signal in an operation
+body, there should be a valid output declared in the operation argument.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_INVALID_STATE_KILL</title>
+<para>
+Output states of operations can have be updated conditionally. An implicit output named
+&lt;state_name&gt;_kill can be assigned in the operation body. If this output is true, the 
+update of the state is killed. To assign a kill signal in an operation body, 
+the state should be declared as an output of the operation.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_INVALID_INTERFACE_KILL</title>
+<para>
+An operation reading or writing a TIE queue can use the &quot;_KILL&quot; interfaces to 
+conditionally read or write the queue. In this case, the queue itself must be an input
+or output of the operation.
+</para>
+</sect2>
+<sect2>
+<title default="">TIE_OPERATION_NO_DEP</title>
+<para>
+The input to the operation is not being used to generate any of the outputs. This
+is determined by analyzing the body of the operation.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_NO_SEMANTIC</title>
+<para>
+An operation usually contains the arguments and a body that represents the 
+implementation of the instruction. In the case where the operation is also
+implemented in a semantic, the operation body can be left blank. However,
+the operation must have at least one implementation in either form.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_OPERAND_REGFILE_NUM</title>
+<para>
+The number of arguments in the operation that reads a register file
+exceeds the number of entries in the register file. For example, an
+operation cannot read 5 inputs from a register file with 4 entries.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_POINTER_ARG</title>
+<para>
+An operation argument can be declared as a pointer. This is usually
+done when writing load/store operations. The pointer argument is
+declared as a pointer to a register file or operand type, which means that the
+address to the data in memory for that register file is stored in the
+pointer. Pointers are always 32 bits and kept in the AR register file.
+Pointer arguments are allowed for register arguments only. For example, 
+in the following code, the operation MYOP declares a pointer to an immediate
+range, which is illegal.
+</para>
+<para>
+operation MYOP { out AR a, in IMMRANGE *b} {out VAddr, in MemDataIn32}
+</para>
+<para>
+Error: (TIE_OPERATION_POINTER_ARG),
+        Operation argument b cannot be a pointer. Pointers
+        allowed only for regfile arguments.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_REF_OPERAND</title>
+<para>
+When an operation argument type is an operand, the argument name should still
+be used in the operation body instead of the operand name. For example, in
+the following code, the valid variable names in the body of MYOP are the 
+arguments &quot;a&quot; and &quot;b&quot;,  and not the operand names &quot;ars&quot; and &quot;arr&quot;.
+</para>
+<para>
+operation MYOP { out arr a, in ars b } {}
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_REQUIRES_STATE</title>
+<para>
+An operation can be required to use a certain state.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_SAME_ARG_TYPE</title>
+<para>
+In an operation, argument types and names must be unique, i.e. an argument name
+cannot be the same as the type name of another argument. For example, in the
+following code, the operation MYOP has an argument type IMMOP and an argument
+name IMMOP.
+</para>
+<para>
+operation MYOP { out AR IMMOP, in IMMOP b } {}
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_UNKNOWN_ARG</title>
+<para>
+Argument type in operation declaration is unknown, i.e. it is not a register file,
+operand, immediate range or table.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_VERIFY_INVALID</title>
+<para>
+Argument in operation's state interface list is unknown, i.e. it is not a state
+or interface.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_VERIFY_MISSING</title>
+<para>
+A state or interface declared as an input or output in the declaration is not
+being read or assigned to in the operation body.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATION_VERIFY_UNEXPECTED</title>
+<para>
+A state or interface that is being assigned to or read from in the operation
+body has not been declared as an output or input in the declaration.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATOR_PROTO_ARG</title>
+<para>
+The argument of the proto used in operator construct is wrong. It is 
+possibly because:
+1. argument of direction inout is used. 
+2. number of arguments does not match specification.
+3. immediate values are used in argument.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATOR_PROTO_CASE</title>
+<para>
+The proto used in operator construct and the defined proto are different in case.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATOR_UNDEFINED_PROTO</title>
+<para>
+The proto used in operator construct is not defined.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_OPERATOR_UNKNOWN</title>
+<para>
+The operator type is not in the supported list.
+</para>
+</sect2>
+<sect2>
+<title default="MSG_DEFAULT_OFF">TIE_OPER_AND_SEM</title>
+<para>
+An instruction can have two implementations in TIE language. One is the 
+operation or reference, and the other is the semantic. A semantic is
+usually written to share the implementation of more than one instruction
+in the same module. If both implementations exist, the TIE compiler 
+generates netlists and scripts to formally verify that the two are
+equivalent. The user is encouraged to a tool like Verplex or Formality
+to formally check the two implementations.
+</para>
+<para>
+This message is not shown by default. It can be seen when running TIE
+compiler with -msgall flag.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PREDEFINED</title>
+<para>
+User TIE cannot define an instruction that is predefined in the Xtensa core.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PRINT_ARGUMENT_MISMATCH</title>
+<para>
+This error occurs when the conversions ( i.e. %d, %x, etc. ) and the formatting arguments given to a TIEprint
+module do not correlate. Make sure you have the same number of conversions in your formatting string as
+arguments in the argument list.
+</para>
+<para>
+Examples:
+</para>
+<list>
+<item><itemtext>This TIEprint has two conversions specified but only one argument: 
+<code>TIEprint( &quot;Two conversions, %d, %08x, one argument\n&quot;, address );</code></itemtext>
+</item>
+<item><itemtext>This TIEprint has one conversion, but two arguments:     
+<code>TIEprint( &quot;One conversion, %d, two arguments\n&quot;, address, align );</code></itemtext>
+</item>
+</list>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PRINT_ARGUMENT_TOO_WIDE</title>
+<para>
+Arguments to TIEprint modules must be &lt;= 32 bits. If an expression is used as an argument in a TIEprint module
+the result of this expression must be &lt;= 32 bits. If you want to print a variable or expression that is longer than
+32 bits use bit selects to split the argument into pieces smaller than 32 bits.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PRINT_ILLEGAL_FORMATTING</title>
+<para>
+Conversions in a TIEprint module formatting string must be in an allowed format. Currently allowed conversions are;
+</para>
+<list>
+<item><itemtext>%d: 
+<strong>signed decimal</strong></itemtext>
+</item>
+<item><itemtext>%x: 
+<strong>unsigned hexadecimal</strong></itemtext>
+</item>
+<item><itemtext>%u: 
+<strong>unsigned decimal</strong></itemtext>
+</item>
+<item><itemtext>%[0-9][0-9]*[d,u,x]: 
+<strong>[0-9]* characters printed in representation given by [d,u,x]. 
+If [0-9] is present at the beginning of the conversion padded with leading characters based on the number given.</strong></itemtext>
+</item>
+</list>
+<para>
+Please review all conversions and make sure that they match the syntax given above.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PRINT_ILLEGAL_VARIABLE</title>
+<para>
+An illegal variable or expression is used in a TIEprint module. The offending expression will be printed along with the error message.
+Please review the expression and make sure all variables are legal in the current scope.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PRINT_TOO_MANY_ARGUMENTS</title>
+<para>
+You are only allowed 32 arguments to a single TIEprint module. Please use more than one TIEprint module if you wish 
+to print more than 32 arguments.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PRINT_QUALIFIER_TOO_WIDE</title>
+<para>
+The qualifier in a TIEprint module must be &lt;= 32 bits wide.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROPERTY_ARG_COUNT_MISMATCH</title>
+<para>
+The number of in, out and inout arguments that the two protos should be the same.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROPERTY_ARG_DUP</title>
+<para>
+The argument appears more than once in the argument list.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROPERTY_EXPORT_SAME</title>
+<para>
+The export property of some states should be identical.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON|WARN_DEFAULT_ON">TIE_PROPERTY_ILLEGAL_ARG</title>
+<para>
+The property has an illegal argument, or the argument is not recognized by TIE compiler.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROPERTY_MISSING</title>
+<para>
+The name, attribute, or the arguments is missing in the property.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROPERTY_NONFLIX_INSTRUCTION</title>
+<para>
+Some Xtensa core instructions are not allowed in a FLIX format.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROPERTY_WRONG_ARGS</title>
+<para>
+The arguments of the property is wrong. It may be because:
+1. The number of arguments is not expected.
+2. For shared_semantic property, same slot index appear in multiple sharing groups.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROPERTY_UNKNOWN</title>
+<para>
+The property is not recognized by TIE compiler.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROPERTY_UNKNOWN_ATTR</title>
+<para>
+The property has an unknown attribute.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_ADDRESS_POINTER</title>
+<para>
+A load or store prototype is written to indicate to the compiler how
+to get data from the register file to memory and vice versa. The
+proto must conform to strict rules for the compiler to use it.
+The second argument of the proto must be a pointer to the data
+type in the register file for which the proto is being written.
+The following are examples of correct protos
+</para>
+<para>
+regfile XR 64 16 xr
+ctype data64 64 64 XR
+</para>
+<para>
+proto data64_loadi  { out data64 d, in data64 *p, in immediate o } {} { //load instruction }
+proto data64_storei { in  data64 d, in data64 *p, in immediate o } {} { //store instruction }
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_PROTO_ADDRESS_UPDATE</title>
+<para>
+A load or store prototype is written to indicate to the compiler how
+to get data from the register file to memory and vice versa. The
+proto must conform to strict rules for the compiler to use it.
+There are two categories of load/store protos with immediate offset.
+The loadi/storei protos don't update the address register with the
+address computed, and the loadiu/storeiu protos update the address
+register with the computed address. The instructions used in the
+protos must be appropriate. Following are examples of some illegal protos
+</para>
+<para>
+regfile XR 64 16 xr
+ctype data64 64 64 XR
+</para>
+<para>
+//incorrect loadi proto, address pointer p gets updated
+proto data64_loadi  { out data64 d, in data64 *p, in immediate o } {} 
+{
+   ADDI p, p, o;
+   //load instruction with p as address pointer
+}
+</para>
+<para>
+//incorrect loadiu proto, address pointer p does not get updated
+proto data64_loadi  { out data64 d, inout data64 *p, in immediate o } {} 
+{
+   //load instruction with p as address pointer
+}
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON|WARN_DEFAULT_ON">TIE_PROTO_ARG_DIR</title>
+<para>
+A prototype has one or more instructions which are called with the
+arguments to the proto. The direction of the proto arguments should
+match the direction of the operands of the instruction in the proto
+body. For example, in the following code, the move prototype has
+an input argument &quot;d&quot; and an output argument &quot;v&quot;, but in the proto
+body the move instruction MOV.S has been called with the argument
+&quot;d&quot; and &quot;v&quot; as the output and input argument respectively.
+</para>
+<para>
+regfile XR 64 16 xr
+ctype data64 64 64 XR
+</para>
+<para>
+operation MOV.S { out XR a, in XR b } { assign a = b; }
+</para>
+<para>
+proto data64_move { out data64 d, in data64 v } {} { MOV.S v, d; }
+</para>
+<para>
+Note that protos are automatically generated by TIE compiler 
+for all operations.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_KILL_ARG_DIR</title>
+<para>
+If a proto uses an instruction whose output has a conditional kill, the
+corresponding proto argument must be an &quot;inout&quot; instead of &quot;out&quot;. This
+is because the compiler needs to recognize the read-modify-write nature
+of the operation. For example, in the following code, the proto for the
+conditional move instruction MOV.T must have the output argument &quot;d&quot;
+declared as inout.
+</para>
+<para>
+regfile XR 64 16 xr
+ctype data64 64 64 XR
+</para>
+<para>
+operation MOV.T { out XR a, in XR b } { assign a = b; assign a_kill = b[0]; }
+</para>
+<para>
+proto data64_move { inout data64 d, in data64 v } {} { MOV.T d, v; }
+</para>
+<para>
+Note that when TIE compiler automatically generates protos for all operations
+with the correct argument direction taking into consideration the kill.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_ARG_DUP</title>
+<para>
+Duplicate argument in proto.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_ARG_FIELD_DEFINED</title>
+<para>
+Input argument field of the proto was used as an output argument in an instruction in the body.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_PROTO_ARG_FIELD_NO_USE</title>
+<para>
+Input argument field of the proto has not been used in the body.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_ARG_OUT_FIELD_USE</title>
+<para>
+Output argument field of the proto is used as an input.
+There are a few cases where it is useful to use ANY register in such
+a way that it generates a constant.  If this is desired, as in using
+\&quot;XOR b, a, a\&quot; to generate 0 in b, use a temporary.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_ARG_OUT_FIELD_NO_DEF</title>
+<para>
+Output argument field of the proto has not been used in the body.
+</para>
+</sect2>
+<sect2>
+<title default="">TIE_PROTO_ARG_OUT_FIELD_UNDECLARED</title>
+<para>
+Input argument field of the proto has not been used in the body.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_PROTO_ARG_NO_USE</title>
+<para>
+Input argument or temporary argument of proto has not been used in the body.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_PROTO_ARG_OUT</title>
+<para>
+Output argument of proto has issues. It may not be used in the proto body, 
+or assigned value multiple times in the proto body.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_ARG_ORDER</title>
+<para>
+A load and store prototype is written to indicate to the compiler how
+to get data from the register file to memory and vice versa. A move
+prototype tells the compiler how to copy data between two registers.
+Protos can also be written to convert between two data types.
+These protos must conform to strict rules for the compiler to use it.
+For a list of all the protos, please refer to TIE language Ref Manual.
+</para>
+<list>
+<item><itemtext>*For a load proto, the first argument must be an output of the ctype.</itemtext>
+</item>
+<item><itemtext>*For a store proto, the first argument must be an input of the cytpe.</itemtext>
+</item>
+<item><itemtext>*For a move proto, the first argument must be an output of ctype.</itemtext>
+</item>
+<item><itemtext>*For load/store proto, the second argument must be an input of type
+pointer to the ctype. This specifies the address.</itemtext>
+</item>
+<item><itemtext>*For a move proto, the first argument must be an input of the cytpe.</itemtext>
+</item>
+<item><itemtext>*If a third argument exists for a load/store proto, it must be an 
+immediate for the loadi/storei proto, or a ctype mapped to AR (uint32, int32)
+for the indexed proto loadx/storex.</itemtext>
+</item>
+</list>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_ARG_POINTER</title>
+<para>
+Some ctypes when used in protos can only be pointers. These are 64 bit data
+types &quot;uint64&quot; and &quot;int64&quot;, as well as &quot;void&quot;.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_ARG_STRUCT</title>
+<para>
+Struct ctypes are not allowed in instruction protos.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_ARG_TYPE</title>
+<para>
+Proto arguments that are register operands must be valid ctypes defined for
+that register file. Also, note that &quot;char&quot; cannot be used as a proto argument,
+&quot;uint8&quot; or &quot;int8&quot; should be used, due to the ambiguity of the behavior of 
+&quot;char&quot; being signed or unsigned.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_CODEARG_CASE_FIELD</title>
+<para>
+In a proto, a code argument must have only valid fields specified for it.
+This error is issued when a field of the same name exists, but differs in
+case from the field specified.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_CODEARG_DECL</title>
+<para>
+Argument used in proto body has not been declared in the proto declaration.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_CODEARG_NONIMM_OFFSET</title>
+<para>
+Immediate constant offsets can be added to instruction arguments in proto body
+only for immediate operands. For example, in the following code, the argument
+&quot;c + 1&quot; for the immediate operand is legal, but the argument &quot;b + 2&quot; for the
+register operand is illegal.
+</para>
+<para>
+operation my.add { in AR a, in AR b, in simm8 off } {} { assign a = b + offset; }
+</para>
+<para>
+proto my_add_3 { out uint32 a, in uint32 b, in immediate c } { } { my.add a, b + 2, c + 1; }
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_CODEARG_NO_FIELD</title>
+<para>
+In a proto, a code argument with ctypes that represents a single register may not have a field specified for it.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_CODEARG_REQUIRED_FIELD</title>
+<para>
+In a proto, a code argument with ctypes that represents multiple registers that are not a register view must have a field specifier to identify which register to use.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_CODEARG_INVALID_FIELD</title>
+<para>
+In a proto, a code argument must have only valid fields specified for it.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_CODEARG_NUM</title>
+<para>
+The number of arguments to an instruction in a proto body must match the
+number of arguments in the instruction. For example, in the following
+code, the proto my_add_3 calls the instruction &quot;my.add&quot; with only 2
+arguments instead of 3.
+</para>
+<para>
+operation my.add { in AR a, in AR b, in simm8 off } {} { assign a = b + offset; }
+</para>
+<para>
+proto my_add_3 { out uint32 a, in uint32 b } { } { my.add a, b; }
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_CODEARG_REGFILE</title>
+<para>
+When a proto input or output argument of a certain ctype is passed to an instruction in its body,
+the underlying register file of the ctype must be the register file of the instruction input/output.
+For example, in the following code, the proto &quot;my_add_3&quot; calls the instruction &quot;my.add&quot; with the
+output argument a, which in the proto is mapped to the AR register file, but in the instruction
+is mapped to the XR register file.
+</para>
+<para>
+regfile XR 64 16 xr
+ctype data64 64 64 XR
+</para>
+<para>
+operation my.add { in XR a, in XR b, in simm8 off } {} { assign a = b + offset; }
+</para>
+<para>
+proto my_add_3 { out uint32 a, in data64 b, in immediate o } { } { my.add a, b, o; }
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_CODEARG_TEMP_OFFSET</title>
+<para>
+A proto can have temporary variables to hold intermediate results when the body
+contains more than one instruction. However, when using the temporary variables
+in the body, no offset can be added. For example, in the following code, the
+temporary variable &quot;x&quot; cannot be used as &quot;x+2&quot;.
+</para>
+<para>
+proto my_add_4 { out uint32 a, in uint32 b } { uint32 x}
+{
+  //generate x
+  my.add a, b, x + 2;    
+}
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_CODEARG_TYPE</title>
+<para>
+The argument type of the proto argument used as an input or output operand of
+an instruction in the body must match the operand type in the instruction.
+For example, in the following code, the proto &quot;my_add_3&quot; calls the instruction
+&quot;my.add&quot; with the third argument as &quot;b&quot; which is a register operand and does
+not match the immediate operand of instruction &quot;my.add&quot;.
+</para>
+<para>
+operation my.add { in AR a, in AR b, in simm8 off } {} { assign a = b + offset; }
+</para>
+<para>
+proto my_add_3 { out uint32 a, in uint32 b } { } { my.add a, b, b; }
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_PROTO_CODEARG_BASE_ADDRESS</title>
+<para>
+In a load/store proto, the second argument to the proto is the address pointer.
+This is the argument that should be used as the base address input to the load/store
+instruction in the proto body. For example, in the following code, the address
+argument p is not being used as the base address input p to the load instruction
+L32I.
+</para>
+<para>
+regfile XR 64 16 xr
+ctype data64 64 64 XR
+operation load_add { out XR d, in XR *p, in XR a } { out VAddr, in MemDataIn32 } 
+{ assign VAddr = p; assign d = MemDataIn32 + a; }
+</para>
+<para>
+proto load_add64 { out data64 d, in data64 *p, in data64 p1 } {} { load_add d, p1, p; }
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_PROTO_CODE_ADDRESS</title>
+<para>
+The load/store instructions used in load/store protos must conform to strict
+addressing rules. The address must be generated from any of the following:
+</para>
+<list>
+<item><itemtext>VAddr = AR register operand</itemtext>
+</item>
+<item><itemtext>VAddr = AR register operand + immediate offset for loadi/storei</itemtext>
+</item>
+<item><itemtext>VAddr = AR register operand + AR register operand for loadx/storex</itemtext>
+</item>
+</list>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_CORE_PROTO</title>
+<para>
+A user defined proto cannot have the same name as an Xtensa core proto.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_CTYPE_CONFLICT</title>
+<para>
+A proto name is the same as a ctype name, which is not legal.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_ILLEGAL_COPROC</title>
+<para>
+Load and store protos can only generate one coprocessor exception.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_INSTR_CODEARG_OFFSET</title>
+<para>
+All instructions in user TIE have a corresponding proto. This is automatically
+generated by the TIE compiler. If the user writes an instruction proto, the
+argument in the proto body must come directly from the proto arguments. No
+offsets are allowed.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_INSTR_CODEARG_SEQUENCE</title>
+<para>
+All instructions in user TIE have a corresponding proto. This is automatically
+generated by the TIE compiler. If the user writes an instruction proto, the
+arguments in the proto body must have the same sequence as the arguments in 
+proto arguments.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_INSTR_NUM_ARGUMENTS</title>
+<para>
+All instructions in user TIE have a corresponding proto. This is automatically
+generated by the TIE compiler. If the user writes an instruction proto, the
+number of arguments of the proto must be the same as the number of arguments in 
+the proto body.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_INVALID_OPCODE</title>
+<para>
+The opcode name used inside the proto body is not a valid instruction.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_LOADSTORE_DATA</title>
+<para>
+The load/store instructions used in load/store protos must conform to strict
+rules. The memory data in a load instruction must be directly assigned to
+the output register. Similarly, the memory data in a store instruction should
+be directly assigned from the input register.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_MEMSIZE</title>
+<para>
+The load/store instructions used in load/store protos must conform to strict
+rules. The size of the memory data (MemDataIn/MemDataOut) must be at least
+the size of the ctype. For example, a single load instruction that uses MemDataIn32
+cannot be used in the loadi proto for a ctype that is 40 bits wide. Note that,
+two such loads in the loadi proto would be legal.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_MISSING</title>
+<para>
+All instructions must have a corresponding proto, either written by user or
+generated automatically by TIE compiler. In some cases, the user has to 
+explicitly write instruction protos. For example, if a register file used
+by the instruction has multiple ctypes, none of which could be identified
+as a default ctype for the register file, then TIE compiler will not generate
+the instruction proto.
+</para>
+<para>
+Similarly, all ctypes must have at least loadi/storei/move prototypes. These
+can be generated automatically by the TIE compiler in most cases. However,
+in some cases TIE compiler cannot do it due to restrictions. For example, if
+a ctype of size 64 bits exists in a Xtensa configuration with memory size
+of 32 bits, TIE compiler will not automatically generate a load/store proto
+with two load/store instructions.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_NO_CODE</title>
+<para>
+Blank proto body.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_NO_TEMP</title>
+<para>
+No temporary variables are allowed for certain protos.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_NUM_ARGS</title>
+<para>
+Some protos can only have a strict number of arguments. 
+For example, loadi/storei protos cannot have more than 3 arguments.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_PROTO_NUM_TEMP</title>
+<para>
+Some protos can only have a strict number of temporary variables.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_PROTO_OLD_RURWUR_REF</title>
+<para>
+A proto is using an old style RUR/WUR instruction which is being
+automatically converted to the new style.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_ONE_OPCODE</title>
+<para>
+Instruction proto (one proto per instruction) which has the same
+name as the instruction must use only one opcode.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_OPERATION_NAME_CASE</title>
+<para>
+Proto names and operation names cannot be different only in case, or different using '.' or '_' letters. They can be exactly the same or totally different. 
+If proto names and operation names are exactly the same, the proto is an instruction proto containing only the operation.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_TEMP_TYPE</title>
+<para>
+Proto temporaries must be have valid ctypes.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_TEMP_TYPE_CASE</title>
+<para>
+Proto temporaries must be have valid ctypes. This error is issued when 
+a ctype of the same name exists, but differs in case from the ctype specified.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_TEMP_WRONG_CTYPE</title>
+<para>
+For load/store protos, the type of the only temporary variable 
+cannot share the same register file  as the ctype intended to load or store.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_PROTO_UNUSED</title>
+<para>
+The proto is unused by XCC. For rtom and rtor converstion protos, 
+XCC does not use the conversion proto if the source ctype is one of the following:
+uint8, int8, uint16, int16.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PROTO_WRONG_CONVERT</title>
+<para>
+Conversion protos are written to convert a datatype to another.
+They are of the following form:
+</para>
+<list>
+<item><itemtext>&lt;ctype_from&gt;_rtor_&lt;ctype_to&gt;, for both datatypes are in registers.</itemtext>
+</item>
+<item><itemtext>&lt;ctype_from&gt;_mtor_&lt;ctype_to&gt;, for converting ctype_from in memory to ctype_to in register.</itemtext>
+</item>
+<item><itemtext>&lt;ctype_from&gt;_rtom_&lt;ctype_to&gt;, for converting ctype_from in register to ctype_to in memory.</itemtext>
+</item>
+</list>
+<para>
+Both ctypes must be valid in the above protos.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_PROTO_WRONG_MOVE</title>
+<para>
+Move prototype must use instruction that does a strict register to register move without 
+any computation or conditional move. This analysis of move instruction used in the proto
+can be done by analyzing a shared semantic.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_CORE_REGFILE</title>
+<para>
+An Xtensa core register file (such as AR, BR, MR) cannot be redefined in user TIE. Also,
+user tie cannot redefine the number of callee saved entries in the core register files.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_ILLEGAL_DEPTH</title>
+<para>
+Number of entries in a register file must be power of 2 to generate efficient addressing bits
+for indexing.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_ILLEGAL_SNAME</title>
+<para>
+A register file &quot;short name&quot; is used in all software tools. This name must be upto 6 characters
+long and cannot contain &quot;.&quot; in it. This is to ensure correctness of all s/w tools including
+debugger.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_MAX_DEPTH</title>
+<para>
+User defined register files can have a maximum of 1024 entries.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_REGFILE_DEPTH</title>
+<para>
+User defined register files can have up to a maximum of 1024 entries. However,
+register files with more than 128 entries require an enhanced version of the XCC 
+compiler to compile C/C++ programs targeted for such a TIE design. Using the 
+default version of the XCC compiler that you have downloaded as part of the software 
+tools will result in an error. If you plan to use register files with more than 
+128 entries, please contact your Tensilica support engineer to request the enhanced 
+version of the XCC compiler.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_MAX_NUMBER</title>
+<para>
+The XCC compiler has a restriction on number of register files. A total of 24 register
+files can exist in the core (Xtensa + user TIE).
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_MULTI_DEFAULT_CTYPE</title>
+<para>
+Register file has multiple default ctypes defined. Only one ctype can be specified as default.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_NO_CTYPE</title>
+<para>
+All register files must have at least one datatype (ctype) associated with it
+to be recognized by the compiler.
+If a register file is declared in user tie and no ctype is added, the TIE
+compiler creates a default one with the same name as the register file, if it
+can. There is currently no way to have a register file that is not recognized
+by the compiler.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_NO_LOADSTORE</title>
+<para>
+All register files must have load and store instructions to read and write the
+contents to memory.  If a register file is added in user tie and no load/store
+instructions are created, the TIE compiler will automatically generate the
+load store instructions if it can.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_NO_READ_PORT</title>
+<para>
+All register files must have at least one read port, i.e. at least one use/read
+of the register file.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_NO_WRITE_PORT</title>
+<para>
+All register files must have at least one write port, i.e. at least one def/write
+to the register file.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_PROTO_GENERATION</title>
+<para>
+All register files must have a datatype associated with it along with
+loadi/storei protos to read/write it from memory. TIE compiler will
+automatically generate the ctype and protos, and the load/store
+instructions. The load/store instructions generated automatically
+are called &quot;ld.REGFILE&quot; and &quot;st.REGFILE&quot;. If user manually writes
+instructions/operations that are named the same as these, then
+TIE compiler expects them to be the correct load/store instructions
+that can be used by the proto.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_REGFILE_SIZE_GT_PIF</title>
+<para>
+All register files must have a datatype associated with it along with
+loadi/storei protos to read/write it from memory. TIE compiler will
+automatically generate the ctype and protos, and the load/store instructions.
+The case where it cannot automatically generate the load/store instructions
+is when the memory width  of the processor is less than the width of the
+register file. In this case, the TIE compiler will not automatically
+generate multiple load/stores.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_SNAME_DEFINED</title>
+<para>
+The shortname for the register file is already defined for another register file.
+Shortnames, used by s/w tools, must be unique.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_SNAME_RESERVED</title>
+<para>
+Shortnames used by Xtensa core register files are reserved and cannot be used by user TIE.
+These are &quot;sp fp i l L r a b m&quot;.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_NUMERIC_SNAME</title>
+<para>
+A shortname cannot end with a number. This is because register index is added to the
+shortname for describing an entry in the register file and a short name such as
+&quot;r1&quot; can generate &quot;r10&quot; for index 0, which cannot be distinguished from a short
+name &quot;r&quot; index 10.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_NUM_CALLEE_SAVED</title>
+<para>
+If not specified, all the register file entries in a register file are caller saved, i.e.
+the entire register file is saved before calling a function, and restored upon returning.
+The user can override this by specifying the number of callee saved register file entries.
+This number must be between 0 and (number of entries - 1). If a register file has N entries
+and M are callee saved, the first N - M entries are caller saved, and the last M entries
+are callee saved. The first entry must be caller saved.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_SREG_CONFLICT</title>
+<para>
+A register file name cannot be the same as a special register in the Xtensa core. This
+is to avoid name conflict in s/w tools such as debugger.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_STATE_CONFLICT</title>
+<para>
+Register file and state names must be unique, to avoid name conflict in s/w tools such as debugger.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_FIELD_CONFLICT</title>
+<para>
+Register file and field names must be unique, if the field is used in operands.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_WIDTH</title>
+<para>
+The maximum allowed width of register file is 1024 bits.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_REGFILE_USE_DEF</title>
+<para>
+There are some restrictions on use/def stages on register files. The earliest use
+stage of a read port of a register file must be less than the 
+maximum def stage among all write ports. For example, the following combination of
+use/def stages is illegal: use ( 3, 4) , def ( 1 ), where the stages are numbered
+from E(1) and up.
+</para>
+<para>
+In addition, for AR register file, the earliest use stage must be 2 or less.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_COPROCESSOR_CONFLICT</title>
+<para>
+If an instruction accesses state/register/tieports of a coprocessor, tie compiler
+automatically generates logic for the instruction to throw a coprocessor exception
+if the corresponding bit is disabled in the state CPENABLE. To do so, it adds
+CPENABLE as an input to the instruction and a use to the schedule. If a schedule
+already exists, and is shared by several instructions whose automatic CPENABLE
+use stage, don't match, the user is advised to break up the schedule.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHEDULE_CORE_SCHEDULE</title>
+<para>
+Schedule name conflicts with a predefined schedule in Xtensa core.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_DUPLICATE_OPCODE</title>
+<para>
+Opcode names in list of schedule must be unique.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_ILLEGAL_DEF_NAME</title>
+<para>
+The def name in the schedule is not an output operand/state for any opcodes 
+in the schedule.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_ILLEGAL_DEF_STAGE</title>
+<para>
+Register operands and states can be written in stage 1 (E) and up. Interfaces
+such as VAddr and MemDataOut have fixed def stages, which are E and M respectively. 
+TIE output queues have fixed def stage of M, and TIE lookup output has def stage
+as defined in the lookup.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_ILLEGAL_USE_NAME</title>
+<para>
+The use name in the schedule is not an input operand/state for any opcodes 
+in the schedule.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_ILLEGAL_USE_STAGE</title>
+<para>
+Register operands and states can be read in stage 1 (E) and up. Interfaces
+such as MemDataIn have fixed use stage (M).  TIE input queues have fixed use stage of M, 
+import wires have a fixed use stage of E, and TIE lookup input has use stage as defined in the lookup.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_INCORRECT_STAGE</title>
+<para>
+Interfaces such as VAddr, MemData and TIE queues, lookups and import wires have fixed stages
+for reading and writing them. These stages cannot be changed by writing a different schedule
+for use/def for a particular opcode. The fixed stages are:
+</para>
+<list>
+<item><itemtext>VAddr : def E</itemtext>
+</item>
+<item><itemtext>MemDataIn and MemDataOut : use M and def M respectively.</itemtext>
+</item>
+<item><itemtext>TIE Queue : use M and def M for input and output queues respectively.</itemtext>
+</item>
+<item><itemtext>TIE lookup : use and def as defined in the lookup.</itemtext>
+</item>
+<item><itemtext>import wire : use E.</itemtext>
+</item>
+</list>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_INVALID</title>
+<para>
+The schedule defined for an output cannot be achieved based on the schedule of
+inputs and wires in the operation or semantic. For example, in the following
+code, the output &quot;d&quot; of the instruction &quot;LOAD.ADD&quot; cannot be defined before the 
+M stage because d depends on MemDataIn32, which has a use of M. The schedule
+with &quot;def d 1&quot; is therefore invalid.
+</para>
+<para>
+operation LOAD.ADD { out AR d, in AR *p, in AR b } { out VAddr, in MemDataIn32 } 
+{
+    assign VAddr = p;
+    assign d = MemDataIn32 + b;
+}
+schedule loadadd { LOAD.ADD } { use b 1; use p 1; def d 1; }
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_LATENCY</title>
+<para>
+The maximum latency of an instruction is determined by the Xtensa configuration and
+cannot be exceeded when writing a schedule.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_MIN_DEF</title>
+<para>
+Any register or state can be written in stage E (1) and up.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_MIN_USE</title>
+<para>
+Any register or state can be read in stage E (1) and up.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_SHARED_FUNCTION</title>
+<para>
+When a shared function is used multiple times in an operation/semantic,
+each instance of the function is scheduled in a specific cycle, since
+the hardware is shared. In some cases, no cycles can be found for a
+shared function if the number of instances exceed the maximum latency
+allowed for an instruction.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SCHED_UNIQUE_STAGE</title>
+<para>
+All operands and states written in a schedule must have a unique
+stage for use/def. For example, &quot;use a 1; use a 3;&quot; is an illegal
+schedule since there is no unique use stage for a.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_OFF">TIE_SCHED_USE_AFTER_DEF</title>
+<para>
+If an instruction reads and writes the same operand/state with a use stage
+that is greater than the def stage, there may be a misconception that the
+value read is the output of the same instruction. This is not the case.
+All register (and state) reads happen when the instruction is issued 
+in the register read (R) stage, and these values are piped down to the
+appropriate use stage. In the case when the input operand/state is being
+defined by another instruction in the pipeline, instead of waiting for
+the instruction to update the register file and then read from it, the
+data is forwarded from the previous instruction's output. But, there
+is no data forwarding within the same instruction.
+</para>
+<para>
+This warning is not seen by default. To see it, run TIE compiler with
+the -warnall flag.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SEAMLESS_NAME_LEN</title>
+<para>
+Mentor Graphics Seamless requires an upper limit of the length of 
+certain identifiers. For configurations with Seamless option selected, 
+TC reports an error if the requirement is violated.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SEM_AMBIGUOUS_OPND_NAME</title>
+<para>
+The semantic shares operations and references.
+An operation argument name is the same as an iclass operand name.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SEMANTIC_CORE_SEMANTIC</title>
+<para>
+The semantic is already defined as a Xtensa core semantic.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SEMANTIC_DUPLICATE_OPCODE</title>
+<para>
+The list of opcodes for a semantic must have unique opcode names.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON|ERR_ALLOW_IGNORE">TIE_SEM_FALSE_DEP</title>
+<para>
+When writing a combined semantic for multiple instructions with
+different inputs and outputs, it is possible to introduce an error
+which causes an incorrect dependency between the output of an instruction
+to an input to the semantic that is not an input to the instruction. This
+would cause incorrect functional behavior of the semantic.
+</para>
+<para>
+If the instruction has a correct operation or reference description, running 
+formal verification between the reference and the semantic would also point 
+out such an error.
+</para>
+<para>
+For example, in the following code, due to incorrect logic in the select
+for wire &quot;b&quot;, the output of opcode &quot;I1&quot; will depend on art, which is 
+invalid for the opcode.
+</para>
+<para>
+iclass CLASS01 {I0, I1} {out arr, in ars } 
+iclass CLASS2 {I2} {out arr, in ars, in art} 
+semantic sem1 {I0, I1, I2 }
+{
+    wire [31:0] a = ars;
+    wire [31:0] b = (~I0)?art:ars;
+    assign arr = TIEadd(a,b,1'b1);
+}
+</para>
+<para>
+Warrning: (TIE_SEM_FALSE_DEP),
+        Semantic &quot;sem1&quot;, output &quot;arr&quot; of instruction &quot;I1&quot;
+        may depend on input &quot;art&quot; which is not in its iclass
+</para>
+<para>
+Note that this is issued as a warning because the analysis of the
+body of the instruction is done with algorithms which in some
+rare case may generate a dependency which is not true. You
+are thus strongly encouraged to review the semantic to verify that
+there is no such dependence. If the dependence is real, it can result
+in incorrect hardware and faulty silicon.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SEM_MULTIPLE_DEF</title>
+<para>
+When combining instructions into a semantic, a common output of the
+instructions must be written in the same stage for all of the instructions.
+An output of a semantic cannot be written in different stages for 
+different instructions.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SEM_MULTIPLE_USE</title>
+<para>
+When combining instructions into a semantic, a common input of the
+instructions must be read in the same stage for all of the instructions.
+An input of a semantic cannot be read in different stages for 
+different instructions.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON|ERR_ALLOW_IGNORE">TIE_SEM_NO_DEP</title>
+<para>
+When writing a combined semantic for multiple instructions with
+different inputs and outputs, it is possible to introduce an error
+which causes an input of an instruction to be ignored.
+This would cause incorrect functional behavior of the semantic.
+</para>
+<para>
+If the instruction has a correct reference, running formal verification
+between the reference and the semantic would also point out this error.
+</para>
+<para>
+For example, in the following code, due to incorrect logic in the select
+for wire &quot;b&quot;, the input art of opcode &quot;I2&quot; will not be used to compute &quot;arr&quot;.
+</para>
+<para>
+iclass CLASS01 {I0, I1} {out arr, in ars } 
+iclass CLASS2 {I2} {out arr, in ars, in art} 
+semantic sem1 {I0, I1, I2 }
+{
+    wire [31:0] a = ars;
+    wire [31:0] b = (~I2)?art:ars;
+    assign arr = TIEadd(a,b,1'b1);
+}
+</para>
+<para>
+Note that this is issued as a warning because the analysis of the
+body of the instruction is done with algorithms which in some
+rare case may generate a dependency which is not true.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SEM_OPERATION_ARG_KIND</title>
+<para>
+When combining multiple operations into a semantic, the named arguments
+of all operations must map to the same type of operand. For example,
+in the following code, the operations &quot;OP1&quot; and &quot;OP2&quot; have different
+kind of operands mapped to the name &quot;a&quot; and therefore cannot be combined
+into a semantic.
+</para>
+<para>
+operation OP1 { out AR c, in AR b, in simm8 a } {}
+operation OP2 { out AR c, in AR a } {}
+semantic alu { OP1, OP2 }
+</para>
+<para>
+Error: (TIE_SEM_OPERATION_ARG_KIND),
+        Semantic alu, argument &quot;a&quot; requires different kinds
+        of operands for operations OP1 and OP2
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SEM_OPERATION_ARG_TYPE</title>
+<para>
+When combining multiple operations into a semantic, the named arguments
+of all operations must map to the same register file. For example,
+in the following code, the operations &quot;OP1&quot; and &quot;OP2&quot; have different
+register files mapped to the name &quot;a&quot; and therefore cannot be combined
+into a semantic.
+</para>
+<para>
+regfile XR 32 16 xr
+operation OP1 { out AR c, in AR a } {}
+operation OP2 { out AR c, in XR a } {}
+semantic alu { OP1, OP2 }
+</para>
+<para>
+Error: (TIE_SEM_OPERATION_ARG_TYPE),
+        Semantic alu, argument &quot;a&quot; requires operands that
+        access two different register files for operations OP1 and OP2
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SEM_OPERATION_ARG_OPNDS</title>
+<para>
+When combining multiple operations into a semantic, the named arguments
+of all operations must map to the same operands. For example,
+in the following code, the operations &quot;OP1&quot; and &quot;OP2&quot; have different
+operands mapped to the name &quot;a&quot; and therefore cannot be combined
+into a semantic.
+</para>
+<para>
+operation OP1 { out arr c, in ars a } {}
+operation OP2 { out arr c, in art a } {}
+semantic alu { OP1, OP2 }
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_SHIFT_AMOUNT</title>
+<para>
+Shift amount specified in expression will cause a larger than needed hardware.
+This typically happens due to expressions involving integer constants which
+are interpreted as 32 bit values. Example:
+</para>
+<para>
+//incorrect
+wire [31:0] val = ars &lt;&lt; 3;
+//correct
+wire [31:0] val = ars &lt;&lt; 2'd3;
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SIGNEXTEND_ERR</title>
+<para>
+The usage of SignExtendFrom and SignExtendTo interface is wrong. 
+The interfaces can only co-exist with MemDataIn32 interface. 
+They can only be assigned to value 4 or less.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SIMD_REDUCTION_ARG_DIR</title>
+<para>
+This error is generated for reduction property statements where one of
+the protos, the &quot;init&quot;, &quot;vector&quot;, &quot;fini&quot; or &quot;scalar&quot; has an argument with
+mismatched directions.
+</para>
+<para>
+The init proto should have 2 arguments, an output with
+the reduction type and an in with the scalar type.
+</para>
+<para>
+The vector proto should have as many arguments as the scalar proto.
+The first argument should be an output with the reduction type.  The
+second should be an in with the reduction type.  The rest of the
+arguments should all contain either the scalar type matching the one
+in the scalar proto or a vector type with the appropriate vector
+length corresponding to the one in the scalar proto.
+</para>
+<para>
+The fini proto should have 2 arguments.  The first is an output with the
+scalar type.  The second in an output with the reduction type.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SIMD_REDUCTION_ARG_TYPE</title>
+<para>
+This error is generated for reduction property statements where one of
+the protos, the &quot;init&quot;, &quot;vector&quot;, &quot;fini&quot; or &quot;scalar&quot; has an invalid argument
+with mismatched directions.
+</para>
+<para>
+The init proto should have 2 arguments, an output with
+the reduction type and an in with the scalar type.
+</para>
+<para>
+The vector proto should have as many arguments as the scalar proto.
+The first argument should be an output with the reduction type.  The
+second should be an in with the reduction type.  The rest of the
+arguments should all contain either the scalar type matching the one
+in the scalar proto or a vector type with the appropriate vector
+length corresponding to the one in the scalar proto.
+</para>
+<para>
+The fini proto should have 2 arguments.  The first is an output with the
+scalar type.  The second in an output with the reduction type.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SIMD_REDUCTION_ARG_VECTYPE</title>
+<para>
+This error is generated for the vector proto for a reduction property
+statement where one of the arguments to the protos mismatches
+the corresponding argument to the scalar proto.
+</para>
+<para>
+For the vector proto, after the first 2 arguments, the rest
+of the arguments must have the type of corresponding scalar proto
+type or a vector type for that type with the appropriate vector length.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SIMD_REDUCTION_CTYPE</title>
+<para>
+The ctype for a reduction operation must be a valid ctype.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SIMD_REDUCTION_CTYPE_CASE</title>
+<para>
+The ctype for a reduction operation must be a valid ctype.  This message is
+generated if there is a ctype that almost matches the one specified.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SIMD_REDUCTION_NUM_ARGS</title>
+<para>
+This error is generated for reduction property statements where one of
+the protos, the &quot;init&quot;, &quot;vector&quot;, &quot;fini&quot; or &quot;scalar&quot; has an invalid
+number of protos.
+</para>
+<para>
+The init proto should have 2 arguments, an output with
+the reduction type and an in with the scalar type.
+</para>
+<para>
+The vector proto should have as many arguments as the scalar proto.
+The first argument should be an output with the reduction type.  The
+second should be an in with the reduction type.  The rest of the
+arguments should all contain either the scalar type matching the one
+in the scalar proto or a vector type with the appropriate vector
+length corresponding to the one in the scalar proto.
+</para>
+<para>
+The fini proto should have 2 arguments.  The first is an output with the
+scalar type.  The second in an output with the reduction type.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SIMD_REDUCTION_OP</title>
+<para>
+This error is generated for reduction property statements where the scalar
+proto is an intrinsic that does not allow user-reductions.
+</para>
+<para>
+The intrinsics that are user-reducible are xt_add, xt_band, xt_bnand, 
+xt_bnor, xt_bor, xt_bxor, xt_max, xt_min, xt_sub, xt_mpy, xt_madd, and 
+xt_msub.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SIMPLE_CONSTRUCT</title>
+<para>
+This error is only generated when you run the TIE compiler with the -chk_tiegen 
+flag. It means that your TIE description does not fully specify all the 
+information required to determine the opcode, operand and field encodings for 
+all the TIE instructions.
+</para>
+<para>
+The TIE compiler can automatically assign the encoding(s), but you are not 
+guaranteed to always get the same encoding from one run to another. If you 
+would like the TIE compiler to assign the encoding, you should run it 
+without the -chk_tiegen flag. If you want to specify all the encodings
+yourself, you must update the TIE description to address the specific
+problem(s) highlighted with this error message.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SLOT_ALL_SIZED</title>
+<para>
+The slots in a format should either be all explicitly assigned to bits
+or all left to the TIE compiler to assign bits. A mix is not allowed.
+Example:
+</para>
+<para>
+length l64 64 { InstBuf[3:1] == 7 }
+format vliw64 l64 { slot0, slot1, slot1 } { InstBuf[3:0] == 14 }
+slot slot0 vliw64[20:5]   
+slot slot1 vliw64[*]
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SLOT_COMP_WRONG_INDEX_ORDER</title>
+<para>
+When assigning bits of a format to a slot, the order must be from:to, where
+from is &gt; to.  Example:
+</para>
+<para>
+length l64 64 { InstBuf[3:1] == 7 }
+format vliw64 l64 { slot0, slot1, slot1 } { InstBuf[3:0] == 14 }
+slot slot0 vliw64[20:5]   //legal
+slot slot1 vliw64[32:63] //illegal
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SLOT_COMP_WRONG_INDEX_RANGE</title>
+<para>
+When assigning bits of a format to a slot, the index must be within the range
+of the instruction word.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SLOT_DIFF_FORMAT</title>
+<para>
+A slot definition must have one format name only. For example, the following
+is illegal
+</para>
+<para>
+length  xlen64      64                  { InstBuf[3:0] == 15 }
+</para>
+<para>
+format  xl64        xlen64   { slot0, slot1 }   { InstBuf[4] == 1'b0 }
+format  ml64        xlen64   { slot0 }          { InstBuf[4] == 1'b1 }
+</para>
+<para>
+slot    slot0       {xl64[29:10], ml64[9:5]}
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SLOT_DIFF_SIZE</title>
+<para>
+A slot must have the same size when defined in multiple formats. For example,
+the following is illegal
+</para>
+<para>
+slot slot0 vliwa[21:0]
+slot slot0 vliwb[21:4]
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SLOT_MULTI_BIT</title>
+<para>
+The same bits of the instruction word can be used only once in a slot definition,
+when the slot is defined as a concatenation of different bits of the format.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SLOT_NO_NOP</title>
+<para>
+Every slot must have a NOP instruction in a multi-slot format so that the 
+compiler can always generate a valid flix instruction. A nop is always
+automatically added by the TIE compiler if the encoding space allows it.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SLOT_NO_SLOT_OPCODE</title>
+<para>
+Every slot must have a &quot;slot_opcodes&quot; statement to indicate what opcodes
+are allowed in that slot. A slot with no opcodes is not allowed. It must
+have NOP at the least.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SLOT_UNKNOWN_FORMAT</title>
+<para>
+The format name in the slot definition is not a known format.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SLOT_UNUSABLE_BITS</title>
+<para>
+Slot contains some bits that cannot be used for encoding or operands.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SLOT_OPCODE_FIELD_CONFLICT</title>
+<para>
+Slot and field names must be unique in a case insensitive way to avoid
+naming conflicts in TIE compiler generated code.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SLOT_OPCODES_SLOT_UNDEFINED</title>
+<para>
+The slot name in the slot_opcodes definition is not a known slot.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SREG_NAME_CONFLICT</title>
+<para>
+The user register specified will have a name conflict with an existing user register.
+For example, a user register cannot be named &quot;PS&quot; because there is a special
+register &quot;PS&quot; in the Xtensa core.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SREG_OPCODE_USED</title>
+<para>
+The user register specified will generate opcodes that will
+have a name conflict with an existing user register.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_STATE_ALREADY_MAPPED</title>
+<para>
+The same state cannot be mapped to multiple user registers, if a user register
+is manually written for a state, it cannot have the add_read_write option as well.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_STATE_CORE_STATE</title>
+<para>
+A Xtensa core state with the same name is defined. State names must be unique
+in a case-insensitive way.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_STATE_EXPORT_INIT</title>
+<para>
+All export states must have a initial value. This is the value of the state
+when Xtensa comes out of reset. If no initial value is assigned, the state
+value is unknown until it is written in the program.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_STATE_INIT_WIDTH</title>
+<para>
+The width of state initialization value need to be within the state width. 
+In the case that the state width is exceeded, the upper bits are ignored.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_STATE_MAX_WIDTH</title>
+<para>
+Maximum width of a state is 1024 bits.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_STATE_MULTIPLE_MAP</title>
+<para>
+The same bits of a state cannot be mapped to multiple user registers.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_STATE_NO_DEF</title>
+<para>
+There are no writes to the state from any instruction. Note that
+&quot;add_read_write&quot; automatically generates &quot;RUR/WUR&quot; instructions
+that read and write the state.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON|WARN_DEFAULT_ON">TIE_STATE_NO_UREG_MAP</title>
+<para>
+A state has to be fully mapped to user-registers if it belongs to 
+a coprocessor, so that the state can be saved and restored upon
+coprocessor exception and context switch.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_STATE_NO_USE</title>
+<para>
+There are no reads from the state from any instruction. Note that
+&quot;add_read_write&quot; automatically generates &quot;RUR/WUR&quot; instructions
+that read and write the state.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_STATE_SHARED_OR</title>
+<para>
+The following limitations are imposed on states with &quot;shared_or&quot; attributes:
+1. The states cannot be killed. If state value is conditionally assigned, 
+   set the state direction as inout and assign the input value instead. 
+2. The states cannot appear in the instructions containing memory, import wire,
+   queue, or lookup interfaces.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_STATE_USE_DEF</title>
+<para>
+The earliest use stage of a state must be less than on equal to the
+maximum def stage of the state, to ensure correct implementation.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SUBFIELD_NOT_DEFINED</title>
+<para>
+If a field is defined as a concatenation of other subfields, all the
+subfields must be defined.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_SUBSCRIPT</title>
+<para>
+Illegal subscript. Legal subscript syntax is name[from:to] where :
+</para>
+<list>
+<item><itemtext>both from and to are within the bounds of the size of the variable,
+i.e. &gt;=0 and &lt;= size - 1.</itemtext>
+</item>
+<item><itemtext>from &gt;= to</itemtext>
+</item>
+</list>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_TABLE_CORE_TABLE</title>
+<para>
+The table name is already defined in the Xtensa core.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_TABLE_FIELD_CONFLICT</title>
+<para>
+The table name conflicts with a field name. Table names must be unique.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_TABLE_ILLEGAL_WIDTH</title>
+<para>
+The width of a table entry must be &gt; 0 and &lt;= 32 bits.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_TABLE_ILLEGAL_ENTRY</title>
+<para>
+The entry in the table uses more than 32 bits.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_TABLE_NUM_ELEMENTS</title>
+<para>
+The number of elements in the table is larger than the size of the table.
+Note that if the table has less elements than the size, it is zero padded.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_TABLE_USE</title>
+<para>
+A table can be indexed with a single index only. TABLE[from:to] is ambiguous.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_TABLE_VALUE</title>
+<para>
+The entry value in the table does not fit in the width of the table.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON|WARN_DEFAULT_ON">TIE_TIEGEN</title>
+<para>
+TIE compiler failed to generate the correct encoding for operations
+and flix formats. This is usually accompanied by a detailed message
+about the specific error cause.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_PORT_PROTECT</title>
+<para>
+If the Xtensa configuration has an MMU, all tieports must have some
+protection implemented. This is done by putting every tieport in a
+coprocessor such that the the coprocessors can be disabled for 
+certain tasks to achieve some protection.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_TPP_EXEC_FAIL</title>
+<para>
+Could not run the TIE perl preprocessor.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_UNDERUTILIZED_RANGE</title>
+<para>
+The immediate range specified is using bits that are not all utilized.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UNIMPLEMENTABLE_RANGE</title>
+<para>
+The immediate range specified cannot be efficiently implemented.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_NAME</title>
+<para>
+User registers should be defined with names only. Numbers are not needed.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_NAME_ALLOC</title>
+<para>
+The user register name specified will generate opcodes that conflict with
+an existing operation or another user register.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_NAME_ALREADY_USED</title>
+<para>
+The user register name specified is already used.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_NAME_CONFLICT</title>
+<para>
+The user register name specified will conflict with another name.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_NAME_ILLEGAL</title>
+<para>
+User register names of the form &quot;UR[number]&quot; should not be used.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_NO_MAP</title>
+<para>
+No state mapped to the user register.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_NO_STATE</title>
+<para>
+The state name in the user register definition does not exist.
+</para>
+</sect2>
+<sect2>
+<title default="WARN_DEFAULT_ON">TIE_UREG_NUMBER</title>
+<para>
+User TIE should use user register numbers from 0-223. Note that user registers
+should be written with name only so that TIE compiler can automatically assign
+an appropriate number.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_NUMBER_ALLOC</title>
+<para>
+TIE compiler could not allocate a user register number because all valid numbers
+are used.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_NUM_ALREADY_USED</title>
+<para>
+The user register number specified is already used. Note that user registers
+should be written with name only so that TIE compiler can automatically assign
+an appropriate number.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_OPCODE_USED</title>
+<para>
+The RUR/WUR opcode is already defined manually, so TIE compiler cannot generate
+these automatically.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_SIZE</title>
+<para>
+A user register can map only 32 bits of a state. Wider states should be mapped
+to multiple user registers. Note that TIE compiler automatically generates
+user registers for all bits of a state with the &quot;add_read_write&quot; option.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_STATE_BITS</title>
+<para>
+User register maps state bits outside the valid range, must be &gt;=0 and &lt;= state width - 1.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_UREG_STATE_NAME_CONFLICT</title>
+<para>
+A user register cannot have the same name as a state unless it has a one to one mapping
+from a state. A user register that maps only a few bits of a state, or maps multiple states
+must be named differently. This is to avoid naming confusion in the debugger.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_WIRE_CYCLIC_DEP</title>
+<para>
+The wire in the semantic depends on itself. For example,
+</para>
+<verbatim><![CDATA[
+wire [31:0] xx;
+wire [31:0] yy;
+assign xx = art + yy;
+assign yy = ars + xx;
+]]></verbatim>
+<para>
+Error: (TIE_WIRE_CYCLIC_DEP),
+        The declared wires in the assignment block have cyclic
+        dependency involving xx ,yy
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_WIRE_DECL</title>
+<para>
+Illegal wire declaration. Wires should be declared as [from:to] where both
+&quot;from&quot; and &quot;to&quot; are &gt;=0 and from is greater than to.
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_XCC_MAX_NUM</title>
+<para>
+XCC requires that the total number of states, register files, and ports
+is less than 1024. The total number of ports includes
+ports generated from TIE queues (3 ports per queue), import
+wires (1 port), export states (1 port) and TIE lookup (2 ports per
+lookup without Rdy, and 3 with Rdy).
+</para>
+</sect2>
+<sect2>
+<title default="ERR_DEFAULT_ON">TIE_XTENSA_CONFIG</title>
+<para>
+This feature is not supported by the base Xtensa core used.
+</para>
+</sect2>
+</sect1>
+</pod>

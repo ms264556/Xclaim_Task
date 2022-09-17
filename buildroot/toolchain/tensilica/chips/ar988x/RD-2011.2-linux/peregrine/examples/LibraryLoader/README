@@ -1,0 +1,18 @@
+/* Customer ID=8327; Build=0x3b95c; Copyright (c) 2009 by Tensilica Inc.  ALL RIGHTS RESERVED.
+   These coded instructions, statements, and computer programs are the
+   copyrighted works and confidential proprietary information of Tensilica Inc.
+   They may not be modified, copied, reproduced, distributed, or disclosed to
+   third parties in any manner, medium, or form, in whole or in part, without
+   the prior written consent of Tensilica Inc.
+*/
+
+Library Loader Example README:
+
+To run the overlay_test portion of this example, you need to 
+do some preliminary work first. See the chapter on the library loader
+in the System Software Users Guide for more information.
+
+Configurations without system memory or where the library call
+malloc returns memory that is not executable will not be able to run
+the position independent library portions of the example.
+

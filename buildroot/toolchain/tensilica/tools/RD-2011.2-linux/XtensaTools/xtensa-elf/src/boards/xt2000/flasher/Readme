@@ -1,0 +1,109 @@
+/*
+ * Copyright (c) 2003-2004 by Tensilica Inc.  ALL RIGHTS RESERVED.
+ * These coded instructions, statements, and computer programs are the
+ * copyrighted works and confidential proprietary information of Tensilica Inc.
+ * They may not be modified, copied, reproduced, distributed, or disclosed to
+ * third parties in any manner, medium, or form, in whole or in part, without
+ * the prior written consent of Tensilica Inc.
+ */
+
+Flash Programming On The XT2000
+Revised 8/12/2002
+
+Theory of operation:
+This directory contains a program "flasher" which when compiled, loaded
+and run on the xt2000 board via XT-GDB will: 
+	1. erase the flash
+	2. prompt the user to input a file for programming into flash
+	3. program the flash
+
+This flash routine assumes:
+	1. The use of a serial port to prompt the user for input
+	   to begin the erase/program process, and to display 
+	   informational messages
+	2. The use of XT-GDB to download the binary image to be programmed
+	   into a SDRAM buffer
+	3. The use of a 32MB Flash module
+	4. The file to be flashed exists and is a binary image
+
+****************************************************************
+To build the binary image that you want to store into the flash:
+ (example) 
+	c: xt-xcc -g -o ledtest_rom -mlsp=xt2000-rt-rom ledtest.c
+	c: xt-objcopy -O binary ledtest_rom ledtest_rom.bin
+
+Note: For making rommable code: If your reset vector does not start
+at 0x00, then it will be necessary to shift the data during download
+to the correct position. See the Trouble Shooting section at the
+bottom of this page.
+****************************************************************
+
+Programming Procedure:
+
+0 --- Attach a serial cable to XT2000 serial port P1 and
+	 open up a Hyperterminal window (38400 N 8 1 none)
+00 -- Attach wiggler if using OCD (recommended)
+	(if not using OCD (assumes XMON) - attach another serial 
+	cable from host to P2)
+000 - Set switches S3-1 and S3-2 down for ASRAM
+0000  Power board, press reset pushbutton
+00000 Start OCD daemon 
+	 (not necessary if using XMON & xt-gdb serial connection to P2)
+1 -- Compile the flash program (only needs to be done once)
+		c: xt-make
+	  or directly:  xt-xcc -mlsp=xt2000-rt -g main.c flash.c -o flasher
+2 -- Erase Flash
+	(Start XT-GDB, load the flasher program into ASRAM and run)
+		c: xt-gdb flasher
+		(xt-gdb)target xtensa-ocd localhost:20000 0
+		(xt-gdb)set $ps = 1
+		(xt-gdb)set $intenable = 0
+		(xt-gdb)set $cacheattr=0x22222222
+		(xt-gdb)load
+		(xt-gdb)set $pc = _ResetVector
+		(xt-gdb)c
+
+      The screen should display the following:
+		********32MB Flash ERASE and PROGRAM********
+		 Press 'e'(cr) to erase
+ 	 	 Flash erase................................................................
+		Flash successfully erased
+ 	 	 To program the flash follow these 4 steps:
+		1. At the XT-GDB prompt,(xt-gdb) CTRL-C
+		2. At the XT-GDB prompt,(xt-gdb) load_data <filename> &program_buffer[0]
+		3. At the XT-GDB prompt,(xt-gdb) set program_flash=1
+		4. At the XT-GDB prompt,(xt-gdb) c
+
+3 -- Download Data and Program Flash
+	(Break the program, load the binary image and continue)
+		(xt-gdb) CTRL-C
+		(xt-gdb) load_data <filename> &program_buffer[0]
+		(xt-gdb) set program_flash=1
+		(xt-gdb) c
+
+      The screen should display the following:
+	 Flash programming... takes 60 seconds
+       Flash programmed successfully     Dwords written=00800000
+
+4 -- Test
+     If successful, you should be able to examine Flash
+	memory via GDB, or boot directly from Flash by
+	setting switches S3-1 and S3-2 up, and pressing reset
+
+****************************************************************
+Troubleshooting:
+If the flasher program says that it has successfully programmed the
+flash, but the the board fails to boot successfully, the cause is
+likely to be that the binary has been programmed into the flash 
+at location 0x0 instead of at the reset vector offset.
+
+For the T1050 standard config, the reset vector is at 0x4000_0020
+So the binary is likely programmed at location 0x4000_0000 instead
+of at 0x4000_0020. (You can check this by examining memory with OCD).
+
+One solution is just to shift the binary data during the download (Step 4)
+-i.e. (xt-gdb)load_data ledtest_rom.bin &program_buffer[8]
+
+(Another possible solution is to pad 0x20 bytes of data into the program
+at compile/link time.)
+****************************************************************

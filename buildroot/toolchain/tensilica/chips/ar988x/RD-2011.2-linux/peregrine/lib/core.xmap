@@ -1,0 +1,42 @@
+<!-- core.xmap - address map layouts for this Xtensa core
+  --
+  --  Customer ID=8327; Build=0x3b95c; Copyright (c) 2007 by Tensilica Inc.  ALL RIGHTS RESERVED.
+  --  These coded instructions, statements, and computer programs are the
+  --  copyrighted works and confidential proprietary information of Tensilica Inc.
+  --  They may not be modified, copied, reproduced, distributed, or disclosed to
+  --  third parties in any manner, medium, or form, in whole or in part, without
+  --  the prior written consent of Tensilica Inc.
+  -->
+
+<addressables>
+  <space  name='core.PIF' sizem1='0xffffffff' context='core' contains='mapping' data='1' />
+  <space  name='core.dram0_iface' sizem1='0x0003ffff' context='core' contains='mapping' check='none' condstore='0' data='1' executable='0' local='1' type='dataRam' unalignable='1' valign='0x3ffff' />
+  <space  name='core.dram1_iface' sizem1='0x0003ffff' context='core' contains='mapping' check='none' condstore='0' data='1' executable='0' local='1' type='dataRam' unalignable='1' valign='0x3ffff' />
+  <space  name='core.iram0_iface' sizem1='0x0007ffff' context='core' contains='mapping' check='none' condstore='0' data='0' executable='1' local='1' readable='1' type='instRam' unalignable='0' valign='0x7ffff' writable='1' />
+  <space  name='core.iram1_iface' sizem1='0x0007ffff' context='core' contains='mapping' check='none' condstore='0' data='0' executable='1' local='1' readable='1' type='instRam' unalignable='0' valign='0x7ffff' writable='1' />
+  <space  name='core.inbound' sizem1='0xffffffff' context='core' contains='interface' >
+    <map addr='0x00400000' context='core' sizem1='0x0003ffff' offset='0x00000000' addressable='core.dram0_iface' />
+    <map addr='0x00440000' context='core' sizem1='0x0003ffff' offset='0x00000000' addressable='core.dram1_iface' />
+    <map addr='0x00900000' context='core' sizem1='0x0007ffff' offset='0x00000000' addressable='core.iram0_iface' />
+    <map addr='0x00980000' context='core' sizem1='0x0007ffff' offset='0x00000000' addressable='core.iram1_iface' />
+  </space>
+  <space  name='core.physical' sizem1='0xffffffff' context='core' contains='interface' >
+    <map addr='0x00000000' context='core' sizem1='0x003fffff' offset='0x00000000' addressable='core.PIF' />
+    <map addr='0x00400000' context='core' sizem1='0x0003ffff' offset='0x00000000' addressable='core.dram0_iface' />
+    <map addr='0x00440000' context='core' sizem1='0x0003ffff' offset='0x00000000' addressable='core.dram1_iface' />
+    <map addr='0x00480000' context='core' sizem1='0x0047ffff' offset='0x00480000' addressable='core.PIF' />
+    <map addr='0x00900000' context='core' sizem1='0x0007ffff' offset='0x00000000' addressable='core.iram0_iface' />
+    <map addr='0x00980000' context='core' sizem1='0x0007ffff' offset='0x00000000' addressable='core.iram1_iface' />
+    <map addr='0x00a00000' context='core' sizem1='0xff5fffff' offset='0x00a00000' addressable='core.PIF' />
+  </space>
+  <space  name='core.virtual' sizem1='0xffffffff' context='core' contains='TLB mapping' >
+    <map addr='0x00000000' context='core' sizem1='0x1fffffff' offset='0x00000000' addressable='core.physical' ca='2' cached='0' exception='0' executable='1' isolate='0' readable='1' writable='1' />
+    <map addr='0x20000000' context='core' sizem1='0x1fffffff' offset='0x20000000' addressable='core.physical' ca='2' cached='0' exception='0' executable='1' isolate='0' readable='1' writable='1' />
+    <map addr='0x40000000' context='core' sizem1='0x1fffffff' offset='0x40000000' addressable='core.physical' ca='2' cached='0' exception='0' executable='1' isolate='0' readable='1' writable='1' />
+    <map addr='0x60000000' context='core' sizem1='0x1fffffff' offset='0x60000000' addressable='core.physical' ca='2' cached='0' exception='0' executable='1' isolate='0' readable='1' writable='1' />
+    <map addr='0x80000000' context='core' sizem1='0x1fffffff' offset='0x80000000' addressable='core.physical' ca='2' cached='0' exception='0' executable='1' isolate='0' readable='1' writable='1' />
+    <map addr='0xa0000000' context='core' sizem1='0x1fffffff' offset='0xa0000000' addressable='core.physical' ca='2' cached='0' exception='0' executable='1' isolate='0' readable='1' writable='1' />
+    <map addr='0xc0000000' context='core' sizem1='0x1fffffff' offset='0xc0000000' addressable='core.physical' ca='2' cached='0' exception='0' executable='1' isolate='0' readable='1' writable='1' />
+    <map addr='0xe0000000' context='core' sizem1='0x1fffffff' offset='0xe0000000' addressable='core.physical' ca='2' cached='0' exception='0' executable='1' isolate='0' readable='1' writable='1' />
+  </space>
+</addressables>

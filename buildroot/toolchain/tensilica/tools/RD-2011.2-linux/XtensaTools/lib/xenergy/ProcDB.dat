@@ -1,0 +1,429 @@
+################################################################################
+# Copyright (c) 2006 by Tensilica Inc.  ALL RIGHTS RESERVED.                   #
+# These coded instructions, statements, and computer programs are the          #
+# copyrighted works and confidential proprietary information of Tensilica Inc. #
+# They may not be modified, copied, reproduced, distributed, or disclosed to   #
+# third parties in any manner, medium, or form, in whole or in part, without   #
+# the prior written consent of Tensilica Inc.                                  #
+################################################################################
+
+{ Name => "Base",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 1,
+                  DataAccessLatency     => 1,
+                  InstCacheNumBits      => 32,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 32,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "BaseI2D2",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 32,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 32,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "BaseI2D2ICW2",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 32,
+                  InstCacheNumWays      => 2,
+                  DataCacheNumBits      => 32,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "BaseI2D2ICW4",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 32,
+                  InstCacheNumWays      => 4,
+                  DataCacheNumBits      => 32,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "BaseI2D2DCW2",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 32,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 32,
+                  DataCacheNumWays      => 2,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "BaseI2D2DCW4",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 32,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 32,
+                  DataCacheNumWays      => 4,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF64I2D2",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 64,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 64,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF64I2D2ICW2",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 64,
+                  InstCacheNumWays      => 2,
+                  DataCacheNumBits      => 64,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF64I2D2ICW4",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 64,
+                  InstCacheNumWays      => 4,
+                  DataCacheNumBits      => 64,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF64I2D2DCW2",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 64,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 64,
+                  DataCacheNumWays      => 2,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF64I2D2DCW4",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 64,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 64,
+                  DataCacheNumWays      => 4,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF128I2D2",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 128,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 128,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF128I2D2ICW2",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 128,
+                  InstCacheNumWays      => 2,
+                  DataCacheNumBits      => 128,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF128I2D2ICW4",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 128,
+                  InstCacheNumWays      => 4,
+                  DataCacheNumBits      => 128,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF128I2D2DCW2",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 128,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 128,
+                  DataCacheNumWays      => 2,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF128I2D2DCW4",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 128,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 128,
+                  DataCacheNumWays      => 4,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF64I2D2IHB64",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 64,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 64,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 1
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF64I2D2ICW2IHB64",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 64,
+                  InstCacheNumWays      => 2,
+                  DataCacheNumBits      => 64,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 1
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "PIF64I2D2ICW4IHB64",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 64,
+                  InstCacheNumWays      => 4,
+                  DataCacheNumBits      => 64,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 1
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "BaseI2D2WrBuf32",
+  Parameters => {
+                  IsaARRegisterCount    => 32,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 32,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 32,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 32,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+},
+{ Name => "BaseI2D2AR64",
+  Parameters => {
+                  IsaARRegisterCount    => 64,
+                  InstAccessLatency     => 2,
+                  DataAccessLatency     => 2,
+                  InstCacheNumBits      => 32,
+                  InstCacheNumWays      => 1,
+                  DataCacheNumBits      => 32,
+                  DataCacheNumWays      => 1,
+                  DataCacheIsWriteBack  => 0,
+                  WriteBufferEntries    => 4,
+                  WideInstHoldingBuffer => 0
+                },
+  InstEnergy => {
+                  nop   =>  59.7,
+                  add   => 103.0,
+                  load  => 114.0,
+                  store => 148.0
+                }
+}

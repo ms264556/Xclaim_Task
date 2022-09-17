@@ -1,0 +1,284 @@
+<html>
+  <head>
+    <title>
+      L32R - Load 32-bit PC-Relative
+    </title>
+    <style type="text/css">
+      <!--
+	body {
+		background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+		margin-left: 2em;
+		margin-right: 2em;
+	}
+	#boundingbox {
+	        background: white;
+		color: black;
+		font-family: Arial, Verdana, Myriad Web, Syntax, sans-serif;
+	        position: relative;
+	        width: 865px;
+	        margin: 0 auto;
+	        padding: 20px;
+	        border-style: dashed;
+	        border-width: 1px;
+	        border-spacing: 10px;
+	        border-collapse: separate;
+	}
+	a {
+		text-decoration: none;
+	}
+	a:visited {
+		color: blue;
+	}
+	a:link {
+		color: green;
+	}
+	a:active {
+		color: green;
+	}
+	a:hover {
+		color: green;
+	}
+	a:offsite {
+		color: green;
+	}
+	h1 {
+		font-size: 14pt;
+		font-weight: bold;
+	}
+	h1.center {
+		font-size: 14pt;
+		font-weight: bold;
+	        text-align: center;
+	}
+	h2 {
+		font-size: 12pt;
+	}
+	caption {
+		padding-top: 1em;
+	}
+	table.thin {
+		border-width: thin;
+		border-spacing: 0px;
+		border-style: inset;
+		border-color: gray;
+		border-collapse: collapse;
+		background-color: rgb(250, 240, 230);
+	}
+	table th.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table th.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: white;
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	table td.thin2 {
+		border-width: thin;
+		padding: 3px;
+		border-style: inset;
+		border-color: gray;
+		background-color: rgb(250, 240, 230);
+		-moz-border-radius: 0px 0px 0px 0px;
+	}
+	pre {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	}
+	.proto {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 1em;
+	        text-indent: -1em;
+	}
+	.protohead {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 2em;
+	        text-indent: -2em;
+	}
+	.protobody {
+		font-family: Lucidatypewriter, monospace;
+	        font-size: 10pt;
+	        padding-left: 4em;
+	        text-indent: -2em;
+	}
+	.rotate {
+	        display: block;
+	        -webkit-transform: rotate(-90deg); 
+	        -moz-transform: rotate(-90deg);
+	        filter:
+	progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	        padding-top: 20px;                       
+	}
+	.light {
+	        font-size: 75%;
+	        color: SlateGrey;
+	}
+	
+        -->
+    </style>
+  </head>
+  <body>
+    <h1>
+      L32R &#8212; Load 32-bit PC-Relative
+    </h1>
+    <h2>
+      Instruction Word
+    </h2>
+    <table frame="void" rules="groups" cellspacing=0 cellpadding=0>
+      <caption>x24 : x24_Inst_0</caption>
+      <colgroup colspan=16>
+	<col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=4>
+	<col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <colgroup colspan=4>
+	<col width=33><col width=33><col width=33><col width=33>
+      </colgroup>
+      <thead>
+	<tr>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>2
+	    3</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>8</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>7</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>4</small>
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>3</small>
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td width=33 valign="bottom" align="center">
+	  </td>
+	  <td  width=33 valign="bottom" align="center">
+	    <small>0</small>
+	  </td>
+	</tr>
+      </thead>
+      <tfoot>
+	<tr>
+	  <td colspan=16 width=528 align="center">
+	    <small>16</small>
+	  </td>
+	  <td colspan=4 width=132 align="center">
+	    <small>4</small>
+	  </td>
+	  <td colspan=4 width=132 align="center">
+	    <small>4</small>
+	  </td>
+	</tr>
+      </tfoot>
+      <tbody>
+	<tr>
+	  <td colspan=16 width=528 align="center" bgcolor="#FFE4E1">
+	    imm16
+	  </td>
+	  <td colspan=4 width=132 align="center" bgcolor="#FFE4E1">
+	    t
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    0
+	  </td>
+	  <td width=33 align="center" bgcolor="#FFF0F5">
+	    1
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <h2>
+      Assembler Syntax
+    </h2>
+    <p>
+      <code>L32R at, label</code><br>
+
+    </p>
+    <h2>
+      Description
+    </h2>
+    <p><small>(please consult the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for any cross references and additional information)</small></p><P><code>L32R</code> is a PC-relative 32-bit load from memory. It is typically used to load constant values into a register when the constant cannot be encoded in a <code>MOVI</code> instruction.</P><P><code>L32R</code> forms a virtual address by adding the 16-bit one-extended constant value encoded in the instruction word shifted left by two to the address of the next instruction (that is, the address of the <code>L32R</code> plus three) with the two least significant bits cleared. Therefore, the offset can specify 32-bit aligned addresses from -262141 to -1 bytes from the address of the <code>L32R</code> instruction. 32 bits (four bytes) are read from the physical address. This data is then written to address register <code>at</code>.</P><P>In the presence of the Extended L32R Option  when <code>LITBASE[0]</code> is clear, the instruction has the identical operation. When <code>LITBASE[0]</code> is set, <code>L32R</code> forms a virtual address by adding the 16-bit one extended constant value encoded in the instruction word shifted left by two to the Literal Base address indicated by the upper 20 bits of <code>LITBASE</code>. The offset can specify 32-bit aligned addresses from 0 to 262140 from the Literal Base address.</P><P>If the Region Translation Option  or the MMU Option  is enabled, the virtual address is translated to the physical address. If not, the physical address is identical to the virtual address. If the translation or memory reference encounters an error (for example, protection violation or non-existent memory), the processor takes one of several exceptions (see Section 4.4.2.6 in the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for more information).</P><P>It is not possible to specify an unaligned address.</P><P><code>L32R</code> is one of only a few memory reference instructions that can access Instruction RAM/ROM.</P>    <h2>Assembler Note</h2>      <P>The assembler takes the address of the location to load from, rather than the offset from the current instruction address. The linker and the assembler both assume that the location loaded by the <code>L32R</code> instruction has not been and will not be accessed by any other type of Load or Store instruction and is optimized according to that assumption.</P>    <h2>Operation</h2>      <pre>
+if Extended L32R Option and LITBASE[0] then
+<SUB>	vAddr </SUB>&#8592;<SUB> (LITBASE[31:12]|| 12"h000) </SUB>+<SUB> (1</SUB><SUP>14</SUP><SUB>||</SUB>imm16<SUB>||0</SUB><SUP>2</SUP><SUB>)</SUB>
+else
+<SUB>	vAddr </SUB>&#8592;<SUB> ((PC </SUB>+<SUB> 3)31..2||0</SUB><SUP>2</SUP>) +<SUB> (1</SUB><SUP>14</SUP><SUB>||</SUB>imm16<SUB>||0</SUB><SUP>2</SUP><SUB>)</SUB>
+endif
+(mem32, error) &#8592; Load32(vAddr)
+if error then
+	EXCVADDR &#8592; vAddr
+	Exception (LoadStoreErrorCause)
+else
+	AR[t] &#8592; mem32
+endif</pre>    <h2>Exceptions</h2>      <LI>Memory Group (see the <i>Xtensa &reg; Instruction Set Architecture Reference Manual</i> for more information)</LI><LI>GenExcep(LoadProhibitedCause) if Region Protection Option or MMU Option</LI><LI>DebugExcep(DBREAK) if Debug Option</LI>
+    <h2>
+      Protos that use L32R
+    </h2>
+    <div>
+      <div class=protohead>proto <a href=../protos.html#L32R>L32R</a> { out
+      int32 r, in immediate i }{}{</div><div class=protobody><a
+      href=L32R.html>L32R</a> r, i + 0;</div><div class=protohead>}</div>
+    </div>
+  </body>
+</html>

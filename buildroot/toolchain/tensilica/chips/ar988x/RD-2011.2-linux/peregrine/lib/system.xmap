@@ -1,0 +1,34 @@
+<!-- system.xmap - default single-processor system address map layout for this Xtensa core
+  --
+  --  Customer ID=8327; Build=0x3b95c; Copyright (c) 2007 by Tensilica Inc.  ALL RIGHTS RESERVED.
+  --  These coded instructions, statements, and computer programs are the
+  --  copyrighted works and confidential proprietary information of Tensilica Inc.
+  --  They may not be modified, copied, reproduced, distributed, or disclosed to
+  --  third parties in any manner, medium, or form, in whole or in part, without
+  --  the prior written consent of Tensilica Inc.
+  -->
+
+<addressables>
+  <memdev name='core.dram0' sizem1='0x0003ffff' context='system' device='0' writable='1' />
+  <memdev name='core.dram1' sizem1='0x0003ffff' context='system' device='0' writable='1' />
+  <memdev name='core.iram0' sizem1='0x0007ffff' context='system' device='0' writable='1' />
+  <memdev name='core.iram1' sizem1='0x0007ffff' context='system' device='0' writable='1' />
+  <memdev name='core.sram' sizem1='0x003fffff' context='system' device='0' writable='1' />
+  <memdev name='core.srom' sizem1='0x0001ffff' context='system' device='0' writable='0' />
+  <space  name='core.PIF' >
+    <map addr='0x40000000' context='system' sizem1='0x0001ffff' offset='0x00000000' addressable='core.srom' />
+    <map addr='0x60000000' context='system' sizem1='0x003fffff' offset='0x00000000' addressable='core.sram' />
+  </space>
+  <space  name='core.dram0_iface' >
+    <map addr='0x00000000' context='system' sizem1='0x0003ffff' offset='0x00000000' addressable='core.dram0' />
+  </space>
+  <space  name='core.dram1_iface' >
+    <map addr='0x00000000' context='system' sizem1='0x0003ffff' offset='0x00000000' addressable='core.dram1' />
+  </space>
+  <space  name='core.iram0_iface' >
+    <map addr='0x00000000' context='system' sizem1='0x0007ffff' offset='0x00000000' addressable='core.iram0' />
+  </space>
+  <space  name='core.iram1_iface' >
+    <map addr='0x00000000' context='system' sizem1='0x0007ffff' offset='0x00000000' addressable='core.iram1' />
+  </space>
+</addressables>

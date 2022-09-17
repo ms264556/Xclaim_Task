@@ -1,0 +1,63 @@
+ConfigVersion 3.0
+
+#  Xtensa processor configuration parameters for use by TC (TIE compiler).
+#  Generated from Sari file /project/cust/genapp/RD-2011.2/build/qualcomm_sw/swupgrade_qca/peregrine/142610/peregrine.sr
+
+# Customer ID=8327; Build=0x3b95c; Copyright (c) 2005-2012 by Tensilica Inc.  ALL RIGHTS RESERVED.
+# These coded instructions, statements, and computer programs are the
+# copyrighted works and confidential proprietary information of Tensilica Inc.
+# They may not be modified, copied, reproduced, distributed, or disclosed to
+# third parties in any manner, medium, or form, in whole or in part, without
+# the prior written consent of Tensilica Inc.
+
+tieCheckLinuxNoPorts 1
+compatGenericRTOS 0
+IsaUseBooleans 0
+IsaUseDebug 1
+IsaUseTimer 1
+IsaUseInterrupt 1
+IsaUseDensityInstruction 1
+IsaUseMAC16 0
+IsaUseMul16 1
+ClkGateGlobal 1
+IsaCoprocessorCount 0
+LoadStoreUnitCount 1
+UnalignedLoadAction Exception
+UnalignedStoreAction Exception
+ClkGateFuncUnit 1
+ProcessorCoreName Xm_peregrine
+TargetHW_VNum 221003
+TargetHW_EarliestVNum 221003
+TargetHWEarliestVersion X7.1.3
+TargetHWVersion X7.1.3
+userImplementsMul 0
+TIEInternalModules  (/home/customer/tree/RD-2011.2/p4root/Coprocessors/MUL32/mul32.tie)
+ringCount 1
+IsaMemoryOrder LittleEndian
+IsaMaxInstructionSize 3
+IsaUseNewExceptionArchitecture 1
+IsaUseException 1
+IsaUseLoops 1
+TIEUseStoreByteDisable 0
+TIEUseWideStore 1
+BranchPredictedTaken 0
+TIETracePort 0
+PipeBStage 1
+PipeEStage 1
+PipeMStage 2
+PipeWStage 3
+IsaUseWindowedRegisters 1
+DataRAM0AccessWidth 32
+DataRAM1AccessWidth 32
+DataMemWidth 32
+PIFAttribute 0
+TestFullScan 1
+TestLatchesTransparent 0
+CadHDL Verilog
+ImplResetFlops 1
+ImplAsyncReset 0
+ImplRegFileBuildingBlock FlipFlop
+BuildUserCID 8327
+BuildUniqueID 0x3b95c
+BuildSeamless 0
+

@@ -1,0 +1,208 @@
+; Customer ID=8327; Build=0x3b95c; Copyright (c) 2006-2008 by Tensilica Inc.  ALL RIGHTS RESERVED.
+; These coded instructions, statements, and computer programs are the
+; copyrighted works and confidential proprietary information of Tensilica Inc.
+; They may not be modified, copied, reproduced, distributed, or disclosed to
+; third parties in any manner, medium, or form, in whole or in part, without
+; the prior written consent of Tensilica Inc.
+;
+Magic 271485
+Revision 5.4v9
+
+; Window Layout <x> <y> <width> <height> <signalwidth> <valuewidth>
+viewPort 2 21 1278 974 127 94
+
+; File list:
+; openDirFile [-d delimiter] [-s time_offset] [-rf auto_bus_rule_file] path_name file_name
+openDirFile -d / "" "waveforms.vcd.fsdb"
+
+; file time scale:
+; fileTimeScale ### s|ms|us|ns|ps
+
+; signal spacing:
+signalSpacing 3
+
+; windowTimeUnit is used for zoom, cursor & marker
+; waveform viewport range
+zoom 0.000000 25000.000000
+cursor 39000.000000
+marker 7000.000000
+
+; user define markers
+; userMarker time_pos marker_name
+; visible top row signal index
+top 0
+; marker line index
+markerPos 5
+
+; event list
+; addEvent event_name event_expression
+; curEvent event_name
+
+
+
+COMPLEX_EVENT_BEGIN
+
+
+COMPLEX_EVENT_END
+
+
+
+; toolbar current search type
+; curSTATUS search_type
+curSTATUS ByChange
+
+
+aliasmapname hbusreqx.alias
+nalias none		16'h0000		NULL
+nalias 0		16'h0001		NULL
+nalias 1		16'h0002		NULL
+nalias 0:1		16'h0003		NULL
+nalias 2		16'h0004		NULL
+nalias 0:2		16'h0005		NULL
+nalias 1:2		16'h0006		NULL
+nalias 0:1:2		16'h0007		NULL
+nalias 3		16'h0008		NULL
+nalias 0:3		16'h0009		NULL
+nalias 1:3		16'h000a		NULL
+nalias 0:1:3		16'h000b		NULL
+nalias 2:3		16'h000c		NULL
+nalias 0:2:3		16'h000d		NULL
+nalias 1:2:3		16'h000e		NULL
+nalias 0:1:2:3		16'h000f		NULL
+nalias 4		16'h0010		NULL
+nalias 0:4		16'h0011		NULL
+nalias 1:4		16'h0012		NULL
+nalias 0:1:4		16'h0013		NULL
+nalias 2:4		16'h0014		NULL
+nalias 0:2:4		16'h0015		NULL
+nalias 1:2:4		16'h0016		NULL
+nalias 0:1:2:4		16'h0017		NULL
+nalias 3:4		16'h0018		NULL
+nalias 0:3:4		16'h0019		NULL
+nalias 1:3:4		16'h001a		NULL
+nalias 0:1:3:4		16'h001b		NULL
+nalias 2:3:4		16'h001c		NULL
+nalias 0:2:3:4		16'h001d		NULL
+nalias 1:2:3:4		16'h001e		NULL
+nalias 0:1:2:3:4	16'h001f		NULL
+nalias 5		16'h0020		NULL
+nalias 0:5		16'h0021		NULL
+nalias 1:5		16'h0022		NULL
+nalias 0:1:5		16'h0023		NULL
+nalias 2:5		16'h0024		NULL
+nalias 0:2:5		16'h0025		NULL
+nalias 1:2:5		16'h0026		NULL
+nalias 0:1:2:5		16'h0027		NULL
+nalias 3:5		16'h0028		NULL
+nalias 0:3:5		16'h0029		NULL
+nalias 1:3:5		16'h002a		NULL
+nalias 0:1:3:5		16'h002b		NULL
+nalias 2:3:5		16'h002c		NULL
+nalias 0:2:3:5		16'h002d		NULL
+nalias 1:2:3:5		16'h002e		NULL
+nalias 0:1:2:3:5	16'h002f		NULL
+nalias 4:5		16'h0030		NULL
+nalias 0:4:5		16'h0031		NULL
+nalias 1:4:5		16'h0032		NULL
+nalias 0:1:4:5		16'h0033		NULL
+nalias 2:4:5		16'h0034		NULL
+nalias 0:2:4:5		16'h0035		NULL
+nalias 1:2:4:5		16'h0036		NULL
+nalias 0:1:2:4:5	16'h0037		NULL
+nalias 3:4:5		16'h0038		NULL
+nalias 0:3:4:5		16'h0039		NULL
+nalias 1:3:4:5		16'h003a		NULL
+nalias 0:1:3:4:5	16'h003b		NULL
+nalias 2:3:4:5		16'h003c		NULL
+nalias 0:2:3:4:5	16'h003d		NULL
+nalias 1:2:3:4:5	16'h003e		NULL
+nalias 0:1:2:3:4:5	16'h003f		NULL
+
+
+aliasmapname hresp.alias
+nalias UNKN		3'h2		NULL
+nalias UNKN		3'h6		NULL
+nalias ABORT		3'h3		NULL
+nalias UNKN		3'h7		NULL
+nalias DONE		3'h0		NULL
+nalias RETRY		3'h4		NULL
+nalias WAIT		3'h1		NULL
+nalias SPLIT		3'h5		NULL
+
+aliasmapname hburst.alias
+nalias WRAP4		3'h2		NULL
+nalias WRAP16		3'h6		NULL
+nalias INCR4		3'h3		NULL
+nalias INCR16		3'h7		NULL
+nalias SINGLE		3'h0		NULL
+nalias WRAP8		3'h4		NULL
+nalias INCR		3'h1		NULL
+nalias INCR8		3'h5		NULL
+
+aliasmapname hsize.alias
+nalias WORD		3'h2		NULL
+nalias 512B		3'h6		NULL
+nalias DWORD		3'h3		NULL
+nalias 1024B		3'h7		NULL
+nalias BYTE		3'h0		NULL
+nalias 128B		3'h4		NULL
+nalias HWORD		3'h1		NULL
+nalias 256B		3'h5		NULL
+
+aliasmapname htrans.alias
+nalias IDLE		2'h0		NULL
+nalias BUSY		2'h1		NULL
+nalias NSEQ		2'h2		NULL
+nalias SEQ		2'h3		NULL
+
+addGroup "G1"
+activeDirFile "" "waveforms.vcd.fsdb"
+addSignal -h 15 -UNSIGNED -HEX /SystemC/HCLK
+aliasname hbusreqx.alias
+addSignal -h 15 -UNSIGNED -HEX -holdScope HBUSREQx[15:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope HLOCKx[15:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope HADDR[31:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope HWRITE
+addSignal -h 15 -UNSIGNED -HEX -holdScope HRDATA[127:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope HWDATA[127:0]
+aliasname hsize.alias
+addSignal -h 15 -UNSIGNED -HEX -holdScope HSIZE[2:0]
+aliasname htrans.alias
+addSignal -h 15 -UNSIGNED -HEX -holdScope HTRANS[1:0]
+aliasname hburst.alias
+addSignal -h 15 -UNSIGNED -HEX -holdScope HBURST[2:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope HGRANT[31:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope HGRANT_z1[31:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope HMASTER[3:0]
+aliasname hresp.alias
+addSignal -c ID_CYAN5 -ls solid -lw 1 -h 15 -UNSIGNED -HEX -holdScope HRESP[1:0]
+addSignal -c ID_CYAN5 -ls solid -lw 1 -h 15 -UNSIGNED -HEX -holdScope HREADY
+addSignal -h 15 -UNSIGNED -HEX -holdScope HREADY_z1
+addSignal -h 15 -UNSIGNED -HEX -holdScope HMASTLOCK
+addSignal -h 15 -UNSIGNED -HEX -holdScope HSEL[31:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope HPROT[3:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope HRESET
+addGroup "G2"
+
+; grid status
+; gridSignal signal_name
+; gridEdge 0 | 1
+; gridCount
+; gridCycleTime from to cycleTime
+
+; getSignalForm Scope Hierarchy Status
+; active file of getSignalForm
+activeDirFile "" "waveforms.vcd.fsdb"
+
+GETSIGNALFORM_SCOPE_HIERARCHY_BEGIN
+getSignalForm close
+
+"/SystemC"
+
+SCOPE_LIST_BEGIN
+"/SystemC"
+SCOPE_LIST_END
+
+GETSIGNALFORM_SCOPE_HIERARCHY_END
+
+
